@@ -1,21 +1,21 @@
 # OxfordCVM
 
-## ssh tunnels
+## FMRIB Server Commands
+##### SSH tunnels
 ssh winokl@jalapeno.fmrib.ox.ac.uk
-
 ssh -C -L 5931:localhost:5931 winokl@jalapeno.fmrib.ox.ac.uk
 
-# password
+##### Login Password
 Hersenen.kijken9!
 
-# copying files (example)
+##### Copying Data Files into Server (example)
 pscp temp.txt winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong
 
-# going to my path
+##### Navigating to My Directory
 cd /zxiong/OxfordCVM/
 
-# activating virtual environment
+##### Activating Virtual Environment
 source /home/fs0/winokl/zxiong/env/bin/activate
 
-# interpreter python virtual env path
+##### VS Code Interpreter Python Virtual Environment Path
 /home/fs0/winokl/zxiong/env/bin/python
