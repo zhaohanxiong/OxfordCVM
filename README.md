@@ -12,10 +12,10 @@ Hersenen.kijken9!
 pscp temp.txt winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong
 
 # going to my path
-cd zxiong
+cd /zxiong/OxfordCVM/
 
 # activating virtual environment
-source env/bin/activate
+source /home/fs0/winokl/zxiong/env/bin/activate
 
 # interpreter python virtual env path
 /home/fs0/winokl/zxiong/env/bin/python
