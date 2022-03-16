@@ -1,4 +1,7 @@
 ### FMRIB Server Commands
+##### VPN Connection using Cisco
+vpn.ox.ac.uk (then type ur user ID and password)
+
 ##### SSH tunnels
 ssh winokl@jalapeno.fmrib.ox.ac.uk
 
