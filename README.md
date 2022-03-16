@@ -1,4 +1,4 @@
-## FMRIB Server Commands
+### FMRIB Server Commands
 ##### SSH tunnels
 ssh winokl@jalapeno.fmrib.ox.ac.uk
 
