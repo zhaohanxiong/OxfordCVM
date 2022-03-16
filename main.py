@@ -1,4 +1,8 @@
+import os
+import sys
 import numpy as np
 import pandas as pd
 
-print("Hello World")
+df = pd.read_csv("bb_data.csv")
+
+sys.pause()
