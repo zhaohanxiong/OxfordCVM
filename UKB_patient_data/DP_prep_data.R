@@ -9,8 +9,8 @@ library(bit64)
 
 ### variables
 # header
-bb_data_tot=fread("/Users/winok/Documents/Projects/UKBiobank/database/bb_data.csv",nrows=1) ## too big: read in files in chunks, select only those with MR data and only variables of interest, delete variable --> repeat
-variablelist=read.csv("/Users/winok/Documents/Projects/UKBiobank/database/bb_variablelist.csv")
+bb_data_tot=fread("../bb_data.csv",nrows=1) ## too big: read in files in chunks, select only those with MR data and only variables of interest, delete variable --> repeat
+variablelist=read.csv("../bb_variablelist.csv")
 variablelist$Field=as.character(variablelist$Field)
 variablelist$FieldID=as.character(variablelist$FieldID)
 bulkvars=variablelist$FieldID[variablelist$ItemType=="Bulk"|variablelist$ItemType=="Samples"|variablelist$ItemType=="Records"]
