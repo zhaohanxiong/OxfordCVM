@@ -17,7 +17,12 @@ sys.pause()
 #    and clusters them based on proximity to princical angle
 #    to reduce to few subspaces. instead of visual inspection
 #    in original algorithm, use gap clustering criteria (matlab)
-# 2.1) PCA identifies direction with the highest variance in target
+# 2.1) main purpose of PCA is to reduce high dimensional data
+#      down into 2 basic components, and highly correlated variables
+#      cluster together in the 2D PCA representation. Distances
+#      between each PC is also more significant for 1st component
+#      compared to 2nd component.
+# 2.2) PCA identifies direction with the highest variance in target
 #      data, while cPCA identifies direction with highest variance
 #      in the target data compared to background data
 # 3) order subjects according to their proximity to background
