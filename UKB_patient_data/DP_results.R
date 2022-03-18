@@ -20,7 +20,7 @@ names(bb_data)=sub("\\.","-",names(bb_data))
 names(bb_data)=sub("Record-Id","Record.Id",names(bb_data))
 
 variablelist=read.csv("/Users/winok/Documents/Projects/UKBiobank/data/database/bb_variablelist.csv")
-  
+
 ### dirbase
 dirbase="/Users/winok/Documents/Projects/UKBiobank/BB_DP_all/"
 dirbase="/Users/winok/Documents/Projects/UKBiobank/BB_DP_imp/"
