@@ -1,10 +1,12 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # The code below is refactored from the DP_prep_par.R
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+library(hdf5r)
+# 
 
 ### Load data
 # read data in
-df = read.csv("../df.csv", 
+df = read.csv("../bb_data.csv", 
         header=TRUE, stringsAsFactors=FALSE)
 df_vars = read.csv("../bb_variablelist.csv", 
               header=TRUE, stringsAsFactors=FALSE)
@@ -323,3 +325,4 @@ between_Record.Id.4 = df$Record.Id[
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # The code below is refactored from the DP_prep2.R
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
