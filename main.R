@@ -1,8 +1,8 @@
+library(xlsx)
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # The code below is refactored from the DP_prep_par.R
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-library(hdf5r)
-# 
 
 ### Load data
 # read data in
@@ -455,8 +455,9 @@ bb_DP_prep2 = function(dataset,
 model1.a.1 = bb_DP_prep2(data_prep.1, 
                          target_Record.Id.1, background_Record.Id.1, 
                          between_Record.Id.1, variables.a)
+#View(model1.a.1$fulldata)
 
-write_xlsx(model1.a.1$sub, file.path(dirbase,"1.a.1/data_sub.xlsx"))
+write.xlsx(model1.a.1$sub, "data_sub.xlsx")
 
 
 
