@@ -40,7 +40,7 @@ DP_prep_cross3 <- function(data_dp,vars_included,target_Record.Id,background_Rec
   data_dp=data_dp[complete.cases(data_dp[,cov]),]
   cov_2=data_dp[,cov]
     list[[cov]]=cov_2
-}
+  }
   return(list)
 } ## also exclude subjects with >??% missing data (default=5%)
 

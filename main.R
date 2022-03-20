@@ -231,45 +231,43 @@ variables.d = vars_2[vars_2 %in% c(bb_CMR_vars,bb_BMR_vars,
 data_prep.1 = df[df$Record.Id %in% 
                    df$Record.Id[!is.na(df$`BPSys-2.0`)], ]
 
-# only women
-data_prep.2 = df[df$Record.Id %in% 
-                   df$Record.Id[!is.na(df$`BPSys-2.0`) & 
-                                       df[,Sex]=="0"]
-                 , ]
+# # only women
+# data_prep.2 = df[df$Record.Id %in% 
+#                    df$Record.Id[!is.na(df$`BPSys-2.0`) & df[,Sex]=="0"]
+#                  , ]
+# 
+# # only men
+# data_prep.3 = df[df$Record.Id %in% 
+#                    df$Record.Id[!is.na(df$`BPSys-2.0`) & df[,Sex]=="1"]
+#                  , ]
+# 
+# # exclude those with heart attack/angina/stroke at time of imaging
+# data_prep.4 = df[df$Record.Id %in% 
+#                    df$Record.Id[
+#                          !is.na(df$`BPSys-2.0`) & 
+#                          (df$`6150-2.0` < 0 |
+#                           df$`6150-2.0` > 3 |
+#                           is.na(df$`6150-2.0`)) & 
+#                          (df$diag_min_datedif > 0 | 
+#                           is.na(df$diag_min_datedif))
+#                       ]
+#                  , ]
+# 
+# # only women: exclude those with heart attack/angina/stroke at 
+# # time of imaging
+# data_prep.5 = df[df$Record.Id %in% 
+#                    df$Record.Id[
+#                      !is.na(df$`BPSys-2.0`) & 
+#                      df[,Sex]=="0" & 
+#                     (df$`6150-2.0` < 0 | 
+#                      df$`6150-2.0` > 3 | 
+#                      is.na(df$`6150-2.0`)) & 
+#                     (df$diag_min_datedif > 0 | 
+#                       is.na(df$diag_min_datedif))
+#                     ]
+#                  , ]
 
-# only men
-data_prep.3 = df[df$Record.Id %in% 
-                   df$Record.Id[!is.na(df$`BPSys-2.0`) & 
-                                       df[,Sex]=="1"]
-                 , ]
-
-# exclude those with heart attack/angina/stroke at time of imaging
-data_prep.4 = df[df$Record.Id %in% 
-                   df$Record.Id[
-                         !is.na(df$`BPSys-2.0`) & 
-                         (df$`6150-2.0` < 0 |
-                          df$`6150-2.0` > 3 |
-                          is.na(df$`6150-2.0`)) & 
-                         (df$diag_min_datedif > 0 | 
-                          is.na(df$diag_min_datedif))
-                      ]
-                 , ]
-
-# only women: exclude those with heart attack/angina/stroke at 
-# time of imaging
-data_prep.5 = df[df$Record.Id %in% 
-                   df$Record.Id[
-                     !is.na(df$`BPSys-2.0`) & 
-                     df[,Sex]=="0" & 
-                    (df$`6150-2.0` < 0 | 
-                     df$`6150-2.0` > 3 | 
-                     is.na(df$`6150-2.0`)) & 
-                    (df$diag_min_datedif > 0 | 
-                      is.na(df$diag_min_datedif))
-                    ]
-                 , ]
-
-## target/background criteria
+### target/background criteria
 # > 140/80
 target_Record.Id.1 = df$Record.Id[df$`BPSys-2.0` > 140 | 
                                        df$`BPDia-2.0` > 90]
@@ -282,47 +280,201 @@ between_Record.Id.1 = df$Record.Id[
                                  )
                           ]
 
-# > 160/100
-target_Record.Id.2 = df$Record.Id[df$`BPSys-2.0` > 160 | 
-                                  df$`BPDia-2.0` > 100]
-background_Record.Id.2 = df$Record.Id[df$`BPSys-2.0` < 120 & 
-                                      df$`BPDia-2.0` < 80]
-between_Record.Id.2 = df$Record.Id[
-                          -which(df$Record.Id %in% 
-                                   c(as.character(background_Record.Id.2),
-                                     as.character(target_Record.Id.2))
-                                 )
-                          ]
-
-# target: event at time of imaging. Background: no event, no event on follow
-target_Record.Id.3 = df$Record.Id[df$`6150-2.0` > 0 & df$`6150-2.0` < 4]
-background_Record.Id.3 = df$Record.Id[(df$`6150-2.0` < 0 |
-                                       df$`6150-2.0` == 4) & 
-                                      (df$`6150-3.0` < 0 |
-                                       df$`6150-3.0`==4)]
-between_Record.Id.3 = df$Record.Id[
-                          -which(df$Record.Id %in% 
-                                   c(as.character(background_Record.Id.3),
-                                     as.character(target_Record.Id.3))
-                                 )
-                          ]
-
-# target: no event at time of imaging, but at follow-up. Background: no event,
-# no event on follow-up, low BP
-target_Record.Id.4 = df$Record.Id[
-                          (df$`6150-2.0` > 0 & df$`6150-2.0` < 4) & 
-                          (df$`6150-3.0` > 0 | df$`6150-3.0` < 4)]
-background_Record.Id.4 = df$Record.Id[
-                                (df$`6150-2.0` < 0 | df$`6150-2.0` == 4) & 
-                                (df$`6150-3.0`<0|df$`6150-3.0` == 4)]
-between_Record.Id.4 = df$Record.Id[
-                            -which(df$Record.Id %in% 
-                                     c(as.character(background_Record.Id.4),
-                                       as.character(target_Record.Id.4))
-                                   )
-                            ]
+# # > 160/100
+# target_Record.Id.2 = df$Record.Id[df$`BPSys-2.0` > 160 |
+#                                   df$`BPDia-2.0` > 100]
+# background_Record.Id.2 = df$Record.Id[df$`BPSys-2.0` < 120 &
+#                                       df$`BPDia-2.0` < 80]
+# between_Record.Id.2 = df$Record.Id[
+#                           -which(df$Record.Id %in%
+#                                    c(as.character(background_Record.Id.2),
+#                                      as.character(target_Record.Id.2))
+#                                  )
+#                           ]
+# 
+# # target: event at time of imaging. Background: no event, no event on follow
+# target_Record.Id.3 = df$Record.Id[df$`6150-2.0` > 0 & df$`6150-2.0` < 4]
+# background_Record.Id.3 = df$Record.Id[(df$`6150-2.0` < 0 |
+#                                        df$`6150-2.0` == 4) &
+#                                       (df$`6150-3.0` < 0 |
+#                                        df$`6150-3.0`==4)]
+# between_Record.Id.3 = df$Record.Id[
+#                           -which(df$Record.Id %in%
+#                                    c(as.character(background_Record.Id.3),
+#                                      as.character(target_Record.Id.3))
+#                                  )
+#                           ]
+# 
+# # target: no event at time of imaging, but at follow-up. Background: no event,
+# # no event on follow-up, low BP
+# target_Record.Id.4 = df$Record.Id[
+#                           (df$`6150-2.0` > 0 & df$`6150-2.0` < 4) &
+#                           (df$`6150-3.0` > 0 | df$`6150-3.0` < 4)]
+# background_Record.Id.4 = df$Record.Id[
+#                                 (df$`6150-2.0` < 0 | df$`6150-2.0` == 4) &
+#                                 (df$`6150-3.0`<0|df$`6150-3.0` == 4)]
+# between_Record.Id.4 = df$Record.Id[
+#                             -which(df$Record.Id %in%
+#                                      c(as.character(background_Record.Id.4),
+#                                        as.character(target_Record.Id.4))
+#                                    )
+#                             ]
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # The code below is refactored from the DP_prep2.R
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+DP_prep_cross3 <- function(data_dp,
+                           vars_included,
+                           target_Record.Id,
+                           background_Record.Id,
+                           perc_mis,
+                           cov) {
+  
+  if(missing(perc_mis)) perc_mis = 5
+  
+  # exclude columns with majority NA, for studies separately
+  for (study in unique(data_dp$StudyName)) {
+
+    a = which(colMeans(is.na(
+                data_dp[data_dp$StudyName == study, 
+                        which(names(data_dp) %in% vars_included)]
+                )) > 0.5)
+          
+    if (length(a) > 0) {
+      data_dp = data_dp[, -which(names(data_dp) %in% names(a))]
+    }
+    
+    # exclude columns with only NA, for studies separately
+    b = which(colSums(
+                  is.na(data_dp[data_dp$StudyName == study, ]) |
+                  data_dp[data_dp$StudyName == study, ] == 0
+                ) == nrow(data_dp[data_dp$StudyName == study, ])
+              )
+    
+    if (length(b) > 0) {
+      data_dp = data_dp[, -which(names(data_dp) %in% names(b))]
+    }
+    
+  }
+  
+  # remove rows with more than ... missing data
+  c = apply(data_dp, MARGIN = 1, function(x) sum(is.na(x)))
+  d = c < (length(c)/100*perc_mis)
+  data_dp = data_dp[d, ]
+  
+  # code bp_group
+  data_dp$bp_group = 0
+  data_dp$bp_group[data_dp$Record.Id %in% target_Record.Id] = 2
+  data_dp$bp_group[data_dp$Record.Id %in% background_Record.Id] = 1
+  
+  colnames = names(data_dp)[names(data_dp) %in% vars_included]
+  data_dp = data_dp[,c("Record.Id", "StudyName", colnames, "bp_group")]
+  
+  list = list("data" = data_dp)
+  
+  if(missing(cov) == FALSE) {
+    
+    ## delete subjects with missing data for covariates
+    data_dp = data_dp[complete.cases(data_dp[, cov]), ]
+    cov_2 = data_dp[, cov]
+    list[[cov]] = cov_2
+    
+  }
+  
+  return(list)
+  
+} ## also exclude subjects with >??% missing data (default=5%)
+
+bb_subset <- function(dataset,
+                      n_target=1000,
+                      n_background=1000,
+                      n_between=200){
+  
+  target_Record.Id = dataset$Record.Id[dataset$bp_group == 2]
+  background_Record.Id = dataset$Record.Id[dataset$bp_group == 1]
+  between_Record.Id = dataset$Record.Id[dataset$bp_group == 0]
+  
+  c = sort(apply(dataset[dataset$Record.Id %in% target_Record.Id, ], 
+                 MARGIN = 1, 
+                 function(x) sum(is.na(x))
+                 )
+           )
+  d = dataset[names(c[1:n_target]), "Record.Id"]
+  
+  f = sort(apply(dataset[dataset$Record.Id %in% background_Record.Id, ], 
+                 MARGIN = 1,
+                 function(x) sum(is.na(x))
+                 )
+           )
+  g = dataset[names(f[1:n_background]), "Record.Id"]
+  
+  i = sort(apply(dataset[dataset$Record.Id %in% between_Record.Id, ],
+                 MARGIN = 1,
+                 function(x) sum(is.na(x))
+                 )
+           )
+  j = dataset[names(i[1:n_between]), "Record.Id"]
+  
+  Record.Id_subset = dataset$Record.Id[dataset$Record.Id %in% 
+                                        c(as.character(d),
+                                          as.character(g),
+                                          as.character(j))
+                                       ]
+ 
+  return(Record.Id_subset)
+
+}
+
+bb_DP_prep2 = function(dataset,
+                       target_Record.Id,
+                       background_Record.Id,
+                       between_Record.Id,
+                       variables, 
+                       n_target=1000, n_background=1000, n_between=200) {
+
+  target_Record.Id = target_Record.Id[!is.na(target_Record.Id)]
+  background_Record.Id = background_Record.Id[!is.na(background_Record.Id)]
+  between_Record.Id = between_Record.Id[!is.na(between_Record.Id)]
+  
+  data_dp = DP_prep_cross3(dataset, variables, 
+                           target_Record.Id, 
+                           background_Record.Id)
+
+  data = list("fulldata" = data_dp$data)
+  data$cov = data_dp$cov
+  
+  # take the 1000 target and 1000 background subjects 
+  # with most complete data + 200 in between
+  data$sub = bb_subset(data$fulldata, n_target, n_background, n_between)
+
+  return(data)
+  
+}
+
+## 1.a.1 = all subjects, all variables, 140/90 vs <120/80
+model1.a.1 = bb_DP_prep2(data_prep.1, 
+                         target_Record.Id.1, background_Record.Id.1, 
+                         between_Record.Id.1, variables.a)
+
+write_xlsx(model1.a.1$sub, file.path(dirbase,"1.a.1/data_sub.xlsx"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
