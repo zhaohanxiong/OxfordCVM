@@ -2,6 +2,8 @@ library(xlsx)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # The code below is refactored from the DP_prep_par.R
+#     This script generates the variables column names we want 
+#     to keep for further analysis
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 ### Load data
@@ -321,6 +323,9 @@ between_Record.Id.1 = df$Record.Id[
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # The code below is refactored from the DP_prep2.R
+#     This script obtains a filtered dataset based on the variables
+#     generated in the script above, and also filters the dataset for 
+#     to remove rows with missing values.
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 DP_prep_cross3 <- function(data_dp,
                            vars_included,
@@ -477,7 +482,8 @@ write2neuroPM = function(dat, dat_filename) {
 
 }
 
-## 1.a.1 = all subjects, all variables, 140/90 vs <120/80
+# 1.a.1 = all subjects, all variables, 140/90 vs <120/80
+# produce full filtered dataset and subset of filtered dataset
 model1.a.1 = bb_DP_prep2(data_prep.1, 
                          target_Record.Id.1, background_Record.Id.1, 
                          between_Record.Id.1, variables.a)
@@ -485,9 +491,14 @@ model1.a.1 = bb_DP_prep2(data_prep.1,
 dat_out = model1.a.1$sub[,3:ncol(model1.a.1$sub)]
 dat_out[is.na(dat_out)] = -99999
 
+# write to output for neuroPM toolbox
 write2neuroPM(dat_out,
               "../NeuroPM_cPCA_files/cPCA_data.txt")
 write2neuroPM(which(dat_out$bp_group == 1),
               "../NeuroPM_cPCA_files/cPCA_background.txt")
-write2neuroPM(as.numeric(dat_out$bp_group == 2),
+write2neuroPM(which(dat_out$bp_group == 2),
               "../NeuroPM_cPCA_files/cPCA_target.txt")
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# The code below is refactored from the DP_results.R
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
