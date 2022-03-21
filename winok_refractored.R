@@ -1,4 +1,6 @@
 library(xlsx)
+library(dplyr)
+library(ggplot2)
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # The code below is refactored from the DP_prep_par.R
@@ -488,8 +490,8 @@ model1.a.1 = bb_DP_prep2(data_prep.1,
                          target_Record.Id.1, background_Record.Id.1, 
                          between_Record.Id.1, variables.a)
 
-dat_out = model1.a.1$sub[,3:ncol(model1.a.1$sub)]
-dat_out[is.na(dat_out)] = -99999
+dat_out = model1.a.1$fulldata[,3:ncol(model1.a.1$fulldata)]
+dat_out[is.na(dat_out)] = -999999
 
 # write to output for neuroPM toolbox
 write2neuroPM(dat_out,
@@ -501,4 +503,44 @@ write2neuroPM(which(dat_out$bp_group == 2),
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # The code below is refactored from the DP_results.R
+#     
+#     
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+pseudotimes = read.table("../NeuroPM_cPCA_files/cTI_IDs_pseudotimes_pseudopaths_cPCA_data.txt")
+pseudotimes = pseudotimes[,-1]
+names(pseudotimes) = c("Record.Id","bp_group","V1_pseudotimes")
+pseudotimes = merge(pseudotimes, df, all.x=TRUE, by = "Record.Id")
+
+# per bp_group
+ggplot(pseudotimes, aes(y=V1_pseudotimes,
+                        x=as.factor(bp_group),
+                        fill=as.factor(bp_group))) + 
+  geom_boxplot() + 
+  geom_point(aes(fill=as.factor(bp_group)),
+             position=position_jitterdodge()) + 
+  scale_fill_discrete(breaks=c("0","1","2"),
+                      labels=c("Other","Healthy","Disease")) + 
+  ggtitle("all subjects all variables: disease category and BP") + 
+  theme(legend.title = element_blank(),
+        axis.text.x = element_blank(),
+        axis.title.x=element_blank())
+
+### with BP
+ggplot(pseudotimes,aes(x = V1_pseudotimes,
+                       y = `BPSys-2.0`,
+                       color = as.factor(bp_group))) + 
+  geom_point() + 
+  scale_color_discrete(breaks = c("0","1","2"), 
+                       labels = c("Other","Healthy","Disease")) + 
+  ggtitle("all subjects all variables: disease category and BP") + 
+  theme(legend.title = element_blank())
+
+ggplot(pseudotimes,aes(x = V1_pseudotimes,
+                       y = `BPDia-2.0`,
+                       color = as.factor(bp_group))) + 
+  geom_point() + scale_color_discrete(breaks = c("0","1","2"), 
+                                      labels = c("Other","Healthy","Disease")) + 
+  ggtitle("all subjects all variables: disease category and BP") + 
+  theme(legend.title = element_blank())
+
