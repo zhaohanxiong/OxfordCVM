@@ -226,8 +226,8 @@ variables.a = vars_2[vars_2 %in% c(bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,
 #                                    bb_art_vars,bb_car_vars,Sex,Age)]
 
 ### population variables
-# all
-data_prep.1 = df[df$Record.Id %in% 
+# all (get all data without missing blood pressure values)
+data_prep.1 = df[df$Record.Id %in%  # df[!is.na(df$`BPSys-2.0`), ]
                    df$Record.Id[!is.na(df$`BPSys-2.0`)], ]
 
 # # only women
@@ -266,7 +266,7 @@ data_prep.1 = df[df$Record.Id %in%
 #                     ]
 #                  , ]
 
-### target/background criteria
+### target/background criteria (patient IDs of each group)
 # > 140/80
 target_Record.Id.1 = df$Record.Id[df$`BPSys-2.0` > 140 | 
                                        df$`BPDia-2.0` > 90]
@@ -326,10 +326,13 @@ DP_prep_cross3 <- function(data_dp,
                            vars_included,
                            target_Record.Id,
                            background_Record.Id,
-                           perc_mis,
-                           cov) {
+                           cov,
+                           perc_mis = 5) {
   
-  if(missing(perc_mis)) perc_mis = 5
+  # This function cleans up the raw UKB data, removes columns
+  # with too many missing data, keeps only the relevant variables
+  # defined above, and also arranges the blood pressure groups
+  # into 0 = between, 2 = diseased (target), 1 = background
   
   # exclude columns with majority NA, for studies separately
   for (study in unique(data_dp$StudyName)) {
@@ -357,6 +360,7 @@ DP_prep_cross3 <- function(data_dp,
   }
   
   # remove rows with more than ... missing data
+  # exclude subjects with >??% missing data (default=5%)
   c = apply(data_dp, MARGIN = 1, function(x) sum(is.na(x)))
   d = c < (length(c)/100*perc_mis)
   data_dp = data_dp[d, ]
@@ -382,17 +386,21 @@ DP_prep_cross3 <- function(data_dp,
   
   return(list)
   
-} ## also exclude subjects with >??% missing data (default=5%)
+} 
 
 bb_subset <- function(dataset,
                       n_target=1000,
                       n_background=1000,
                       n_between=200){
   
+  # This function subsets the data by extracting N samples from each
+  # of the groups target, background, and between
+  
   target_Record.Id = dataset$Record.Id[dataset$bp_group == 2]
   background_Record.Id = dataset$Record.Id[dataset$bp_group == 1]
   between_Record.Id = dataset$Record.Id[dataset$bp_group == 0]
   
+  # get the first N data by sorting entire dataset by target
   c = sort(apply(dataset[dataset$Record.Id %in% target_Record.Id, ], 
                  MARGIN = 1, 
                  function(x) sum(is.na(x))
@@ -400,6 +408,7 @@ bb_subset <- function(dataset,
            )
   d = dataset[names(c[1:n_target]), "Record.Id"]
   
+  # get the first N data by sorting entire dataset by background
   f = sort(apply(dataset[dataset$Record.Id %in% background_Record.Id, ], 
                  MARGIN = 1,
                  function(x) sum(is.na(x))
@@ -407,6 +416,7 @@ bb_subset <- function(dataset,
            )
   g = dataset[names(f[1:n_background]), "Record.Id"]
   
+  # get the first N data by sorting entire dataset by between
   i = sort(apply(dataset[dataset$Record.Id %in% between_Record.Id, ],
                  MARGIN = 1,
                  function(x) sum(is.na(x))
@@ -414,12 +424,13 @@ bb_subset <- function(dataset,
            )
   j = dataset[names(i[1:n_between]), "Record.Id"]
   
-  Record.Id_subset = dataset$Record.Id[dataset$Record.Id %in% 
-                                        c(as.character(d),
-                                          as.character(g),
-                                          as.character(j))
-                                       ]
- 
+  # combine the 3 individual sets
+  Record.Id_subset = dataset[dataset$Record.Id %in% 
+                              c(as.character(d),
+                                as.character(g),
+                                as.character(j))
+                             ,]
+
   return(Record.Id_subset)
 
 }
@@ -431,6 +442,10 @@ bb_DP_prep2 = function(dataset,
                        variables, 
                        n_target=1000, n_background=1000, n_between=200) {
 
+  # this function uses the two functions above DP_prep_cross3 and 
+  # bb_subset to process the raw data given a set of variables,
+  # background, and targets
+  
   target_Record.Id = target_Record.Id[!is.na(target_Record.Id)]
   background_Record.Id = background_Record.Id[!is.na(background_Record.Id)]
   between_Record.Id = between_Record.Id[!is.na(between_Record.Id)]
@@ -450,30 +465,29 @@ bb_DP_prep2 = function(dataset,
   
 }
 
+write2neuroPM = function(dat, dat_filename) {
+  
+  # this function writes dataframes/vectors to the format
+  # required by the neuroPM toolbox
+  
+  write.table(formatC(as.matrix(dat), format = "e", digits = 7),
+              dat_filename,
+              row.names=FALSE, col.names=FALSE, quote=FALSE,
+              sep="\t")
+
+}
+
 ## 1.a.1 = all subjects, all variables, 140/90 vs <120/80
 model1.a.1 = bb_DP_prep2(data_prep.1, 
                          target_Record.Id.1, background_Record.Id.1, 
                          between_Record.Id.1, variables.a)
 
-#write.xlsx(model1.a.1$sub, "data_sub.xlsx")
+dat_out = model1.a.1$sub[,3:ncol(model1.a.1$sub)]
+dat_out[is.na(dat_out)] = -99999
 
-write.csv(model1.a.1$fulldata,"../NeuroPM_cPCA_files/cPCA_data.csv",row.names=FALSE)
-#write.csv(model1.a.1$fulldata,"cPCA_data",row.names=FALSE)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+write2neuroPM(dat_out,
+              "../NeuroPM_cPCA_files/cPCA_data.txt")
+write2neuroPM(which(dat_out$bp_group == 1),
+              "../NeuroPM_cPCA_files/cPCA_background.txt")
+write2neuroPM(as.numeric(dat_out$bp_group == 2),
+              "../NeuroPM_cPCA_files/cPCA_target.txt")
