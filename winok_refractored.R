@@ -110,8 +110,7 @@ bb_CMR_vars = grep(
                 names(df),
                 value=TRUE)
 bb_CMR_vars = bb_CMR_vars[!bb_CMR_vars %in% bulkvars]
-cardiac_seg = read.csv("../ukbreturn1886/UK Biobank 
-                                      Enhancement Cardiac Phenotypes.csv")
+cardiac_seg = read.csv("../ukbreturn1886/UK Biobank Imaging Enhancement Cardiac Phenotypes.csv")
 bb_CMR_vars = c(bb_CMR_vars,
                 names(cardiac_seg)[2:length(names(cardiac_seg))])
 
@@ -216,15 +215,15 @@ variables.a = vars_2[vars_2 %in% c(bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,
                                    bb_car_vars,bb_blood_vars,bb_spir_vars,
                                    bb_ecgrest_vars,Sex,Age)]
 
-# cardiac
-variables.b = vars_2[vars_2 %in% c(bb_CMR_vars, bb_art_vars, bb_car_vars)]
-
-# brain
-variables.c = vars_2[vars_2 %in% bb_BMR_vars]
-
-# cardiac + brain + carotid ultrasound
-variables.d = vars_2[vars_2 %in% c(bb_CMR_vars,bb_BMR_vars,
-                                   bb_art_vars,bb_car_vars,Sex,Age)]
+# # cardiac
+# variables.b = vars_2[vars_2 %in% c(bb_CMR_vars, bb_art_vars, bb_car_vars)]
+# 
+# # brain
+# variables.c = vars_2[vars_2 %in% bb_BMR_vars]
+# 
+# # cardiac + brain + carotid ultrasound
+# variables.d = vars_2[vars_2 %in% c(bb_CMR_vars,bb_BMR_vars,
+#                                    bb_art_vars,bb_car_vars,Sex,Age)]
 
 ### population variables
 # all
@@ -455,12 +454,11 @@ bb_DP_prep2 = function(dataset,
 model1.a.1 = bb_DP_prep2(data_prep.1, 
                          target_Record.Id.1, background_Record.Id.1, 
                          between_Record.Id.1, variables.a)
-#View(model1.a.1$fulldata)
 
-write.xlsx(model1.a.1$sub, "data_sub.xlsx")
+#write.xlsx(model1.a.1$sub, "data_sub.xlsx")
 
-
-
+write.csv(model1.a.1$fulldata,"../NeuroPM_cPCA_files/cPCA_data.csv",row.names=FALSE)
+#write.csv(model1.a.1$fulldata,"cPCA_data",row.names=FALSE)
 
 
 
