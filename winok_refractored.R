@@ -486,8 +486,8 @@ write2neuroPM = function(dat, dat_filename) {
 
 # 1.a.1 = all subjects, all variables, 140/90 vs <120/80
 # produce full filtered dataset and subset of filtered dataset
-model1.a.1 = bb_DP_prep2(data_prep.1, 
-                         target_Record.Id.1, background_Record.Id.1, 
+model1.a.1 = bb_DP_prep2(data_prep.1,
+                         target_Record.Id.1, background_Record.Id.1,
                          between_Record.Id.1, variables.a)
 
 dat_out = model1.a.1$fulldata[,3:ncol(model1.a.1$fulldata)]
@@ -503,44 +503,72 @@ write2neuroPM(which(dat_out$bp_group == 2),
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # The code below is refactored from the DP_results.R
-#     
-#     
+#   Plots a bunch of results based on what variables we want to see
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
-pseudotimes = read.table("../NeuroPM_cPCA_files/cTI_IDs_pseudotimes_pseudopaths_cPCA_data.txt")
-pseudotimes = pseudotimes[,-1]
-names(pseudotimes) = c("Record.Id","bp_group","V1_pseudotimes")
-pseudotimes = merge(pseudotimes, df, all.x=TRUE, by = "Record.Id")
+# read in neuroPM toolbox output
+pseudotimes = read.table("../NeuroPM_cPCA_files/subset run/cTI_IDs_pseudotimes_pseudopaths_cPCA_data.txt")
+names(pseudotimes) = c("Record.Id","V1_pseudotimes","unknown","bp_group")
 
-# per bp_group
+# merge with UKB data
+#pseudotimes = merge(pseudotimes, df, all.x=TRUE, by = "Record.Id")
+pseudotimes = cbind(V1_pseudotimes=pseudotimes[,2], model1.a.1$sub) # temp temp temp!
+
+# plot per bp_group
+pdf("p1.pdf", width = 20, height = 10)
 ggplot(pseudotimes, aes(y=V1_pseudotimes,
-                        x=as.factor(bp_group),
-                        fill=as.factor(bp_group))) + 
-  geom_boxplot() + 
-  geom_point(aes(fill=as.factor(bp_group)),
-             position=position_jitterdodge()) + 
-  scale_fill_discrete(breaks=c("0","1","2"),
-                      labels=c("Other","Healthy","Disease")) + 
-  ggtitle("all subjects all variables: disease category and BP") + 
-  theme(legend.title = element_blank(),
-        axis.text.x = element_blank(),
-        axis.title.x=element_blank())
+                          x=as.factor(bp_group),
+                          fill=as.factor(bp_group))) + 
+    geom_boxplot() + 
+    geom_point(aes(fill=as.factor(bp_group)),
+               position=position_jitterdodge()) + 
+    scale_fill_discrete(breaks=c("0","1","2"),
+                        labels=c("Other","Healthy","Disease")) + 
+    ggtitle("all subjects all variables: disease category and BP") + 
+    theme(legend.title = element_blank(),
+          axis.text.x = element_blank(),
+          axis.title.x=element_blank())
+dev.off()
 
-### with BP
-ggplot(pseudotimes,aes(x = V1_pseudotimes,
-                       y = `BPSys-2.0`,
-                       color = as.factor(bp_group))) + 
-  geom_point() + 
-  scale_color_discrete(breaks = c("0","1","2"), 
-                       labels = c("Other","Healthy","Disease")) + 
-  ggtitle("all subjects all variables: disease category and BP") + 
-  theme(legend.title = element_blank())
+# table with multiple outcome measures
+outvars = bb_BMR_vars
 
-ggplot(pseudotimes,aes(x = V1_pseudotimes,
-                       y = `BPDia-2.0`,
-                       color = as.factor(bp_group))) + 
-  geom_point() + scale_color_discrete(breaks = c("0","1","2"), 
-                                      labels = c("Other","Healthy","Disease")) + 
-  ggtitle("all subjects all variables: disease category and BP") + 
-  theme(legend.title = element_blank())
+table = NULL
+for (outvar in outvars){
+  formula = as.formula(paste0("`", outvar, "`" , "~", "V1_pseudotimes"))
+  linMod = glm(formula, data = pseudotimes)
+  
+  # Summary of the analysis
+  b = unname(summary(linMod)$coefficients["V1_pseudotimes",])
+  c = c(outvar, b)
+  if (c[5] < 0.05){
+    table = rbind(table,c)
+  }
+}
 
+colnames(table) = c("Variable", "Estimate", "Std.Error", "t value", "Pr(>|t|")
+table = as.data.frame(table)
+rownames(table) = table$Variable
+print(table)
+
+r = cor(pseudotimes[, "V1_pseudotimes"],
+        pseudotimes[, outvar], 
+        use = "pairwise.complete.obs")
+f = ggplot(pseudotimes, aes_string(x = "V1_pseudotimes", y = outvar)) +
+    geom_point()+
+    geom_smooth(method = "lm")+
+    theme(legend.position = "top")+
+    ggtitle(paste("r=", r))
+print(f)
+
+table$Variable=gsub("-2.0","",table$Variable)
+table$Variable=gsub("-0.0","",table$Variable)
+
+for (var in table$Variable){
+  if(var %in% variablelist$FieldID){
+    table$Variable[table$Variable==var] = rename2(variablelist,
+                                                  var, 
+                                                  "FieldID", 
+                                                  "Field")
+  }
+}
