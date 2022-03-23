@@ -494,13 +494,16 @@ dat_out = model1.a.1$fulldata[,3:ncol(model1.a.1$fulldata)]
 dat_out[is.na(dat_out)] = -999999
 
 # write to output for neuroPM toolbox
-write2neuroPM(dat_out,
-              "../NeuroPM_cPCA_files/cPCA_data.txt")
-write2neuroPM(which(dat_out$bp_group == 1),
-              "../NeuroPM_cPCA_files/cPCA_background.txt")
-write2neuroPM(which(dat_out$bp_group == 2),
-              "../NeuroPM_cPCA_files/cPCA_target.txt")
+if (FALSE) {
+  write2neuroPM(dat_out,
+                "../NeuroPM_cPCA_files/cPCA_data.txt")
+  write2neuroPM(which(dat_out$bp_group == 1),
+                "../NeuroPM_cPCA_files/cPCA_background.txt")
+  write2neuroPM(which(dat_out$bp_group == 2),
+                "../NeuroPM_cPCA_files/cPCA_target.txt")
+}
 
+stop("Break in Script")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # The code below is refactored from the DP_results.R
 #   Plots a bunch of results based on what variables we want to see
@@ -508,11 +511,12 @@ write2neuroPM(which(dat_out$bp_group == 2),
 
 # read in neuroPM toolbox output
 pseudotimes = read.table("../NeuroPM_cPCA_files/subset run/cTI_IDs_pseudotimes_pseudopaths_cPCA_data.txt")
-names(pseudotimes) = c("Record.Id","V1_pseudotimes","unknown","bp_group")
+#pseudotimes = read.table("../NeuroPM_cPCA_files/cTI_IDs_pseudotimes_pseudopaths_cPCA_data.txt")
+names(pseudotimes) = c("row.id","V1_pseudotimes","traj1","traj2")
 
 # merge with UKB data
 #pseudotimes = merge(pseudotimes, df, all.x=TRUE, by = "Record.Id")
-pseudotimes = cbind(V1_pseudotimes=pseudotimes[,2], model1.a.1$sub) # temp temp temp!
+pseudotimes = cbind(pseudotimes, model1.a.1$sub) # temp temp temp!
 
 # plot per bp_group
 pdf("p1.pdf", width = 20, height = 10)
