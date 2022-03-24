@@ -305,7 +305,7 @@ between_Record.Id.1 = df$Record.Id[
 #                           -which(df$Record.Id %in%
 #                                    c(as.character(background_Record.Id.3),
 #                                      as.character(target_Record.Id.3))
-#                                  )
+#                                  ) 
 #                           ]
 # 
 # # target: no event at time of imaging, but at follow-up. Background: no event,
@@ -393,12 +393,12 @@ DP_prep_cross3 <- function(data_dp,
   
   return(list)
   
-} 
+}
 
 bb_subset <- function(dataset,
                       n_target=1000,
                       n_background=1000,
-                      n_between=200){
+                      n_between=200) {
   
   # This function subsets the data by extracting N samples from each
   # of the groups target, background, and between
@@ -487,10 +487,12 @@ write2neuroPM = function(dat, dat_filename) {
 # 1.a.1 = all subjects, all variables, 140/90 vs <120/80
 # produce full filtered dataset and subset of filtered dataset
 model1.a.1 = bb_DP_prep2(data_prep.1,
-                         target_Record.Id.1, background_Record.Id.1,
-                         between_Record.Id.1, variables.a)
+                         target_Record.Id.1,
+                         background_Record.Id.1,
+                         between_Record.Id.1,
+                         variables.a)
 
-dat_out = model1.a.1$fulldata[,3:ncol(model1.a.1$fulldata)]
+dat_out = model1.a.1$sub[,3:ncol(model1.a.1$sub)]
 dat_out[is.na(dat_out)] = -999999
 
 # write to output for neuroPM toolbox
@@ -503,7 +505,7 @@ if (FALSE) {
                 "../NeuroPM_cPCA_files/cPCA_target.txt")
 }
 
-stop("Break in Script")
+stop("Break in Script, comment to disable")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # The code below is refactored from the DP_results.R
 #   Plots a bunch of results based on what variables we want to see
