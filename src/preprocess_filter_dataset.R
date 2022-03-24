@@ -253,7 +253,7 @@ get_ukb_subset_column_names = function(df, df_vars,
     warning("Wrong Subset Option Error")
   }
   
-  # add back useful columns
+  # add back useful columns involving blood pressure
   vars_subset_cols = c("Record.Id","BPSys-2.0","BPDia-2.0",vars_subset_cols)
                          
   return(vars_subset_cols)
@@ -303,7 +303,7 @@ get_ukb_subset_rows = function(df, subset_option="all") {
   
 }
 
-return_cols_rows_filter_dataset = function(df, cols, rows) {
+return_cols_rows_filter_df = function(df, cols, rows) {
   
   # given the UKB dataset and a set of columns and rows, subset the dataset
   # and returned the subsetted version.
@@ -343,12 +343,13 @@ return_clean_NA_from_df = function(df, threshold_col, threshold_row) {
   
 }
 
-get_ukb_target_background_labels = function(df_subset,
-                                            target_criteria="> 140/80") {
+return_ukb_target_background_labels = function(df_subset,
+                                               target_criteria="> 140/80") {
   
   # given the subsetted df, create a vector containing whether
   # a given row is a background (1), target (2), or between (0), depending
-  # on the criteria provided for blood pressure
+  # on the criteria provided for blood pressure. then append this new vector
+  # in between at the 4th column of the original dataframe
   
   # define all as between first
   bp_label_vector = rep(0, nrow(df_subset))
@@ -390,6 +391,11 @@ get_ukb_target_background_labels = function(df_subset,
   bp_label_vector[background_rows] = 1
   bp_label_vector[target_rows] = 2
   
-  return(bp_label_vector)
+  # add this new column to df
+  df_subset = cbind(df_subset[,1:3],
+                    bp_group = bp_label_vector,
+                    df_subset[4:ncol(df_subset)])
+  
+  return(df_subset)
   
 }
