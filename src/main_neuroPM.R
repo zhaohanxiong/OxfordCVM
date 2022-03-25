@@ -35,7 +35,7 @@ ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
 # write files out for input into neuroPM box
 if (FALSE) {
   # reduce computational cost by only taking a fraction of whole dataset
-  ukb_df_small = return_fractional_df(ukb_df, 5000)
+  ukb_df_small = return_fractional_df(ukb_df, N = 5000)
 
   # convert and write into neuroPM toolbox inputs files (3 files)
   neuroPM_write_all_df(ukb_df_small[,5:ncol(ukb_df_small)], # from 5th column
