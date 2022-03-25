@@ -1,10 +1,10 @@
 library(ggplot2)
 
-plot_box_by_group = function(data, y, group, 
-                             title = "Plot By Group",
-                             xlab = "x lab", ylab = "y lab",
-                             labels = c("Group 1", "Group 2"),
-                             save = FALSE, save_path = "") {
+plot_boxplot_by_group = function(data, y, group, 
+                                 title = "Plot By Group",
+                                 xlab = "x lab", ylab = "y lab",
+                                 labels = c("Group 1", "Group 2"),
+                                 save = FALSE, save_path = "") {
   
   # this function produces a boxplot given a dataframe, the name of the
   # y-variable, and the name of the group we want to plot by group by

@@ -51,12 +51,12 @@ ukb_final_df = merge_pseudotime_with_ukb(pseudotime = pseudotimes,
                                          ukb_df = ukb_df_small)
 
 # visualizations
-plot_box_by_group(data = ukb_final_df, 
-                  y = ukb_final_df$V1_pseudotimes,
-                  group = ukb_final_df$bp_group,
-                  title = "Disease Progression by Blood Pressure Group",
-                  xlab = "Blood Pressure Groups", ylab = "Disease Score",
-                  labels = c("Between", "Background", "Disease"))
+plot_boxplot_by_group(data = ukb_final_df, 
+                      y = ukb_final_df$V1_pseudotimes,
+                      group = ukb_final_df$bp_group,
+                      title = "Disease Progression by Blood Pressure Group",
+                      xlab = "Blood Pressure Groups", ylab = "Disease Score",
+                      labels = c("Between", "Background", "Disease"))
 
 ##### NeuroPM box method overview
 # compute neighborhood variance
