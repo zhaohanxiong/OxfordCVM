@@ -99,7 +99,7 @@ get_ukb_subset_column_names = function(df, df_vars,
                                   df_vars$Category==109 |
                                   df_vars$Category==134 |
                                   df_vars$Category==135 |
-                                  df_vars$Category==1101] 
+                                  df_vars$Category==1101]
   bb_BMR_vars = grep(
                   paste0("^", paste0(bb_BMR_vars, collapse="-|^"), "-"),
                   names(df),
@@ -273,12 +273,12 @@ get_ukb_subset_rows = function(df, subset_option="all") {
   } else if (subset_option == "women") {
     
     # women
-    subset_rows = which(!is.na(df[,"BPSys-2.0"]) & df[,"sex"] == "0")
+    subset_rows = which(!is.na(df[,"BPSys-2.0"]) & df[,"31-0.0"] == 0)
     
   } else if (subset_option == "men") {
     
     # men
-    subset_rows = which(!is.na(df[,"BPSys-2.0"]) & df[,"sex"] == "1")
+    subset_rows = which(!is.na(df[,"BPSys-2.0"]) & df[,"31-0.0"] == 1)
     
   } else if (subset_option == "no heart attack, angina, stroke") {
     
@@ -339,6 +339,9 @@ return_clean_NA_from_df = function(df, threshold_col, threshold_row) {
   print(sprintf("Percentage NA After Cleaning: %0.1f%%", 
                 sum(is.na(df))/prod(dim(df))*100))
   
+  # change NA to numerical value
+  df[is.na(df)] = -999999
+  
   return(df)
   
 }
@@ -391,7 +394,7 @@ return_ukb_target_background_labels = function(df_subset,
   bp_label_vector[background_rows] = 1
   bp_label_vector[target_rows] = 2
   
-  # add this new column to df
+  # add this new column to df, insert into 4th column index position
   df_subset = cbind(df_subset[,1:3],
                     bp_group = bp_label_vector,
                     df_subset[4:ncol(df_subset)])
