@@ -67,6 +67,9 @@ neuroPM_load_pseudotime_output_df = function(path) {
                           )
   names(pseudotimes) = c("row.id", "V1_pseudotimes", "traj1", "traj2")
   
+  # remove first column as it is only the row name
+  pseudotimes = pseudotimes[,-1]
+  
   return(pseudotimes)
   
 }
@@ -78,7 +81,7 @@ merge_pseudotime_with_ukb = function(pseudotime, ukb_df) {
   # futher visualization between the disease progression score and the 
   # various variables in the UKB
   
-  df_merged = 0
+  df_merged = cbind(pseudotime, ukb_df)
   
   return(df_merged)
   
