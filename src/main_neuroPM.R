@@ -2,6 +2,7 @@
 # load functions
 source("preprocess_filter_dataset.R")
 source("preprocess_neuroPM.R")
+source("postprocess_visualization.R")
 
 # load UKB datasets
 ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../bb_data.csv",
@@ -43,13 +44,19 @@ if (FALSE) {
 }
 
 # load output from neuroPM box for the pseudotimes (disease progression scores)
-pseudotimes = neuroPM_load_pseudotime_output_df(path = "../../NeuroPM_cPCA_files")
+pseudotimes = neuroPM_load_pseudotime_output_df(path = "../../NeuroPM_cPCA_files/fulldata cardiac run")
 
 # merge pseudotime dataframe with ukb input into the neuroPM box
 ukb_final_df = merge_pseudotime_with_ukb(pseudotime = pseudotimes,
                                          ukb_df = ukb_df_small)
 
 # visualizations
+plot_box_by_group(data = ukb_final_df, 
+                  y = ukb_final_df$V1_pseudotimes,
+                  group = ukb_final_df$bp_group,
+                  title = "Disease Progression by Blood Pressure Group",
+                  xlab = "Blood Pressure Groups", ylab = "Disease Score",
+                  labels = c("Between", "Background", "Disease"))
 
 ##### NeuroPM box method overview
 # compute neighborhood variance
