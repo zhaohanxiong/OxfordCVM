@@ -29,26 +29,29 @@ ukb_df = return_clean_NA_from_df(df = ukb_df,
 
 # get corresponding vector of labels depending on criteria
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
-                                             target_criteria = "> 140/80")
+                                             target_criteria = "> 160/100")
 
-##### for testing with NeuroPM Box
-# reduce computational cost by only taking a fraction of whole dataset
-# use function to convert and wrute into neuroPM toolbox inputs files (3 files)
+# write files out for input into neuroPM box
 if (FALSE) {
-  ukb_df_small = return_fractional_df(ukb_df, 3000)
-  
+  # reduce computational cost by only taking a fraction of whole dataset
+  ukb_df_small = return_fractional_df(ukb_df, 5000)
+
+  # convert and write into neuroPM toolbox inputs files (3 files)
   neuroPM_write_all_df(ukb_df_small[,5:ncol(ukb_df_small)], # from 5th column
                        labels = ukb_df_small$bp_group,
                        path = "../../NeuroPM_cPCA_files")
-
 }
 
+# load output from neuroPM box for the pseudotimes (disease progression scores)
+pseudotimes = neuroPM_load_pseudotime_output_df(path = "../../NeuroPM_cPCA_files")
+
+# merge pseudotime dataframe with ukb input into the neuroPM box
+ukb_final_df = merge_pseudotime_with_ukb(pseudotime = pseudotimes,
+                                         ukb_df = ukb_df_small)
+
+# visualizations
+
+##### NeuroPM box method overview
 # compute neighborhood variance
-# # 
-
-# functions to perform cPCA
-# # #http://www.bioconductor.org/packages/devel/bioc/vignettes/scPCA/inst/doc/scpca_intro.html
-
-
-# calculate pseudotime score
-# # 
+# functions to perform cPCA http://www.bioconductor.org/packages/devel/bioc/vignettes/scPCA/inst/doc/scpca_intro.html
+# calculate pseudotime score using MST

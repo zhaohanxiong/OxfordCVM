@@ -5,12 +5,13 @@ return_fractional_df = function(df, N=5000) {
   # we only need a subset, or to reduce computational cost, or if we 
   # simply want to test on a smaller sample. The number sampled will be 
   # provided as input by N. This is mostly used for the neuroPM box
-  # preprocessing stage
+  # preprocessing stage.
   
   # print proportion of class before subsetting
-  print(sprintf("Proportion of Each Class Before Subsetting"))
+  cat("\n")
+  cat(sprintf("Proportion of Each Class Before Subsetting"))
   print(table(df$bp_group)/nrow(df)*100)
-  print("\n")
+  cat("\n")
   
   # create random vector of indices to subset
   set.seed(0633)
@@ -20,8 +21,9 @@ return_fractional_df = function(df, N=5000) {
   df = df[ind, ]
   
   # print proportion of class before subsetting
-  print(sprintf("Proportion of Each Class After Subsetting"))
+  cat(sprintf("Proportion of Each Class After Subsetting"))
   print(table(df$bp_group)/nrow(df)*100)
+  cat("\n")
   
   return(df)
   
@@ -52,4 +54,32 @@ neuroPM_write_all_df = function(df, labels, path) {
   neuroPM_convert_and_write_df(which(labels == 2),
                                file.path(path,"cPCA_target.txt"))
 
+}
+
+neuroPM_load_pseudotime_output_df = function(path) {
+  
+  # read in neuroPM toolbox output and assign column names given the 
+  # path to the directory containing the file
+  
+  pseudotimes = read.table(file.path(
+                            path,
+                            "cTI_IDs_pseudotimes_pseudopaths_cPCA_data.txt")
+                          )
+  names(pseudotimes) = c("row.id", "V1_pseudotimes", "traj1", "traj2")
+  
+  return(pseudotimes)
+  
+}
+
+merge_pseudotime_with_ukb = function(pseudotime, ukb_df) {
+  
+  # given the processed pseudotime output from the neuroPM box, merge this
+  # with the original UKB data that was inputted so that we can perform
+  # futher visualization between the disease progression score and the 
+  # various variables in the UKB
+  
+  df_merged = 0
+  
+  return(df_merged)
+  
 }
