@@ -24,9 +24,9 @@ ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
 #rm(ukb) # delete UKB variable from workspace to save RAM
 
 # clean dataset of rows/columns with too many missing values
-ukb_df = return_clean_NA_from_df(df = ukb_df,
-                                 threshold_col = 0.5,
-                                 threshold_row = 0.05)
+ukb_df = return_clean_and_normalize_df(df = ukb_df,
+                                       threshold_col = 0.5,
+                                       threshold_row = 0.05)
 
 # get corresponding vector of labels depending on criteria
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
