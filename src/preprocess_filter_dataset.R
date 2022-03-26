@@ -318,7 +318,7 @@ return_cols_rows_filter_df = function(df, cols, rows) {
   
 }
 
-return_clean_NA_from_df = function(df, threshold_col, threshold_row) {
+return_clean_df = function(df,threshold_col,threshold_row) {
   
   # apply filtering to clean the dataset and remove rows (patients) with many
   # missing values from the dataset and return the fully cleaned dataset
@@ -349,7 +349,7 @@ return_clean_NA_from_df = function(df, threshold_col, threshold_row) {
 return_ukb_target_background_labels = function(df_subset,
                                                target_criteria="> 140/80") {
   
-  # given the subsetted df, create a vector containing whether
+  # given the filtered/subsetted ukb df, create a vector containing whether
   # a given row is a background (1), target (2), or between (0), depending
   # on the criteria provided for blood pressure. then append this new vector
   # in between at the 4th column of the original dataframe
