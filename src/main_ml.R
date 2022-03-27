@@ -49,4 +49,4 @@ pr = knn(dat$train_dat, dat$test_dat, cl = dat$train_lab, k = 13)
 
 # test
 tab = table(pr, dat$test_lab)
-acc = sum(diag(tab)/(sum(rowSums(tab)))) * 100
+acc = sum(diag(tab)/(sum(rowSums(tab)))) * 100 # 71% for now
