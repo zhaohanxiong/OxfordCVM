@@ -24,9 +24,9 @@ ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
 #rm(ukb) # delete UKB variable from workspace to save RAM
 
 # clean dataset of rows/columns with too many missing values
-ukb_df = return_clean_and_normalize_df(df = ukb_df,
-                                       threshold_col = 0.5,
-                                       threshold_row = 0.05)
+ukb_df = return_clean_df(df = ukb_df,
+                         threshold_col = 0.5,
+                         threshold_row = 0.05)
 
 # get corresponding vector of labels depending on criteria
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
@@ -35,7 +35,7 @@ ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
 # write files out for input into neuroPM box
 if (FALSE) {
   # reduce computational cost by only taking a fraction of whole dataset
-  ukb_df_small = return_fractional_df(ukb_df, N = 5000)
+  ukb_df_small = return_fractional_df(ukb_df, N = 2000)
 
   # convert and write into neuroPM toolbox inputs files (3 files)
   neuroPM_write_all_df(ukb_df_small[,5:ncol(ukb_df_small)], # from 5th column
@@ -62,3 +62,18 @@ plot_boxplot_by_group(data = ukb_final_df,
 # compute neighborhood variance
 # functions to perform cPCA http://www.bioconductor.org/packages/devel/bioc/vignettes/scPCA/inst/doc/scpca_intro.html
 # calculate pseudotime score using MST
+
+# compute pca
+pca_out = prcomp(ukb_df_small[, 5:ncol(ukb_df_small)], center = TRUE, scale = TRUE)
+
+screeplot(pca_out, type = "l", npcs = 150, log = "y")
+abline(h = 1, col="red", lty=5)
+
+# plot principle components
+colours = rep(0,nrow(ukb_df_small))
+colours[ukb_df_small$bp_group==0] = "blue"
+colours[ukb_df_small$bp_group==1] = "green"
+colours[ukb_df_small$bp_group==2] = "red"
+plot(pca_out$x[,1], pca_out$x[,2],
+     xlab="PC1", ylab = "PC2",
+     col = colours, pch = 19)
