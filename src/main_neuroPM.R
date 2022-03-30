@@ -32,19 +32,25 @@ ukb_df = return_clean_df(df = ukb_df,
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
                                              target_criteria = "> 160/100")
 
+# reduce computational cost by only taking a fraction of whole dataset
+ukb_df_small = return_fractional_df(ukb_df, N = 2200)
+
+# load output from neuroPM box for the pseudotimes (disease progression scores)
+pseudotimes = neuroPM_load_pseudotime_output_df(path = "../../NeuroPM_cPCA_files/subset run")
+
 # write files out for input into neuroPM box
 if (FALSE) {
-  # reduce computational cost by only taking a fraction of whole dataset
-  ukb_df_small = return_fractional_df(ukb_df, N = 2000)
-
+  
   # convert and write into neuroPM toolbox inputs files (3 files)
   neuroPM_write_all_df(ukb_df_small[,5:ncol(ukb_df_small)], # from 5th column
                        labels = ukb_df_small$bp_group,
                        path = "../../NeuroPM_cPCA_files")
 }
 
-# load output from neuroPM box for the pseudotimes (disease progression scores)
-pseudotimes = neuroPM_load_pseudotime_output_df(path = "../../NeuroPM_cPCA_files/fulldata cardiac run")
+##### NeuroPM box method overview
+# compute neighborhood variance
+# functions to perform cPCA http://www.bioconductor.org/packages/devel/bioc/vignettes/scPCA/inst/doc/scpca_intro.html
+# calculate pseudotime score using MST
 
 # merge pseudotime dataframe with ukb input into the neuroPM box
 ukb_final_df = merge_pseudotime_with_ukb(pseudotime = pseudotimes,
@@ -58,13 +64,11 @@ plot_boxplot_by_group(data = ukb_final_df,
                       xlab = "Blood Pressure Groups", ylab = "Disease Score",
                       labels = c("Between", "Background", "Disease"))
 
-##### NeuroPM box method overview
-# compute neighborhood variance
-# functions to perform cPCA http://www.bioconductor.org/packages/devel/bioc/vignettes/scPCA/inst/doc/scpca_intro.html
-# calculate pseudotime score using MST
 
+##### Random PCA methods
 # compute pca
-pca_out = prcomp(ukb_df_small[, 5:ncol(ukb_df_small)], center = TRUE, scale = TRUE)
+pca_out = prcomp(ukb_df_small[, 5:ncol(ukb_df_small)], 
+                 center = TRUE, scale = TRUE)
 
 screeplot(pca_out, type = "l", npcs = 150, log = "y")
 abline(h = 1, col="red", lty=5)
@@ -75,5 +79,27 @@ colours[ukb_df_small$bp_group==0] = "blue"
 colours[ukb_df_small$bp_group==1] = "green"
 colours[ukb_df_small$bp_group==2] = "red"
 plot(pca_out$x[,1], pca_out$x[,2],
+     xlab="PC1", ylab = "PC2",
+     col = colours, pch = 19)
+
+# compute cPCA
+library(scPCA)
+
+cpca_out = scPCA(target = ukb_df_small[,5:ncol(ukb_df_small)],
+                 background = ukb_df_small[ukb_df_small$bp_group == 2,
+                                           5:ncol(ukb_df_small)],
+                 penalties = 0, # run cPCA if this = 0
+                 n_centers = 3)
+
+scpca_out = scPCA(target = ukb_df_small[, 5:ncol(ukb_df_small)],
+                  background = ukb_df_small[ukb_df_small$bp_group == 2,
+                                            5:ncol(ukb_df_small)],
+                  penalties = exp(seq(log(0.01), log(0.5), length.out = 10)),
+                  n_centers = 3)
+
+# plot principle components
+cpca_out = cbind(cpca_out$x, ukb_df_small$bp_group)
+
+plot(cpca_out[,1], cpca_out[,2],
      xlab="PC1", ylab = "PC2",
      col = colours, pch = 19)
