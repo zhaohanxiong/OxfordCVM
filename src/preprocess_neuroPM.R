@@ -1,3 +1,4 @@
+library(R.matlab)
 
 return_fractional_df = function(df, N=5000) {
   
@@ -48,12 +49,23 @@ neuroPM_write_all_df = function(df, labels, path) {
   # the path given in the format of the neuroPM box input requirements
   
   neuroPM_convert_and_write_df(df,
-                               file.path(path,"cPCA_data.txt"))
+                               file.path(path, "cPCA_data.txt"))
   neuroPM_convert_and_write_df(which(labels == 1),
-                               file.path(path,"cPCA_background.txt"))
+                               file.path(path, "cPCA_background.txt"))
   neuroPM_convert_and_write_df(which(labels == 2),
-                               file.path(path,"cPCA_target.txt"))
+                               file.path(path, "cPCA_target.txt"))
 
+}
+
+neuroPM_matlab_write_all_df = function(df, labels, path) {
+  
+  # given a dataframe containing the filtered patient values of the UKB
+  # write the entire thing to one .mat output file to read into matlab
+  # and run on the matlab source code of the neuroPM toolbox
+  writeMat(file.path(path, "ukb_data.mat"), 
+           data = as.matrix(df),
+           bp_group = labels)
+  
 }
 
 neuroPM_load_pseudotime_output_df = function(path) {
