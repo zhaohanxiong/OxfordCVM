@@ -404,3 +404,34 @@ return_ukb_target_background_labels = function(df_subset,
   return(df_subset)
   
 }
+
+return_ukb_normalize_zscore = function(data) {
+  
+  # given a ukb with features starting from the 5th column (previous 4 columns
+  # are the IDs and labels), perform mean and standard deviation normalization
+  # for each column, which represents 1 feature, of the dataframe, these cols
+  # should all be numerical
+  
+  # 
+  feature_cols = data[,5:ncol(data)]
+  
+  # retrieve NAs and re-assign NA value
+  feature_cols[feature_cols == -999999] = NA
+  
+  # compute mean and standard deviation of each column
+  data_means = colMeans(feature_cols, na.rm=TRUE)
+  data_std = apply(feature_cols, 2, function(x) sd(x, na.rm=TRUE))
+  
+  # subtract mean and divide by standard deviation
+  feature_cols = sweep(feature_cols, 2, data_means, "-")
+  feature_cols = sweep(feature_cols, 2, data_std, "/")
+  
+  # re-assign missing values
+  feature_cols[is.na(feature_cols)] = -999999
+  
+  # re-assign to original data frame
+  data[, 5:ncol(data)] = feature_cols
+  
+  return(data)
+  
+}

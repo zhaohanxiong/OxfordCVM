@@ -1,6 +1,6 @@
 %% read data
 % loads data (main feature matrix) and labels (bp_group)
-load('ukb_data.mat')
+%load('ukb_data.mat')
 
 % set indices of background/target/between
 ind_between = find(bp_group == 0);
