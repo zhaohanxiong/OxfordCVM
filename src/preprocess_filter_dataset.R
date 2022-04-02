@@ -123,7 +123,7 @@ get_ukb_subset_column_names = function(df, df_vars,
                     names(df),
                     value=TRUE)
   bb_CMR_vars = bb_CMR_vars[!bb_CMR_vars %in% bulkvars]
-  cardiac_seg = read.csv(paste0("../../ukbreturn1886/UK Biobank Imaging ",
+  cardiac_seg = read.csv(paste0("../../UK Biobank Imaging ",
                                 "Enhancement Cardiac Phenotypes.csv"))
   bb_CMR_vars = c(bb_CMR_vars,
                   names(cardiac_seg)[2:length(names(cardiac_seg))])
