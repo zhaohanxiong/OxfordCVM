@@ -31,6 +31,7 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
 get_ukb_subset_column_names = function(df, df_vars,
                                        subset_option="all") {
   
+  # Code written by Winok
   # This function uses the ukb patient spreadsheet and 
   # extracts the columns needed for further analysis, we then subset
   # these variables depending on the subset_option (all, cardiac, brain,
@@ -261,6 +262,7 @@ get_ukb_subset_column_names = function(df, df_vars,
 
 get_ukb_subset_rows = function(df, subset_option="all") {
 
+  # Code written by Winok
   # this function extracts the rows (patients) we want to analyse
   # and returns the indices of the rows. here we focuse on the blood
   # pressure mainly to ensure no missing values are in the subset

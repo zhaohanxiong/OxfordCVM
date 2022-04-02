@@ -1,12 +1,14 @@
 %% read data
-% loads data (main feature matrix) and labels (bp_group)
-load('ukb_data.mat')
+% set path
+%load('ukb_data.mat')
 
-% set indices of background/target/between
-ind_between = find(bp_group == 0);
-ind_background = find(bp_group == 1);
-ind_target = find(bp_group == 2);
+% set indices of background
+ind_background = find(labels == 1);
 
+% set indices for target
+ind_target = find(labels == 2);
+
+% set
 % set colors to use for each class
 classes_for_colours = [];
 classes_for_colours(ind_target) = 1;
