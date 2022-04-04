@@ -76,7 +76,7 @@ elseif strcmp(method,'UMAP')
 end
 try, classes_for_colours = classes_for_colours(1:N_nodes); 
 catch, classes_for_colours(starting_point) = 1; classes_for_colours(setdiff([1:N_nodes]',[starting_point; final_subjects])) = 2; classes_for_colours(final_subjects) = 3; end
-figure; gscatter(mappedX(:,1),mappedX(:,2),classes_for_colours); title('cPC space'); xlabel('cPC1'); ylabel('cPC2');
+%figure; gscatter(mappedX(:,1),mappedX(:,2),classes_for_colours); title('cPC space'); xlabel('cPC1'); ylabel('cPC2');
 
 %--- Node-node distance
 disp('Node-node distance and shortest paths ...')

@@ -1,9 +1,14 @@
-%% read data
-% add paths to workspace (additional functions to access in subfolder)
-addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\");
+%% add paths (not for compile version)
+%addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\");
 
+%% read data
 % loads data (main feature matrix) and labels (bp_group)
-load('ukb_data.mat');
+ukb_data = readtable('ukb_num.csv');
+labels = readtable('labels.csv');
+
+% extract parts of dataframe to array
+data = table2array(ukb_data);
+bp_group = table2array(labels(:,'bp_group'));
 
 % set indices of background/target/between
 ind_between = find(bp_group == 0);
@@ -20,17 +25,12 @@ classes_for_colours(ind_between) = 3;
 [global_ordering, global_pseudotimes, mappedX, contrasted_data, Node_contributions, Expected_contribution] = ...
           pseudotimes_cTI(data, ind_background, classes_for_colours, ind_target, 'cPCA', 10);
 
-%% save results
-pseudotimes_file = table(bp_group, global_pseudotimes);
-FigList = findobj(allchild(0), 'flat', 'Type', 'figure');
-
-%% weighting
-node_contributions = table(var_names,Node_contributions);
+%% convert outputs to dataframes
+pseudotimes_file = [labels, table(global_pseudotimes)];
+node_contributions = table(ukb_data.Properties.VariableNames', Node_contributions);
 expected_contribution = table(Expected_contribution);
 
-%% output
-writetable(pseudotimes_file, strcat(dir,'global_pseudotimes.csv'));
-writetable(node_contributions, strcat(dir,'var_weighting.csv'));
-writetable(expected_contribution, strcat(dir,'thr_weighting.csv'));
-savefig(FigList,strcat(dir, 'fig_global_pseudotimes'));
-close(findobj(allchild(0), 'flat', 'Type', 'figure'))
+%% output csv
+writetable(pseudotimes_file, strcat('labels.csv'));
+writetable(node_contributions, strcat('var_weighting.csv'));
+writetable(expected_contribution, strcat('threshold_weighting.csv'));

@@ -57,14 +57,16 @@ neuroPM_write_all_df = function(df, labels, path) {
 
 }
 
-neuroPM_matlab_write_all_df = function(df, labels, path) {
+neuroPM_matlab_write_all_df = function(df, col_from, path) {
   
   # given a dataframe containing the filtered patient values of the UKB
-  # write the entire thing to one .mat output file to read into matlab
+  # write the entire thing to two .csv output files to read into matlab
   # and run on the matlab source code of the neuroPM toolbox
-  writeMat(file.path(path, "ukb_data.mat"), 
-           data = as.matrix(df),
-           bp_group = labels)
+
+  write.csv(df[, col_from:ncol(df)],
+            file.path(path, "ukb_num.csv"), row.names=FALSE)
+  write.csv(df[, 1:(col_from - 1)],
+            file.path(path, "labels.csv"), row.names=FALSE)
   
 }
 
