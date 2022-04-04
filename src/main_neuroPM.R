@@ -36,11 +36,7 @@ ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
 ukb_df = return_ukb_normalize_zscore(data = ukb_df)
 
 # reduce computational cost by only taking a fraction of whole dataset
-<<<<<<< HEAD
 ukb_df_small = return_fractional_df(ukb_df, N = 1000) #N = nrow(ukb_df))
-=======
-ukb_df_small = return_fractional_df(ukb_df, N = nrow(ukb_df))
->>>>>>> 89651060d807fe4ed6e4fcdf75e388f4ca5d5dfc
 
 # write files out for input into neuroPM box
 if (FALSE) {
@@ -53,11 +49,7 @@ if (FALSE) {
   # convert and write into .mat file for matlab source code of neuroPM box
   neuroPM_matlab_write_all_df(df = ukb_df_small,
                               col_from = 5, # from 5th column
-<<<<<<< HEAD
                               path = "fmrib/io")
-=======
-                              path = "../../NeuroPM_cPCA_files")
->>>>>>> 89651060d807fe4ed6e4fcdf75e388f4ca5d5dfc
 
 }
 
