@@ -44,12 +44,12 @@ if (FALSE) {
   # convert and write into neuroPM toolbox inputs files (3 files)
   neuroPM_write_all_df(df = ukb_df_small[,5:ncol(ukb_df_small)], # from 5th column
                        labels = ukb_df_small$bp_group,
-                       path = "../../NeuroPM_cPCA_files")
+                       path = "/fmrib/io")
   
   # convert and write into .mat file for matlab source code of neuroPM box
   neuroPM_matlab_write_all_df(df = ukb_df_small,
                               col_from = 5, # from 5th column
-                              path = "../../NeuroPM_cPCA_files")
+                              path = "/fmrib/io")
 
 }
 
