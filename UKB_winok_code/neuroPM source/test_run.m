@@ -1,6 +1,9 @@
 %% read data
+% add paths to workspace (additional functions to access in subfolder)
+addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\");
+
 % loads data (main feature matrix) and labels (bp_group)
-%load('ukb_data.mat')
+load('ukb_data.mat');
 
 % set indices of background/target/between
 ind_between = find(bp_group == 0);
@@ -18,7 +21,7 @@ classes_for_colours(ind_between) = 3;
           pseudotimes_cTI(data, ind_background, classes_for_colours, ind_target, 'cPCA', 10);
 
 %% save results
-pseudotimes_file = table(RecordId,dp_bpgroup,global_pseudotimes);
+pseudotimes_file = table(bp_group, global_pseudotimes);
 FigList = findobj(allchild(0), 'flat', 'Type', 'figure');
 
 %% weighting
