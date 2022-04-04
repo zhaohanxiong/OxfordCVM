@@ -35,4 +35,4 @@ Specifically for FMRIB:
 	- these commands have been packaged into a shell script, run.sh
 	- to run this script first turn into an executable, then simply type it to run
 	chmod a+rx run.sh
-	run.sh
+	./run.sh
