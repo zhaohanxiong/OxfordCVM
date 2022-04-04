@@ -17,10 +17,8 @@ into matlab to save the hassle with the reading of excel files
 Dependencies:
 	- statistics and machine learning toolbox
 	- financial toolbox
-	- Dimensionality Reduction
-	- Gabriel Peyre's Toolbox Graph
-	- Principal Angles between Subspaces by Andrew Knyazev and Rico Argentati
-	- Community Detection Toolbox
+	- optimization toolbox
+	- bioinformatics toolbox
 
 Compiling on FMRIB (given a script named "temp.m"):
 	- module add MATLAB/2020a
