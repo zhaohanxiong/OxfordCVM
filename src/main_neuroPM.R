@@ -2,7 +2,6 @@
 # load functions
 source("preprocess_filter_dataset.R")
 source("preprocess_neuroPM.R")
-source("postprocess_visualization.R")
 
 # load UKB datasets
 ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../bb_data.csv",
@@ -11,7 +10,7 @@ ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../bb_data.csv",
 # extract UKB columns (variables) we want to keep
 ukb_filtered_cols = get_ukb_subset_column_names(df = ukb$ukb_data,
                                                 df_vars = ukb$ukb_vars,
-                                                subset_option = "all")
+                                                subset_option = "cardiac")
 
 # extract UKB dataset rows (patients) we want to keep
 ukb_filtered_rows = get_ukb_subset_rows(df = ukb$ukb_data,
@@ -29,28 +28,41 @@ ukb_df = return_clean_df(df = ukb_df,
                          threshold_row = 0.05)
 
 # get corresponding vector of labels depending on criteria
+# background (1), target (2), between (0)
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
-                                             target_criteria = "> 160/100")
+                                             target_criteria = "> 140/80")
+
+# mean and standard deviation normalization for all feature columns (from 5th)
+ukb_df = return_ukb_normalize_zscore(data = ukb_df)
 
 # reduce computational cost by only taking a fraction of whole dataset
-ukb_df_small = return_fractional_df(ukb_df, N = 2200)
-
-# load output from neuroPM box for the pseudotimes (disease progression scores)
-pseudotimes = neuroPM_load_pseudotime_output_df(path = "../../NeuroPM_cPCA_files/subset run")
+ukb_df_small = return_fractional_df(ukb_df, N = 1000)
 
 # write files out for input into neuroPM box
 if (FALSE) {
   
   # convert and write into neuroPM toolbox inputs files (3 files)
-  neuroPM_write_all_df(ukb_df_small[,5:ncol(ukb_df_small)], # from 5th column
+  neuroPM_write_all_df(df = ukb_df_small[,5:ncol(ukb_df_small)], # from 5th column
                        labels = ukb_df_small$bp_group,
                        path = "../../NeuroPM_cPCA_files")
+  
+  # convert and write into .mat file for matlab source code of neuroPM box
+  neuroPM_matlab_write_all_df(df = ukb_df_small[,5:ncol(ukb_df_small)], # from 5th column
+                              labels = ukb_df_small$bp_group,
+                              path = "../../NeuroPM_cPCA_files")
+
 }
+
+# load output from neuroPM box for the pseudotimes (disease progression scores)
+pseudotimes = neuroPM_load_pseudotime_output_df(path = "../../NeuroPM_cPCA_files/subset run")
 
 ##### NeuroPM box method overview
 # compute neighborhood variance
-# functions to perform cPCA http://www.bioconductor.org/packages/devel/bioc/vignettes/scPCA/inst/doc/scpca_intro.html
+# perform cPCA
 # calculate pseudotime score using MST
+
+# functions to visualize output
+source("postprocess_visualization.R")
 
 # merge pseudotime dataframe with ukb input into the neuroPM box
 ukb_final_df = merge_pseudotime_with_ukb(pseudotime = pseudotimes,
