@@ -85,7 +85,7 @@ for alpha_i = 1:n_alphas
     end
 end
 affinity_matrix = double(affinity_matrix);
-figure; imagesc(affinity_matrix); title('Subspaces affinity matrix'); colorbar; colormap Jet;
+%figure; imagesc(affinity_matrix); title('Subspaces affinity matrix'); colorbar; colormap Jet;
 
 % Clustering
 warning off;
@@ -107,35 +107,35 @@ for clus_i = 1:n_clusters
     cPCs(:,:,clus_i)    = X * Vmedoid(:,:,clus_i);
     contrasted_data(:,:,clus_i) = cPCs(:,:,clus_i)*Vmedoid(:,:,clus_i)'*diag(std_data) + mean_data; % see https://stats.stackexchange.com/questions/229092/how-to-reverse-pca-and-reconstruct-original-variables-from-several-principal-com
     
-    figure;  hold on;
-    if clus_i == 1
-        unique_classes_for_colours = unique(classes_for_colours);
-        colours2classes = [1 1 0; ... % yellow
-            0 1 1; ... % cyan
-            0 1 0; ... % green
-            0 0 1; ... % blue
-            1 0 1; ... % magenta
-            1 0 0; ... % red
-            0.5430 0 0]; % dark red
-        if length(unique_classes_for_colours) > 7
-            disp('Warning: Only 7 different classes (plus background) are considered for the colouring...');
-            color_class = colours2classes(end,:);
-        end
-    end
-    for class = 1:length(unique_classes_for_colours)
-        ind = find(classes_for_colours == unique_classes_for_colours(class));
-        if no_dims(clus_i) < 3
-            plot(cPCs(ind,1,clus_i),cPCs(ind,2,clus_i),'.','color',colours2classes(class,:));
-        else
-            plot3(cPCs(ind,1,clus_i),cPCs(ind,2,clus_i),cPCs(ind,3,clus_i),'.','color',colours2classes(class,:));
-        end
-    end
-    if no_dims(clus_i) < 3
-        plot(cPCs(indices_background,1,clus_i),cPCs(indices_background,2,clus_i),'.','color',[0 0 0]); % Background in black.
-    else
-        plot3(cPCs(indices_background,1,clus_i),cPCs(indices_background,2,clus_i),cPCs(indices_background,3,clus_i),'.','color',[0 0 0]); % Background in black.
-    end
-    title(['cPC, alpha -> ' num2str(alphas_f(clus_i))]);
+%     figure;  hold on;
+%     if clus_i == 1
+%         unique_classes_for_colours = unique(classes_for_colours);
+%         colours2classes = [1 1 0; ... % yellow
+%             0 1 1; ... % cyan
+%             0 1 0; ... % green
+%             0 0 1; ... % blue
+%             1 0 1; ... % magenta
+%             1 0 0; ... % red
+%             0.5430 0 0]; % dark red
+%         if length(unique_classes_for_colours) > 7
+%             disp('Warning: Only 7 different classes (plus background) are considered for the colouring...');
+%             color_class = colours2classes(end,:);
+%         end
+%     end
+%     for class = 1:length(unique_classes_for_colours)
+%         ind = find(classes_for_colours == unique_classes_for_colours(class));
+%         if no_dims(clus_i) < 3
+%             plot(cPCs(ind,1,clus_i),cPCs(ind,2,clus_i),'.','color',colours2classes(class,:));
+%         else
+%             plot3(cPCs(ind,1,clus_i),cPCs(ind,2,clus_i),cPCs(ind,3,clus_i),'.','color',colours2classes(class,:));
+%         end
+%     end
+%     if no_dims(clus_i) < 3
+%         plot(cPCs(indices_background,1,clus_i),cPCs(indices_background,2,clus_i),'.','color',[0 0 0]); % Background in black.
+%     else
+%         plot3(cPCs(indices_background,1,clus_i),cPCs(indices_background,2,clus_i),cPCs(indices_background,3,clus_i),'.','color',[0 0 0]); % Background in black.
+%     end
+%     title(['cPC, alpha -> ' num2str(alphas_f(clus_i))]);
     
     % Calculating intrinsic dimensionality for current alpha
     lambda = Dmedoid(:,clus_i) ./ sum(Dmedoid(:,clus_i));

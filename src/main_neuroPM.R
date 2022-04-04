@@ -10,7 +10,7 @@ ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../bb_data.csv",
 # extract UKB columns (variables) we want to keep
 ukb_filtered_cols = get_ukb_subset_column_names(df = ukb$ukb_data,
                                                 df_vars = ukb$ukb_vars,
-                                                subset_option = "cardiac")
+                                                subset_option = "all")
 
 # extract UKB dataset rows (patients) we want to keep
 ukb_filtered_rows = get_ukb_subset_rows(df = ukb$ukb_data,
@@ -30,13 +30,13 @@ ukb_df = return_clean_df(df = ukb_df,
 # get corresponding vector of labels depending on criteria
 # background (1), target (2), between (0)
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
-                                             target_criteria = "> 140/80")
+                                             target_criteria = "> 160/100")
 
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df = return_ukb_normalize_zscore(data = ukb_df)
 
 # reduce computational cost by only taking a fraction of whole dataset
-ukb_df_small = return_fractional_df(ukb_df, N = 1000)
+ukb_df_small = return_fractional_df(ukb_df, N = nrow(ukb_df))
 
 # write files out for input into neuroPM box
 if (FALSE) {
@@ -47,8 +47,8 @@ if (FALSE) {
                        path = "../../NeuroPM_cPCA_files")
   
   # convert and write into .mat file for matlab source code of neuroPM box
-  neuroPM_matlab_write_all_df(df = ukb_df_small[,5:ncol(ukb_df_small)], # from 5th column
-                              labels = ukb_df_small$bp_group,
+  neuroPM_matlab_write_all_df(df = ukb_df_small,
+                              col_from = 5, # from 5th column
                               path = "../../NeuroPM_cPCA_files")
 
 }
