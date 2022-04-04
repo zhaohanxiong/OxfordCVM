@@ -31,6 +31,7 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
 get_ukb_subset_column_names = function(df, df_vars,
                                        subset_option="all") {
   
+  # Code written by Winok
   # This function uses the ukb patient spreadsheet and 
   # extracts the columns needed for further analysis, we then subset
   # these variables depending on the subset_option (all, cardiac, brain,
@@ -123,7 +124,7 @@ get_ukb_subset_column_names = function(df, df_vars,
                     names(df),
                     value=TRUE)
   bb_CMR_vars = bb_CMR_vars[!bb_CMR_vars %in% bulkvars]
-  cardiac_seg = read.csv(paste0("../../ukbreturn1886/UK Biobank Imaging ",
+  cardiac_seg = read.csv(paste0("../../UK Biobank Imaging ",
                                 "Enhancement Cardiac Phenotypes.csv"))
   bb_CMR_vars = c(bb_CMR_vars,
                   names(cardiac_seg)[2:length(names(cardiac_seg))])
@@ -261,6 +262,7 @@ get_ukb_subset_column_names = function(df, df_vars,
 
 get_ukb_subset_rows = function(df, subset_option="all") {
 
+  # Code written by Winok
   # this function extracts the rows (patients) we want to analyse
   # and returns the indices of the rows. here we focuse on the blood
   # pressure mainly to ensure no missing values are in the subset
@@ -400,5 +402,36 @@ return_ukb_target_background_labels = function(df_subset,
                     df_subset[4:ncol(df_subset)])
   
   return(df_subset)
+  
+}
+
+return_ukb_normalize_zscore = function(data) {
+  
+  # given a ukb with features starting from the 5th column (previous 4 columns
+  # are the IDs and labels), perform mean and standard deviation normalization
+  # for each column, which represents 1 feature, of the dataframe, these cols
+  # should all be numerical
+  
+  # 
+  feature_cols = data[,5:ncol(data)]
+  
+  # retrieve NAs and re-assign NA value
+  feature_cols[feature_cols == -999999] = NA
+  
+  # compute mean and standard deviation of each column
+  data_means = colMeans(feature_cols, na.rm=TRUE)
+  data_std = apply(feature_cols, 2, function(x) sd(x, na.rm=TRUE))
+  
+  # subtract mean and divide by standard deviation
+  feature_cols = sweep(feature_cols, 2, data_means, "-")
+  feature_cols = sweep(feature_cols, 2, data_std, "/")
+  
+  # re-assign missing values
+  feature_cols[is.na(feature_cols)] = -999999
+  
+  # re-assign to original data frame
+  data[, 5:ncol(data)] = feature_cols
+  
+  return(data)
   
 }
