@@ -3,8 +3,13 @@
 
 %% read data
 % loads data (main feature matrix) and labels (bp_group)
+<<<<<<< HEAD
 ukb_data = readtable('io\ukb_num.csv');
 labels = readtable('io\labels.csv');
+=======
+ukb_data = readtable('ukb_num.csv');
+labels = readtable('labels.csv');
+>>>>>>> 89651060d807fe4ed6e4fcdf75e388f4ca5d5dfc
 
 % extract parts of dataframe to array
 data = table2array(ukb_data);
@@ -31,6 +36,12 @@ node_contributions = table(ukb_data.Properties.VariableNames', Node_contribution
 expected_contribution = table(Expected_contribution);
 
 %% output csv
+<<<<<<< HEAD
 writetable(pseudotimes_file, strcat('io\pseudotimes.csv'));
 writetable(node_contributions, strcat('io\var_weighting.csv'));
 writetable(expected_contribution, strcat('io\threshold_weighting.csv'));
+=======
+writetable(pseudotimes_file, strcat('labels.csv'));
+writetable(node_contributions, strcat('var_weighting.csv'));
+writetable(expected_contribution, strcat('threshold_weighting.csv'));
+>>>>>>> 89651060d807fe4ed6e4fcdf75e388f4ca5d5dfc
