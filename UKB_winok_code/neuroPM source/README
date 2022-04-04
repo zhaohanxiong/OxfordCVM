@@ -14,7 +14,7 @@ imputed dataset as input reduces this substantially.
 Code can be saved from the R script into a .mat file, then loaded directly
 into matlab to save the hassle with the reading of excel files
 
-Dependencies:
+Dependencies (matlab toolboxes):
 	- statistics and machine learning toolbox
 	- financial toolbox
 	- optimization toolbox
@@ -22,5 +22,7 @@ Dependencies:
 
 Compiling on FMRIB (given a script named "temp.m"):
 	- module add MATLAB/2020a
-	- mcc -m temp.m
+	- module list
+	- module unload MATLAB/2020a
+	- mcc -m temp.m ./path/*
 	- ./run_temp.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
