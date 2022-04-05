@@ -10,7 +10,7 @@ ssh -C -L 5931:localhost:5931 winokl@jalapeno.fmrib.ox.ac.uk
 ```
 ##### Login Password
 ```
-Hersenen.kijken9!
+<see key file>
 ```
 ##### Navigating to My Directory
 ```
