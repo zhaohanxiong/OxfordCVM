@@ -22,10 +22,8 @@ missing data for excluding participants. Usually a large part of the processing
 power/time in the NeuroPM toolbox is taken up by imputing data, so having an 
 imputed dataset as input reduces this substantially.
 
-Code can be saved from the R script into a .mat file, then loaded directly
-into matlab to save the hassle with the reading of excel files
-
 Dependencies (matlab toolboxes):
+
 	- statistics and machine learning toolbox
 	- financial toolbox
 	- optimization toolbox
@@ -33,12 +31,14 @@ Dependencies (matlab toolboxes):
 
 General compiling on FMRIB (given a script named "temp.m"):
 	- module add MATLAB/2020a
+
 	- module list
 	- module unload MATLAB/2020a
 	- mcc -m temp.m ./path_to_add/*
 	- ./run_temp.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 	
 Specifically for running neuroPM source code on FMRIB:
+
 	module add MATLAB/2020a
 	mcc -m run_NeuroPM.m -a ./cTI-codes/
 	./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
