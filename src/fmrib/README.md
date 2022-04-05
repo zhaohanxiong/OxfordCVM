@@ -30,8 +30,8 @@ Dependencies (matlab toolboxes):
 	- bioinformatics toolbox
 
 General compiling on FMRIB (given a script named "temp.m"):
-	- module add MATLAB/2020a
 
+	- module add MATLAB/2020a
 	- module list
 	- module unload MATLAB/2020a
 	- mcc -m temp.m ./path_to_add/*
