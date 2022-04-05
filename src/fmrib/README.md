@@ -11,10 +11,10 @@ pscp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/fmr
 
 ##### Dependencies (matlab toolboxes):
 ```
-	- statistics and machine learning toolbox
-	- financial toolbox
-	- optimization toolbox
-	- bioinformatics toolbox
+- statistics and machine learning toolbox
+- financial toolbox
+- optimization toolbox
+- bioinformatics toolbox
 ```
 
 ##### General compiling on FMRIB (given a script named "temp.m"):
