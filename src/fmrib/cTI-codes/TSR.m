@@ -32,7 +32,7 @@
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %--------------------------------------------------------------------------
 
-function [X]=TSR(Xmd)
+function [X] = TSR(Xmd)
 
 [n,p]=size(Xmd);
 
@@ -56,16 +56,15 @@ end
 % Uncomment if necessary.
 % ncomp=min(ncomp,0.75*p,50);
 
-h = waitbar(0,'Imputing Data..., step 1');
+disp('Imputing Data..., step 1');
 for i=n:-1:1,
-  waitbar((n-i)/n);
   r=~isnan(Xmd(i,:));
   pat(i).O=find(r==1); 
   pat(i).M=find(r==0); 
   pat(i).nO=size(pat(i).O,2); 
   pat(i).nM=size(pat(i).M,2); 
 end
-close(h)
+
 
 X=Xmd;
 mis=isnan(Xmd);
@@ -73,22 +72,19 @@ mis=isnan(Xmd);
 X(mis)=0;
 meanc=sum(X)./(n-sum(mis));
 ntemp = length(r);
-h = waitbar(0,'Imputing Data..., step 2');
+disp('Imputing Data..., step 2');
 for k=1:ntemp,
-    waitbar(k/ntemp);
   X(r(k),c(k))=meanc(c(k));
 end
-close(h);
 
 maxiter=1000;
 conv=1.0e-10;
 diff=100;
 
 It=0;
-h = waitbar(0,'Imputing Data..., step 3 (final)');
+disp('Imputing Data..., step 3');
 while It<maxiter && diff>conv,
   It=It+1;
-  waitbar(It/maxiter);
   
   Xmis=X(mis);
   mX=mean(X);
@@ -111,4 +107,3 @@ while It<maxiter && diff>conv,
   d=(X(mis)-Xmis).^2;
   diff=mean(d);
 end
-close(h);

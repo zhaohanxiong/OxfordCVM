@@ -12,10 +12,6 @@ ssh -C -L 5931:localhost:5931 winokl@jalapeno.fmrib.ox.ac.uk
 ```
 Hersenen.kijken9!
 ```
-##### Copying Data Files into Server from Windows (example)
-```
-pscp temp.txt winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong
-```
 ##### Navigating to My Directory
 ```
 cd /zxiong/OxfordCVM/
