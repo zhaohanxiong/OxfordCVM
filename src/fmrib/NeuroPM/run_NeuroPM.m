@@ -22,8 +22,8 @@ classes_for_colours(ind_background) = 2;
 classes_for_colours(ind_between) = 3;
 
 %% impute data (dont use as takes very long to run)
-&data(data == -999999) = nan;
-&data = TSR(data);
+%data(data == -999999) = nan;
+%data = TSR(data);
 
 %% call function
 [global_ordering, global_pseudotimes, mappedX, contrasted_data, Node_contributions, Expected_contribution] = ...
