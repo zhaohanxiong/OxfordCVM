@@ -7,7 +7,7 @@ cd /home/fs0/winokl/zxiong/OxfordCVM/src/fmrib
 Rscript main_preprocess.R
 
 - run executible for NeuroPM (compile and run)
-./NeuroPM/run.sh
+./NeuroPM/compile_run.sh
 ```
 
 ##### Copying Data Files to/from Server to/from Local Windows (Example)
@@ -42,5 +42,5 @@ mcc -m run_NeuroPM.m -a ./cTI-codes/
 - these commands have been packaged into a shell script, run.sh
 - to run this script first turn into an executable, then simply type it to run
 chmod a+rx run.sh
-./run.sh
+./compile_run.sh
 ```

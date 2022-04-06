@@ -35,12 +35,18 @@ if nargin < 6 || isempty(max_cPCs), max_cPCs = 10; end
 starting_point = starting_point(:);
 N_nodes = size(data,1);
 if nargin < 4 || isempty(final_subjects), final_subjects = setdiff(1:N_nodes,starting_point)'; else, final_subjects = final_subjects(:); end
+
 disp('Contrastive Dimensionality Reduction of the data ...')
+
 if strcmp(method,'cPCA')
+    
     [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours);
-    cPCs = cPCs(1:N_nodes,:,:); contrasted_data = contrasted_data(1:N_nodes,:,:);
+    cPCs = cPCs(1:N_nodes,:,:);
+    contrasted_data = contrasted_data(1:N_nodes,:,:);
+    
     try, classes_for_colours = classes_for_colours(1:N_nodes);
     catch, classes_for_colours(starting_point) = 1; classes_for_colours(final_subjects) = 2; end
+    
     [~,j]           = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
     mappedX         = cPCs(:,1:no_dims(j),j);
     contrasted_data = contrasted_data(:,:,j);
@@ -48,10 +54,13 @@ if strcmp(method,'cPCA')
     Lambdas         = Dmedoid(1:no_dims(j),j);
     cPCs            = cPCs(1:N_nodes,:,:); 
     contrasted_data = contrasted_data(1:N_nodes,:,:);
+    
     Node_contributions = (100*(Node_Weights.^2)./repmat(sum(Node_Weights.^2,1),size(Node_Weights,1),1))*Lambdas;
     Expected_contribution = sum(100*1/size(Node_Weights,1)*Lambdas);
+    
     disp(['Final # of components (cPCA) -> ' num2str(no_dims(j))]);
     disp(['Final alpha (cPCA) -> ' num2str(alphas(j))]);
+    
 elseif strcmp(method,'PCA')
     norm_data = zscore(data);
     rng('default');  % For reproducibility
@@ -74,6 +83,7 @@ elseif strcmp(method,'UMAP')
     Lambdas = []; Node_Weights = []; contrasted_data = [];
     Node_contributions = []; Expected_contribution = [];
 end
+
 try, classes_for_colours = classes_for_colours(1:N_nodes); 
 catch, classes_for_colours(starting_point) = 1; classes_for_colours(setdiff([1:N_nodes]',[starting_point; final_subjects])) = 2; classes_for_colours(final_subjects) = 3; end
 %figure; gscatter(mappedX(:,1),mappedX(:,2),classes_for_colours); title('cPC space'); xlabel('cPC1'); ylabel('cPC2');

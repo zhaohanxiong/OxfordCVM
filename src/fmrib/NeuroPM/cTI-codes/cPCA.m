@@ -90,7 +90,9 @@ affinity_matrix = double(affinity_matrix);
 % Clustering
 warning off;
 rng('default');  % For reproducibility
-Ci    = GCSpectralClust1(affinity_matrix,10); Kbst=CNDistBased(Ci,affinity_matrix); Ci = Ci(:,Kbst); % Using the Community Detection Toolbox (from http://users.auth.gr/~kehagiat/Software/)
+Ci   = GCSpectralClust1(affinity_matrix,10);
+Kbst =CNDistBased(Ci,affinity_matrix);
+Ci = Ci(:,Kbst); % Using the Community Detection Toolbox (from http://users.auth.gr/~kehagiat/Software/)
 Ci(1) = 1; Ci(2:end) = Ci(2:end)+1;
 n_clusters = length(unique(Ci));
 

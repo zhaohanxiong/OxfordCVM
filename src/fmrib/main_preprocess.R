@@ -35,8 +35,9 @@ ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df = return_ukb_normalize_zscore(data = ukb_df)
 
-# impute data
+# remove outliers
 
+# impute data
 
 # write to output
 write.csv(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv", row.names=FALSE)
