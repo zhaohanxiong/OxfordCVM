@@ -42,7 +42,7 @@ ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
 
 # impute data
 ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
-                                               method = "mean")
+                                               method = "median")
 
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
