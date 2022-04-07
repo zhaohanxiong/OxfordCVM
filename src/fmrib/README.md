@@ -41,6 +41,6 @@ mcc -m run_NeuroPM.m -a ./cTI-codes/
 
 - these commands have been packaged into a shell script, run.sh
 - to run this script first turn into an executable, then simply type it to run
-chmod a+rx run.sh
+chmod a+rx compile_run.sh
 ./compile_run.sh
 ```
