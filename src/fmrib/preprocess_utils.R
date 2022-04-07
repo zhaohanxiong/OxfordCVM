@@ -124,11 +124,11 @@ get_ukb_subset_column_names = function(df, df_vars,
                     names(df),
                     value=TRUE)
   bb_CMR_vars = bb_CMR_vars[!bb_CMR_vars %in% bulkvars]
-  cardiac_seg = read.csv(paste0("../../UK Biobank Imaging ",
+  cardiac_seg = read.csv(paste0("../../../UK Biobank Imaging ",
                                 "Enhancement Cardiac Phenotypes.csv"))
   bb_CMR_vars = c(bb_CMR_vars,
                   names(cardiac_seg)[2:length(names(cardiac_seg))])
-  
+
   # abdominal MR variables
   bb_AMR_vars = df_vars$FieldID[df_vars$Category==126 | df_vars$Category==149]
   bb_AMR_vars = grep(
@@ -286,16 +286,16 @@ get_ukb_subset_rows = function(df, subset_option="all") {
     
     # exclude those with heart attack/angina/stroke at time of imaging
     subset_rows = which(!is.na(df[,"BPSys-2.0"]) & 
-                        (df[,"6150-2.0"] < 0 | df[,"6150-2.0"] > 3) & 
-                        (df[,"diag_min_datedif"] > 0))
-    
+                        (!(df[,"6150-2.0"] > 0 & df[,"6150-2.0"] < 4) ))#|
+#                                                      is.na(df[,"6150-2.0"])))
+
   } else if (subset_option == "women no heart attack, angina, stroke") {
     
     # only women: exclude those with heart attack/angina/stroke at time 
     #             of imaging
     subset_rows = which(!is.na(df[,"BPSys-2.0"]) & df[,"sex"] == "0" &
-                        (df[,"6150-2.0"] < 0 | df[,"6150-2.0"] > 3) & 
-                        (df[,"diag_min_datedif"] > 0))
+                          (!(df[,"6150-2.0"] > 0 & df[,"6150-2.0"] < 4) ))#|
+#                                                      is.na(df[,"6150-2.0"])))
     
   } else {
     warning("Wrong Subset Option Error")
@@ -320,7 +320,32 @@ return_cols_rows_filter_df = function(df, cols, rows) {
   
 }
 
-return_clean_df = function(df,threshold_col,threshold_row) {
+return_remove_outlier = function(data) {
+  
+  # given a matrix, remove values in each column (representing each feature)
+  # which are more than 3 standard deviations away from the mean, assuming
+  # the values are normally distributed
+  
+  # use z_score to remove values which are more than 3 standard deviations
+  # away from the mean (not within 99.7% of values), performed by column
+  data = apply(data, 2, function(x) {
+    
+                            # compute mean and sd
+                            mean = mean(x, na.rm=TRUE)
+                            std = sd(x, na.rm=TRUE)
+                            z_score = abs(x - mean)/std
+                            
+                            # set outliers as NA
+                            x[z_score > 3] = NA
+                            return(x)
+                          
+                        })
+  
+  return(data)
+  
+}
+
+return_clean_df = function(df, threshold_col, threshold_row) {
   
   # apply filtering to clean the dataset and remove rows (patients) with many
   # missing values from the dataset and return the fully cleaned dataset
@@ -340,10 +365,7 @@ return_clean_df = function(df,threshold_col,threshold_row) {
   # display % missing values before cleaning
   print(sprintf("Percentage NA After Cleaning: %0.1f%%", 
                 sum(is.na(df))/prod(dim(df))*100))
-  
-  # change NA to numerical value
-  df[is.na(df)] = -999999
-  
+
   return(df)
   
 }
@@ -405,32 +427,64 @@ return_ukb_target_background_labels = function(df_subset,
   
 }
 
-return_ukb_normalize_zscore = function(data) {
+return_imputed_data = function(data, method="median") {
   
-  # given a ukb with features starting from the 5th column (previous 4 columns
-  # are the IDs and labels), perform mean and standard deviation normalization
+  # given an input data matrix, and a method selected for imputation
+  # perform imputation and return the dataset
+  
+  if (any(method == c("median", "mode", "mean"))) {
+   
+    if (method == "mean") {
+      
+      data = apply(data, 2, function(x) {
+                                  x[is.na(x)] = mean(x, na.rm=TRUE)
+                                  return(x)
+                                })
+      
+    } else if (method == "mode") {
+      
+      data = apply(data, 2, function(x) {
+                                  x[is.na(x)] = mode(x)
+                                  return(x)
+                                })
+    
+    } else if (method == "median") {
+
+      data = apply(data, 2, function(x) {
+                                  x[is.na(x)] = median(x, na.rm=TRUE)
+                                  return(x)
+                                })
+      
+    }
+    
+  } else if (method == "regression") {
+    
+    # TO DO
+    #library(mi)
+    #data = mi(ukb_df)
+    x = 0
+    
+  } else {
+    warning("Wrong Imputation Method Provided")
+  }
+  
+  return(data)
+  
+}
+
+return_normalize_zscore = function(data) {
+  
+  # given a matrix of numbers perform mean and standard deviation normalization
   # for each column, which represents 1 feature, of the dataframe, these cols
   # should all be numerical
-  
-  # 
-  feature_cols = data[,5:ncol(data)]
-  
-  # retrieve NAs and re-assign NA value
-  feature_cols[feature_cols == -999999] = NA
-  
+
   # compute mean and standard deviation of each column
-  data_means = colMeans(feature_cols, na.rm=TRUE)
-  data_std = apply(feature_cols, 2, function(x) sd(x, na.rm=TRUE))
+  data_means = colMeans(data, na.rm = TRUE)
+  data_std = apply(data, 2, function(x) sd(x, na.rm = TRUE))
   
   # subtract mean and divide by standard deviation
-  feature_cols = sweep(feature_cols, 2, data_means, "-")
-  feature_cols = sweep(feature_cols, 2, data_std, "/")
-  
-  # re-assign missing values
-  feature_cols[is.na(feature_cols)] = -999999
-  
-  # re-assign to original data frame
-  data[, 5:ncol(data)] = feature_cols
+  data = sweep(data, 2, data_means, "-")
+  data = sweep(data, 2, data_std, "/")
   
   return(data)
   

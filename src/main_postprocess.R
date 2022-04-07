@@ -11,7 +11,7 @@ weight_thres = as.numeric(read.csv(file.path(path,"threshold_weighting.csv"),
                                    header=TRUE))
 
 # box plot by group
-plot_boxplot_by_group(data = psuedotimes, 
+plot_boxplot_by_group(data = psuedotimes,
                       y = psuedotimes$global_pseudotimes,
                       group = psuedotimes$bp_group,
                       title = "Disease Progression by Blood Pressure Group",

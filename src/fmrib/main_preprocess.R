@@ -1,6 +1,6 @@
 
 # load functions
-source("preprocess_fmrib_utils.R")
+source("preprocess_utils.R")
 
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
@@ -15,29 +15,38 @@ ukb_filtered_cols = get_ukb_subset_column_names(df = ukb$ukb_data,
 
 # extract UKB dataset rows (patients) we want to keep
 ukb_filtered_rows = get_ukb_subset_rows(df = ukb$ukb_data,
-                                        subset_option = "all")
+                                        subset_option = "no heart attack, angina, stroke")
 
 # subset UKB dataframe based on row/column filters, and remove missing
 ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
                                     cols = ukb_filtered_cols,
                                     rows = ukb_filtered_rows)
 
+# remove outliers
+ukb_df[, 2:ncol(ukb_df)] = return_remove_outlier(data =
+                                                    ukb_df[, 2:ncol(ukb_df)])
+
 # clean dataset of rows/columns with too many missing values
 ukb_df = return_clean_df(df = ukb_df,
                          threshold_col = 0.5,
                          threshold_row = 0.05)
 
-# get corresponding vector of labels depending on criteria
-# background (1), target (2), between (0)
+# remove rows with missing blood pressure values
+ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
+
+# get corresponding vector of labels depending on criteria background (1), 
+# target (2), between (0). The first 5 columns are now ID/label columns
+# to omit during further processing
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
-                                             target_criteria = "> 160/100")
-
-# mean and standard deviation normalization for all feature columns (from 5th)
-ukb_df = return_ukb_normalize_zscore(data = ukb_df)
-
-# remove outliers
+                                             target_criteria = "> 140/80")
 
 # impute data
+ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
+                                               method = "median")
+
+# mean and standard deviation normalization for all feature columns (from 5th)
+ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
+                                                      ukb_df[, 5:ncol(ukb_df)])
 
 # write to output
 write.csv(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv", row.names=FALSE)
