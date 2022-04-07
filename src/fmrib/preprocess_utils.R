@@ -427,7 +427,7 @@ return_ukb_target_background_labels = function(df_subset,
   
 }
 
-return_imputed_data = function(data, method="median") {
+return_imputed_data = function(data, method="mean") {
   
   # given an input data matrix, and a method selected for imputation
   # perform imputation and return the dataset
@@ -467,6 +467,9 @@ return_imputed_data = function(data, method="median") {
   } else {
     warning("Wrong Imputation Method Provided")
   }
+  
+  # display number of missing data to check
+  print(sprintf("Number of Missing Data: %0.f",sum(is.na(data))))
   
   return(data)
   

@@ -15,7 +15,7 @@ ukb_filtered_cols = get_ukb_subset_column_names(df = ukb$ukb_data,
 
 # extract UKB dataset rows (patients) we want to keep
 ukb_filtered_rows = get_ukb_subset_rows(df = ukb$ukb_data,
-                                        subset_option = "no heart attack, angina, stroke")
+                                        subset_option = "all")
 
 # subset UKB dataframe based on row/column filters, and remove missing
 ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
@@ -42,7 +42,7 @@ ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
 
 # impute data
 ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
-                                               method = "median")
+                                               method = "mean")
 
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
