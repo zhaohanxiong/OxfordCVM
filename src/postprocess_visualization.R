@@ -13,7 +13,7 @@ plot_boxplot_by_group = function(data, y, group,
                                  xlab = "x lab", ylab = "y lab",
                                  labels = c("Group 1", "Group 2"),
                                  ylimits = c(min(y, na.rm=TRUE),
-                                             max(quantile(y, 0.95), na.rm=TRUE)),
+                                             max(quantile(y, 0.99), na.rm=TRUE)),
                                  save = FALSE, save_path = "") {
   
   # this function produces a boxplot given a dataframe, the name of the
@@ -57,7 +57,7 @@ plot_line_by_group = function(data, x, y, group,
   # else just open new window for plotting
   if (save) pdf(file.path(save_path,".pdf"), width = 20, height = 10)
   
-  # get the number of unique groups
+  # extract the trend of each group
   grad = c()
   y_intercept = c()
   
@@ -76,18 +76,20 @@ plot_line_by_group = function(data, x, y, group,
     
   }
   
-  # generate some colours
-  cols = gg_color_hue(length(unique(group)))
+  # extract the centroids for each group
+  centroids = aggregate(cbind(x, y) ~ group, data, mean)
   
   # produce plot
   p = ggplot(psuedotimes, aes(y = y, x = x,
                               group = as.factor(group))) +
         geom_point(aes(color = as.factor(group)), shape = 1, alpha = 0.5) +
+        geom_point(data = centroids, aes(fill = as.factor(group)), size = 5, 
+                   color = "black", shape = 21) + 
         scale_y_continuous(limits = ylimits) +
         ggtitle(title) + xlab(xlab) + ylab(ylab) +
-        theme(legend.title = element_blank()) +
-        geom_abline(slope = grad, intercept = y_intercept, 
-                    color = cols, size = 1.25, linetype = "longdash")
+        theme(legend.title = element_blank()) #+
+        #geom_abline(slope = grad, intercept = y_intercept, 
+        #            size = 1, linetype = "longdash")
   
   # close the plotting tool if needed
   if (save) dev.off()

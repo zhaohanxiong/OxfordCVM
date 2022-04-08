@@ -40,9 +40,9 @@ ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
                                              target_criteria = "> 140/80")
 
-# impute data
-ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
-                                               method = "median")
+# impute data, number of cols could change here so need to re-assign df
+temp = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)], method = "median")
+ukb_df = cbind(ukb_df[, 1:4], temp)
 
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
