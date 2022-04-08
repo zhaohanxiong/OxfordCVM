@@ -362,9 +362,14 @@ return_clean_df = function(df, threshold_col, threshold_row) {
   # keep rows with under 5% missing data
   df = df[rowMeans(is.na(df)) <= threshold_row, ]
 
+  # filter out any column which are all 0s, if column is full of 0s, this 
+  # will break the PCA algorithm. Mask out NAs when finding zeros
+  zero_cols = apply(df, 2, function(x) all(x[!is.na(x)] == 0))
+  df = df[, !zero_cols]
+  
   # display % missing values before cleaning
   print(sprintf("Percentage NA After Cleaning: %0.1f%%", 
-                sum(is.na(df))/prod(dim(df))*100))
+                                          sum(is.na(df))/prod(dim(df))*100))
 
   return(df)
   
@@ -470,11 +475,6 @@ return_imputed_data = function(data, method="median") {
   } else {
     warning("Wrong Imputation Method Provided")
   }
-  
-  # filter out any column which are all 0s, if column is full of 0s, this 
-  # will break the PCA algorithm
-  zero_cols = apply(data, 2, function(x) all(x == 0))
-  data = data[, !zero_cols]
   
   # display number of missing data to check
   print(sprintf("Number of Missing Data: %0.f", sum(is.na(data))))
