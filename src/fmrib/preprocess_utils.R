@@ -468,9 +468,6 @@ return_imputed_data = function(data, method="median") {
     warning("Wrong Imputation Method Provided")
   }
   
-  # rm cols with missing values
-  data = data[,!is.na(data[1,])]
-  
   # display number of missing data to check
   print(sprintf("Number of Missing Data: %0.f",sum(is.na(data))))
   
@@ -487,6 +484,9 @@ return_normalize_zscore = function(data) {
   # compute mean and standard deviation of each column
   data_means = colMeans(data, na.rm = TRUE)
   data_std = apply(data, 2, function(x) sd(x, na.rm = TRUE))
+  
+  # if std = 0, set it to 1 to avoid zero division
+  data_std[data_std == 0] = 1
   
   # subtract mean and divide by standard deviation
   data = sweep(data, 2, data_means, "-")
