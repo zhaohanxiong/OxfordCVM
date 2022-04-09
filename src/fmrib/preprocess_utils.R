@@ -345,12 +345,14 @@ return_remove_outlier = function(data) {
   
 }
 
-return_clean_df = function(df, threshold_col, threshold_row) {
+return_clean_df = function(df, threshold_col, threshold_row, char_cols = c()) {
   
   # apply filtering to clean the dataset and remove rows (patients) with many
   # missing values from the dataset and return the fully cleaned dataset
   # the thresholds are the upper boundaries for how many missing data
   # we allow in each column/row (thresholds are not in percentages)
+  # this function also includes an array defining character columns which
+  # can be masked out for further cleaning of 0/NA values
   
   # display % missing values before cleaning
   print(sprintf("Percentage NA Before Cleaning: %0.1f%%", 
@@ -361,11 +363,23 @@ return_clean_df = function(df, threshold_col, threshold_row) {
   
   # keep rows with under 5% missing data
   df = df[rowMeans(is.na(df)) <= threshold_row, ]
-
-  # filter out any column which are all 0s, if column is full of 0s, this 
-  # will break the PCA algorithm. Mask out NAs when finding zeros
-  zero_cols = apply(df, 2, function(x) all(x[!is.na(x)] == 0))
-  df = df[, !zero_cols]
+  
+  # only perform cleaning on numeric columns
+  if (length(char_cols) > 0) {
+    
+    # assign numeric columns only to new temp dataframe
+    temp = df[, -char_cols]
+    
+    # filter out any column which are all 0s, if column is full of 0s, this 
+    # will break the PCA algorithm. Mask out NAs when finding zeros
+    # need to filter out character columns, and leave only numeric ones
+    zero_cols = apply(temp, 2, function(x) all(x[!is.na(x)] == 0))
+    temp = temp[, !zero_cols]
+    
+    # reassign via column concatenation, moving character columns to the front
+    df = cbind(df[, char_cols], temp)
+      
+  }
   
   # display % missing values before cleaning
   print(sprintf("Percentage NA After Cleaning: %0.1f%%", 

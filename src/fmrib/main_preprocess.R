@@ -28,8 +28,8 @@ ukb_df[, 2:ncol(ukb_df)] = return_remove_outlier(data =
 
 # clean dataset of rows/columns with too many missing values
 ukb_df = return_clean_df(df = ukb_df,
-                         threshold_col = 0.5,
-                         threshold_row = 0.05)
+                         threshold_col = 0.5, threshold_row = 0.05,
+                         char_cols = c(1))
 
 # remove rows with missing blood pressure values
 ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
