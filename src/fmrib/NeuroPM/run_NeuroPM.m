@@ -1,4 +1,4 @@
-ble%% add paths (not for compile version)
+%% add paths (not for compile version)
 %addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\");
 
 %% read data
