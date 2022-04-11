@@ -22,7 +22,7 @@ classes_for_colours(ind_background) = 2;
 classes_for_colours(ind_between) = 3;
 
 %% impute data (dont use as takes very long to run)
-%data(data == -999999) = nan;
+%data(ismissing(data)) = nan;
 %data = TSR(data);
 
 %% call function
