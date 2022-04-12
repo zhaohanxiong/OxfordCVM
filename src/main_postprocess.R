@@ -3,7 +3,7 @@
 source("postprocess_visualization.R")
 
 # load outputs from NeuroPM
-path = "C:/Users/zxiong/Desktop/io 2 - imputation" #"fmrib/NeuroPM/io/"
+path = "C:/Users/zxiong/Desktop/io 2 - no zscore" #"fmrib/NeuroPM/io/"
 
 #ukb_df = read.csv(file.path(path,"ukb_num.csv"),header=TRUE)
 psuedotimes = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
