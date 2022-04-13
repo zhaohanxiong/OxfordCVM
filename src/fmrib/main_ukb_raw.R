@@ -1,10 +1,9 @@
 
 # load dataframe
-df = read.csv("../../../ukb51139.csv", sep = ",",
-              header = TRUE, nrows = 1000)
+df = read.csv("../../../ukb51139.csv", sep = ",", header = TRUE)
 
 # convert empties into missing value
-df[df==""] = NA
+df[df == ""] = NA
 
 # print information regarding outputs
 print(sprintf("Percentage of Missing Data Before Filtering %0.1f%%",

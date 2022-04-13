@@ -5,7 +5,7 @@ source("preprocess_utils.R")
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
 # which is tracked by git
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../bb_data.csv",
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_subset.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
 
 # extract UKB columns (variables) we want to keep
