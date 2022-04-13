@@ -1,9 +1,15 @@
 
-# load dataframe
-df = read.csv("../../../ukb51139.csv", sep = ",", header = TRUE)
+# load dependencies
+library(data.table)
 
-# convert empties into missing value
-df[df == ""] = NA
+# read data using fast method
+df = fread("../../../ukb51139.csv")
+
+# convert into data frame (for ease of manipulation)
+df = data.frame(df)
+
+# convert empties into missing value (gives memory error)
+#df[df == ""] = NA
 
 # print information regarding outputs
 print(sprintf("Percentage of Missing Data Before Filtering %0.1f%%",
@@ -21,5 +27,5 @@ print(sprintf("Percentage of Missing Data After Filtering %0.1f%%",
               sum(is.na(df))/prod(dim(df))*100))
 print(sprintf("Number of Samples After Filtering %0.0f", nrow(df)))
 
-# write to output
-write.csv(df,"../../../ukb51139_subset.csv", row.names = FALSE)
+# write to output using fast method
+fwrite(df, "../../../ukb51139_subset.csv")
