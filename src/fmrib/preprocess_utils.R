@@ -358,6 +358,9 @@ return_clean_df = function(df, threshold_col, threshold_row, char_cols = c()) {
   print(sprintf("Percentage NA Before Cleaning: %0.1f%%", 
                 sum(is.na(df))/prod(dim(df))*100))
   
+  # turn empty string cells in to NA
+  df[df == ""] = NA
+
   # keep columns with under 50% missing data
   df = df[, colMeans(is.na(df)) <= threshold_col]
   
