@@ -1,4 +1,7 @@
 
+# load dependencies
+library(data.table)
+
 load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   
   # This function takes two file paths, the path to the UKB patient
@@ -7,24 +10,33 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   # tidied and returned
   
   # read data in
-  df = read.csv(path_ukb_data, 
-                header=TRUE, stringsAsFactors=FALSE)
-  df_vars = read.csv(path_ukb_vars, 
-                     header=TRUE, stringsAsFactors=FALSE)
+  df = fread(path_ukb_data, header=TRUE, nrows = 10000)
+  df_vars = fread(path_ukb_vars, header=TRUE)
+  
+  # convert to dataframe
+  df = data.frame(df)
+  df_vars = data.frame(df_vars)
   
   # clean up some column names
   names(df) = gsub("X", "", names(df))
   names(df) = sub("\\.", "-", names(df))
   names(df) = sub("Record-Id", "Record.Id", names(df))
   
-  df$Record.Id = paste0("BB", df$Record.Id)
+  # set record ID column
+  df$Record.Id = paste0(paste0("BB", df$Record.Id), df$eid)
   df$StudyName = "BB"
+
+  # set blood pressure variables
+  df[["BPSys-1.0"]] = df[["4080-0.0"]]
+  df[["BPSys-2.0"]] = df[["4080-0.1"]]
+  df[["BPDia-1.0"]] = df[["4079-0.0"]]
+  df[["BPDia-2.0"]] = df[["4079-0.1"]]
   
   # change some data types
   df_vars$Field = as.character(df_vars$Field)
   df_vars$FieldID = as.character(df_vars$FieldID)
   
-  return(list(ukb_data=df, ukb_vars=df_vars))
+  return(list(ukb_data = df, ukb_vars = df_vars))
   
 }
 
@@ -258,6 +270,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   vars_subset_cols = c("Record.Id","BPSys-2.0","BPDia-2.0",vars_subset_cols)
                          
   return(vars_subset_cols)
+  
 }
 
 get_ukb_subset_rows = function(df, subset_option="all") {

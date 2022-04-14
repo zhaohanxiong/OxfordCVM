@@ -1,19 +1,6 @@
 
-# load dependencies
-library(data.table)
-
-# define helper functions to isolate memory usage
-read_file = function(path) {
-
-    # read data using fast method
-    df = fread(path)
-
-    # convert into data frame (for ease of manipulation)
-    df = data.frame(df)
-
-    return(df)
-
-}
+# load functions
+source("preprocess_utils.R")
 
 clean_NAs = function(data) {
 
@@ -27,15 +14,15 @@ clean_NAs = function(data) {
 
 }
 
-# read data using fast method
-df = read_file("../../../ukb51139.csv")
+# read data
+df = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139.csv",
+                                  path_ukb_vars = "../../../bb_variablelist.csv")[[1]]
 
 # print information regarding outputs
 print(sprintf("Percentage of Missing Data Before Filtering %0.1f%%",
               sum(is.na(df))/prod(dim(df))*100))
-print(sprintf("Data Frame is of Size %0.0f by %0.0f", nrow(df), ncol(df)))
-
-# get cols here (make sure BP and Record ID is in here somewhere)
+print(sprintf("Data Frame is of Size %0.0f by %0.0f", 
+              nrow(df), ncol(df)))
 
 # remove NAs
 df = clean_NAs(df)
@@ -43,14 +30,22 @@ df = clean_NAs(df)
 # print information regarding outputs
 print(sprintf("Percentage of Missing Data After Filtering %0.1f%%",
               sum(is.na(df))/prod(dim(df))*100))
-print(sprintf("Data Frame is of Size %0.0f by %0.0f", nrow(df), ncol(df)))
+print(sprintf("Data Frame is of Size %0.0f by %0.0f", 
+              nrow(df), ncol(df)))
 
-# write to output using fast method
-fwrite(df[1:100000,], "../../../ukb51139_subset_1.csv")
-fwrite(df[100001:200000,], "../../../ukb51139_subset_2.csv")
-fwrite(df[200001:300000,], "../../../ukb51139_subset_3.csv")
-fwrite(df[300001:400000,], "../../../ukb51139_subset_4.csv")
-fwrite(df[400000:nrow(df),], "../../../ukb51139_subset_5.csv")
+# write to output
+r = nrow(df)
+f = seq(1, by = 100000, to = r)
+
+for (i in 1:length(f)) {
+  if (i < length(f)) { # for the first n - 1 files
+    fwrite(df[f[i]:(f[i]+100000), ],
+           paste0("../../../ukb51139_subset_", i, ".csv"))
+  } else { # for the last file
+    fwrite(df[f[i]:ncol(df), ],
+           paste0("../../../ukb51139_subset_", i, ".csv"))    
+  }
+}
 
 # combining the files above into a single data frame (processing) done
 # in steps as the memory cannot allocate the required memory to both
