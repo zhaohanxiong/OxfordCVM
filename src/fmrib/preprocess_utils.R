@@ -324,10 +324,10 @@ return_cols_rows_filter_df = function(df, cols, rows) {
   # and returned the subsetted version.
   
   # subset rows
-  df = df[rows, ]
+  df = df[rows[rows <= nrow(df)], ]
   
   # subset columns
-  df = df[, cols]
+  df = df[, cols[cols %in% colnames(df)]]
 
   return(df)
   

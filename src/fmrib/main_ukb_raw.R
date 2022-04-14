@@ -1,4 +1,6 @@
 
+setDTthreads(8)
+
 # load functions
 source("preprocess_utils.R")
 
