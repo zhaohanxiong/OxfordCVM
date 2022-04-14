@@ -10,7 +10,7 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   # tidied and returned
   
   # read data in
-  df = fread(path_ukb_data, header=TRUE, nrows = 10000)
+  df = fread(path_ukb_data, header=TRUE)
   df_vars = fread(path_ukb_vars, header=TRUE)
   
   # convert to dataframe

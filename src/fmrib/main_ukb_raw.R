@@ -4,13 +4,13 @@ source("preprocess_utils.R")
 
 clean_NAs = function(data) {
 
-    # keep columns with under 50% missing data
-    data = data[, colMeans(is.na(data)) <= 0.5]
+  # keep columns with under 50% missing data
+  data = data[, colMeans(is.na(data)) <= 0.5]
+  
+  # keep rows with under 5% missing data
+  data = data[rowMeans(is.na(data)) <= 0.05, ]
 
-    # keep rows with under 5% missing data
-    data = data[rowMeans(is.na(data)) <= 0.05, ]
-
-    return(data)
+  return(data)
 
 }
 
@@ -34,8 +34,7 @@ print(sprintf("Data Frame is of Size %0.0f by %0.0f",
               nrow(df), ncol(df)))
 
 # write to output
-r = nrow(df)
-f = seq(1, by = 100000, to = r)
+f = seq(1, by = 100000, to = nrow(df))
 
 for (i in 1:length(f)) {
   if (i < length(f)) { # for the first n - 1 files
