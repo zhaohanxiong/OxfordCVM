@@ -5,7 +5,7 @@ source("preprocess_utils.R")
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
 # which is tracked by git
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139.csv",
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_subset.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
 
 # extract UKB columns (variables) we want to keep
@@ -38,7 +38,7 @@ ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
 # target (2), between (0). The first 5 columns are now ID/label columns
 # to omit during further processing
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
-                                             target_criteria = "> 140/80")
+                                             target_criteria = "> 160/100")
 
 # impute data
 ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)], 
