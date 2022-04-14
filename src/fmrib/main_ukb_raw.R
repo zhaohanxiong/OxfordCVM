@@ -4,6 +4,19 @@ source("preprocess_utils.R")
 
 setDTthreads(8)
 
+# define helper functions to isolate memory usage
+read_file = function(path) {
+
+    # read data using fast method
+    df = fread(path)
+
+    # convert into data frame (for ease of manipulation)
+    df = data.frame(df)
+
+    return(df)
+
+}
+
 clean_NAs = function(data) {
 
   # keep columns with under 50% missing data
@@ -17,8 +30,7 @@ clean_NAs = function(data) {
 }
 
 # read data
-df = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139.csv",
-                                  path_ukb_vars = "../../../bb_variablelist.csv")[[1]]
+df = read_file("../../../ukb51139.csv")
 
 # print information regarding outputs
 print(sprintf("Percentage of Missing Data Before Filtering %0.1f%%",
