@@ -66,8 +66,6 @@ write_final_output = function() {
     # concatenate and write to file
     dat_out = rbind(dat_1, dat_2, dat_3, dat_4, dat_5)
 
-    dat_out = data.frame(dat_out)
-    
     # write to output
     fwrite(dat_out, "../../../ukb51139_subset.csv", row.names = FALSE)
 
