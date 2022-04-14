@@ -5,7 +5,7 @@ source("preprocess_utils.R")
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
 # which is tracked by git
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_subset.csv",
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
 
 # extract UKB columns (variables) we want to keep
@@ -47,6 +47,10 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
                                                       ukb_df[, 5:ncol(ukb_df)])
+
+# display final dataframe size
+print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
+                                                    nrow(ukb_df), ncol(ukb_df)))
 
 # write to output
 write.csv(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv", row.names=FALSE)
