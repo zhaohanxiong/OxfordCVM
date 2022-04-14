@@ -35,6 +35,8 @@ print(sprintf("Percentage of Missing Data Before Filtering %0.1f%%",
               sum(is.na(df))/prod(dim(df))*100))
 print(sprintf("Data Frame is of Size %0.0f by %0.0f", nrow(df), ncol(df)))
 
+# get cols here (make sure BP and Record ID is in here somewhere)
+
 # remove NAs
 df = clean_NAs(df)
 
@@ -68,8 +70,10 @@ write_final_output = function() {
     # concatenate and write to file
     dat_out = rbind(dat_1, dat_2, dat_3, dat_4, dat_5)
 
+    dat_out = data.frame(dat_out)
+    
     # write to output
-    fwrite(dat_out,"../../../ukb51139_subset.csv")
+    fwrite(dat_out, "../../../ukb51139_subset.csv", row.names = FALSE)
 
 }
 
