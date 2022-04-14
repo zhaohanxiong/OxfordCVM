@@ -1,8 +1,8 @@
 
-setDTthreads(8)
-
 # load functions
 source("preprocess_utils.R")
+
+setDTthreads(8)
 
 clean_NAs = function(data) {
 
