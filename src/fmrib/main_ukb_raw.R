@@ -2,8 +2,6 @@
 # load functions
 source("preprocess_utils.R")
 
-setDTthreads(8)
-
 # define helper functions to isolate memory usage
 read_file = function(path) {
 
@@ -52,11 +50,13 @@ f = seq(1, by = 100000, to = nrow(df))
 
 for (i in 1:length(f)) {
   if (i < length(f)) { # for the first n - 1 files
-    fwrite(df[f[i]:(f[i]+100000), ],
+    fwrite(df[f[i]:(f[i]+99999), ],
            paste0("../../../ukb51139_subset_", i, ".csv"))
+    print(sprintf("Writing Rows %0.0f to %0.0f"), f[i], f[i]+99999)
   } else { # for the last file
-    fwrite(df[f[i]:ncol(df), ],
-           paste0("../../../ukb51139_subset_", i, ".csv"))    
+    fwrite(df[f[i]:nrow(df), ],
+           paste0("../../../ukb51139_subset_", i, ".csv"))
+    print(sprintf("Writing Rows %0.0f to %0.0f"), f[i], nrow(df))
   }
 }
 
@@ -78,9 +78,9 @@ write_final_output = function() {
     # concatenate and write to file
     dat_out = rbind(dat_1, dat_2, dat_3, dat_4, dat_5)
 
-    # write to output
-    fwrite(dat_out, "../../../ukb51139_subset.csv", row.names = FALSE)
+    return(dat_out)
 
 }
 
-#write_final_output()
+#df = write_final_output()
+#fwrite(df, "../../../ukb51139_subset.csv", row.names = FALSE)
