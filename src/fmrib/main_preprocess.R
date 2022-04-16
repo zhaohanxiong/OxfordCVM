@@ -53,5 +53,5 @@ print(sprintf("Final Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
 
 # write to output
-write.csv(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv", row.names=FALSE)
-write.csv(ukb_df[, 1:4], "NeuroPM/io/labels.csv", row.names=FALSE)
+fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")
+fwrite(ukb_df[, 1:4], "NeuroPM/io/labels.csv")
