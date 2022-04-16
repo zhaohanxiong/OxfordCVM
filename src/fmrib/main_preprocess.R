@@ -31,7 +31,8 @@ print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
 
 # clean dataset of rows/columns with too many missing values
 ukb_df = return_clean_df(df = ukb_df,
-                         threshold_col = 0.75, threshold_row = 0.05,
+                         threshold_row1 = 0.95, threshold_col = 0.5,
+                         threshold_row2 = 0.05,
                          char_cols = c(1))
 
 # remove rows with missing blood pressure values

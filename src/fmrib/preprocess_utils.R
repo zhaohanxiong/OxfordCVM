@@ -360,7 +360,8 @@ return_remove_outlier = function(data) {
   
 }
 
-return_clean_df = function(df, threshold_col, threshold_row, char_cols = c()) {
+return_clean_df = function(df, threshold_row1, threshold_col, threshold_row2, 
+                           char_cols = c()) {
   
   # apply filtering to clean the dataset and remove rows (patients) with many
   # missing values from the dataset and return the fully cleaned dataset
@@ -375,12 +376,15 @@ return_clean_df = function(df, threshold_col, threshold_row, char_cols = c()) {
   
   # turn empty string cells in to NA
   df[df == ""] = NA
+  
+  # initial row filter
+  df = df[rowMeans(is.na(df)) <= threshold_row1, ]
 
   # keep columns with under 50% missing data
   df = df[, colMeans(is.na(df)) <= threshold_col]
-  
+
   # keep rows with under 5% missing data
-  df = df[rowMeans(is.na(df)) <= threshold_row, ]
+  df = df[rowMeans(is.na(df)) <= threshold_row2, ]
   
   # only perform cleaning on numeric columns
   if (length(char_cols) > 0) {
