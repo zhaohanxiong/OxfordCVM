@@ -22,6 +22,10 @@ ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
                                     cols = ukb_filtered_cols,
                                     rows = ukb_filtered_rows)
 
+# display final dataframe size
+print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
+                                                    nrow(ukb_df), ncol(ukb_df)))
+
 # remove outliers
 ukb_df[, 2:ncol(ukb_df)] = return_remove_outlier(data =
                                                     ukb_df[, 2:ncol(ukb_df)])
@@ -33,6 +37,10 @@ ukb_df = return_clean_df(df = ukb_df,
 
 # remove rows with missing blood pressure values
 ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
+
+# display final dataframe size
+print(sprintf("Cleaned Data Frame is of Size %0.0f by %0.0f",
+                                                    nrow(ukb_df), ncol(ukb_df)))
 
 # get corresponding vector of labels depending on criteria background (1), 
 # target (2), between (0). The first 5 columns are now ID/label columns
