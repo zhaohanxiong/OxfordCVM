@@ -26,11 +26,15 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   df$Record.Id = paste0(paste0("BB", df$Record.Id), df$eid)
   df$StudyName = "BB"
 
-  # set blood pressure variables
-  df[["BPSys-1.0"]] = df[["4080-0.0"]]
-  df[["BPSys-2.0"]] = df[["4080-0.1"]]
-  df[["BPDia-1.0"]] = df[["4079-0.0"]]
-  df[["BPDia-2.0"]] = df[["4079-0.1"]]
+  # set blood pressure variables if not present already
+  if (length(grep("BPSys", colnames(df))) == 0) {
+
+    df[["BPSys-1.0"]] = df[["4080-0.0"]]
+    df[["BPSys-2.0"]] = df[["4080-0.1"]]
+    df[["BPDia-1.0"]] = df[["4079-0.0"]]
+    df[["BPDia-2.0"]] = df[["4079-0.1"]]
+
+  }
   
   # change some data types
   df_vars$Field = as.character(df_vars$Field)

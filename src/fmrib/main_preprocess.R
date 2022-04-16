@@ -5,7 +5,7 @@ source("preprocess_utils.R")
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
 # which is tracked by git
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139.csv",
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_subset.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
 
 # extract UKB columns (variables) we want to keep
@@ -22,13 +22,12 @@ ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
                                     cols = ukb_filtered_cols,
                                     rows = ukb_filtered_rows)
 
+# remove initial variable to clear memory
+rm(ukb)
+
 # display final dataframe size
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
-
-# remove outliers
-ukb_df[, 2:ncol(ukb_df)] = return_remove_outlier(data =
-                                                    ukb_df[, 2:ncol(ukb_df)])
 
 # clean dataset of rows/columns with too many missing values
 ukb_df = return_clean_df(df = ukb_df,
@@ -38,6 +37,10 @@ ukb_df = return_clean_df(df = ukb_df,
 # remove rows with missing blood pressure values
 ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
 
+# remove outliers
+ukb_df[, 2:ncol(ukb_df)] = return_remove_outlier(data =
+                                                    ukb_df[, 2:ncol(ukb_df)])
+                                                    
 # display final dataframe size
 print(sprintf("Cleaned Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
