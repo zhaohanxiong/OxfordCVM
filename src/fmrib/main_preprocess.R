@@ -42,12 +42,7 @@ ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
 ukb_df[, 2:ncol(ukb_df)] = return_remove_outlier(data =
                                                     ukb_df[, 2:ncol(ukb_df)])
 
-# clean dataset again
-ukb_df = return_clean_df(df = ukb_df,
-                         threshold_row1 = 1, threshold_col = 0.05,
-                         threshold_row2 = 0.05)
-
-# display final dataframe size
+# display claned dataframe size
 print(sprintf("Cleaned Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
 
@@ -68,6 +63,7 @@ ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data =
 # display final dataframe size
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
                                                     nrow(ukb_df), ncol(ukb_df)))
+print(sprintf("Final Number of Missing Data: %0.f", sum(is.na(ukb_df))))
 
 # write to output
 fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")

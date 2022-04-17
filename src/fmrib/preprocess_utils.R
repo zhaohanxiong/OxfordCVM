@@ -535,6 +535,9 @@ return_normalize_zscore = function(data) {
   data = sweep(data, 2, data_means, "-")
   data = sweep(data, 2, data_std, "/")
   
+  # remove missing columns induced by this step
+  data = data[, colMeans(is.na(data)) < 1]
+
   return(data)
   
 }
