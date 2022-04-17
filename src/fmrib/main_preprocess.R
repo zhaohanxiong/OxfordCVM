@@ -15,7 +15,7 @@ ukb_filtered_cols = get_ukb_subset_column_names(df = ukb$ukb_data,
 
 # extract UKB dataset rows (patients) we want to keep
 ukb_filtered_rows = get_ukb_subset_rows(df = ukb$ukb_data,
-                                        subset_option = "all") #no heart attack, angina, stroke
+                                subset_option = "no heart attack, angina, stroke")
 
 # subset UKB dataframe based on row/column filters, and remove missing
 ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
