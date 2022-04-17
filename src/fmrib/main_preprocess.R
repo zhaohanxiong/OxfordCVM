@@ -5,7 +5,7 @@ source("preprocess_utils.R")
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
 # which is tracked by git
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_subset.csv",
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
 
 # extract UKB columns (variables) we want to keep
@@ -15,15 +15,15 @@ ukb_filtered_cols = get_ukb_subset_column_names(df = ukb$ukb_data,
 
 # extract UKB dataset rows (patients) we want to keep
 ukb_filtered_rows = get_ukb_subset_rows(df = ukb$ukb_data,
-                                subset_option = "no heart attack, angina, stroke")
+                                subset_option = "all") #no heart attack, angina, stroke
 
 # subset UKB dataframe based on row/column filters, and remove missing
 ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
                                     cols = ukb_filtered_cols,
                                     rows = ukb_filtered_rows)
 
-# remove initial variable to clear memory
-rm(ukb)
+# remove initial variable to clear memory and write intermediate
+rm(ukb) #fwrite(ukb_df, "../../../ukb51139_subset.csv")
 
 # display final dataframe size
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",

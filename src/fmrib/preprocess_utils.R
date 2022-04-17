@@ -77,6 +77,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   # Demographic
   Sex = "31-0.0"
   Age = grep("^21003-", names(df), value=TRUE)
+  Event = "6150-0.0"
   
   # other, date of imaging visit 
   StudyDate = grep("^53-", names(df), value=TRUE)
@@ -221,7 +222,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   bb_blood_vars = bb_blood_vars[!bb_blood_vars %in% excl]
   
   # Combine variables together
-  vars = c("eid", "12187-2.0", Age, Sex, StudyDate, BPSys, BPSys2, BPDia,
+  vars = c("eid", "12187-2.0", Age, Sex, Event, StudyDate, BPSys, BPSys2, BPDia,
            BPDia2,bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
            bb_art_vars,bb_blood_vars,bb_car_vars, bb_spir_vars,
            bb_ecgrest_vars,bb_dis_vars,bb_med_vars) # bb_antro_vars
@@ -247,7 +248,7 @@ get_ukb_subset_column_names = function(df, df_vars,
                                   bb_AMR_vars,
                                   bb_bodycomp_vars,bb_art_vars,
                                   bb_car_vars,bb_blood_vars,bb_spir_vars,
-                                  bb_ecgrest_vars,Sex,Age)]
+                                  bb_ecgrest_vars,Sex,Age,Event)]
     
   } else if (subset_option == "cardiac") {
     
@@ -303,14 +304,14 @@ get_ukb_subset_rows = function(df, subset_option="all") {
     
     # exclude those with heart attack/angina/stroke at time of imaging
     subset_rows = which(!is.na(df[,"BPSys-2.0"]) & 
-                              (!(df[,"6150-0.0"] > 0 & df[,"6150-0.0"] < 4) ))
+                              (!(df[,"6150-0.0"] > 0 & df[,"6150-0.0"] < 4)))
 
   } else if (subset_option == "women no heart attack, angina, stroke") {
     
     # only women: exclude those with heart attack/angina/stroke at time 
     #             of imaging
     subset_rows = which(!is.na(df[,"BPSys-2.0"]) & df[,"31-0.0"] == "0" &
-                              (!(df[,"6150-0.0"] > 0 & df[,"6150-0.0"] < 4) ))
+                              (!(df[,"6150-0.0"] > 0 & df[,"6150-0.0"] < 4)))
     
   } else {
     warning("Wrong Subset Option Error")
@@ -438,18 +439,15 @@ return_ukb_target_background_labels = function(df_subset,
     
     # target: event at time of imaging. 
     # Background: no event, no event on follow
-    target_rows = which(df_subset[,"6150-2.0"] > 0 & df_subset[,"6150-2.0"] < 4)
-    background_rows = which((df_subset[,"6150-2.0"] < 0 | df_subset[,"6150-2.0"] == 4) &
-                            (df_subset[,"6150-3.0"] < 0 | df_subset[,"6150-3.0"] == 4))
+    target_rows = which(df_subset[,"6150-0.0"] > 0 & df_subset[,"6150-0.0"] < 4)
+    background_rows = which(df_subset[,"6150-0.0"] < 0 | df_subset[,"6150-0.0"] == 4)
     
   } else if (target_criteria == "no event at time of imaging, but at follow-up") {
     
     # target: no event at time of imaging, but at follow-up. 
     # Background: no event, no event on follow-up, low BP
-    target_rows = which((df_subset[,"6150-2.0"] > 0 & df_subset[,"6150-2.0"] < 4) &
-                        (df_subset[,"6150-3.0"] > 0 | df_subset[,"6150-3.0"] < 4))
-    background_rows = which((df_subset[,"6150-2.0"] < 0 | df_subset[,"6150-2.0"] == 4) &
-                            (df_subset[,"6150-3.0"] < 0 | df_subset[,"6150-3.0"] == 4))
+    target_rows = which(df_subset[,"6150-0.0"] > 0 & df_subset[,"6150-0.0"] < 4)
+    background_rows = which(df_subset[,"6150-0.0"] < 0 | df_subset[,"6150-0.0"] == 4)
     
   } else {
     warning("Wrong Criteria Option Error")
