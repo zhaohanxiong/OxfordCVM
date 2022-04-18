@@ -3,7 +3,7 @@
 source("postprocess_visualization.R")
 
 # load outputs from NeuroPM
-path = "C:/Users/zxiong/Desktop/io" #"fmrib/NeuroPM/io/"
+path = "C:/Users/zxiong/Desktop/io 2 - imputation" #"fmrib/NeuroPM/io/"
 
 ukb_df = data.frame(fread(file.path(path,"ukb_num.csv"),header=TRUE))
 psuedotimes = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
@@ -40,16 +40,30 @@ var_sorted = gsub("x","X",var_sorted)
 plot_boxplot_by_group(data = psuedotimes,
                       y = psuedotimes$global_pseudotimes,
                       group = psuedotimes$bp_group,
-                      ylim=c(0,1),
+                      ylim=c(0, 1),
                       title = "Disease Progression by Blood Pressure Group",
                       xlab = "Blood Pressure Groups", ylab = "Disease Score",
                       labels = levels(psuedotimes$bp_group))
 
-# line plot by group
-plot_line_by_group(data = psuedotimes,
-                   x = psuedotimes$BPSys_2_0,
-                   #x = ukb_df[,c(var_sorted[10])],
-                   y = psuedotimes$global_pseudotimes,
-                   group = psuedotimes$bp_group,
-                   title = "Disease Progression by Variable",
-                   xlab = "Variable", ylab = "Disease Score")
+# # line plot by group
+# plot_line_by_group(data = psuedotimes,
+#                    x = psuedotimes$BPSys_2_0,
+#                    #x = ukb_df[,c(var_sorted[10])],
+#                    y = psuedotimes$global_pseudotimes,
+#                    group = psuedotimes$bp_group,
+#                    title = "Disease Progression by Variable",
+#                    xlab = "Variable", ylab = "Disease Score")
+
+# perform statistical tests to evaluate model
+# seperate groups into different variable
+g1 = psuedotimes$global_pseudotimes[psuedotimes$bp_group=="Background"]
+g2 = psuedotimes$global_pseudotimes[psuedotimes$bp_group=="Between"]
+g3 = psuedotimes$global_pseudotimes[psuedotimes$bp_group=="Disease"]
+
+# perform t-test between groups
+t.test(g1,g3)
+t.test(g2,g3)
+
+# perform quantile differences between groups
+unname(quantile(g2, 0.25) - quantile(g1, 0.75))
+unname(quantile(g3, 0.25) - quantile(g2, 0.75))
