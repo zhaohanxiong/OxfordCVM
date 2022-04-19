@@ -65,15 +65,15 @@ t.test(g1,g3)
 t.test(g2,g3)
 
 # perform quantile differences between groups, % overlap
-g1_bar = unname(c(quantile(g1, 0.25), quantile(g1, 0.75)))
-g2_bar = unname(c(quantile(g2, 0.25), quantile(g2, 0.75)))
-g3_bar = unname(c(quantile(g3, 0.25), quantile(g3, 0.75)))
+g1_box = unname(c(quantile(g1, 0.25), quantile(g1, 0.75)))
+g2_box = unname(c(quantile(g2, 0.25), quantile(g2, 0.75)))
+g3_box = unname(c(quantile(g3, 0.25), quantile(g3, 0.75)))
 
 sprintf("Overlap Between Background and Between is %0.3f of Background",
-                                    (g1_bar[2] - g2_bar[1]) / diff(g1_bar))
+                                    (g1_box[2] - g2_box[1]) / diff(g1_box))
 sprintf("Overlap Between Background and Between is %0.3f of Between",
-                                    (g1_bar[2] - g2_bar[1]) / diff(g2_bar))
+                                    (g1_box[2] - g2_box[1]) / diff(g2_box))
 sprintf("Overlap Between Disease and Between is %0.3f of Between", 
-                                    (g2_bar[2] - g3_bar[1]) / diff(g2_bar))
-sprintf("Overlap Between Disease and Between is %0.3f of Between", 
-                                    (g2_bar[2] - g3_bar[1]) / diff(g3_bar))
+                                    (g2_box[2] - g3_box[1]) / diff(g2_box))
+sprintf("Overlap Between Disease and Between is %0.3f of Disease", 
+                                    (g2_box[2] - g3_box[1]) / diff(g3_box))
