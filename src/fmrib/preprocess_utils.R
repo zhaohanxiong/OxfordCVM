@@ -388,21 +388,21 @@ return_clean_df = function(df, threshold_row1, threshold_col, threshold_row2,
   df = df[rowMeans(is.na(df)) <= threshold_row2, ]
   
   # only perform cleaning on numeric columns
-#  if (length(char_cols) > 0) {
+  if (length(char_cols) > 0) {
     
     # assign numeric columns only to new temp dataframe
-#    temp = df[, -char_cols]
+    temp = df[, -char_cols]
     
     # filter out any column which are all 0s, if column is full of 0s, this 
     # will break the PCA algorithm. Mask out NAs when finding zeros
     # need to filter out character columns, and leave only numeric ones
-#    zero_cols = apply(temp, 2, function(x) all(x[!is.na(x)] == 0))
-#    temp = temp[, !zero_cols]
+    zero_cols = apply(temp, 2, function(x) all(x[!is.na(x)] == 0))
+    temp = temp[, !zero_cols]
     
     # reassign via column concatenation, moving character columns to the front
-#    df = cbind(df[, char_cols], temp)
+    df = cbind(df[, char_cols], temp)
       
-#  }
+  }
   
   # display % missing values before cleaning
   print(sprintf("Percentage NA After Cleaning: %0.1f%%", 
