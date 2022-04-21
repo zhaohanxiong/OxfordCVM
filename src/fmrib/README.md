@@ -30,7 +30,7 @@ module add MATLAB/2020a
 module list
 module unload MATLAB/2020a
 mcc -m temp.m ./path_to_add/*
-fsl_sub ./run_temp.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
+fsl_sub -T 100 -R 20 ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 qstat
 qdel job_id
 ```
