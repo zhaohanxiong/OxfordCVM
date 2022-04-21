@@ -30,7 +30,9 @@ module add MATLAB/2020a
 module list
 module unload MATLAB/2020a
 mcc -m temp.m ./path_to_add/*
-./run_temp.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
+fsl_sub ./run_temp.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
+qstat
+qdel job_id
 ```
 
 ##### FMRIB Specific Commands for Running NeuroPM Source Code:
