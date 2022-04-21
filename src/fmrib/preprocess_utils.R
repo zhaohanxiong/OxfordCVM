@@ -326,6 +326,10 @@ return_cols_rows_filter_df = function(df, cols, rows) {
   # given the UKB dataset and a set of columns and rows, subset the dataset
   # and returned the subsetted version.
   
+  # only keep unique rows/columns, duplicate columns 
+  cols = unique(cols)
+  rows = unique(rows)
+
   # subset rows
   df = df[rows[rows <= nrow(df)], ]
   

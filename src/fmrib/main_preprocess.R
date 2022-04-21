@@ -54,8 +54,8 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
                                                method = "median")
 
 # mean and standard deviation normalization for all feature columns (from 5th)
-#ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
-#                                                      ukb_df[, 5:ncol(ukb_df)])
+ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
+                                                      ukb_df[, 5:ncol(ukb_df)])
 
 # display final dataframe size
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
