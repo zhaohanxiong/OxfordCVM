@@ -52,7 +52,7 @@ chmod a+rx run_NeuroPM.sh
 - to run compiled version (not current working due to memory error)
 fsl_sub -T 100 -R 20 ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 
-- to run code directly using matlab
+- to run code directly using matlab (sub-directories not detecting)
 fsl_sub -q short.q matlab -nodisplay -nosplash \< run_NeuroPM.m
 
 - manage active jobs
