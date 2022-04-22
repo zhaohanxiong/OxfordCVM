@@ -340,23 +340,6 @@ return_cols_rows_filter_df = function(df, cols, rows) {
   
 }
 
-feature_select_neighbourhood_variance = function(data) {
-  
-  # this function 
-  
-  
-  # sample variance of each row
-  sample_var = apply(data, 2, function(x) sum((x - data)^2)/(nrow(data)-1))
-  
-  # neighborhood variance of each row
-  
-  # keep features with high sample/neighbourhood variance ratio
-  
-  
-  return(filter_rows)
-  
-}
-
 return_remove_outlier = function(data) {
   
   # given a matrix, remove values in each column (representing each feature)
@@ -373,7 +356,7 @@ return_remove_outlier = function(data) {
                             z_score = abs(x - mean)/std
                             
                             # set outliers as NA
-                            x[z_score > 3] = NA
+                            x[z_score >= 3] = NA
                             return(x)
                           
                         })
@@ -531,11 +514,6 @@ return_imputed_data = function(data, method="median") {
     warning("Wrong Imputation Method Provided")
   }
   
-  # display number of missing data to check
-  print(sprintf("Number of Missing Data: %0.f", sum(is.na(data))))
-  print(sprintf("Percentage of Zeros: %0.5f%%", sum(data == 0) / 
-                                                        prod(dim(data))*100))
-  
   return(data)
   
 }
@@ -553,10 +531,18 @@ return_normalize_zscore = function(data) {
   # subtract mean and divide by standard deviation
   data = sweep(data, 2, data_means, "-")
   data = sweep(data, 2, data_std, "/")
-  
-  # remove missing columns induced by this step
-  data = data[, colMeans(is.na(data)) < 1]
 
+  return(data)
+  
+}
+
+return_remove_large_zscores = function(data) {
+  
+  # this function removes large z-scores, sets them to NA
+  
+  # remove large z scores
+  data[abs(data) > 3] = NA
+  
   return(data)
   
 }

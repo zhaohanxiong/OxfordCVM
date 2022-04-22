@@ -32,10 +32,9 @@ weight_vars$Node_contributions = weight_vars$Node_contributions /
 
 # get list of variables sorted from high to low weighting
 # also re-format these variable names since matlab screwed it up
+weight_vars$Var1 = gsub("x","X",gsub("_","\\.",weight_vars$Var1))
 var_sorted = weight_vars$Var1[order(weight_vars$Node_contributions, 
                                                             decreasing=TRUE)]
-var_sorted = gsub("_","\\.",var_sorted)
-var_sorted = gsub("x","X",var_sorted)
 
 # box plot by group
 plot_boxplot_by_group(data = psuedotimes,
@@ -45,15 +44,6 @@ plot_boxplot_by_group(data = psuedotimes,
                       title = "Disease Progression by Blood Pressure Group",
                       xlab = "Blood Pressure Groups", ylab = "Disease Score",
                       labels = levels(psuedotimes$bp_group))
-
-# # line plot by group
-# plot_line_by_group(data = psuedotimes,
-#                    x = psuedotimes$BPSys_2_0,
-#                    #x = ukb_df[,c(var_sorted[10])],
-#                    y = psuedotimes$global_pseudotimes,
-#                    group = psuedotimes$bp_group,
-#                    title = "Disease Progression by Variable",
-#                    xlab = "Variable", ylab = "Disease Score")
 
 # perform statistical tests to evaluate model
 # seperate groups into different variable
@@ -71,10 +61,17 @@ g2_box = unname(c(quantile(g2, 0.25), quantile(g2, 0.75))) # between
 g3_box = unname(c(quantile(g3, 0.25), quantile(g3, 0.75))) # disease
 
 sprintf(paste0("Overlap in IQR of Background vs Between is ",
-               "%0.1f%% (Background) %0.1f%% of (Between)"), 
+               "%0.1f%% (Background) %0.1f%% of (Between)"),
         (g1_box[2] - g2_box[1]) / diff(g1_box) * 100,
         (g1_box[2] - g2_box[1]) / diff(g2_box) * 100)
 sprintf(paste0("Overlap in IQR of Boxes Between vs Disease is ",
-               "%0.1f%% (Between) %0.1f%% (Disease)"), 
+               "%0.1f%% (Between) %0.1f%% (Disease)"),
         (g2_box[2] - g3_box[1]) / diff(g2_box) * 100,
         (g2_box[2] - g3_box[1]) / diff(g3_box) * 100)
+
+# analysis for variable weightings compared to disease score
+plot(psuedotimes$global_pseudotimes, ukb_df[, var_sorted[3]],
+     col=alpha(c("green","blue","red")[labels$bp_group+1], 0.25), pch=20)
+
+# View unusually high weight variables and their variable distribution
+View(ukb_df[,var_sorted[1:5]])
