@@ -38,10 +38,13 @@ module add MATLAB/2020a
 mcc -m run_NeuroPM.m -a ./cTI-codes/
 ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 
-- these commands have been packaged into a shell script, run.sh
+- these commands have been packaged into a shell script, run_NeuroPM.sh
 - to run this script first turn into an executable, then simply type it to run
-chmod a+rx compile_run.sh
-./compile_run.sh
+chmod a+rx run_NeuroPM.sh
+./run_NeuroPM.sh
+
+- the entire preprocessing plus neuroPM code has also been packaged into a single shell script in the /fmrib directory
+./run_all.sh
 ```
 
 ##### FMRIB Cluster Commands
