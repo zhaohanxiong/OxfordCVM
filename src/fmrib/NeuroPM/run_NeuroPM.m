@@ -1,5 +1,5 @@
 %% add paths (not for compile version)
-%addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\");
+addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\");
 
 %% read data
 % loads data (main feature matrix) and labels (bp_group)
