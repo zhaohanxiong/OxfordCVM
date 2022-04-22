@@ -3,7 +3,7 @@
 source("postprocess_visualization.R")
 
 # load outputs from NeuroPM
-path = "C:/Users/zxiong/Desktop/io" #"fmrib/NeuroPM/io/"
+path = "C:/Users/86155/Desktop/io" #"fmrib/NeuroPM/io/"
 
 ukb_df = data.frame(fread(file.path(path,"ukb_num.csv"),header=TRUE))
 labels = read.csv(file.path(path,"labels.csv"), header=TRUE)
@@ -70,8 +70,8 @@ sprintf(paste0("Overlap in IQR of Boxes Between vs Disease is ",
         (g2_box[2] - g3_box[1]) / diff(g3_box) * 100)
 
 # analysis for variable weightings compared to disease score
-plot(psuedotimes$global_pseudotimes, ukb_df[, var_sorted[3]],
+plot(psuedotimes$global_pseudotimes, ukb_df[, var_sorted[5]],
      col=alpha(c("green","blue","red")[labels$bp_group+1], 0.25), pch=20)
 
 # View unusually high weight variables and their variable distribution
-View(ukb_df[,var_sorted[1:5]])
+View(cbind(psuedotimes[,4:5],ukb_df[,var_sorted[1:15]]))
