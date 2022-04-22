@@ -351,12 +351,12 @@ return_remove_outlier = function(data) {
   data = apply(data, 2, function(x) {
     
                             # compute mean and sd
-                            mean = mean(x, na.rm=TRUE)
+                            mean_val = mean(x, na.rm=TRUE)
                             std = sd(x, na.rm=TRUE)
-                            z_score = abs(x - mean)/std
+                            z_score = abs(x - mean_val)/std
                             
                             # set outliers as NA
-                            x[z_score >= 3] = NA
+                            x[z_score > 3] = NA
                             return(x)
                           
                         })
