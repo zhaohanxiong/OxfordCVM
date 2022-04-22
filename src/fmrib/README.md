@@ -52,7 +52,7 @@ chmod a+rx run_NeuroPM.sh
 - link to resource
 https://sharepoint.nexus.ox.ac.uk/sites/NDCN/FMRIB/IT/User%20Guides/GridEngine.aspx
 
-- to run compiled version (not current working due to memory error)
+- to run compiled version
 fsl_sub -q bigmem.q ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 
 - to run code directly using matlab (sub-directories not detecting)
