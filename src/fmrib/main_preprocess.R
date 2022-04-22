@@ -61,6 +61,10 @@ print(sprintf("Final Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
 print(sprintf("Final Number of Missing Data: %0.f", sum(is.na(ukb_df))))
 
-# write to output
+# write to output (data & labels)
 fwrite(ukb_df[, 1:4], "NeuroPM/io/labels.csv")
 fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")
+
+# write to output (covariates)
+cov = return_covariates(ukb_df)
+fwrite(cov, "NeuroPM/io/cov.csv")
