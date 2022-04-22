@@ -30,9 +30,6 @@ module add MATLAB/2020a
 module list
 module unload MATLAB/2020a
 mcc -m temp.m ./path_to_add/*
-fsl_sub -T 100 -R 20 ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
-qstat
-qdel job_id
 ```
 
 ##### FMRIB Specific Commands for Running NeuroPM Source Code:
@@ -45,4 +42,12 @@ mcc -m run_NeuroPM.m -a ./cTI-codes/
 - to run this script first turn into an executable, then simply type it to run
 chmod a+rx compile_run.sh
 ./compile_run.sh
+```
+
+##### FMRIB Cluster Commands
+```
+fsl_sub -T 100 -R 20 ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
+fsl_sub -q short.q matlab -singleCompThread -nodisplay -nosplash \< myjob.m
+qstat
+qdel job_id
 ```
