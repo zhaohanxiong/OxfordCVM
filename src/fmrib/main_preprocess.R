@@ -4,7 +4,7 @@ source("preprocess_utils.R")
 
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_subset.csv",
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../bb_data.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
 
 # display initial dataframe size
@@ -50,7 +50,7 @@ print(sprintf("Cleaned Data Frame is of Size %0.0f by %0.0f",
 # target (2), between (0). The first 5 columns are now ID/label columns
 # to omit during further processing
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
-                                             target_criteria = "> 140/80")
+                                             target_criteria = "> 160/100")
 
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
@@ -67,8 +67,9 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
                                                     nrow(ukb_df), ncol(ukb_df)))
 print(sprintf("Final Number of Missing Data: %0.f", sum(is.na(ukb_df))))
-print(sprintf("Final Distribution is E = %0.3f [%0.3f, %0.3f]",
+print(sprintf("Final Distribution is E(x) = %0.3f +- %0.3f [%0.3f, %0.3f]",
                    mean(as.matrix(ukb_df[, 5:ncol(ukb_df)])),
+                   sd(as.matrix(ukb_df[, 5:ncol(ukb_df)])),
                    min(ukb_df[, 5:ncol(ukb_df)]),max(ukb_df[, 5:ncol(ukb_df)])))
 
 # write to output (data & labels)
