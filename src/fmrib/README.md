@@ -49,8 +49,11 @@ chmod a+rx run_NeuroPM.sh
 
 ##### FMRIB Cluster Commands
 ```
+- link to resource
+https://sharepoint.nexus.ox.ac.uk/sites/NDCN/FMRIB/IT/User%20Guides/GridEngine.aspx
+
 - to run compiled version (not current working due to memory error)
-fsl_sub -T 100 -R 20 ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
+fsl_sub -q bigmem.q ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 
 - to run code directly using matlab (sub-directories not detecting)
 fsl_sub -q short.q matlab -nodisplay -nosplash \< run_NeuroPM.m
