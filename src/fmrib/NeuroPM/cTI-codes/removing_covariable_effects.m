@@ -47,9 +47,8 @@ for ii = 1:length(i)
     ind_non_nan = find(~isnan(covariables(:,j(ii))));
     covariables(i(ii),j(ii)) = mean(covariables(ind_non_nan,j(ii)));    
 end
-h = waitbar(0,'Removing covariable effects...');
+
 for feature = 1:Nfeatures
-    waitbar(feature / Nfeatures)
     
     %     stats = regstats(features(:,feature),covariables,'linear');
     % stats = regstats(features(:,feature),covariables,'interaction');
@@ -89,4 +88,3 @@ for feature = 1:Nfeatures
         % base_features(:, feature) = base_features(:, feature) - covs_base(:,covs_2_remove)*b(1 + covs_2_remove); % removing effects of covs_2_remove        
     end
 end
-close(h)
