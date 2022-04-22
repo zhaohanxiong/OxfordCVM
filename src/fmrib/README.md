@@ -7,7 +7,7 @@ cd /home/fs0/winokl/zxiong/OxfordCVM/src/fmrib
 Rscript main_preprocess.R
 
 - run executible for NeuroPM (compile and run)
-./NeuroPM/compile_run.sh
+./NeuroPM/run_NeuroPM.sh
 ```
 
 ##### Copying Data Files to/from Server to/from Local Windows (Example)

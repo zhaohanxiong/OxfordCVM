@@ -27,11 +27,11 @@ classes_for_colours(ind_between) = 3;
 
 %% adjust for covariates
 cov = table2array(readtable('io/cov.csv'));
-data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
+%data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
 
 %% call function
 [global_ordering, global_pseudotimes, mappedX, contrasted_data, Node_contributions, Expected_contribution] = ...
-          pseudotimes_cTI(data, ind_background, classes_for_colours, ind_target, 'cPCA', 10);
+          pseudotimes_cTI(data, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
 
 %% convert outputs to dataframes
 pseudotimes_file = [labels, table(global_pseudotimes)];
