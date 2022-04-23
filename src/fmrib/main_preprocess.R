@@ -2,7 +2,7 @@
 # load functions
 source("preprocess_utils.R")
 
-# load UKB datasets
+# load UKB dataset
 # these datsets have to be located directly outside the base dir (OxfordCVM)
 ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_subset.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
@@ -18,7 +18,7 @@ ukb_filtered_cols = get_ukb_subset_column_names(df = ukb$ukb_data,
 
 # extract UKB dataset rows (patients) we want to keep
 ukb_filtered_rows = get_ukb_subset_rows(df = ukb$ukb_data,
-                                        subset_option = "no heart attack, angina, stroke")
+                                subset_option = "no heart attack, angina, stroke")
 
 # subset UKB dataframe based on row/column filters, and remove missing
 ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
@@ -35,9 +35,6 @@ print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
 # remove outliers
 ukb_df[, 2:ncol(ukb_df)] = return_remove_outlier(data =
                                                     ukb_df[, 2:ncol(ukb_df)])
-
-# remove columns which contain the same value (extremely low variance)
-ukb_df = return_remove_low_variance_columns(ukb_df, char_cols = c(1))
 
 # clean dataset of rows/columns with too many missing values
 ukb_df = return_clean_df(df = ukb_df, threshold_col = 0.5, threshold_row = 0.05,
@@ -59,6 +56,9 @@ ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
                                                      ukb_df[, 5:ncol(ukb_df)])
+
+# remove columns which contain the same value (extremely low variance)
+ukb_df = return_remove_low_variance_columns(ukb_df, char_cols = c(1))
 
 # further filtering outliers
 ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)])
