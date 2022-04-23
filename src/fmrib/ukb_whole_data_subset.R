@@ -35,5 +35,8 @@ ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
 
+# clean dataset of rows with too many missing values (less than 5% data)
+ukb_df = ukb_df[rowMeans(is.na(ukb_df)) < 0.95, ]
+
 # write to output (data & labels)
 fwrite(ukb_df, "../../../ukb51139_subset.csv")

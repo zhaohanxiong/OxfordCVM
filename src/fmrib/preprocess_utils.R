@@ -377,16 +377,16 @@ return_remove_low_variance_columns = function(data, char_cols = c()) {
     # assign numeric columns only to new temp dataframe
     temp = data[, -char_cols]
 
-    # find which columns have standard deviation of less than 0.1
-    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.01)
+    # find which columns have no variation in value (only 1 unique value)
+    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) == 0)
 
     # reassign via column concatenation, moving character columns to the front
     data = cbind(data[, char_cols], temp[, which(!unname(low_var_cols))])
 
   } else {
 
-    # find which columns have standard deviation of less than 0.1
-    low_var_cols = apply(data, 2, function(x) var(x, na.rm=TRUE) < 0.01)
+    # find which columns have no variation in value (only 1 unique value)
+    low_var_cols = apply(data, 2, function(x) var(x, na.rm=TRUE) == 0)
 
     # remove low variance columns
     data = data[, which(!unname(low_var_cols))]
@@ -408,7 +408,7 @@ return_clean_df = function(df, threshold_col, threshold_row, char_cols = c()) {
   
   # display % missing values before cleaning
   print(sprintf("Percentage NA Before Cleaning: %0.1f%%", 
-                sum(is.na(df))/prod(dim(df))*100))
+                                          sum(is.na(df))/prod(dim(df))*100))
   
   # turn empty string cells in to NA
   df[df == ""] = NA
