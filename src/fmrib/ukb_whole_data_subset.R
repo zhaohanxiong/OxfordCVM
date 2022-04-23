@@ -31,9 +31,6 @@ rm(ukb)
 # remove rows with missing blood pressure values
 ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
 
-# clean dataset of rows with too many missing values (less than 5% data)
-ukb_df = ukb_df[rowMeans(is.na(ukb_df)) <= 0.95, ]
-
 # display subset dataframe size
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))

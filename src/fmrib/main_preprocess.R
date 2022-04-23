@@ -4,7 +4,7 @@ source("preprocess_utils.R")
 
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_subset.csv",
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../bb_data.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
 
 # display initial dataframe size
@@ -40,8 +40,7 @@ ukb_df[, 2:ncol(ukb_df)] = return_remove_outlier(data =
 ukb_df = return_remove_low_variance_columns(ukb_df, char_cols = c(1))
 
 # clean dataset of rows/columns with too many missing values
-ukb_df = return_clean_df(df = ukb_df,
-                         threshold_col = 0.5, threshold_row = 0.05,
+ukb_df = return_clean_df(df = ukb_df, threshold_col = 0.5, threshold_row = 0.05,
                          char_cols = c(1))
 
 # remove rows with missing blood pressure values
