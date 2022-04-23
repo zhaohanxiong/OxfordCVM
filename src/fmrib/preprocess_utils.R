@@ -379,7 +379,7 @@ return_remove_low_variance_columns = function(data, char_cols = c()) {
 
     # find which columns have standard deviation of less than 0.1
     low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.01)
-
+    print(which(low_var_cols))
     # reassign via column concatenation, moving character columns to the front
     data = cbind(data[, char_cols], temp[, !low_var_cols])
 
@@ -397,7 +397,7 @@ return_remove_low_variance_columns = function(data, char_cols = c()) {
 
 }
 
-return_clean_df = function(df, threshold_row1, threshold_col, threshold_row2, 
+return_clean_df = function(df, threshold_col, threshold_row, 
                            char_cols = c()) {
   
   # apply filtering to clean the dataset and remove rows (patients) with many
@@ -413,15 +413,12 @@ return_clean_df = function(df, threshold_row1, threshold_col, threshold_row2,
   
   # turn empty string cells in to NA
   df[df == ""] = NA
-  
-  # initial row filter
-  df = df[rowMeans(is.na(df)) <= threshold_row1, ]
 
   # keep columns with under 50% missing data
   df = df[, colMeans(is.na(df)) <= threshold_col]
 
   # keep rows with under 5% missing data
-  df = df[rowMeans(is.na(df)) <= threshold_row2, ]
+  df = df[rowMeans(is.na(df)) <= threshold_row, ]
   
   # only perform cleaning on numeric columns
   if (length(char_cols) > 0) {

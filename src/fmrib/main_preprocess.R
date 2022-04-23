@@ -41,8 +41,7 @@ ukb_df = return_remove_low_variance_columns(ukb_df, char_cols = c(1))
 
 # clean dataset of rows/columns with too many missing values
 ukb_df = return_clean_df(df = ukb_df,
-                         threshold_row1 = 1.0, threshold_col = 0.5,
-                         threshold_row2 = 0.05,
+                         threshold_col = 0.5, threshold_row = 0.05,
                          char_cols = c(1))
 
 # remove rows with missing blood pressure values
@@ -77,6 +76,9 @@ print(sprintf("Final Distribution is E(x) = %0.3f +- %0.3f [%0.3f, %0.3f]",
                    mean(as.matrix(ukb_df[, 5:ncol(ukb_df)])),
                    sd(as.matrix(ukb_df[, 5:ncol(ukb_df)])),
                    min(ukb_df[, 5:ncol(ukb_df)]),max(ukb_df[, 5:ncol(ukb_df)])))
+
+# sample 10% of data to reduce number of rows for faster job runtimes
+#ukb_df = ukb_df[sample(1:nrow(ukb_df), round(nrow(ukb_df)*0.1)), ]
 
 # write to output (data & labels)
 fwrite(ukb_df[, 1:4], "NeuroPM/io/labels.csv")
