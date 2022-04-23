@@ -25,7 +25,7 @@ ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
                                     cols = ukb_filtered_cols,
                                     rows = ukb_filtered_rows)
 
-# clear memory
+# free up memory
 rm(ukb)
 
 # remove rows with missing blood pressure values

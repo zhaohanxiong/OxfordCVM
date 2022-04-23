@@ -382,7 +382,7 @@ return_remove_low_variance_columns = function(data, char_cols = c()) {
 
     # reassign via column concatenation, moving character columns to the front
     data = cbind(data[, char_cols], temp[, !low_var_cols])
-      
+
   } else {
 
     # find which columns have standard deviation of less than 0.1

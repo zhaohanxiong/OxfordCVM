@@ -25,6 +25,9 @@ ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
                                     cols = ukb_filtered_cols,
                                     rows = ukb_filtered_rows)
 
+# free up memory
+rm(ukb)
+
 # display subset dataframe size
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
