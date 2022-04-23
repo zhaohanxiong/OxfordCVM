@@ -381,7 +381,7 @@ return_remove_low_variance_columns = function(data, char_cols = c()) {
     low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.01)
 
     # reassign via column concatenation, moving character columns to the front
-    data = cbind(data[, char_cols], temp[, !unname(low_var_cols)])
+    data = cbind(data[, char_cols], temp[, which(!unname(low_var_cols))])
 
   } else {
 
@@ -389,7 +389,7 @@ return_remove_low_variance_columns = function(data, char_cols = c()) {
     low_var_cols = apply(data, 2, function(x) var(x, na.rm=TRUE) < 0.01)
 
     # remove low variance columns
-    data = data[, !unname(low_var_cols)]
+    data = data[, which(!unname(low_var_cols))]
 
   }
 
@@ -397,8 +397,7 @@ return_remove_low_variance_columns = function(data, char_cols = c()) {
 
 }
 
-return_clean_df = function(df, threshold_col, threshold_row, 
-                           char_cols = c()) {
+return_clean_df = function(df, threshold_col, threshold_row, char_cols = c()) {
   
   # apply filtering to clean the dataset and remove rows (patients) with many
   # missing values from the dataset and return the fully cleaned dataset
