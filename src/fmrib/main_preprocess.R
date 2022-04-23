@@ -2,7 +2,7 @@
 # load functions
 source("preprocess_utils.R")
 
-# load UKB datasets
+# load UKB dataset
 # these datsets have to be located directly outside the base dir (OxfordCVM)
 ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_subset.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
