@@ -365,38 +365,6 @@ return_remove_outlier = function(data) {
   
 }
 
-return_remove_low_variance_columns = function(data, char_cols = c()) {
-
-  # this function removes columns which have extremely low variance meaning
-  # that they could potentially be columns which only contain either 1 single
-  # value or very narrow range of values.
-
-  # only perform cleaning on numeric columns
-  if (length(char_cols) > 0) {
-    
-    # assign numeric columns only to new temp dataframe
-    temp = data[, -char_cols]
-
-    # find which columns have no variation in value (only 1 unique value)
-    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) == 0)
-
-    # reassign via column concatenation, moving character columns to the front
-    data = cbind(data[, char_cols], temp[, which(!unname(low_var_cols))])
-
-  } else {
-
-    # find which columns have no variation in value (only 1 unique value)
-    low_var_cols = apply(data, 2, function(x) var(x, na.rm=TRUE) == 0)
-
-    # remove low variance columns
-    data = data[, which(!unname(low_var_cols))]
-
-  }
-
-  return(data)
-
-}
-
 return_clean_df = function(df, threshold_col, threshold_row, char_cols = c()) {
   
   # apply filtering to clean the dataset and remove rows (patients) with many
@@ -513,6 +481,38 @@ return_normalize_zscore = function(data) {
 
   return(data)
   
+}
+
+return_remove_low_variance_columns = function(data, char_cols = c()) {
+
+  # this function removes columns which have extremely low variance meaning
+  # that they could potentially be columns which only contain either 1 single
+  # value or very narrow range of values.
+
+  # only perform cleaning on numeric columns
+  if (length(char_cols) > 0) {
+    
+    # assign numeric columns only to new temp dataframe
+    temp = data[, -char_cols]
+
+    # find which columns have no variation in value (only 1 unique value)
+    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) == 0)
+
+    # reassign via column concatenation, moving character columns to the front
+    data = cbind(data[, char_cols], temp[, which(!unname(low_var_cols))])
+
+  } else {
+
+    # find which columns have no variation in value (only 1 unique value)
+    low_var_cols = apply(data, 2, function(x) var(x, na.rm=TRUE) == 0)
+
+    # remove low variance columns
+    data = data[, which(!unname(low_var_cols))]
+
+  }
+
+  return(data)
+
 }
 
 return_remove_large_zscores = function(data) {
