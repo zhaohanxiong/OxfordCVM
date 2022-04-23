@@ -344,7 +344,7 @@ return_remove_outlier = function(data) {
   
   # given a matrix, remove values in each column (representing each feature)
   # which are more than 3 standard deviations away from the mean, assuming
-  # the values are normally distributed
+  # the values are normally distributed. values are removed by setting to NA
   
   # use z_score to remove values which are more than 3 standard deviations
   # away from the mean (not within 99.7% of values), performed by column
@@ -363,6 +363,38 @@ return_remove_outlier = function(data) {
   
   return(data)
   
+}
+
+return_remove_low_variance_columns = function(data, char_cols = c()) {
+
+  # this function removes columns which have extremely low variance meaning
+  # that they could potentially be columns which only contain either 1 single
+  # value or very narrow range of values.
+
+  # only perform cleaning on numeric columns
+  if (length(char_cols) > 0) {
+    
+    # assign numeric columns only to new temp dataframe
+    temp = data[, -char_cols]
+
+    # find which columns have standard deviation of less than 0.1
+    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.01)
+
+    # reassign via column concatenation, moving character columns to the front
+    data = cbind(data[, char_cols], temp[, -low_var_cols])
+      
+  } else {
+
+    # find which columns have standard deviation of less than 0.1
+    low_var_cols = apply(data, 2, function(x) var(x, na.rm=TRUE) < 0.01)
+
+    # remove low variance columns
+    data = data[, -low_var_cols]
+
+  }
+
+  return(data)
+
 }
 
 return_clean_df = function(df, threshold_row1, threshold_col, threshold_row2, 
@@ -416,8 +448,7 @@ return_clean_df = function(df, threshold_row1, threshold_col, threshold_row2,
   
 }
 
-return_ukb_target_background_labels = function(df_subset,
-                                               target_criteria="> 140/80") {
+return_ukb_target_background_labels = function(df_subset, target_criteria="> 140/80") {
   
   # given the filtered/subsetted ukb df, create a vector containing whether
   # a given row is a background (1), target (2), or between (0), depending
@@ -470,6 +501,35 @@ return_ukb_target_background_labels = function(df_subset,
   
 }
 
+return_normalize_zscore = function(data) {
+  
+  # given a matrix of numbers perform mean and standard deviation normalization
+  # for each column, which represents 1 feature, of the dataframe, these cols
+  # should all be numerical
+  
+  # compute mean and standard deviation of each column
+  data_means = colMeans(data, na.rm = TRUE)
+  data_std = apply(data, 2, function(x) sd(x, na.rm = TRUE))
+  
+  # subtract mean and divide by standard deviation
+  data = sweep(data, 2, data_means, "-")
+  data = sweep(data, 2, data_std, "/")
+
+  return(data)
+  
+}
+
+return_remove_large_zscores = function(data) {
+  
+  # this function removes large z-scores, sets them to NA
+  
+  # remove large z scores
+  data[abs(data) > 5] = NA
+  
+  return(data)
+  
+}
+
 return_imputed_data = function(data, method="median") {
   
   # given an input data matrix, and a method selected for imputation
@@ -513,35 +573,6 @@ return_imputed_data = function(data, method="median") {
   } else {
     warning("Wrong Imputation Method Provided")
   }
-  
-  return(data)
-  
-}
-
-return_normalize_zscore = function(data) {
-  
-  # given a matrix of numbers perform mean and standard deviation normalization
-  # for each column, which represents 1 feature, of the dataframe, these cols
-  # should all be numerical
-  
-  # compute mean and standard deviation of each column
-  data_means = colMeans(data, na.rm = TRUE)
-  data_std = apply(data, 2, function(x) sd(x, na.rm = TRUE))
-  
-  # subtract mean and divide by standard deviation
-  data = sweep(data, 2, data_means, "-")
-  data = sweep(data, 2, data_std, "/")
-
-  return(data)
-  
-}
-
-return_remove_large_zscores = function(data) {
-  
-  # this function removes large z-scores, sets them to NA
-  
-  # remove large z scores
-  data[abs(data) > 5] = NA
   
   return(data)
   
