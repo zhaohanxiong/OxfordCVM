@@ -25,6 +25,9 @@ ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
                                     cols = ukb_filtered_cols,
                                     rows = ukb_filtered_rows)
 
+# clear memory
+rm(ukb)
+
 # remove rows with missing blood pressure values
 ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
 
@@ -33,4 +36,4 @@ print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
 
 # write to output (data & labels)
-fwrite(ukb_df[, 1:4], "../../../ukb51139_subset.csv")
+fwrite(ukb_df, "../../../ukb51139_subset.csv")
