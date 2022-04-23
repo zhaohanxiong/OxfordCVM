@@ -39,4 +39,4 @@ print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
 
 # write to output (data & labels)
-#fwrite(ukb_df, "../../../ukb51139_subset.csv")
+fwrite(ukb_df, "../../../ukb51139_subset.csv")
