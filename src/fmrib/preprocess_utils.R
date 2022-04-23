@@ -541,20 +541,17 @@ return_remove_large_zscores = function(data) {
   # this function removes large z-scores, sets them to NA
   
   # remove large z scores
-  data[abs(data) > 3] = NA
+  data[abs(data) > 5] = NA
   
   return(data)
   
 }
 
-return_covariates = function(data) {
+return_covariates = function(data, covariates) {
   
   # this function returns the covariate columns of the dataset provided
   
-  # covariate variables
-  cov = c("31-0.0", "21003-2.0")
-  
-  # extract these columns
+  # extract columns defined as covariates
   data = data[, cov]
   
   return(data)

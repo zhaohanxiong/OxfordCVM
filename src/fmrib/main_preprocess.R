@@ -4,7 +4,7 @@ source("preprocess_utils.R")
 
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../bb_data.csv",
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_subset.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
 
 # display initial dataframe size
@@ -50,7 +50,7 @@ print(sprintf("Cleaned Data Frame is of Size %0.0f by %0.0f",
 # target (2), between (0). The first 5 columns are now ID/label columns
 # to omit during further processing
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
-                                             target_criteria = "> 140/80")
+                                             target_criteria = "> 160/100")
 
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
@@ -77,5 +77,6 @@ fwrite(ukb_df[, 1:4], "NeuroPM/io/labels.csv")
 fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")
 
 # write to output (covariates)
-cov = return_covariates(ukb_df)
+cov = return_covariates(ukb_df, 
+                        covariate = c("31-0.0", "21003-2.0"))
 fwrite(cov, "NeuroPM/io/cov.csv")
