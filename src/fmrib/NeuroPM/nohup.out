@@ -91,3 +91,21 @@ Contrastive Dimensionality Reduction of the data ...
 Final # of components (cPCA) -> 15
 Final alpha (cPCA) -> 68.9261
 Node-node distance and shortest paths ...
+------------------------------------------
+Setting up environment variables
+---
+LD_LIBRARY_PATH is .:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/runtime/glnxa64:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/bin/glnxa64:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/sys/os/glnxa64:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/sys/opengl/lib/glnxa64
+Warning: Executing startup failed in matlabrc.
+This indicates a potentially serious problem in your MATLAB setup, which should be resolved as soon as possible.  Error detected was:
+MATLAB:mpath:PathAlterationNotSupported
+Modifying the search path is not supported by MATLAB Compiler. Remove functions that modify the search path from your MATLAB code. To make files visible to your deployed application, add the parent folder to your MATLAB session.
+Warning: Column headers from the file were modified to make them valid MATLAB identifiers before creating variable names for the table. The original column headers are saved in the VariableDescriptions property.
+Set 'PreserveVariableNames' to true to use the original column headers as table variable names.
+Warning: Column headers from the file were modified to make them valid MATLAB identifiers before creating variable names for the table. The original column headers are saved in the VariableDescriptions property.
+Set 'PreserveVariableNames' to true to use the original column headers as table variable names.
+Warning: Column headers from the file were modified to make them valid MATLAB identifiers before creating variable names for the table. The original column headers are saved in the VariableDescriptions property.
+Set 'PreserveVariableNames' to true to use the original column headers as table variable names.
+Contrastive Dimensionality Reduction of the data ...
+Final # of components (cPCA) -> 17
+Final alpha (cPCA) -> 47.5081
+Node-node distance and shortest paths ...
