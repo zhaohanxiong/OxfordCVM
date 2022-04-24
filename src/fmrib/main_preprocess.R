@@ -51,7 +51,7 @@ print(sprintf("Cleaned Data Frame is of Size %0.0f by %0.0f",
 # target (2), between (0). The first 5 columns are now ID/label columns
 # to omit during further processing
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
-                                             target_criteria = "> 160/100")
+                                             target_criteria = "> 140/80")
 
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
@@ -77,7 +77,10 @@ print(sprintf("Final Distribution is E(x) = %0.3f +- %0.3f [%0.3f, %0.3f]",
                    min(ukb_df[, 5:ncol(ukb_df)]),max(ukb_df[, 5:ncol(ukb_df)])))
 
 # sample 10% of data to reduce number of rows for faster job runtimes
-#ukb_df = ukb_df[sample(1:nrow(ukb_df), round(nrow(ukb_df)*0.1)), ]
+ukb_df = ukb_df[sample(1:nrow(ukb_df), round(nrow(ukb_df)*0.1)), ]
+
+# display number of rows after sampling
+print(sprintf("Sampled %0.0f Rows", nrow(ukb_df)))
 
 # write to output (data & labels)
 fwrite(ukb_df[, 1:4], "NeuroPM/io/labels.csv")
