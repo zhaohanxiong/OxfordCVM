@@ -4,4 +4,5 @@
 Rscript main_preprocess.R
 
 # execute the compiled matlab program
-nohup ./NeuroPM/run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
+cd ./NeuroPM
+nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
