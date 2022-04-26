@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# preprocess entire UKB data set to subset into smaller data frame
+#Rscript ukb_whole_data_subset.R
+
 # run R preprocessing script, writes to NeuroPM/io directory
 Rscript main_preprocess.R
 
