@@ -4,7 +4,7 @@ source("preprocess_utils.R")
 
 # load UKB dataset
 # these datsets have to be located directly outside the base dir (OxfordCVM)
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_subset.csv",
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb_subset.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
 
 # display initial dataframe size
