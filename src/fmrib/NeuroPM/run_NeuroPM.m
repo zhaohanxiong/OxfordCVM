@@ -3,7 +3,7 @@
 
 %% read data
 % loads data (main feature matrix) and labels (bp_group)
-ukb_data = readtable('io/ukb_num.csv');
+ukb_data = readtable('io/ukb_num_norm.csv');
 labels = readtable('io/labels.csv');
 
 % extract parts of dataframe to array
