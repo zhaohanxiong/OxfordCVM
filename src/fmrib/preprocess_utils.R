@@ -574,6 +574,18 @@ return_imputed_data = function(data, method="median") {
   
 }
 
+remove_columns = function(data, cols) {
+
+  # this function takes in a dataframe and a vector of column names
+  # and removes these columns from the data frame
+
+  # inverse index dataframe
+  data = data[ , !colnames(data) %in% cols]
+
+  return(data)
+  
+}
+
 return_covariates = function(data, covariates) {
   
   # this function returns the covariate columns of the dataset provided

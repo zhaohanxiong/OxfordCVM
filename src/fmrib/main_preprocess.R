@@ -47,8 +47,11 @@ ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
 print(sprintf("Cleaned Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
 
+# write raw dataframe to file so we can check pre-normalization values
+fwrite(ukb_df[, 4:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")
+
 # get corresponding vector of labels depending on criteria background (1), 
-# target (2), between (0). The first 5 columns are now ID/label columns
+# target (2), between (0). The first 4 columns are now ID/label columns
 # to omit during further processing
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
                                              target_criteria = "> 140/80")
@@ -67,6 +70,9 @@ ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)])
 ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)], 
                                                method = "median")
 
+# remove columns which we dont want influence the model
+ukb_df = remove_columns(ukb_df, cols = c("6150.0.0"))
+
 # display final dataframe size
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
                                                     nrow(ukb_df), ncol(ukb_df)))
@@ -80,11 +86,12 @@ print(sprintf("Final Distribution is E(x) = %0.3f +- %0.3f [%0.3f, %0.3f]",
 ukb_df = ukb_df[sample(1:nrow(ukb_df), round(nrow(ukb_df)*0.1)), ]
 
 # display number of rows after sampling
-print(sprintf("Sampled %0.0f Rows", nrow(ukb_df)))
+print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f", 
+                                                    nrow(ukb_df), ncol(ukb_df)))
 
 # write to output (data & labels)
 fwrite(ukb_df[, 1:4], "NeuroPM/io/labels.csv")
-fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")
+fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
 
 # write to output (covariates)
 cov = return_covariates(ukb_df, 
