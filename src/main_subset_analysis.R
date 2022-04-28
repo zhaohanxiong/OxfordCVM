@@ -22,7 +22,7 @@ top500 = list()
 par(mfrow = c(2,5))
 
 for (i in 1:length(files)) {
-  
+
   # set directory of files for this subset run
   f_dir = files[i]
   
@@ -31,12 +31,12 @@ for (i in 1:length(files)) {
   
   weight_thres = as.numeric(read.csv(file.path(f_dir, "threshold_weighting.csv"), 
                                      header=TRUE))
-  
+
   # read psuedo time files
   psuedotimes = read.csv(file.path(f_dir, "pseudotimes.csv"), header=TRUE)
   psuedotimes$bp_group = ordered(psuedotimes$bp_group, levels = c(1,0,2))
   
-  # make plot
+  # make plot box plot of disease groups
   boxplot(psuedotimes$global_pseudotimes ~ psuedotimes$bp_group, 
           main = sprintf("subset %s", gsub("io ", "", files[i])),
           ylab = "Disease Score", xlab = "Group")
@@ -44,7 +44,11 @@ for (i in 1:length(files)) {
                                   sum(weight_vars$Node_contributions > weight_thres)))
   text(1, 0.9, adj = 0, labels = sprintf("Highest Weighting = %.2f", 
                                      max(weight_vars$Node_contributions)))
-
+  
+  # make histogram of weight contributions
+  #hist(weight_vars$Node_contributions, 
+  #     breaks = seq(0, max(weight_vars$Node_contributions), by = 0.1))
+  
   # sort the weight variables
   weight_vars = weight_vars$Var1[order(weight_vars$Node_contributions, 
                                        decreasing=TRUE)]
@@ -59,7 +63,7 @@ for (i in 1:length(files)) {
 
 }
 
-# flatten lists and tabulate, those with variable occurance = N are kept
+# flatten lists and tabulate, those with variable occurrence = N are kept
 top10 = sort(table(unlist(top10)))
 top25 = sort(table(unlist(top25)))
 top50 = sort(table(unlist(top50)))
