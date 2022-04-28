@@ -37,17 +37,17 @@ for (i in 1:length(files)) {
   psuedotimes$bp_group = ordered(psuedotimes$bp_group, levels = c(1,0,2))
   
   # make plot box plot of disease groups
-  boxplot(psuedotimes$global_pseudotimes ~ psuedotimes$bp_group, 
-          main = sprintf("subset %s", gsub("io ", "", files[i])),
-          ylab = "Disease Score", xlab = "Group")
-  text(1, 1, adj = 0, labels = sprintf("Vars = %.0f", 
-                                  sum(weight_vars$Node_contributions > weight_thres)))
-  text(1, 0.9, adj = 0, labels = sprintf("Highest Weighting = %.2f", 
-                                     max(weight_vars$Node_contributions)))
+  #boxplot(psuedotimes$global_pseudotimes ~ psuedotimes$bp_group, 
+  #        main = sprintf("subset %s", gsub("io ", "", files[i])),
+  #        ylab = "Disease Score", xlab = "Group")
+  #text(1, 1, adj = 0, labels = sprintf("Vars = %.0f", 
+  #                                sum(weight_vars$Node_contributions > weight_thres)))
+  #text(1, 0.9, adj = 0, labels = sprintf("Highest Weighting = %.2f", 
+  #                                   max(weight_vars$Node_contributions)))
   
   # make histogram of weight contributions
-  #hist(weight_vars$Node_contributions, 
-  #     breaks = seq(0, max(weight_vars$Node_contributions), by = 0.1))
+  hist(weight_vars$Node_contributions, 
+       breaks = seq(0, max(weight_vars$Node_contributions)+0.1, by = 0.1))
   
   # sort the weight variables
   weight_vars = weight_vars$Var1[order(weight_vars$Node_contributions, 

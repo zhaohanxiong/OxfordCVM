@@ -5,7 +5,7 @@ source("postprocess_visualization.R")
 # load outputs from NeuroPM
 path = "C:/Users/zxiong/Desktop/io" #"fmrib/NeuroPM/io/"
 
-ukb_df = data.frame(fread(file.path(path,"ukb_num.csv"),header=TRUE))
+ukb_df = data.frame(fread(file.path(path,"ukb_num_norm.csv"),header=TRUE))
 labels = read.csv(file.path(path,"labels.csv"), header=TRUE)
 psuedotimes = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
 weight_vars = read.csv(file.path(path,"var_weighting.csv"), header=TRUE)
