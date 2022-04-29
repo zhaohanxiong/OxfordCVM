@@ -574,13 +574,20 @@ return_imputed_data = function(data, method="median") {
   
 }
 
-remove_columns = function(data, cols) {
+edit_columns = function(data, add_cols = c(), remove_cols = c()) {
 
-  # this function takes in a dataframe and a vector of column names
-  # and removes these columns from the data frame
+  # this function takes in a dataframe and 2 vectors of column names
+  # and adds/removes these columns from the data frame
 
-  # inverse index dataframe
-  data = data[ , !colnames(data) %in% cols]
+  # index dataframe (if not empty input)
+  if (length(add_cols) > 0) {
+    data = data[, add_cols]
+  }
+
+  # inverse index dataframe (if not empty input)
+  if (length(remove_cols) > 0) {
+    data = data[, !colnames(data) %in% remove_cols]
+  }
 
   return(data)
   
