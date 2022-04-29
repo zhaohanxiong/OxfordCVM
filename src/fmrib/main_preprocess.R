@@ -71,7 +71,8 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
                                                method = "median")
 
 # remove columns which we dont want influence the model
-ukb_df = edit_columns(ukb_df, remove_cols = c("6150-0.0"))
+ukb_df = edit_columns(ukb_df, add_cols = fread("../../../var_list.csv")$x,
+                              remove_cols = c("6150-0.0"))
 
 # display final dataframe size
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
