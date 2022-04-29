@@ -141,10 +141,8 @@ get_ukb_subset_column_names = function(df, df_vars,
                     names(df),
                     value=TRUE)
   bb_CMR_vars = bb_CMR_vars[!bb_CMR_vars %in% bulkvars]
-  cardiac_seg = read.csv(paste0("../../../UK Biobank Imaging ",
-                                "Enhancement Cardiac Phenotypes.csv"))
   bb_CMR_vars = c(bb_CMR_vars,
-                  names(cardiac_seg)[2:length(names(cardiac_seg))])
+                  c("LVM__g_","LVEDV__mL_","RVEDV__mL_","LVEF","RVEF"))
 
   # abdominal MR variables
   bb_AMR_vars = df_vars$FieldID[df_vars$Category==126 | df_vars$Category==149]
