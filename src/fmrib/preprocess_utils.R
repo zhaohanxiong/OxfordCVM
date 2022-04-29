@@ -572,10 +572,14 @@ return_imputed_data = function(data, method="median") {
   
 }
 
-edit_columns = function(data, add_cols = c(), remove_cols = c()) {
+edit_ukb_columns = function(ukb_data, add_cols = c(), remove_cols = c()) {
 
+  # given a ukb dataset
   # this function takes in a dataframe and 2 vectors of column names
   # and adds/removes these columns from the data frame
+
+  # subset away first 4 columns as these contain important labels
+  data = ukb_data[, 5:ncol(ukb_data)]
 
   # index dataframe (if not empty input)
   if (length(add_cols) > 0) {
@@ -587,7 +591,10 @@ edit_columns = function(data, add_cols = c(), remove_cols = c()) {
     data = data[, !colnames(data) %in% remove_cols]
   }
 
-  return(data)
+  # re-combine new subset of columns with dataframe
+  ukb_data = cbind(ukb_data[, 1:4], data)
+
+  return(ukb_data)
   
 }
 
