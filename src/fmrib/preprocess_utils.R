@@ -23,7 +23,7 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   names(df) = sub("Record-Id", "Record.Id", names(df))
   
   # set record ID column
-  df$Record.Id = paste0(paste0("BB", df$Record.Id), df$eid)
+  df$Record.Id = paste0(df$Record.Id, df$eid)
   df$StudyName = "BB"
 
   # set blood pressure variables if not present already
