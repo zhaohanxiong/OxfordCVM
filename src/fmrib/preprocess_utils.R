@@ -574,7 +574,7 @@ return_imputed_data = function(data, method="median") {
   
 }
 
-edit_columns = function(data, add_cols, remove_cols) {
+edit_columns = function(data, add_cols = c(), remove_cols = c()) {
 
   # this function takes in a dataframe and 2 vectors of column names
   # and adds/removes these columns from the data frame
