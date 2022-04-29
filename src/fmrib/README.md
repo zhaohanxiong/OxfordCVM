@@ -40,8 +40,8 @@ mcc -m run_NeuroPM.m -a ./cTI-codes/
 
 - these commands have been packaged into a shell script, run_NeuroPM.sh
 - to run this script first turn into an executable, then simply type it to run
-chmod a+rx run_NeuroPM.sh
-./run_NeuroPM.sh
+chmod a+rx compile_NeuroPM.sh
+./compile_NeuroPM.sh
 
 - the entire preprocessing plus neuroPM code has also been packaged into a single shell script in the /fmrib directory
 ./run_all.sh
