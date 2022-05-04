@@ -74,7 +74,7 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
 #overlapping_vars = fread("../../../var_list.csv")$x
 ukb_df = edit_ukb_columns(ukb_df, 
                           #add_cols = c("31-0.0", "21003-2.0", overlapping_vars),
-                          remove_cols = c("6150-0.0"))
+                          remove_cols = c("6150-0.0", "21003-2.0"))
 
 # display final dataframe size
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
@@ -98,5 +98,5 @@ fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
 
 # write to output (covariates)
 cov = return_covariates(ukb_df, 
-                        covariate = c("31-0.0"),#c("31-0.0", "21003-2.0"))
+                        covariate = c("31-0.0", "21003-2.0"))
 fwrite(cov, "NeuroPM/io/cov.csv")
