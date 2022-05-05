@@ -52,7 +52,7 @@ chmod a+rx compile_NeuroPM.sh
 - link to resource
 https://sharepoint.nexus.ox.ac.uk/sites/NDCN/FMRIB/IT/User%20Guides/GridEngine.aspx
 
-- to run preprocessing + neuroPM in one scrip
+- to run preprocessing + neuroPM in one script (12GB memory or less)
 fsl_sub -q short.q ./run_all.sh
 
 - to run compiled version
