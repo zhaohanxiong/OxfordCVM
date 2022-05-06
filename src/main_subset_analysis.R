@@ -94,7 +94,7 @@ for (n in 1:length(topN)) {
 }
 
 # save variable list of most overlapping variables
-var_list = names(top500[top500 >= 5])
+var_list = names(top500[top500 >= 9])
 var_list = gsub("x","",var_list)
 var_list = sub("\\_","-",var_list)
 var_list = gsub("_",".", var_list)

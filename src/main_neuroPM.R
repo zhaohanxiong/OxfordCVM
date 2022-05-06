@@ -41,6 +41,13 @@ ukb_df_small = return_fractional_df(ukb_df, N = 1000) #N = nrow(ukb_df))
 # write files out for input into neuroPM box
 if (FALSE) {
   
+  setwd("C:/Users/zxiong/Desktop/temp_neuroPM_run")
+  ukb = read.csv("io/ukb_num_norm.csv")
+  labels = read.csv("io/labels.csv")
+  neuroPM_write_all_df(df = ukb,
+                       labels = labels$bp_group,
+                       path = "..")
+  
   # convert and write into neuroPM toolbox inputs files (3 files)
   neuroPM_write_all_df(df = ukb_df_small[,5:ncol(ukb_df_small)], # from 5th column
                        labels = ukb_df_small$bp_group,
@@ -54,7 +61,7 @@ if (FALSE) {
 }
 
 # load output from neuroPM box for the pseudotimes (disease progression scores)
-pseudotimes = neuroPM_load_pseudotime_output_df(path = "../../NeuroPM_cPCA_files/subset run")
+pseudotimes = neuroPM_load_pseudotime_output_df(path = ".")
 
 ##### NeuroPM box method overview
 # compute neighborhood variance
