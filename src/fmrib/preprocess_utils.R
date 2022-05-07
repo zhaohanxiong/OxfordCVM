@@ -513,12 +513,15 @@ return_remove_low_variance_columns = function(data, char_cols = c()) {
 
 }
 
-return_remove_large_zscores = function(data) {
+return_remove_large_zscores = function(data, sd_threshold) {
   
   # this function removes large z-scores, sets them to NA
+  # note that this only works if the input data is already normalized
+  # using mean/standard deviation normalization such that it has a 
+  # mean of 0 and standard deviation of 1
   
   # remove large z scores
-  data[abs(data) > 5] = NA
+  data[abs(data) > sd_threshold] = NA
   
   return(data)
   
