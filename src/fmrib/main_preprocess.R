@@ -72,7 +72,8 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
 
 # remove columns which we dont want influence the model
 ukb_df = edit_ukb_columns(ukb_df, 
-                          #add_cols = c("31-0.0", "21003-2.0", fread("../../../var_list.csv")$x),
+                          #add_cols = c("31-0.0", "21003-2.0", 
+                                        #fread("../../../var_list.csv")$x),
                           remove_cols = c("6150-0.0"))
 
 # display final dataframe size
