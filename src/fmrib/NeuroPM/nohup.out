@@ -1,54 +1,42 @@
 ------------------------------------------
 Final # of components (cPCA) -> 17
 Final alpha (cPCA) -> 47.5081
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 17
 Final alpha (cPCA) -> 11.7681
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 9
 Final alpha (cPCA) -> 75.6463
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 57.2237
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 15
 Final alpha (cPCA) -> 68.9261
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 17
 Final alpha (cPCA) -> 47.5081
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 17
 Final alpha (cPCA) -> 43.2876
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 8
 Final alpha (cPCA) -> 9.7701
-Node-node distance and shortest paths ...
 ------------------------------------------
 Imputing Data..., step 1
 Imputing Data..., step 2
 Imputing Data..., step 3
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 24.7708
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 27.1859
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 18
 Final alpha (cPCA) -> 47.5081
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 32.7455
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 43.2876
@@ -56,124 +44,106 @@ Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 62.8029
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 15
 Final alpha (cPCA) -> 14.1747
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 91.1163
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 62.8029
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 57.2237
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 68.9261
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 17
 Final alpha (cPCA) -> 43.2876
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 43.2876
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 31
 Final alpha (cPCA) -> 6.1359
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 17
 Final alpha (cPCA) -> 57.2237
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 18
 Final alpha (cPCA) -> 68.9261
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 68.9261
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 17
 Final alpha (cPCA) -> 43.2876
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 17
 Final alpha (cPCA) -> 57.2237
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 68.9261
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 52.1401
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 52.1401
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 16
 Final alpha (cPCA) -> 43.2876
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 17
 Final alpha (cPCA) -> 68.9261
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 17
 Final alpha (cPCA) -> 39.4421
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 18
 Final alpha (cPCA) -> 47.5081
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 18
 Final alpha (cPCA) -> 11.7681
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 17
 Final alpha (cPCA) -> 3.5112
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 18
 Final alpha (cPCA) -> 4.2292
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 18
 Final alpha (cPCA) -> 47.5081
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 18
 Final alpha (cPCA) -> 47.5081
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 3
 Final alpha (cPCA) -> 1.2129
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 3
 Final alpha (cPCA) -> 1.1755
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 3
 Final alpha (cPCA) -> 0.31257
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 3
 Final alpha (cPCA) -> 1.0233
-Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 2
 Final alpha (cPCA) -> 1.2959
+------------------------------------------
+Final # of components (cPCA) -> 2
+Final alpha (cPCA) -> 0.010975
+------------------------------------------
+Final # of components (cPCA) -> 2
+Final alpha (cPCA) -> 1.2989
+------------------------------------------
+Final # of components (cPCA) -> 2
+Final alpha (cPCA) -> 1.4475
+------------------------------------------
+Final # of components (cPCA) -> 2
+Final alpha (cPCA) -> 1.515
 Node-node distance and shortest paths ...

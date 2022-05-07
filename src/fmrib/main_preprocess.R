@@ -64,16 +64,15 @@ ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data =
 ukb_df = return_remove_low_variance_columns(ukb_df, char_cols = c(1))
 
 # further filtering outliers
-ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)])
+ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)], 5)
 
 # impute data
 ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)], 
                                                method = "median")
 
 # remove columns which we dont want influence the model
-#overlapping_vars = fread("../../../var_list.csv")$x
 ukb_df = edit_ukb_columns(ukb_df, 
-                          #add_cols = c("31-0.0", "21003-2.0", overlapping_vars),
+                          #add_cols = c("31-0.0", "21003-2.0", fread("../../../var_list.csv")$x),
                           remove_cols = c("6150-0.0"))
 
 # display final dataframe size
