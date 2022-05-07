@@ -150,3 +150,6 @@ Node-node distance and shortest paths ...
 ------------------------------------------
 Final # of components (cPCA) -> 19
 Final alpha (cPCA) -> 52.1401
+------------------------------------------
+Final # of components (cPCA) -> 17
+Final alpha (cPCA) -> 75.6463
