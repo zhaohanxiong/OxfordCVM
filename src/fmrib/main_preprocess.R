@@ -38,7 +38,7 @@ ukb_df[, 2:ncol(ukb_df)] = return_remove_outlier(data =
 
 # clean dataset of rows/columns with too many missing values
 ukb_df = return_clean_df(df = ukb_df, threshold_col = 0.5, threshold_row = 0.05,
-                         char_cols = c(1))
+                         ignore_cols = c(1))
 
 # remove rows with missing blood pressure values
 ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
@@ -61,10 +61,15 @@ ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data =
                                                      ukb_df[, 5:ncol(ukb_df)])
 
 # remove columns which contain the same value (extremely low variance)
-ukb_df = return_remove_low_variance_columns(ukb_df, char_cols = c(1))
+ukb_df = return_remove_low_variance_columns(ukb_df, ignore_cols = c(1))
 
 # further filtering outliers
-ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)], 5)
+ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)], 
+                                                       sd_threshold = 5)
+
+# feature selection, filter out columns with high neigborhood variance
+ukb_df = return_feature_select_neighborhood_variance(ukb_df,
+                                                     ignore_cols = 1:4)
 
 # impute data
 ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)], 
@@ -72,8 +77,8 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
 
 # remove columns which we dont want influence the model
 ukb_df = edit_ukb_columns(ukb_df, 
-                          #add_cols = c("31-0.0", "21003-2.0", 
-                                        #fread("../../../var_list.csv")$x),
+                          #keep_cols = c("31-0.0", "21003-2.0", 
+                                         #fread("../../../var_list.csv")$x),
                           remove_cols = c("6150-0.0"))
 
 # display final dataframe size
@@ -97,6 +102,5 @@ fwrite(ukb_df[, 1:4], "NeuroPM/io/labels.csv")
 fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
 
 # write to output (covariates)
-cov = return_covariates(ukb_df, 
-                        covariate = c("31-0.0", "21003-2.0"))
+cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
 fwrite(cov, "NeuroPM/io/cov.csv")

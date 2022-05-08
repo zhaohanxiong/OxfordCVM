@@ -363,7 +363,7 @@ return_remove_outlier = function(data) {
   
 }
 
-return_clean_df = function(df, threshold_col, threshold_row, char_cols = c()) {
+return_clean_df = function(df, threshold_col, threshold_row, ignore_cols = c()) {
   
   # apply filtering to clean the dataset and remove rows (patients) with many
   # missing values from the dataset and return the fully cleaned dataset
@@ -386,10 +386,10 @@ return_clean_df = function(df, threshold_col, threshold_row, char_cols = c()) {
   df = df[rowMeans(is.na(df)) <= threshold_row, ]
   
   # only perform cleaning on numeric columns
-  if (length(char_cols) > 0) {
+  if (length(ignore_cols) > 0) {
     
     # assign numeric columns only to new temp dataframe
-    temp = df[, -char_cols]
+    temp = df[, -ignore_cols]
     
     # filter out any column which are all 0s, if column is full of 0s, this 
     # will break the PCA algorithm. Mask out NAs when finding zeros
@@ -398,7 +398,7 @@ return_clean_df = function(df, threshold_col, threshold_row, char_cols = c()) {
     temp = temp[, !zero_cols]
     
     # reassign via column concatenation, moving character columns to the front
-    df = cbind(df[, char_cols], temp)
+    df = cbind(df[, ignore_cols], temp)
       
   }
   
@@ -481,23 +481,23 @@ return_normalize_zscore = function(data) {
   
 }
 
-return_remove_low_variance_columns = function(data, char_cols = c()) {
+return_remove_low_variance_columns = function(data, ignore_cols = c()) {
 
   # this function removes columns which have extremely low variance meaning
   # that they could potentially be columns which only contain either 1 single
   # value or very narrow range of values.
 
   # only perform cleaning on numeric columns
-  if (length(char_cols) > 0) {
+  if (length(ignore_cols) > 0) {
     
     # assign numeric columns only to new temp dataframe
-    temp = data[, -char_cols]
+    temp = data[, -ignore_cols]
 
     # find which columns have no variation in value (only 1 unique value)
     low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) == 0)
 
     # reassign via column concatenation, moving character columns to the front
-    data = cbind(data[, char_cols], temp[, which(!unname(low_var_cols))])
+    data = cbind(data[, ignore_cols], temp[, which(!unname(low_var_cols))])
 
   } else {
 
@@ -522,6 +522,53 @@ return_remove_large_zscores = function(data, sd_threshold) {
   
   # remove large z scores
   data[abs(data) > sd_threshold] = NA
+  
+  return(data)
+  
+}
+
+return_feature_select_neighborhood_variance = function(data, ignore_cols = c()) {
+  
+  # this function performs feature selection on columns in a dataframe, that
+  # are masked our by char_cols 
+  
+  # remove columns which 
+  data_ft = data[, -ignore_cols]
+  
+  # calculate sample variance
+  sample_var = apply(data_ft, 2, function(x) var(x, na.rm = TRUE))
+  
+  # calculate neighborhood variance
+  neighborhood_var = apply(data_ft, 2, function(e_g) {
+                        
+                            # minimum number of neighbors to get connect graph
+                            kc = length(eg) - 1 # !!! NEED TO VERIFY THIS !!!
+                            
+                            # function to perform inner summation
+                            vars = sapply(e_g, function(e_ig) {
+  
+                                # get the kc number of closest neighbors
+                                # ignore smallest value as same node
+                                dist_vec = sqrt(e_ig^2 - e_g^2)
+                                e_Nij_g = e_g[order(dist_vec)[2:(kc + 1)]]
+                                
+                                # compute the sum of the 
+                                return(sum((e_ig - e_Nij_g)^2))
+                              
+                            })
+                      
+                            # compute neighborhood variance
+                            S_g = sum(vars)/(length(e_g)*kc - 1)
+                            
+                            return(S_g)
+                          
+                          })
+  
+  # keep features which are most likely to be involved in trajectory
+  cols_keep = which(sample_var > neighborhood_var)
+  
+  # sample columns to keep
+  data = cbind(data[, ignore_cols], data_ft[, cols_keep])
   
   return(data)
   
@@ -575,7 +622,7 @@ return_imputed_data = function(data, method="median") {
   
 }
 
-edit_ukb_columns = function(ukb_data, add_cols = c(), remove_cols = c()) {
+edit_ukb_columns = function(ukb_data, keep_cols = c(), remove_cols = c()) {
 
   # given a ukb dataset
   # this function takes in a dataframe and 2 vectors of column names
