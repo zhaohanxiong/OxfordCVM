@@ -530,7 +530,10 @@ return_remove_large_zscores = function(data, sd_threshold) {
 return_feature_select_neighborhood_variance = function(data, ignore_cols = c()) {
   
   # this function performs feature selection on columns in a dataframe, that
-  # are masked our by char_cols 
+  # are masked our by ignore_cols. it calculates the neighborhood variance
+  # and uses this with the normal variance to identify features which are 
+  # mostly likely to be on a trajectory, therefore influence contrastive 
+  # trajectory inference the most
   
   # remove columns which 
   data_ft = data[, -ignore_cols]
