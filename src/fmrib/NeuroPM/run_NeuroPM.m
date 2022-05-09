@@ -22,8 +22,8 @@ classes_for_colours(ind_background) = 2;
 classes_for_colours(ind_between) = 3;
 
 %% impute data (dont use as takes very long to run)
-%data(ismissing(data)) = nan;
-%data = TSR(data);
+data(ismissing(data)) = nan;
+data = TSR(data);
 
 %% adjust for covariates
 %cov = table2array(readtable('io/cov.csv'));

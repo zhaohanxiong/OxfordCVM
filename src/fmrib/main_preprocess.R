@@ -68,8 +68,8 @@ ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)],
                                                        sd_threshold = 5)
 
 # feature selection, filter out columns with high neigborhood variance
-ukb_df = return_feature_select_neighborhood_variance(ukb_df,
-                                                     ignore_cols = 1:4)
+#ukb_df = return_feature_select_neighborhood_variance(ukb_df,
+#                                                     ignore_cols = 1:4)
 
 # impute data
 ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)], 
@@ -101,5 +101,5 @@ fwrite(ukb_df[, 1:4], "NeuroPM/io/labels.csv")
 fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
 
 # write to output (covariates)
-#cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
-#fwrite(cov, "NeuroPM/io/cov.csv")
+cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
+fwrite(cov, "NeuroPM/io/cov.csv")
