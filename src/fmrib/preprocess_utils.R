@@ -615,10 +615,7 @@ return_imputed_data = function(data, method="median") {
     
   # regression imputation
   } else if (method == "regression") {
-    
-    # TO DO
-    #library(mi)
-    #data = mi(ukb_df)
+
     x = 0
     
   } else {
