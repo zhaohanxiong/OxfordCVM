@@ -36,6 +36,12 @@ weight_vars$Var1 = gsub("x","X",gsub("_","\\.",weight_vars$Var1))
 var_sorted = weight_vars$Var1[order(weight_vars$Node_contributions, 
                                                             decreasing=TRUE)]
 
+# write highly weighted vars to file
+var_list = weight_vars$Var1[weight_vars$thres_above]
+var_list = gsub("X","",var_list)
+var_list = sub("\\.","-",var_list)
+fwrite(data.frame(x=var_list), file.path(path, "var_list.csv"))
+
 # box plot by group
 plot_boxplot_by_group(data = psuedotimes,
                       y = psuedotimes$global_pseudotimes,
