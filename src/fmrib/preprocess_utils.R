@@ -528,7 +528,7 @@ return_remove_large_zscores = function(data, sd_threshold) {
 }
 
 return_feature_select_neighborhood_variance = function(data, 
-                                                       cov_cols = c(),
+                                                       keep_cols = c(),
                                                        ignore_cols = c()) {
   
   # this function performs feature selection on columns in a dataframe, that
@@ -536,7 +536,7 @@ return_feature_select_neighborhood_variance = function(data,
   # and uses this with the normal variance to identify features which are 
   # mostly likely to be on a trajectory, therefore influence contrastive 
   # trajectory inference the most. we can also include columns we want to 
-  # keep in the output by using the input argument cov_cols
+  # keep in the output by using the input argument keep_cols
   
   # remove columns which 
   data_ft = data[, -ignore_cols]
@@ -579,8 +579,8 @@ return_feature_select_neighborhood_variance = function(data,
   cols_keep = which(sample_var / neighborhood_var >= 0.95)
 
   # keep covariate columns too
-  cov_cols = which(cov_cols %in% colnames(data_ft))
-  cols_keep = unique(c(cov_cols, cols_keep))
+  keep_cols = which(keep_cols %in% colnames(data_ft))
+  cols_keep = unique(c(keep_cols, cols_keep))
   
   # sample columns to keep
   data = cbind(data[, ignore_cols], data_ft[, cols_keep])
