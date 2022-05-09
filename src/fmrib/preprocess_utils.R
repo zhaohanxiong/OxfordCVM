@@ -645,7 +645,6 @@ edit_ukb_columns = function(ukb_data, keep_cols = c(), remove_cols = c()) {
 
   # index dataframe (if not empty input)
   if (length(keep_cols) > 0) {
-    keep_cols = unique(c(keep_cols, colnames(data)))
     data = data[, keep_cols]
   }
 
