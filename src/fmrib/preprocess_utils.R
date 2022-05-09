@@ -542,10 +542,11 @@ return_feature_select_neighborhood_variance = function(data, ignore_cols = c()) 
   sample_var = apply(data_ft, 2, function(x) var(x, na.rm = TRUE))
   
   # calculate neighborhood variance for all columns
+  N = nrow(data_ft)
   neighborhood_var = apply(data_ft, 2, function(e_g) {
                         
                         # minimum number of neighbors to get connect graph
-                        kc = length(e_g) - 1 # !!! NEED TO VERIFY THIS !!!
+                        kc = N - 1 # !!! NEED TO VERIFY THIS !!!
 
                         # compute both summations to form distance matrix
                         vars = outer(e_g, e_g, 
@@ -565,7 +566,7 @@ return_feature_select_neighborhood_variance = function(data, ignore_cols = c()) 
                         #})
 
                         # compute neighborhood variance
-                        S_g = sum(vars, na.rm = TRUE) / (length(e_g)*kc - 1)
+                        S_g = sum(vars, na.rm = TRUE) / (N*kc - 1)
                         
                         return(S_g)
                       
