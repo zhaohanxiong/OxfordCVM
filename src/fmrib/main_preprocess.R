@@ -69,6 +69,7 @@ ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)],
 
 # feature selection, filter out columns with high neigborhood variance
 #ukb_df = return_feature_select_neighborhood_variance(ukb_df,
+#                                                     cov_cols = c("31-0.0", "21003-2.0"),
 #                                                     ignore_cols = 1:4)
 
 # impute data
