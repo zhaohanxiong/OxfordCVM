@@ -572,7 +572,7 @@ return_feature_select_neighborhood_variance = function(data, ignore_cols = c()) 
                       })
   
   # keep features which are most likely to be involved in trajectory
-  cols_keep = which(sample_var > neighborhood_var)
+  cols_keep = which(sample_var / neighborhood_var >= 0.95)
   
   # sample columns to keep
   data = cbind(data[, ignore_cols], data_ft[, cols_keep])
