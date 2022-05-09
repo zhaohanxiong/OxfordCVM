@@ -541,31 +541,35 @@ return_feature_select_neighborhood_variance = function(data, ignore_cols = c()) 
   # calculate sample variance
   sample_var = apply(data_ft, 2, function(x) var(x, na.rm = TRUE))
   
-  # calculate neighborhood variance
+  # calculate neighborhood variance for all columns
   neighborhood_var = apply(data_ft, 2, function(e_g) {
                         
-                            # minimum number of neighbors to get connect graph
-                            kc = length(eg) - 1 # !!! NEED TO VERIFY THIS !!!
+                        # minimum number of neighbors to get connect graph
+                        kc = length(e_g) - 1 # !!! NEED TO VERIFY THIS !!!
+
+                        # compute both summations to form distance matrix
+                        vars = outer(e_g, e_g, 
+                                     function(e_ig, e_Nij_g) (e_ig - e_Nij_g)^2)
+
+                        # function to perform inner summation
+                        #vars = sapply(e_g, function(e_ig) {
+
+                            # get the kc number of closest neighbors
+                            # ignore smallest value as same node
+                        #    dist_vec = sqrt(e_ig^2 - e_g^2)
+                        #    e_Nij_g = e_g[order(dist_vec)[2:(kc + 1)]]
                             
-                            # function to perform inner summation
-                            vars = sapply(e_g, function(e_ig) {
-  
-                                # get the kc number of closest neighbors
-                                # ignore smallest value as same node
-                                dist_vec = sqrt(e_ig^2 - e_g^2)
-                                e_Nij_g = e_g[order(dist_vec)[2:(kc + 1)]]
-                                
-                                # compute the sum of the 
-                                return(sum((e_ig - e_Nij_g)^2))
-                              
-                            })
-                      
-                            # compute neighborhood variance
-                            S_g = sum(vars)/(length(e_g)*kc - 1)
-                            
-                            return(S_g)
+                            # compute the sum of the 
+                        #    return(sum((e_ig - e_Nij_g)^2))
                           
-                          })
+                        #})
+
+                        # compute neighborhood variance
+                        S_g = sum(vars, na.rm = TRUE) / (length(e_g)*kc - 1)
+                        
+                        return(S_g)
+                      
+                      })
   
   # keep features which are most likely to be involved in trajectory
   cols_keep = which(sample_var > neighborhood_var)
@@ -635,8 +639,8 @@ edit_ukb_columns = function(ukb_data, keep_cols = c(), remove_cols = c()) {
   data = ukb_data[, 5:ncol(ukb_data)]
 
   # index dataframe (if not empty input)
-  if (length(add_cols) > 0) {
-    data = data[, add_cols]
+  if (length(keep_cols) > 0) {
+    data = data[, keep_cols]
   }
 
   # inverse index dataframe (if not empty input)
