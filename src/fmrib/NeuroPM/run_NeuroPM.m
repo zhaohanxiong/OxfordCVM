@@ -22,12 +22,12 @@ classes_for_colours(ind_background) = 2;
 classes_for_colours(ind_between) = 3;
 
 %% impute data (dont use as takes very long to run)
-data(ismissing(data)) = nan;
-data = TSR(data);
+%data(ismissing(data)) = nan;
+%data = TSR(data);
 
 %% adjust for covariates
-%cov = table2array(readtable('io/cov.csv'));
-%data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
+cov = table2array(readtable('io/cov.csv'));
+data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
 
 %% call function
 [global_ordering, global_pseudotimes, mappedX, contrasted_data, Node_contributions, Expected_contribution] = ...
