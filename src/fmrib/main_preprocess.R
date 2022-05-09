@@ -77,8 +77,7 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
 
 # remove columns which we dont want influence the model
 ukb_df = edit_ukb_columns(ukb_df, 
-                          #keep_cols = c("31-0.0", "21003-2.0", 
-                                         #fread("../../../var_list.csv")$x),
+                          #keep_cols = c("31-0.0", "21003-2.0")
                           remove_cols = c("6150-0.0"))
 
 # display final dataframe size
@@ -102,5 +101,5 @@ fwrite(ukb_df[, 1:4], "NeuroPM/io/labels.csv")
 fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
 
 # write to output (covariates)
-cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
-fwrite(cov, "NeuroPM/io/cov.csv")
+#cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
+#fwrite(cov, "NeuroPM/io/cov.csv")
