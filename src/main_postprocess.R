@@ -81,3 +81,8 @@ plot(psuedotimes$global_pseudotimes, ukb_df[, var_sorted[1]],
 
 # View unusually high weight variables and their variable distribution
 View(cbind(psuedotimes[,4:5],ukb_df[,var_sorted[1:15]]))
+
+# load distance matrix and visualize distance distributions
+mat = readMat(file.path(path,"dist_mat.mat"))$dist.matrix
+range(mat)
+hist(mat, breaks = seq(0,max(mat)+0.1,by=0.1))

@@ -1,6 +1,6 @@
 
 # load outputs from NeuroPM
-setwd("C:/Users/zxiong/Desktop")
+setwd("C:/Users/zxiong/Desktop/2_10 subset runs")
 
 # list files
 files = list.files()
