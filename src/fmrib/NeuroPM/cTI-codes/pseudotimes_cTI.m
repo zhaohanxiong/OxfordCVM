@@ -91,7 +91,6 @@ catch, classes_for_colours(starting_point) = 1; classes_for_colours(setdiff([1:N
 %--- Node-node distance
 disp('Node-node distance and shortest paths ...')
 dist_matrix = double(L2_distance(mappedX', mappedX'));
-save('io/dist_mat', 'dist_matrix'); % saves distance matrix
 
 %--- Minimal spanning tree across all the points
 % Specifying which node is the root, the closest one to all the starting points
@@ -120,6 +119,7 @@ if length(final_subjects) < length(setdiff(1:N_nodes,starting_point)) % in case 
     global_pseudotimes(out_background_target,1) = global_pseudotimes(in_background_target(j),1);
 end
 [~,global_ordering] = sort(global_pseudotimes);
+%save('io/all'); % save all variables to workspace to study intermediary values
 return;
 
 function [theta,varargout] = subspacea(F,G,A)
