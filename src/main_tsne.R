@@ -1,12 +1,9 @@
 library(data.table)
 library(tsne)
 
-df = fread("fmrib/NeuroPM/io/ukb_num_norm.csv")
+path = "C:/users/zxiong/desktop/workspace vars 20% run/"
+df = fread(file.path(path, "ukb_num_norm.csv"))
 df = data.frame(df)
 
-labels = read.csv("fmrib/NeuroPM/io/labels.csv")
-
-reduce = tsne(df, k = 50)
-
-plot(reduce[,49],reduce[,50],
-     col=c("orange","green","red")[labels$bp_group+1],pch=16)
+reduce = tsne(df, max_iter = 500, k = 50)
+fwrite(reduce, file.path(path, "tsne.csv"))
