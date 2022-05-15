@@ -90,9 +90,10 @@ catch, classes_for_colours(starting_point) = 1; classes_for_colours(setdiff([1:N
 
 %--- Node-node distance
 disp('Node-node distance and shortest paths ...')
-mappedX(abs(mappedX) > std(mappedX,0, "all")*3) = median(mappedX, "all");
+sd = std(mappedX, 0, "all");
+mappedX(mappedX > sd) = sd;
+mappedX(mappedX < -sd) = -sd;
 dist_matrix = double(L2_distance(mappedX', mappedX'));
-%dist_matrix(dist_matrix > std(dist_matrix, 0,"all")*5) = median(dist_matrix,"all");
 
 %--- Minimal spanning tree across all the points
 % Specifying which node is the root, the closest one to all the starting points
@@ -109,10 +110,10 @@ end
 rng('default'); % For reproducibility
 
 % calculate spanning tree
-G = graph(dist_matrix, "upper");
-Tree = adjacency(shortestpathtree(G, Root_node), "weighted");
-%Tree = graphminspantree(sparse(dist_matrix),Root_node);
-%Tree(Tree > 0) = dist_matrix(Tree > 0);
+%G = graph(dist_matrix, "upper");
+%Tree = adjacency(shortestpathtree(G, Root_node), "weighted");
+Tree = graphminspantree(sparse(dist_matrix),Root_node);
+Tree(Tree > 0) = dist_matrix(Tree > 0);
 MST = full(Tree + Tree'); clear Tree d
 
 %--- Shortest paths to the starting point(s) and pseudotimes
