@@ -90,9 +90,15 @@ catch, classes_for_colours(starting_point) = 1; classes_for_colours(setdiff([1:N
 
 %--- Node-node distance
 disp('Node-node distance and shortest paths ...')
-sd = std(mappedX, 0, "all");
-mappedX(mappedX > sd) = sd;
-mappedX(mappedX < -sd) = -sd;
+% normalize for each contrastive principle component
+for i = 1:size(mappedX,2)
+    mappedX_i = mappedX(:,i);
+    sd_i = std(mappedX_i, 0, "all")*3;
+    mappedX_i(mappedX_i > sd_i) = sd_i;
+    mappedX_i(mappedX_i < -sd_i) = -sd_i;
+    mappedX(:,i) = mappedX_i;
+end
+
 dist_matrix = double(L2_distance(mappedX', mappedX'));
 
 %--- Minimal spanning tree across all the points
