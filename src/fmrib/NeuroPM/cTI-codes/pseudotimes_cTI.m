@@ -91,6 +91,7 @@ catch, classes_for_colours(starting_point) = 1; classes_for_colours(setdiff([1:N
 %--- Node-node distance
 disp('Node-node distance and shortest paths ...')
 % normalize for each contrastive principle component
+%save("io/mappedX.mat","mappedX");
 for i = 1:size(mappedX,2)
     mappedX_i = mappedX(:,i);
     sd_i = std(mappedX_i, 0, "all")*3;
