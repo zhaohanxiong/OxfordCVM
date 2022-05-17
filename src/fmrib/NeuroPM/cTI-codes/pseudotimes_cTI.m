@@ -90,8 +90,7 @@ catch, classes_for_colours(starting_point) = 1; classes_for_colours(setdiff([1:N
 
 %--- Node-node distance
 disp('Node-node distance and shortest paths ...')
-% normalize for each contrastive principle component
-%save("io/mappedX.mat","mappedX");
+save("io/mappedX.mat","mappedX");
 
 dist_matrix = double(L2_distance(mappedX', mappedX'));
 
