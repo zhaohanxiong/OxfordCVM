@@ -19,7 +19,7 @@ if ~exist('classes_for_colours') || isempty(classes_for_colours)
     classes_for_colours = ones(size(X,1),1);
 end
 if nargin < 6 || isempty(alphas)
-    alphas = logspace(-2,1.5,50);
+    alphas = logspace(-2,0.15,50);
 end
 n_alphas = length(alphas);
 
