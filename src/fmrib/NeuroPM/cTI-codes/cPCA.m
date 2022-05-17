@@ -19,7 +19,7 @@ if ~exist('classes_for_colours') || isempty(classes_for_colours)
     classes_for_colours = ones(size(X,1),1);
 end
 if nargin < 6 || isempty(alphas)
-    alphas = logspace(-2,2,100);
+    alphas = logspace(-2,1.5,50);
 end
 n_alphas = length(alphas);
 
@@ -38,7 +38,7 @@ mean_data = mean(X); std_data = std(X);
 
 % Assigning background and target data.
 X_background = X(indices_background,:);
-X_target     = X(indices_target,:);    
+X_target     = X(indices_target,:);
 
 % Covariance matrices
 Cb = cov(X_background);
@@ -59,7 +59,8 @@ for alpha_i = 1:n_alphas
     [V_i,D_i] = eig(C);
     % sort eigenvalues in descending order
     [D_i, ind] = sort(diag(D_i), 'descend');
-    V(:,:,alpha_i) = V_i(:,ind(1:min([d_max length(ind)])));
+    V_sort = V_i(:,ind(1:min([d_max length(ind)])));
+    V(:,:,alpha_i) = V_sort;
     D(:,alpha_i)   = D_i(1:min([d_max length(ind)])); clear V_i D_i ind
     % calculating intrinsic dimensionality for current alpha
     D(:,alpha_i) = D(:,alpha_i) - min(D(:,alpha_i));
