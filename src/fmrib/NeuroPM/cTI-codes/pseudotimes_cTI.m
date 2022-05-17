@@ -92,13 +92,6 @@ catch, classes_for_colours(starting_point) = 1; classes_for_colours(setdiff([1:N
 disp('Node-node distance and shortest paths ...')
 % normalize for each contrastive principle component
 %save("io/mappedX.mat","mappedX");
-for i = 1:size(mappedX,2)
-    mappedX_i = mappedX(:,i);
-    sd_i = std(mappedX_i, 0, "all")*3;
-    mappedX_i(mappedX_i > sd_i) = sd_i;
-    mappedX_i(mappedX_i < -sd_i) = -sd_i;
-    mappedX(:,i) = mappedX_i;
-end
 
 dist_matrix = double(L2_distance(mappedX', mappedX'));
 
@@ -133,7 +126,7 @@ if length(final_subjects) < length(setdiff(1:N_nodes,starting_point)) % in case 
     global_pseudotimes(out_background_target,1) = global_pseudotimes(in_background_target(j),1);
 end
 [~,global_ordering] = sort(global_pseudotimes);
-%save('io/all'); % save all variables to workspace to study intermediary values
+%save('io/all.mat'); % save all variables to workspace to study intermediary values
 return;
 
 function [theta,varargout] = subspacea(F,G,A)

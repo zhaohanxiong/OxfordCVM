@@ -24,17 +24,17 @@ end
 n_alphas = length(alphas);
 
 % Transforming non-normal features into a normal shape (didn't change our results, but may be help with some data).
-for d = 1:size(X,2)
-    [~,lambda] = boxcox(X([indices_background; indices_target],d)-min(X(:,d))+eps);
-    if lambda > 0,
-        X(:,d) = ((X(:,d)-min(X(:,d))+eps).^lambda - 1)/lambda;
-    elseif lambda == 0,
-        X(:,d) = log(X(:,d)-min(X(:,d))+eps);
-    end
-end
+%for d = 1:size(X,2)
+%    [~,lambda] = boxcox(X([indices_background; indices_target],d)-min(X(:,d))+eps);
+%    if lambda > 0,
+%        X(:,d) = ((X(:,d)-min(X(:,d))+eps).^lambda - 1)/lambda;
+%    elseif lambda == 0,
+%        X(:,d) = log(X(:,d)-min(X(:,d))+eps);
+%    end
+%end
 mean_data = mean(X); std_data = std(X);
-X = (X - repmat(mean(X([indices_background; indices_target],:)),[size(X,1) 1]))./ ...
-    repmat(std(X([indices_background; indices_target],:)),[size(X,1) 1]); % Standardizing data after box-cox
+%X = (X - repmat(mean(X([indices_background; indices_target],:)),[size(X,1) 1]))./ ...
+%    repmat(std(X([indices_background; indices_target],:)),[size(X,1) 1]); % Standardizing data after box-cox
 
 % Assigning background and target data.
 X_background = X(indices_background,:);
@@ -154,6 +154,7 @@ for clus_i = 1:n_clusters
     N_subspaces(clus_i) = eva.OptimalK;
     gap_values(clus_i)  = max(eva.CriterionValues);
 end
+save('io/all_cPCA.mat'); % save all variables to workspace to study intermediary values
 return;
 
 function [theta,varargout] = subspacea(F,G,A)
