@@ -37,8 +37,8 @@ mean_data = mean(X); std_data = std(X);
 %    repmat(std(X([indices_background; indices_target],:)),[size(X,1) 1]); % Standardizing data after box-cox
 
 % Assigning background and target data.
-X_background = X(indices_background,:);
-X_target     = X(indices_target,:);
+X_background = X(indices_background,:); %X(randsample(indices_background,2500),:);
+X_target     = X(indices_target,:); %X(randsample(indices_target,4500),:);
 
 % Covariance matrices
 Cb = cov(X_background);
@@ -60,6 +60,7 @@ for alpha_i = 1:n_alphas
     % sort eigenvalues in descending order
     [D_i, ind] = sort(diag(D_i), 'descend');
     V_sort = V_i(:,ind(1:min([d_max length(ind)])));
+    %V_sort(abs(V_sort) > std(V_sort,0,"all")*3) = 0;
     V(:,:,alpha_i) = V_sort;
     D(:,alpha_i)   = D_i(1:min([d_max length(ind)])); clear V_i D_i ind
     % calculating intrinsic dimensionality for current alpha
@@ -92,7 +93,7 @@ affinity_matrix = double(affinity_matrix);
 warning off;
 rng('default');  % For reproducibility
 Ci   = GCSpectralClust1(affinity_matrix,10);
-Kbst =CNDistBased(Ci,affinity_matrix);
+Kbst = CNDistBased(Ci,affinity_matrix);
 Ci = Ci(:,Kbst); % Using the Community Detection Toolbox (from http://users.auth.gr/~kehagiat/Software/)
 Ci(1) = 1; Ci(2:end) = Ci(2:end)+1;
 n_clusters = length(unique(Ci));
