@@ -54,7 +54,7 @@ fwrite(ukb_df[, 4:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")
 # target (2), between (0). The first 4 columns are now ID/label columns
 # to omit during further processing
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
-                                             target_criteria = "> 140/80")
+                                             target_criteria = "> 160/100")
 
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
