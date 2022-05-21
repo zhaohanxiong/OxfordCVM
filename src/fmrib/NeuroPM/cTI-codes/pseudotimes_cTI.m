@@ -60,7 +60,7 @@ if strcmp(method,'cPCA')
     
     disp(['Final # of components (cPCA) -> ' num2str(no_dims(j))]);
     disp(['Final alpha (cPCA) -> ' num2str(alphas(j))]);
-    
+    %save('io/cPCA_out.mat'); % save all direct outputs of cPCA
 elseif strcmp(method,'PCA')
     norm_data = zscore(data);
     rng('default');  % For reproducibility
@@ -90,7 +90,7 @@ catch, classes_for_colours(starting_point) = 1; classes_for_colours(setdiff([1:N
 
 %--- Node-node distance
 disp('Node-node distance and shortest paths ...')
-save("io/mappedX.mat","mappedX");
+%save("io/mappedX.mat","mappedX");
 
 dist_matrix = double(L2_distance(mappedX', mappedX'));
 
