@@ -41,8 +41,8 @@ X_background = X(indices_background,:); %X(randsample(indices_background,2500),:
 X_target     = X(indices_target,:); %X(randsample(indices_target,4500),:);
 
 % Covariance matrices
-Cb = cov(X_background);
-Ct = cov(X_target);
+Cb = corrcoef(X_background);
+Ct = corrcoef(X_target);
 
 % cPCA with multiple alphas:
 for alpha_i = 1:n_alphas
