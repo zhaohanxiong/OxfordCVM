@@ -399,7 +399,7 @@ return_clean_df = function(df, threshold_col, threshold_row, ignore_cols = c()) 
     
     # reassign via column concatenation, moving character columns to the front
     df = cbind(df[, ignore_cols], temp)
-      
+    
   }
   
   # display % missing values before cleaning
@@ -481,7 +481,7 @@ return_normalize_zscore = function(data) {
   
 }
 
-return_remove_low_variance_columns = function(data, ignore_cols = c()) {
+return_remove_non_unique_columns = function(data, ignore_cols = c()) {
 
   # this function removes columns which have extremely low variance meaning
   # that they could potentially be columns which only contain either 1 single
@@ -493,19 +493,19 @@ return_remove_low_variance_columns = function(data, ignore_cols = c()) {
     # assign numeric columns only to new temp dataframe
     temp = data[, -ignore_cols]
 
-    # find which columns have no variation in value (only 1 unique value)
-    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) == 0)
+    # find which columns have all uniue values
+    non_unique_cols = apply(temp, 2, function(x) length(unique(x)) == 1)
 
     # reassign via column concatenation, moving character columns to the front
-    data = cbind(data[, ignore_cols], temp[, which(!unname(low_var_cols))])
+    data = cbind(data[, ignore_cols], temp[, which(!unname(non_unique_cols))])
 
   } else {
 
-    # find which columns have no variation in value (only 1 unique value)
-    low_var_cols = apply(data, 2, function(x) var(x, na.rm=TRUE) == 0)
+    # find which columns have all uniue values
+    non_unique_cols = apply(temp, 2, function(x) length(unique(x)) == 1)
 
     # remove low variance columns
-    data = data[, which(!unname(low_var_cols))]
+    data = data[, which(!unname(non_unique_cols))]
 
   }
 
