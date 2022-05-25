@@ -60,7 +60,7 @@ if strcmp(method,'cPCA')
     
     disp(['Final # of components (cPCA) -> ' num2str(no_dims(j))]);
     disp(['Final alpha (cPCA) -> ' num2str(alphas(j))]);
-    %save('io/cPCA_out.mat'); % save all direct outputs of cPCA
+
 elseif strcmp(method,'PCA')
     norm_data = zscore(data);
     rng('default');  % For reproducibility
@@ -83,6 +83,7 @@ elseif strcmp(method,'UMAP')
     Lambdas = []; Node_Weights = []; contrasted_data = [];
     Node_contributions = []; Expected_contribution = [];
 end
+save('io/cPCA_out.mat'); % save all direct outputs of cPCA
 
 try, classes_for_colours = classes_for_colours(1:N_nodes); 
 catch, classes_for_colours(starting_point) = 1; classes_for_colours(setdiff([1:N_nodes]',[starting_point; final_subjects])) = 2; classes_for_colours(final_subjects) = 3; end
