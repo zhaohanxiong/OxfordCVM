@@ -481,11 +481,9 @@ return_normalize_zscore = function(data) {
   
 }
 
-return_remove_non_unique_columns = function(data, ignore_cols = c()) {
+return_low_variance_columns = function(data, ignore_cols = c()) {
 
-  # this function removes columns which have extremely low variance meaning
-  # that they could potentially be columns which only contain either 1 single
-  # value or very narrow range of values.
+  # this function removes columns which have only 1 value
 
   # only perform cleaning on numeric columns
   if (length(ignore_cols) > 0) {
@@ -494,18 +492,18 @@ return_remove_non_unique_columns = function(data, ignore_cols = c()) {
     temp = data[, -ignore_cols]
 
     # find which columns have all uniue values
-    non_unique_cols = apply(temp, 2, function(x) length(unique(x)) == 1)
+    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.1)
 
     # reassign via column concatenation, moving character columns to the front
-    data = cbind(data[, ignore_cols], temp[, which(!unname(non_unique_cols))])
+    data = cbind(data[, ignore_cols], temp[, which(!unname(low_var_cols))])
 
   } else {
 
     # find which columns have all uniue values
-    non_unique_cols = apply(temp, 2, function(x) length(unique(x)) == 1)
+    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.1)
 
     # remove low variance columns
-    data = data[, which(!unname(non_unique_cols))]
+    data = data[, which(!unname(low_var_cols))]
 
   }
 

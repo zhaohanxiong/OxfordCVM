@@ -60,12 +60,12 @@ ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
                                                      ukb_df[, 5:ncol(ukb_df)])
 
-# remove columns which contain the same value (extremely low variance)
-ukb_df = return_remove_non_unique_columns(ukb_df, ignore_cols = c(1))
-
 # further filtering outliers
 ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)], 
                                                        sd_threshold = 10)
+
+# remove columns which contain the same value (extremely low variance)
+ukb_df = return_low_variance_columns(ukb_df, ignore_cols = c(1))
 
 # feature selection, filter out columns with high neigborhood variance
 #ukb_df = return_feature_select_neighborhood_variance(ukb_df,
