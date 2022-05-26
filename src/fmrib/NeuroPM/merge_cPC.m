@@ -1,6 +1,6 @@
 addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\");
 
-N_nodes = 9000;
+N_nodes = 12000;
 
 % load and combine the labels
 labels_0001 = readtable('C:/Users/zxiong/Desktop/io 1-3000/labels.csv');
@@ -18,15 +18,21 @@ bp_group = table2array(labels_6001(:, 'bp_group'));
 starting_point_6001 = find(bp_group == 1)+6000;
 final_subjects_6001 = find(bp_group == 2)+6000;
 
-starting_point = [starting_point_0001; starting_point_3001; starting_point_6001];
-final_subjects = [final_subjects_0001; final_subjects_3001; final_subjects_6001];
-labels = [labels_0001; labels_3001; labels_6001];
+labels_9001 = readtable('C:/Users/zxiong/Desktop/io 9001-12000/labels.csv');
+bp_group = table2array(labels_9001(:, 'bp_group'));
+starting_point_9001 = find(bp_group == 1)+9000;
+final_subjects_9001 = find(bp_group == 2)+9000;
+
+starting_point = [starting_point_0001; starting_point_3001; starting_point_6001; starting_point_9001];
+final_subjects = [final_subjects_0001; final_subjects_3001; final_subjects_6001; final_subjects_9001];
+labels = [labels_0001; labels_3001; labels_6001; labels_9001];
 
 % load and combine the cPCs
 mappedX_0001 = padarray(mappedX_0001, [0 4], 0, 'post');
 mappedX_3001 = padarray(mappedX_3001, [0 5], 0, 'post');
 mappedX_6001 = padarray(mappedX_6001, [0 5], 0, 'post');
-mappedX = [mappedX_0001; mappedX_3001; mappedX_6001];
+mappedX_9001 = padarray(mappedX_9001, [0 6], 0, 'post');
+mappedX = [mappedX_0001; mappedX_3001; mappedX_6001; mappedX_9001];
 %mappedX(abs(mappedX) > std(mappedX,0,"all")*3) = 0;
 
 %%
@@ -73,6 +79,12 @@ global_pseudotimes(in_background_target,1) = datas.A/max_distance;
 % temp_dist = dist_matrix0(out_background_target_6001,in_background_target_6001);
 % [i,j] = min(temp_dist,[],2);
 % global_pseudotimes(out_background_target_6001,1) = global_pseudotimes(in_background_target_6001(j),1);
+% 
+% in_background_target_9001 = [starting_point_9001(:); final_subjects_9001(:)];
+% out_background_target_9001 = setdiff(9001:12000, in_background_target_9001)';
+% temp_dist = dist_matrix0(out_background_target_9001,in_background_target_9001);
+% [i,j] = min(temp_dist,[],2);
+% global_pseudotimes(out_background_target_9001,1) = global_pseudotimes(in_background_target_9001(j),1);
 
 out_background_target = setdiff(1:N_nodes,in_background_target)';
 temp_dist = dist_matrix0(out_background_target,in_background_target);
@@ -81,7 +93,7 @@ global_pseudotimes(out_background_target,1) = global_pseudotimes(in_background_t
 [~,global_ordering] = sort(global_pseudotimes);
 
 % load and combine nodal weights distribution
-Node_contributions = (Node_contributions_0001 + Node_contributions_3001 + Node_contributions_6001)./3;
+Node_contributions = (Node_contributions_0001 + Node_contributions_3001 + Node_contributions_6001 + Node_contributions_9001)./4;
 ukb_data = readtable('C:/Users/zxiong/Desktop/io 1-3000/ukb_num_norm.csv');
 node_contributions = table(ukb_data.Properties.VariableNames', Node_contributions);
 
