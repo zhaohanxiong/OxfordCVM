@@ -19,6 +19,7 @@ labels = [labels_0001; labels_3001];
 mappedX_0001 = padarray(mappedX_0001, [0 4], 0, 'post');
 mappedX_3001 = padarray(mappedX_3001, [0 5], 0, 'post');
 mappedX = cat(1, mappedX_0001, mappedX_3001);
+%mappedX(abs(mappedX) > std(mappedX,0,"all")*3) = 0;
 
 %%
 % rest of graph generation code
@@ -36,8 +37,8 @@ dist_matrix = dist_matrix(in_background_target,in_background_target); % only con
 
 % calculate spanning tree
 rng('default'); % For reproducibility
-%Tree = adjacency(shortestpathtree(graph(dist_matrix, "upper"), Root_node), "weighted");
-Tree = graphminspantree(sparse(dist_matrix),Root_node);
+Tree = adjacency(shortestpathtree(graph(dist_matrix, "upper"), Root_node), "weighted");
+%Tree = graphminspantree(sparse(dist_matrix),Root_node);
 Tree(Tree > 0) = dist_matrix(Tree > 0);
 MST = full(Tree + Tree');
 
