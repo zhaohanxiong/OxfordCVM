@@ -39,7 +39,7 @@ mappedX_6001 = padarray(mappedX_6001, [0 5], 0, 'post');
 mappedX_9001 = padarray(mappedX_9001, [0 6], 0, 'post');
 mappedX_12001 = padarray(mappedX_12001, [0 5], 0, 'post');
 mappedX = [mappedX_0001; mappedX_3001; mappedX_6001; mappedX_9001; mappedX_12001];
-%mappedX(abs(mappedX) > std(mappedX,0,"all")*3) = 0;
+%mappedX(abs(mappedX) > std(mappedX(mappedX~=0),0,"all")*3) = 0;
 
 %%
 % rest of graph generation code
@@ -57,7 +57,6 @@ dist_matrix = dist_matrix(in_background_target,in_background_target); % only con
 
 % calculate spanning tree
 rng('default'); % For reproducibility
-%Tree = adjacency(shortestpathtree(graph(dist_matrix, "upper"), Root_node), "weighted");
 Tree = graphminspantree(sparse(dist_matrix),Root_node);
 Tree(Tree > 0) = dist_matrix(Tree > 0);
 MST = full(Tree + Tree');
@@ -74,7 +73,7 @@ global_pseudotimes(out_background_target,1) = global_pseudotimes(in_background_t
 [~,global_ordering] = sort(global_pseudotimes);
 
 % load and combine nodal weights distribution
-Node_contributions = (Node_contributions_0001 + Node_contributions_3001 + Node_contributions_6001 + Node_contributions_9001)./4;
+Node_contributions = (Node_contributions_0001 + Node_contributions_3001 + Node_contributions_6001 + Node_contributions_9001 + Node_contributions_12001)./5;
 ukb_data = readtable('C:/Users/zxiong/Desktop/io 1-3000/ukb_num_norm.csv');
 node_contributions = table(ukb_data.Properties.VariableNames', Node_contributions);
 
