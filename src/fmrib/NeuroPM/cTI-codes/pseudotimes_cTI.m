@@ -113,6 +113,7 @@ rng('default'); % For reproducibility
 Tree = graphminspantree(sparse(dist_matrix),Root_node);
 Tree(Tree > 0) = dist_matrix(Tree > 0);
 MST = full(Tree + Tree'); clear Tree d
+%MST = minspantree(graph(dist_matrix, "upper"));
 
 %--- Shortest paths to the starting point(s) and pseudotimes
 datas = dijkstra(MST, Root_node');
