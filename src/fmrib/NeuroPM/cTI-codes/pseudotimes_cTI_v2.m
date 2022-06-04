@@ -68,8 +68,8 @@ for b = 1:(length(batch_ranges) - 1)
     Expected_contribution = sum(100*1/size(Node_Weights,1)*Lambdas);
 
     % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
-    disp(['Number of cPCs -> ' num2str(no_dims(j)) ' in batch ' num2str(b)]);
-    disp(['Alpha Selected -> ' num2str(alphas(j)) ' in batch ' num2str(b)]);
+    disp(['batch ' num2str(b) ' Number of cPCs -> ' num2str(no_dims(j))]);
+    disp(['batch ' num2str(b) ' Alpha Selected -> ' num2str(alphas(j))]);
 
     % pad intermediary values for concatenation
     mappedX = padarray(mappedX, [0 (max_cPCs - size(mappedX, 2))], 0, 'post');
@@ -92,7 +92,7 @@ Root_node = j;
 % subset background and diseased groups
 in_background_target = [starting_point(:); final_subjects(:)];
 dist_matrix0 = dist_matrix;   
-out_background_target = setdiff(1:N_nodes, in_background_target)';
+out_background_target = setdiff(1:N_patients, in_background_target)';
 dist_matrix = dist_matrix(in_background_target, in_background_target);
 
 % calculate minimum spanning tree
@@ -113,6 +113,7 @@ global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_
 [~, global_ordering] = sort(global_pseudotimes);
 
 % clear and save variables
+%boxplot(global_pseudotimes, classes_for_colours)
 clear Tree dist_matrix0 dist_matrix
 save('io/all.mat'); % save all variables to workspace to study intermediary values
 
