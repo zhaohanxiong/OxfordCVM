@@ -30,7 +30,7 @@ disp('Iterative Contrastive Dimensionality Reduction ...')
 % compute number of batches to use & define index ranges for patient sub-batches
 starting_point = starting_point(:);
 N_patients = size(data, 1);
-N_batches = 10; %N_batches = ceil(N_patients/3000);
+N_batches = 11; %N_batches = ceil(N_patients/3000);
 batch_ranges = floor(linspace(1, N_patients, N_batches + 1));
 
 % define output variable
@@ -41,10 +41,10 @@ for b = 1:(length(batch_ranges) - 1)
 
     % define data subset for sub-batch
     start_ind = batch_ranges(b);
-    end_ind = batch_ranges(b + 1) - 1;
-    
+    end_ind = batch_ranges(b + 1) - (b ~= (length(batch_ranges) - 1));
+
     % subset data inputted
-    data_batch = data(start_ind:end_ind, :)
+    data_batch = data(start_ind:end_ind, :);
     starting_point_batch = starting_point(starting_point >= start_ind & starting_point <= end_ind) - start_ind + 1;
     final_subjects_batch = final_subjects(final_subjects >= start_ind & final_subjects <= end_ind) - start_ind + 1;
 
@@ -59,7 +59,7 @@ for b = 1:(length(batch_ranges) - 1)
     mappedX         = cPCs(:,1:no_dims(j),j);
     Node_Weights    = Vmedoid(:,1:no_dims(j),j);
     Lambdas         = Dmedoid(1:no_dims(j),j);
-    cPCs            = cPCs(1:N_nodes,:,:); 
+    cPCs            = cPCs(1:N_nodes,:,:);
     contrasted_data = contrasted_data(1:N_nodes,:,:);
     contrasted_data = contrasted_data(:,:,j);
 
@@ -68,8 +68,8 @@ for b = 1:(length(batch_ranges) - 1)
     Expected_contribution = sum(100*1/size(Node_Weights,1)*Lambdas);
 
     % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
-    disp(['# of components (cPCA) -> ' num2str(no_dims(j)) 'in batch' num2str(b)]);
-    disp(['Alpha (cPCA) -> ' num2str(alphas(j)) 'in batch ' num2str(b)]);
+    disp(['Number of cPCs -> ' num2str(no_dims(j)) ' in batch ' num2str(b)]);
+    disp(['Alpha Selected -> ' num2str(alphas(j)) ' in batch ' num2str(b)]);
 
     % pad intermediary values for concatenation
     mappedX = padarray(mappedX, [0 (max_cPCs - size(mappedX, 2))], 0, 'post');
@@ -108,7 +108,7 @@ global_pseudotimes(in_background_target,1) = datas.A/max_distance;
 
 % extrapolate between group values
 temp_dist = dist_matrix0(out_background_target, in_background_target);
-[i, j] = min(temp_dist,[],2);
+[~, j] = min(temp_dist,[],2);
 global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_target(j), 1);
 [~, global_ordering] = sort(global_pseudotimes);
 
