@@ -30,7 +30,7 @@ disp('Iterative Contrastive Dimensionality Reduction ...')
 % compute number of batches to use & define index ranges for patient sub-batches
 starting_point = starting_point(:);
 N_patients = size(data, 1);
-N_batches = 11; %N_batches = ceil(N_patients/3000);
+N_batches = 10; %N_batches = ceil(N_patients/3000);
 batch_ranges = floor(linspace(1, N_patients, N_batches + 1));
 
 % define output variable
