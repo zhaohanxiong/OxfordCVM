@@ -59,6 +59,7 @@ for alpha_i = 1:n_alphas
     [V_i,D_i] = eig(C);
     % sort eigenvalues in descending order
     [D_i, ind] = sort(diag(D_i), 'descend');
+    %ind = ind(~ismember(ind, find(max(abs(V_i),[],1) >= 0.3)'));
     V_sort = V_i(:,ind(1:min([d_max length(ind)])));
     %V_sort(abs(V_sort) > std(V_sort,0,"all")*3) = 0;
     V(:,:,alpha_i) = V_sort;
