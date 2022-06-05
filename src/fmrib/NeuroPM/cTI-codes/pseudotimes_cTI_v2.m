@@ -25,8 +25,6 @@ function [global_ordering,global_pseudotimes,mappedX,contrasted_data,Node_contri
 %         in the final representation space (usefull as cut-off value).
 
 %--- Reducing dimensionality
-disp('Iterative Contrastive Dimensionality Reduction ...')
-
 % compute number of batches to use & define index ranges for patient sub-batches
 starting_point = starting_point(:);
 N_patients = size(data, 1);
@@ -81,7 +79,6 @@ for b = 1:(length(batch_ranges) - 1)
 end
 
 %--- Node-node distance
-disp('Node-node distance and shortest paths ...')
 dist_matrix = double(L2_distance(final_cPCs', final_cPCs'));
 
 %--- Minimal spanning tree across all the points

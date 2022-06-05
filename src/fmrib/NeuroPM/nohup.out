@@ -291,3 +291,39 @@ Final alpha (cPCA) -> 4.6416
 ------------------------------------------
 Final # of components (cPCA) -> 50
 Final alpha (cPCA) -> 4.5568
+------------------------------------------
+Setting up environment variables
+---
+LD_LIBRARY_PATH is .:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/runtime/glnxa64:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/bin/glnxa64:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/sys/os/glnxa64:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/sys/opengl/lib/glnxa64
+Warning: Executing startup failed in matlabrc.
+This indicates a potentially serious problem in your MATLAB setup, which should be resolved as soon as possible.  Error detected was:
+MATLAB:mpath:PathAlterationNotSupported
+Modifying the search path is not supported by MATLAB Compiler. Remove functions that modify the search path from your MATLAB code. To make files visible to your deployed application, add the parent folder to your MATLAB session.
+Warning: Column headers from the file were modified to make them valid MATLAB identifiers before creating variable names for the table. The original column headers are saved in the VariableDescriptions property.
+Set 'PreserveVariableNames' to true to use the original column headers as table variable names.
+Warning: Column headers from the file were modified to make them valid MATLAB identifiers before creating variable names for the table. The original column headers are saved in the VariableDescriptions property.
+Set 'PreserveVariableNames' to true to use the original column headers as table variable names.
+Warning: Column headers from the file were modified to make them valid MATLAB identifiers before creating variable names for the table. The original column headers are saved in the VariableDescriptions property.
+Set 'PreserveVariableNames' to true to use the original column headers as table variable names.
+Iterative Contrastive Dimensionality Reduction ...
+batch 1 Number of cPCs -> 15
+batch 1 Alpha Selected -> 52.1401
+batch 2 Number of cPCs -> 16
+batch 2 Alpha Selected -> 47.5081
+batch 3 Number of cPCs -> 13
+batch 3 Alpha Selected -> 43.2876
+batch 4 Number of cPCs -> 15
+batch 4 Alpha Selected -> 47.5081
+batch 5 Number of cPCs -> 15
+batch 5 Alpha Selected -> 47.5081
+batch 6 Number of cPCs -> 15
+batch 6 Alpha Selected -> 52.1401
+batch 7 Number of cPCs -> 16
+batch 7 Alpha Selected -> 43.2876
+batch 8 Number of cPCs -> 15
+batch 8 Alpha Selected -> 47.5081
+batch 9 Number of cPCs -> 15
+batch 9 Alpha Selected -> 52.1401
+batch 10 Number of cPCs -> 16
+batch 10 Alpha Selected -> 68.9261
+Node-node distance and shortest paths ...
