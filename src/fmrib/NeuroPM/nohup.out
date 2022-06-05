@@ -312,3 +312,11 @@ batch 9 Number of cPCs -> 15
 batch 9 Alpha Selected -> 52.1401
 batch 10 Number of cPCs -> 16
 batch 10 Alpha Selected -> 68.9261
+------------------------------------------
+Setting up environment variables
+---
+LD_LIBRARY_PATH is .:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/runtime/glnxa64:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/bin/glnxa64:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/sys/os/glnxa64:/opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98/sys/opengl/lib/glnxa64
+Warning: Executing startup failed in matlabrc.
+This indicates a potentially serious problem in your MATLAB setup, which should be resolved as soon as possible.  Error detected was:
+MATLAB:mpath:PathAlterationNotSupported
+Modifying the search path is not supported by MATLAB Compiler. Remove functions that modify the search path from your MATLAB code. To make files visible to your deployed application, add the parent folder to your MATLAB session.
