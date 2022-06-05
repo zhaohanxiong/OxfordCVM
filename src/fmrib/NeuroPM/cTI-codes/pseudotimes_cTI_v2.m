@@ -112,8 +112,18 @@ temp_dist = dist_matrix0(out_background_target, in_background_target);
 global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_target(j), 1);
 [~, global_ordering] = sort(global_pseudotimes);
 
+% produce visualization and save the plots
+f = figure('visible','off');
+subplot(2,1,1);
+boxplot(global_pseudotimes,classes_for_colours);
+title('Disease Score By Group (Background/Between/Disease)');
+subplot(2,1,2);
+plot(graph(MST));
+title('Minimum Spanning Tree (Background/Disease)');
+set(gcf, 'PaperPosition', [0 0 10 20])
+saveas(f, 'io/results.png');
+
 % clear and save variables
-%boxplot(global_pseudotimes, classes_for_colours)
 clear Tree dist_matrix0 dist_matrix
 save('io/all.mat'); % save all variables to workspace to study intermediary values
 
