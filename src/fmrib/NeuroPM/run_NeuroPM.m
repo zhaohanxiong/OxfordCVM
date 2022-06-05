@@ -17,9 +17,9 @@ ind_target = find(bp_group == 2);
 
 % set colors to use for each class
 classes_for_colours = [];
-classes_for_colours(ind_target) = 1;
-classes_for_colours(ind_background) = 2;
-classes_for_colours(ind_between) = 3;
+classes_for_colours(ind_target) = 3;
+classes_for_colours(ind_background) = 1;
+classes_for_colours(ind_between) = 2;
 
 %% impute data (dont use as takes very long to run)
 %data(ismissing(data)) = nan;
@@ -31,7 +31,7 @@ data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
 
 %% call function
 [global_ordering, global_pseudotimes, mappedX, contrasted_data, Node_contributions, Expected_contribution] = ...
-          pseudotimes_cTI(data, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
+                        pseudotimes_cTI_v2(data, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
 
 %% convert outputs to dataframes
 pseudotimes_file = [labels, table(global_pseudotimes)];
