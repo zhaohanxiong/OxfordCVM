@@ -70,7 +70,7 @@ for b = 1:(length(batch_ranges) - 1)
     disp(['batch ' num2str(b) ' Alpha Selected -> ' num2str(alphas(j))]);
 
     % normalize cPC space
-    mappedX = (mappedX - mean(mappedX,"all"))/std(mappedX,0,"all")*100
+    %mappedX = (mappedX - mean(mappedX,"all"))/std(mappedX,0,"all")*100
 
     % pad intermediary values for concatenation
     mappedX = padarray(mappedX, [0 (max_cPCs - size(mappedX, 2))], 0, 'post');
