@@ -60,8 +60,6 @@ for b = 1:(length(batch_ranges) - 1)
     mappedX         = cPCs(:,1:no_dims(j),j);
     Node_Weights    = Vmedoid(:,1:no_dims(j),j);
     Lambdas         = Dmedoid(1:no_dims(j),j);
-    cPCs            = cPCs(1:N_nodes,:,:);
-    contrasted_data = contrasted_data(1:N_nodes,:,:);
     contrasted_data = contrasted_data(:,:,j);
 
     % compute nodal weightings (values of the final eigen vectors)
@@ -69,8 +67,8 @@ for b = 1:(length(batch_ranges) - 1)
     Expected_contribution = sum(100*1/size(Node_Weights,1)*Lambdas);
 
     % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
-    disp(['batch ' num2str(b) ' Number of cPCs -> ' num2str(no_dims(j))]);
-    disp(['batch ' num2str(b) ' Alpha Selected -> ' num2str(alphas(j))]);
+    disp(['Batch ' num2str(b) ' Number of cPCs -> ' num2str(no_dims(j))]);
+    disp(['Batch ' num2str(b) ' Alpha Selected -> ' num2str(alphas(j))]);
 
     % pad intermediary values for concatenation
     mappedX = padarray(mappedX, [0 (max_cPCs - size(mappedX, 2))], 0, 'post');
