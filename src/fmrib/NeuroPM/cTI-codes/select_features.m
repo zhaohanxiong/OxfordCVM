@@ -1,5 +1,5 @@
-function [selected_features,ratio_sigma2_s2,sigma2_g,S2_g] = select_features(data,network_option,cdf_prob_threshold)
-% data: [N_samples x N_features] matrix.
+function [selected_features,ratio_sigma2_s2,sigma2_g,S2_g] = select_features(norm_data,network_option,cdf_prob_threshold)
+% norm_data: [N_samples x N_features] matrix. z-score already normalized
 % network_option = 1; % for minimum number of nearest neighbors needed to
 % yield a fully connected graph (like in Welch et al., 2016, Genome
 % Biology).
@@ -13,7 +13,7 @@ function [selected_features,ratio_sigma2_s2,sigma2_g,S2_g] = select_features(dat
 if nargin < 2 || isempty(network_option)
     network_option = 1; % like in Welch et al., 2016, Genome Biology.
 end
-[N_samples,N_features] = size(data);
+[N_samples,N_features] = size(norm_data);
 
 if network_option == 1, % Calculating minimum number of nearest neighbors needed to yield a fully connected graph
     kc = 1;
