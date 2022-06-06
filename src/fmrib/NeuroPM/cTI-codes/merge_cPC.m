@@ -1,4 +1,8 @@
-addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\");
+% this file is a mock test of the iterative cPCA method, which is an intermediary
+% solution to the current issue with the cPCA method which does not scale well
+% onto large datasets
+
+addpath("auxiliary\","dijkstra_tools\");
 
 N_nodes = 15000;
 
