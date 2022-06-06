@@ -14,3 +14,7 @@ cd ./NeuroPM
 
 # execute the compiled matlab program
 nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
+
+# run post-analysis
+cd ../..
+Rscript main_postprocess.R
