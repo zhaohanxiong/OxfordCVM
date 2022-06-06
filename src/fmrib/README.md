@@ -52,14 +52,11 @@ chmod a+rx compile_NeuroPM.sh
 - link to resource
 https://sharepoint.nexus.ox.ac.uk/sites/NDCN/FMRIB/IT/User%20Guides/GridEngine.aspx
 
-- to run preprocessing + neuroPM in one script (12GB memory or less, ~5000 rows)
+- to run preprocessing + neuroPM in one script (<12GB RAM, 4 Hours Max, priority)
 fsl_sub -q short.q ./run_all.sh
 
-- to run preprocessing + neuroPM in one script (Use for full dataset run)
+- to run preprocessing + neuroPM in one script (Unlimited RAM and Hours, needed for full UKB, but slow)
 fsl_sub -q bigmem.q ./run_all.sh
-
-- to run code directly using matlab (sub-directories not detecting)
-fsl_sub -q short.q matlab -nodisplay -nosplash \< run_NeuroPM.m
 
 - manage active jobs
 qstat
