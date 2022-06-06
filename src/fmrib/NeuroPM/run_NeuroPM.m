@@ -29,6 +29,10 @@ classes_for_colours(ind_between) = 2;
 cov = table2array(readtable('io/cov.csv'));
 data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
 
+%% feature selection
+%[selected_features, ratio_sigma2_s2, sigma2_g, S2_g] = select_features(data, 1, 0.95);
+%data = data(:, selected_features);
+
 %% call function
 [global_ordering, global_pseudotimes, mappedX, contrasted_data, Node_contributions, Expected_contribution] = ...
                         pseudotimes_cTI_v2(data, ind_background, classes_for_colours, ind_target, 'cPCA', 25);

@@ -67,11 +67,6 @@ ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)],
 # remove columns which contain the same value (extremely low variance)
 ukb_df = return_low_variance_columns(ukb_df, ignore_cols = c(1))
 
-# feature selection, filter out columns with high neigborhood variance
-#ukb_df = return_feature_select_neighborhood_variance(ukb_df,
-#                                                     keep_cols = c("31-0.0", "21003-2.0"),
-#                                                     ignore_cols = 1:4)
-
 # impute data
 ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)], 
                                                method = "median")

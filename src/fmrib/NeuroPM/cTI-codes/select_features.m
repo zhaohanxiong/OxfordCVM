@@ -8,13 +8,12 @@ function [selected_features,ratio_sigma2_s2,sigma2_g,S2_g] = select_features(dat
 % cdf_prob_threshold: cut-off value (e.g. 0.95 will keep only the features with a 0.95 probably of being in a trajectory).
 %---------------------------------------------------------------%
 % Author: Yasser Iturria medina, 17/05/2018.
-% See Welch et al., 2016, Genome Biology, 17, 1–15.
+% See Welch et al., 2016, Genome Biology, 17, 1ï¿½15.
 
 if nargin < 2 || isempty(network_option)
     network_option = 1; % like in Welch et al., 2016, Genome Biology.
 end
 [N_samples,N_features] = size(data);
-norm_data = zscore(data);
 
 if network_option == 1, % Calculating minimum number of nearest neighbors needed to yield a fully connected graph
     kc = 1;
@@ -62,14 +61,13 @@ end
 sigma2_g = var(norm_data,[],1)';
 S2_g     = zeros(N_features,1);
 distance = distance - diag(diag(distance));
-h = waitbar(0,'Calculating sample variance with regards neighboring points...');
+
 for i = 1:N_samples
-    waitbar(i/N_samples);
     kc_node = length(nonzeros(distance(i,:)));
     ind     = find(distance(i,:));
     S2_g    = S2_g + var(repmat(norm_data(i,:),[length(ind) 1]) - norm_data(ind,:),0,1)'/N_samples;
 end
-close(h);
+
 % Selecting features more likely to be involved in a trajectory, i.e.
 % features that show more gradual variation across neighboring points than
 % at global scale:

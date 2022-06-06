@@ -525,68 +525,6 @@ return_remove_large_zscores = function(data, sd_threshold) {
   
 }
 
-return_feature_select_neighborhood_variance = function(data, 
-                                                       keep_cols = c(),
-                                                       ignore_cols = c()) {
-  
-  # this function performs feature selection on columns in a dataframe, that
-  # are masked our by ignore_cols. it calculates the neighborhood variance
-  # and uses this with the normal variance to identify features which are 
-  # mostly likely to be on a trajectory, therefore influence contrastive 
-  # trajectory inference the most. we can also include columns we want to 
-  # keep in the output by using the input argument keep_cols
-  
-  # remove columns which 
-  data_ft = data[, -ignore_cols]
-  
-  # calculate sample variance
-  sample_var = apply(data_ft, 2, function(x) var(x, na.rm = TRUE))
-  
-  # calculate neighborhood variance for all columns
-  N = nrow(data_ft)
-  neighborhood_var = apply(data_ft, 2, function(e_g) {
-                        
-                        # minimum number of neighbors to get connect graph
-                        kc = N - 1 # !!! NEED TO VERIFY THIS !!!
-
-                        # compute both summations to form distance matrix
-                        vars = outer(e_g, e_g, 
-                                     function(e_ig, e_Nij_g) (e_ig - e_Nij_g)^2)
-
-                        # function to perform inner summation
-                        #vars = sapply(e_g, function(e_ig) {
-
-                            # get the kc number of closest neighbors
-                            # ignore smallest value as same node
-                        #    dist_vec = sqrt(e_ig^2 - e_g^2)
-                        #    e_Nij_g = e_g[order(dist_vec)[2:(kc + 1)]]
-                            
-                            # compute the sum of the 
-                        #    return(sum((e_ig - e_Nij_g)^2))
-                          
-                        #})
-
-                        # compute neighborhood variance
-                        S_g = sum(vars, na.rm = TRUE) / (N*kc - 1)
-                        
-                        return(S_g)
-                      
-                      })
-  
-  # keep features which are most likely to be involved in trajectory
-  cols_keep = which(sample_var / neighborhood_var >= 0.95)
-
-  # keep covariate columns too
-  keep_cols = which(keep_cols %in% colnames(data_ft))
-  cols_keep = unique(c(keep_cols, cols_keep))
-  
-  # sample columns to keep
-  data = cbind(data[, ignore_cols], data_ft[, cols_keep])
-  
-  return(data)
-  
-}
-
 return_imputed_data = function(data, method="median") {
   
   # given an input data matrix, and a method selected for imputation
