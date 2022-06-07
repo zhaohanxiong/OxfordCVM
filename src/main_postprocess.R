@@ -76,13 +76,13 @@ sprintf(paste0("Overlap in IQR of Boxes Between vs Disease is ",
         (g2_box[2] - g3_box[1]) / diff(g3_box) * 100)
 
 # analysis for variable weightings compared to disease score
-plot(psuedotimes$global_pseudotimes, ukb_df[, var_sorted[1]],
-     col=alpha(c("green","blue","red")[labels$bp_group+1], 0.25), pch=20)
+#plot(psuedotimes$global_pseudotimes, ukb_df[, var_sorted[1]],
+#     col=alpha(c("green","blue","red")[labels$bp_group+1], 0.25), pch=20)
 
 # View unusually high weight variables and their variable distribution
-View(cbind(psuedotimes[,4:5],ukb_df[,var_sorted[1:15]]))
+#View(cbind(psuedotimes[,4:5],ukb_df[,var_sorted[1:15]]))
 
 # load distance matrix and visualize distance distributions
-mat = readMat(file.path(path,"all.mat"))$dist.matrix
-range(mat)
-hist(mat, breaks = seq(0,max(mat)+0.1,by=0.1))
+#mat = readMat(file.path(path,"all.mat"))$dist.matrix
+#range(mat)
+#hist(mat, breaks = seq(0,max(mat)+0.1,by=0.1))

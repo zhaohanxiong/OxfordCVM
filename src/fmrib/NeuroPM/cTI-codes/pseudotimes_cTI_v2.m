@@ -28,7 +28,7 @@ function [global_ordering,global_pseudotimes,mappedX,contrasted_data,Node_contri
 % compute number of batches to use & define index ranges for patient sub-batches
 starting_point = starting_point(:);
 N_patients = size(data, 1);
-N_batches = 15; %N_batches = ceil(N_patients/3000);
+N_batches = 10; %N_batches = ceil(N_patients/3000);
 batch_ranges = floor(linspace(1, N_patients, N_batches + 1));
 
 % define output variable
@@ -53,7 +53,7 @@ for b = 1:(length(batch_ranges) - 1)
     [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = cPCA(data_batch,starting_point_batch,final_subjects_batch,max_cPCs,classes_for_colours);
 
     % normalize cPC space
-    %cPCs = (cPCs - mean(cPCs,"all"))/std(cPCs,0,"all")*100
+    cPCs = (cPCs - mean(cPCs,"all"))/std(cPCs,0,"all")*100;
     
     % store the output values
     [~,j]           = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
