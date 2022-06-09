@@ -43,13 +43,13 @@ var_list = sub("\\.","-",var_list)
 #fwrite(data.frame(x=var_list), file.path(path, "var_list.csv"))
 
 # box plot by group
-plot_boxplot_by_group(data = psuedotimes,
-                      y = psuedotimes$global_pseudotimes,
-                      group = psuedotimes$bp_group,
-                      ylim=c(0, 1),
-                      title = "Disease Progression by Blood Pressure Group",
-                      xlab = "Blood Pressure Groups", ylab = "Disease Score",
-                      labels = levels(psuedotimes$bp_group))
+#plot_boxplot_by_group(data = psuedotimes,
+#                      y = psuedotimes$global_pseudotimes,
+#                      group = psuedotimes$bp_group,
+#                      ylim=c(0, 1),
+#                      title = "Disease Progression by Blood Pressure Group",
+#                      xlab = "Blood Pressure Groups", ylab = "Disease Score",
+#                      labels = levels(psuedotimes$bp_group))
 
 # perform statistical tests to evaluate model
 # seperate groups into different variable
