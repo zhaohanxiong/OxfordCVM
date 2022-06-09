@@ -127,7 +127,10 @@ save('io/all.mat'); % save all variables to workspace to study intermediary valu
 
 % save MST as table to output file
 MST = graph(MST);
-MST = MST.Edges;
+Edges = MST.Edges.EndNodes;
+Edges(:,1) = in_background_target(Edges(:,1));
+Edges(:,2) = in_background_target(Edges(:,2));
+MST = table(Edges, MST.Edges.Weight);
 writetable(MST,'io/MST.csv');
 
 return;
