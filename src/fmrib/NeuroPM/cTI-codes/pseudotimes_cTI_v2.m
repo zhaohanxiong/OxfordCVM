@@ -125,6 +125,11 @@ saveas(f, 'io/results.png');
 clear Tree dist_matrix0 dist_matrix
 save('io/all.mat'); % save all variables to workspace to study intermediary values
 
+% save MST as table to output file
+MST = graph(MST);
+MST = MST.Edges;
+writetable(MST,'io/MST.csv');
+
 return;
 
 function [theta,varargout] = subspacea(F,G,A)
