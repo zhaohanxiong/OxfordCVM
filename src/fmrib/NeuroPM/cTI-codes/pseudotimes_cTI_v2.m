@@ -110,13 +110,25 @@ temp_dist = dist_matrix0(out_background_target, in_background_target);
 global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_target(j), 1);
 [~, global_ordering] = sort(global_pseudotimes);
 
+% convert MST from adjacency matrix into graph object
+MST_graph = graph(MST);
+
+% save MST as table to output file
+Edges = MST_graph.Edges.EndNodes;
+Edges(:,1) = in_background_target(Edges(:,1));
+Edges(:,2) = in_background_target(Edges(:,2));
+MST_out = table(MST_graph.Edges.EndNodes, MST_graph.Edges.Weight, Edges, ...
+                 'VariableNames', {'Edges', 'Weight', 'Edges_Index_Matched'});
+writetable(MST_out,'io/MST.csv', 'WriteVariableNames', true);
+
 % produce visualization and save the plots
 f = figure('visible','off');
 subplot(2,1,1);
 boxplot(global_pseudotimes,classes_for_colours);
 title('Disease Score By Group (Background/Between/Disease)');
 subplot(2,1,2);
-plot(graph(MST));
+p = plot(MST_graph);
+highlight(p, Root_node, 'NodeColor', 'r', 'MarkerSize',5);
 title('Minimum Spanning Tree (Background/Disease)');
 set(gcf, 'PaperPosition', [0 0 10 20])
 saveas(f, 'io/results.png');
@@ -124,14 +136,6 @@ saveas(f, 'io/results.png');
 % clear and save variables
 clear Tree dist_matrix0 dist_matrix
 save('io/all.mat'); % save all variables to workspace to study intermediary values
-
-% save MST as table to output file
-MST = graph(MST);
-Edges = MST.Edges.EndNodes;
-Edges(:,1) = in_background_target(Edges(:,1));
-Edges(:,2) = in_background_target(Edges(:,2));
-MST = table(Edges, MST.Edges.Weight);
-writetable(MST,'io/MST.csv');
 
 return;
 
