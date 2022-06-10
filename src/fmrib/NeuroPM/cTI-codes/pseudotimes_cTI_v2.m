@@ -135,6 +135,7 @@ saveas(f, 'io/results.png');
 
 % clear and save variables
 clear Tree dist_matrix0 dist_matrix
+save('io/MST.mat','MST'); % save minimum spanning tree individually
 save('io/all.mat'); % save all variables to workspace to study intermediary values
 
 return;
