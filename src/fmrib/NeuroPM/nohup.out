@@ -581,3 +581,6 @@ Batch 24 Number of cPCs -> 14
 Batch 24 Alpha Selected -> 24.7708
 Batch 25 Number of cPCs -> 14
 Batch 25 Alpha Selected -> 20.5651
+------------------------------------------
+Final # of components (cPCA) -> 2
+Final alpha (cPCA) -> 5.0941
