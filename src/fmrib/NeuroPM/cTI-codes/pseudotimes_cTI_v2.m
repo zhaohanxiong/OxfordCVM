@@ -128,7 +128,10 @@ boxplot(global_pseudotimes,classes_for_colours);
 title('Disease Score By Group (Background/Between/Disease)');
 subplot(2,1,2);
 p = plot(MST_graph);
-highlight(p, Root_node, 'NodeColor', 'r', 'MarkerSize',5);
+highlight(p, MST_graph, 'EdgeColor', 'black', 'LineWidth',1);
+highlight(p, find(temp==1), 'NodeColor', 'g', 'MarkerSize',3);
+highlight(p, find(temp==3), 'NodeColor', 'r', 'MarkerSize',3);
+highlight(p, Root_node, 'NodeColor', 'black', 'Marker', '^', 'MarkerSize', 10);
 title('Minimum Spanning Tree (Background/Disease)');
 set(gcf, 'PaperPosition', [0 0 10 20])
 saveas(f, 'io/results.png');
