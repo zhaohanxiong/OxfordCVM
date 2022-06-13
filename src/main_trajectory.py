@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import networkx as nx
 import matplotlib.pyplot as plt
-import plotly.graph_objects as go
 
 # https://plotly.com/python/network-graphs/
 # https://www.geeksforgeeks.org/python-visualize-graphs-generated-in-networkx-using-matplotlib/
@@ -22,9 +21,10 @@ os.chdir(path)
 labels = pd.read_csv("pseudotimes.csv", index_col = False)
 
 # load minimum spanning tree
-#MST_mat = scipy.io.loadmat("MST.mat")["MST"]
-#G = nx.from_numpy_matrix(MST_mat)
-#nx.draw_spectral(G, with_labels = True)
+MST_mat = scipy.io.loadmat("MST.mat")["MST"]
+G = nx.from_numpy_matrix(MST_mat)
+nx.draw_spectral(G, with_labels = True)
+plt.savefig("filename.png")
 
 #MST = pd.read_csv("MST.csv",index_col=False)
 #MST["group"] = labels["bp_group"][MST["Edges_Index_Matched_1"]-1].to_numpy()
@@ -34,14 +34,13 @@ labels = pd.read_csv("pseudotimes.csv", index_col = False)
 #MST_mat = MST_mat[:,np.argsort(MST["disease_score"])]
 #G = nx.from_numpy_matrix(MST_mat)
 
-dist_mat = scipy.io.loadmat("dist_matrix.mat")["dist_matrix"] # only works for a few thousand points
-dist_ind = np.argsort(np.sum(dist_mat,0))
-dist_mat = dist_mat[dist_ind,:]
-dist_mat = dist_mat[:,dist_ind]
-
-G = nx.from_numpy_matrix(dist_mat)
-T = nx.minimum_spanning_tree(G)
-nx.draw_spectral(T, with_labels = False)
+#dist_mat = scipy.io.loadmat("dist_matrix.mat")["dist_matrix"] # only works for a few thousand points
+#dist_ind = np.argsort(np.sum(dist_mat,0))
+#dist_mat = dist_mat[dist_ind,:]
+#dist_mat = dist_mat[:,dist_ind]
+#G = nx.from_numpy_matrix(dist_mat)
+#T = nx.minimum_spanning_tree(G)
+#nx.draw_spectral(T, with_labels = False)
 
 #rows, cols = np.where(MST > 0)
 #edges = zip(rows.tolist(), cols.tolist())
