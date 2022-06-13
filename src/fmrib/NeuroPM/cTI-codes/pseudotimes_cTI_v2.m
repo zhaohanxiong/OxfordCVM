@@ -122,6 +122,7 @@ MST_out = table(MST_graph.Edges.EndNodes, MST_graph.Edges.Weight, Edges, ...
 writetable(MST_out,'io/MST.csv', 'WriteVariableNames', true);
 
 % produce visualization and save the plots
+colours_target_disease = classes_for_colours(in_background_target);
 f = figure('visible','off');
 subplot(2,1,1);
 boxplot(global_pseudotimes,classes_for_colours);
@@ -129,9 +130,9 @@ title('Disease Score By Group (Background/Between/Disease)');
 subplot(2,1,2);
 p = plot(MST_graph);
 highlight(p, MST_graph, 'EdgeColor', 'black', 'LineWidth',1);
-highlight(p, find(temp==1), 'NodeColor', 'g', 'MarkerSize',3);
-highlight(p, find(temp==3), 'NodeColor', 'r', 'MarkerSize',3);
-highlight(p, Root_node, 'NodeColor', 'black', 'Marker', '^', 'MarkerSize', 10);
+highlight(p, find(colours_target_disease==1), 'NodeColor', 'g', 'MarkerSize',2);
+highlight(p, find(colours_target_disease==3), 'NodeColor', 'r', 'MarkerSize',2);
+highlight(p, Root_node, 'NodeColor', 'black', 'Marker', '^', 'MarkerSize', 5);
 title('Minimum Spanning Tree (Background/Disease)');
 set(gcf, 'PaperPosition', [0 0 10 20])
 saveas(f, 'io/results.png');
