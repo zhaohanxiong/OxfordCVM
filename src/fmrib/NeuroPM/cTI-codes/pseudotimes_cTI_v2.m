@@ -28,7 +28,7 @@ function [global_ordering,global_pseudotimes,mappedX,contrasted_data,Node_contri
 % compute number of batches to use & define index ranges for patient sub-batches
 starting_point = starting_point(:);
 N_patients = size(data, 1);
-N_batches = 25; %N_batches = ceil(N_patients/2000);
+N_batches = 20; %N_batches = ceil(N_patients/2000);
 batch_ranges = floor(linspace(1, N_patients, N_batches + 1));
 
 % define output variable
