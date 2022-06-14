@@ -32,6 +32,7 @@ data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
 %% feature selection
 %[selected_features, ratio_sigma2_s2, sigma2_g, S2_g] = select_features(data, 1, 0.95);
 %data = data(:, selected_features);
+%disp(['Reduced Data To ' num2str(size(data,2)) ' Features'])
 
 %% call function
 [global_ordering, global_pseudotimes, mappedX, contrasted_data, Node_contributions, Expected_contribution] = ...
