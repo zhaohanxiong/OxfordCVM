@@ -3,6 +3,7 @@ import scipy.io
 import numpy as np
 import pandas as pd
 import networkx as nx
+import plotly.express as px
 import matplotlib.pyplot as plt
 
 # https://plotly.com/python/network-graphs/
@@ -10,7 +11,7 @@ import matplotlib.pyplot as plt
 # https://hilbert-cantor.medium.com/network-plot-with-plotly-and-graphviz-ebd7778073b
 
 # source path
-path      = "C:/Users/zxiong/Desktop"
+path      = "C:/Users/86155/Desktop/io 10 batches 160 100"
 file_path = "" #"io - iter_cPCA full run 10"
 path      = os.path.join(path, file_path)
 
@@ -20,11 +21,14 @@ os.chdir(path)
 # load labels (0 = between, 1 = background, 2 = disease)
 labels = pd.read_csv("pseudotimes.csv", index_col = False)
 
+fig = px.scatter(labels, x="BPSys_2_0", y="global_pseudotimes", trendline="ols")
+fig.show()
+
 # load minimum spanning tree
 MST_mat = scipy.io.loadmat("MST.mat")["MST"]
 G = nx.from_numpy_matrix(MST_mat)
-nx.draw_spectral(G, with_labels = True)
-plt.savefig("filename.png")
+#nx.draw_spectral(G, with_labels = True)
+#plt.savefig("filename.png")
 
 #MST = pd.read_csv("MST.csv",index_col=False)
 #MST["group"] = labels["bp_group"][MST["Edges_Index_Matched_1"]-1].to_numpy()
