@@ -157,7 +157,7 @@ for clus_i = 1:n_clusters
     N_subspaces(clus_i) = eva.OptimalK;
     gap_values(clus_i)  = max(eva.CriterionValues);
 end
-save('io/cPCA_interm.mat'); % save all variables to workspace to study intermediary values
+%save('io/cPCA_interm.mat'); % save all variables to workspace to study intermediary values
 return;
 
 function [theta,varargout] = subspacea(F,G,A)

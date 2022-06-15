@@ -124,7 +124,6 @@ p = plot(MST_graph);
 highlight(p, MST_graph, 'EdgeColor', 'black', 'LineWidth',1);
 highlight(p, find(colours_target_disease==1), 'NodeColor', 'g', 'MarkerSize',2);
 highlight(p, find(colours_target_disease==3), 'NodeColor', 'r', 'MarkerSize',2);
-highlight(p, Root_node, 'NodeColor', 'black', 'Marker', '^', 'MarkerSize', 5);
 title('Minimum Spanning Tree (Background/Disease)');
 set(gcf, 'PaperPosition', [0 0 10 20])
 saveas(f, 'io/results.png');
