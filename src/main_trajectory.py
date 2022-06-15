@@ -58,8 +58,8 @@ node_trace = go.Scattergl(x=node_x, y=node_y,
                          )
 
 score_col = MST["disease_score"].to_numpy()
-disease_q3 = np.quantile(score_col[MST["group"]==2], 0.75)
-score_col[score_col>disease_q3] = disease_q3
+score_col[MST["group"]==2] *= 3
+score_col[score_col>1] = 1
 node_trace.marker.color = score_col
 
 # produce the overall plot
