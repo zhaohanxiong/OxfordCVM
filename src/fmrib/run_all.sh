@@ -15,6 +15,10 @@ cd ./NeuroPM
 # execute the compiled matlab program
 nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 
-# run post-analysis
+# run post-analysis evaluation
 cd ../..
 Rscript main_postprocess.R
+
+# run python trajectory visualization
+source ../../env/bin/activate
+python main_trajectory.py
