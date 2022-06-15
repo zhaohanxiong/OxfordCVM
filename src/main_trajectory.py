@@ -54,7 +54,7 @@ node_trace = go.Scattergl(x=node_x, y=node_y,
                                       opacity=0.75,
                                       colorbar=dict(thickness=15,title='Disease Score',
                                                     xanchor='left',titleside='right'),
-                                      line=dict(width=0,color='black'))
+                                      line=dict(width=2.5,color='black'))
                          )
 
 score_col = MST["disease_score"].to_numpy()
