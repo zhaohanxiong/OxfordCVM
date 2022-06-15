@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from scipy.sparse.csgraph import laplacian
 
 # source path & set the current working directory
-path = "fmrib/NeuroPM/io/"
+path = "src/fmrib/NeuroPM/io/"
 os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
@@ -20,6 +20,10 @@ G = nx.from_numpy_matrix(MST_mat)
 MST = pd.read_csv("MST.csv",index_col=False)
 MST["group"] = labels["bp_group"][MST["Edges_Index_Matched_1"]-1].to_numpy()
 MST["disease_score"] = labels["global_pseudotimes"][MST["Edges_Index_Matched_1"]-1].to_numpy()
+
+# root node
+root_node = np.argmin(MST["disease_score"]) # least diseased node
+max_node = np.argmax(MST["disease_score"]) # most diseased node
 
 # compute spectral layout using lapacian and eigen decomp
 L = laplacian((MST_mat>0).astype(int))
@@ -62,8 +66,20 @@ score_col[MST["group"]==2] *= 3
 score_col[score_col>1] = 1
 node_trace.marker.color = score_col
 
+# highlight most healthy and most diseased nodes
+node_trace_b = go.Scatter(x=[node_x[root_node]], y=[node_y[root_node]],
+                          mode='markers',marker_symbol="star",marker_line_color="black",
+                          marker_size=30,marker_line_width=2,marker_color="Green",
+                          hovertemplate="Root Node (Least Diseased Node)"
+                          )
+node_trace_d = go.Scatter(x=[node_x[max_node]], y=[node_y[max_node]],
+                          mode='markers',marker_symbol="hexagram",marker_color="Red",
+                          marker_size=30,marker_line_width=2,
+                          hovertemplate="Root Node (Least Diseased Node)"
+                          )
+                    
 # produce the overall plot
-fig = go.Figure(data=[edge_trace, node_trace],
+fig = go.Figure(data=[edge_trace, node_trace, node_trace_b, node_trace_d],
                 layout=go.Layout(
                     title='<br>Disease Trajectory Map of Patients in the UK Biobank',
                     titlefont_size=20,
