@@ -113,14 +113,6 @@ global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_
 % convert MST from adjacency matrix into graph object
 MST_graph = graph(MST);
 
-% save MST as table to output file
-Edges = MST_graph.Edges.EndNodes;
-Edges(:,1) = in_background_target(Edges(:,1));
-Edges(:,2) = in_background_target(Edges(:,2));
-MST_out = table(MST_graph.Edges.EndNodes, MST_graph.Edges.Weight, Edges, ...
-                 'VariableNames', {'Edges', 'Weight', 'Edges_Index_Matched'});
-writetable(MST_out,'io/MST.csv', 'WriteVariableNames', true);
-
 % produce visualization and save the plots
 colours_target_disease = classes_for_colours(in_background_target);
 f = figure('visible','off');
@@ -137,8 +129,17 @@ title('Minimum Spanning Tree (Background/Disease)');
 set(gcf, 'PaperPosition', [0 0 10 20])
 saveas(f, 'io/results.png');
 
+% save MST labels as table to output file
+MST_groups = colours_target_disease';
+MST_groups(MST_groups==3) = 2;
+MST_labels = table(MST_groups, global_pseudotimes(in_background_target,1), ...
+                   'VariableNames', {'bp_group', 'pseudotime', });
+writetable(MST_labels,'io/MST.csv', 'WriteVariableNames', true);
+
 % clear and save variables
 clear Tree dist_matrix0 dist_matrix
+dijkstra_F = datas.F;
+save('io/dijkstra.mat','dijkstra_F'); % dijkstra father nodes of every node for computing trajectories
 save('io/MST.mat','MST'); % save minimum spanning tree individually
 save('io/all.mat'); % save all variables to workspace to study intermediary values
 

@@ -13,23 +13,24 @@ os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
 labels = pd.read_csv("pseudotimes.csv", index_col = False)
+MST_labels = labels["bp_group"]==1
 
-# load minimum spanning tree
+# load minimum spanning tree, and labels for each node in the graph
 MST_mat = scipy.io.loadmat("MST.mat")["MST"]
 G = nx.from_numpy_matrix(MST_mat)
-MST = pd.read_csv("MST.csv",index_col=False)
-MST["group"] = labels["bp_group"][MST["Edges_Index_Matched_1"]-1].to_numpy()
-MST["disease_score"] = labels["global_pseudotimes"][MST["Edges_Index_Matched_1"]-1].to_numpy()
+MST_label = pd.read_csv("MST.csv",index_col=False)
 
-# root node
-root_node = np.argmin(MST["disease_score"]) # least diseased node
-max_node = np.argmax(MST["disease_score"]) # most diseased node
+# root node (least diseased node)
+root_node = np.argmin(MST_label["pseudotime"])
+
+# load dijkstra for determining trajectories of each path
+dijkstra_F = scipy.io.loadmat("dijkstra.mat")["dijkstra_F"][:,0]
 
 # compute spectral layout using lapacian and eigen decomp
 L = laplacian((MST_mat>0).astype(int))
 vals, vecs = np.linalg.eigh(L)
 x, y = vecs[:,1], vecs[:,2]
-spectral_coordinates = {i : (x[i], y[i]) for i in range(MST_mat.shape[0])}
+spectral_coordinates = {i: (x[i], y[i]) for i in range(MST_mat.shape[0])}
 
 # build list of edges and nodes
 edge_x,edge_y = [],[]
@@ -61,8 +62,9 @@ node_trace = go.Scattergl(x=node_x, y=node_y,
                                       line=dict(width=2.5,color='black'))
                          )
 
-score_col = MST["disease_score"].to_numpy()
-score_col[MST["group"]==2] *= 3
+# re-scale colors in disease group to make them more pronouced
+score_col = MST_label["pseudotime"].to_numpy()
+score_col[MST_label["bp_group"]==2] *= 5
 score_col[score_col>1] = 1
 node_trace.marker.color = score_col
 
@@ -72,14 +74,9 @@ node_trace_b = go.Scatter(x=[node_x[root_node]], y=[node_y[root_node]],
                           marker_size=30,marker_line_width=2,marker_color="Green",
                           hovertemplate="Root Node (Least Diseased Node)"
                           )
-node_trace_d = go.Scatter(x=[node_x[max_node]], y=[node_y[max_node]],
-                          mode='markers',marker_symbol="hexagram",marker_color="Red",
-                          marker_size=30,marker_line_width=2,
-                          hovertemplate="Root Node (Least Diseased Node)"
-                          )
                     
 # produce the overall plot
-fig = go.Figure(data=[edge_trace, node_trace, node_trace_b, node_trace_d],
+fig = go.Figure(data=[edge_trace, node_trace, node_trace_b],
                 layout=go.Layout(
                     title='<br>Disease Trajectory Map of Patients in the UK Biobank',
                     titlefont_size=20,
