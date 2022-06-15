@@ -26,6 +26,16 @@ root_node = np.argmin(MST_label["pseudotime"])
 # load dijkstra for determining trajectories of each path
 dijkstra_F = scipy.io.loadmat("dijkstra.mat")["dijkstra_F"][:,0]
 
+# determine the trajectory route of each node from the root node
+# - find nodes which are not father nodes, these are the most extreme points, use this to back track to the root node.
+
+# add the trajectory to the MST label
+
+# map this back to the label file
+
+# infer the traj of between group with the same pseudotime score as the background/target nodes
+
+
 # compute spectral layout using lapacian and eigen decomp
 L = laplacian((MST_mat>0).astype(int))
 vals, vecs = np.linalg.eigh(L)
@@ -63,8 +73,8 @@ node_trace = go.Scattergl(x=node_x, y=node_y,
                          )
 
 # re-scale colors in disease group to make them more pronouced
-score_col = MST_label["pseudotime"].to_numpy()
-score_col[MST_label["bp_group"]==2] *= 5
+score_col = np.copy(MST_label["pseudotime"].to_numpy())
+score_col[MST_label["bp_group"]==2] *= 3
 score_col[score_col>1] = 1
 node_trace.marker.color = score_col
 
