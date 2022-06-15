@@ -56,10 +56,10 @@ node_trace = go.Scattergl(x=node_x, y=node_y,
                           mode='markers',
                           hoverinfo='text',
                           marker=dict(
-                                    showscale=True,reversescale=True, # True False
+                                    showscale=True,reversescale=False, # True False
                                     color=[],
                                     size=10,
-                                    colorscale='Spectral', # Spectral Hot
+                                    colorscale='Reds', # Spectral Hot
                                     opacity=0.75,
                                     colorbar=dict(thickness=15,title='Disease Score',
                                                 xanchor='left',titleside='right'),
