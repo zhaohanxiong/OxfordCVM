@@ -28,7 +28,7 @@ function [global_ordering,global_pseudotimes,mappedX,contrasted_data,Node_contri
 % compute number of batches to use & define index ranges for patient sub-batches
 starting_point = starting_point(:);
 N_patients = size(data, 1);
-N_batches = 12; %N_batches = ceil(N_patients/2000);
+N_batches = 10; %N_batches = ceil(N_patients/2000);
 batch_ranges = floor(linspace(1, N_patients, N_batches + 1));
 
 % define output variable
@@ -132,7 +132,6 @@ p = plot(MST_graph);
 highlight(p, MST_graph, 'EdgeColor', 'black', 'LineWidth',1);
 highlight(p, find(colours_target_disease==1), 'NodeColor', 'g', 'MarkerSize',2);
 highlight(p, find(colours_target_disease==3), 'NodeColor', 'r', 'MarkerSize',2);
-highlight(p, Root_node, 'NodeColor', 'black', 'Marker', '^', 'MarkerSize', 5);
 title('Minimum Spanning Tree (Background/Disease)');
 set(gcf, 'PaperPosition', [0 0 10 20])
 saveas(f, 'io/results.png');
