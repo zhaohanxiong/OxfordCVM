@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from scipy.sparse.csgraph import laplacian
 
 # source path & set the current working directory
-path = "fmrib/NeuroPM/io/"
+path = "src/fmrib/NeuroPM/io/"
 os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
@@ -22,7 +22,7 @@ MST["group"] = labels["bp_group"][MST["Edges_Index_Matched_1"]-1].to_numpy()
 MST["disease_score"] = labels["global_pseudotimes"][MST["Edges_Index_Matched_1"]-1].to_numpy()
 
 # compute spectral layout using lapacian and eigen decomp
-L = laplacian(MST_mat)
+L = laplacian((MST_mat>0).astype(int))
 vals, vecs = np.linalg.eigh(L)
 x, y = vecs[:,1], vecs[:,2]
 spectral_coordinates = {i : (x[i], y[i]) for i in range(MST_mat.shape[0])}
@@ -47,20 +47,20 @@ edge_trace = go.Scattergl(x=edge_x, y=edge_y,
                           hoverinfo='none',mode='lines')
 
 node_trace = go.Scattergl(x=node_x, y=node_y,
-                          mode='markers',
-                          hoverinfo='text',
+                          mode='markers',hoverinfo='text',
                           marker=dict(
-                                    showscale=True,reversescale=False, # True False
-                                    color=[],
-                                    size=10,
-                                    colorscale='Reds', # Spectral Hot
-                                    opacity=0.75,
+                                    showscale=True,reversescale=False,
+                                    color=[],colorscale='YlOrRd',
+                                    size=15,opacity=0.75,
                                     colorbar=dict(thickness=15,title='Disease Score',
-                                                xanchor='left',titleside='right'),
+                                                  xanchor='left',titleside='right'),
                                     line=dict(width=2,color='black'))
                          )
 
-node_trace.marker.color = MST["disease_score"]
+score_col = MST["disease_score"].to_numpy()
+disease_q3 = np.quantile(score_col[MST["group"]==2], 0.95)
+score_col[score_col>disease_q3] = disease_q3
+node_trace.marker.color = score_col
 
 # produce the overall plot
 fig = go.Figure(data=[edge_trace, node_trace],
@@ -70,9 +70,8 @@ fig = go.Figure(data=[edge_trace, node_trace],
                     showlegend=False,
                     hovermode='closest',
                     margin=dict(b=20,l=5,r=5,t=40),
-                    annotations=[dict(
-                        text="add annotation here",xref="paper", yref="paper",
-                        showarrow=False,x=0.005, y=-0.002)],
+                    annotations=[dict(text="add annotation here",xref="paper", yref="paper",
+                                      showarrow=False,x=0.005, y=-0.002)],
                     xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                     yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
                 )
