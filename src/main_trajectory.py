@@ -7,18 +7,12 @@ import networkx as nx
 import plotly.graph_objects as go
 from scipy.sparse.csgraph import laplacian
 
-# source path
-path      = "C:/Users/86155/Desktop/io 10 batches 160 100"
-file_path = "" #"io - iter_cPCA full run 10"
-path      = os.path.join(path, file_path)
-
-# set the current working directory
+# source path & set the current working directory
+path = "fmrib/NeuroPM/io/"
 os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
 labels = pd.read_csv("pseudotimes.csv", index_col = False)
-#fig = px.scatter(labels, x="BPSys_2_0", y="global_pseudotimes", trendline="ols", render_mode='webgl')
-#fig.show()
 
 # load minimum spanning tree
 MST_mat = scipy.io.loadmat("MST.mat")["MST"]
@@ -84,4 +78,4 @@ fig = go.Figure(data=[edge_trace, node_trace],
                 )
 
 # save the plot to offline html file
-plotly.offline.plot(fig,filename='Trajectory.html',auto_open=False)
+plotly.offline.plot(fig, filename='Trajectory.html', auto_open=False)
