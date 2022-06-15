@@ -51,14 +51,14 @@ node_trace = go.Scattergl(x=node_x, y=node_y,
                           marker=dict(
                                     showscale=True,reversescale=False,
                                     color=[],colorscale='YlOrRd',
-                                    size=15,opacity=0.75,
+                                    size=12,opacity=0.75,
                                     colorbar=dict(thickness=15,title='Disease Score',
                                                   xanchor='left',titleside='right'),
-                                    line=dict(width=2,color='black'))
+                                    line=dict(width=2.5,color='black'))
                          )
 
 score_col = MST["disease_score"].to_numpy()
-disease_q3 = np.quantile(score_col[MST["group"]==2], 0.95)
+disease_q3 = np.quantile(score_col[MST["group"]==2], 0.75)
 score_col[score_col>disease_q3] = disease_q3
 node_trace.marker.color = score_col
 
