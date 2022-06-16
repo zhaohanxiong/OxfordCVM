@@ -24,7 +24,7 @@ MST_label = pd.read_csv("MST.csv",index_col=False)
 root_node = np.argmin(MST_label["pseudotime"])
 
 # load dijkstra for determining trajectories of each path
-#dijkstra_F = scipy.io.loadmat("dijkstra.mat")["dijkstra_F"][:,0]
+dijkstra_F = scipy.io.loadmat("dijkstra.mat")["dijkstra_F"][:,0]
 
 # determine the trajectory route of each node from the root node
 # - find nodes which are not father nodes, these are the most extreme points, use this to back track to the root node.
