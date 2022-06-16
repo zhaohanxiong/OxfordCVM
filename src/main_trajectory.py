@@ -8,12 +8,11 @@ import plotly.graph_objects as go
 from scipy.sparse.csgraph import laplacian
 
 # source path & set the current working directory
-path = "fmrib/NeuroPM/io/"
+path = "src/fmrib/NeuroPM/io/"
 os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
 labels = pd.read_csv("pseudotimes.csv", index_col = False)
-MST_labels = labels["bp_group"]==1
 
 # load minimum spanning tree, and labels for each node in the graph
 MST_mat = scipy.io.loadmat("MST.mat")["MST"]
@@ -23,11 +22,30 @@ MST_label = pd.read_csv("MST.csv",index_col=False)
 # root node (least diseased node)
 root_node = np.argmin(MST_label["pseudotime"])
 
-# load dijkstra for determining trajectories of each path
+# load dijkstra for determining trajectories of each path, root node = -1
 dijkstra_F = scipy.io.loadmat("dijkstra.mat")["dijkstra_F"][:,0]
+dijkstra_F[dijkstra_F!=-1] -= 1 # since matlab is 1-indexed and python is 0-index
 
-# determine the trajectory route of each node from the root node
-# - find nodes which are not father nodes, these are the most extreme points, use this to back track to the root node.
+# find every node on branch ends (nodes which are not father nodes/does not have child nodes)
+end_nodes = np.array([i for i in range(len(dijkstra_F)) if not any(i == dijkstra_F)])
+end_nodes = end_nodes[end_nodes!=-1]
+
+# define trajectory for each end-node
+trajectories = [] # this will contain every node in the MST
+for n in end_nodes: # for each node without child nodes
+
+    path, path_node = [], n
+    while path_node != -1: # backtrack through dijkstra until root node is reached
+        path.append(path_node)
+        path_node = dijkstra_F[path_node]
+
+    trajectories.append(np.array(path)) # add to list of trajectories
+
+# reduce trajectories from >1000 to ~10
+traj_reduced = np.zeros(len(trajectories))
+for i in range(len(trajectories)):
+    for j in range(i+1,len(trajectories)):
+        print("")
 
 # add the trajectory to the MST label
 
@@ -39,7 +57,7 @@ dijkstra_F = scipy.io.loadmat("dijkstra.mat")["dijkstra_F"][:,0]
 # compute spectral layout using lapacian and eigen decomp (1 minute run time)
 L = laplacian((MST_mat>0).astype(int))
 vals, vecs = np.linalg.eigh(L)
-x, y = vecs[:,0], vecs[:,1]
+x, y = vecs[:,0], vecs[:,2]
 graph_coordinates = {i: (x[i], y[i]) for i in range(MST_mat.shape[0])}
 
 # compute spring layout (3 minutes run time), but looks very messy
