@@ -1,4 +1,5 @@
 import os
+from this import s
 import plotly
 import scipy.io
 import numpy as np
@@ -17,7 +18,7 @@ labels = pd.read_csv("pseudotimes.csv", index_col = False)
 # load minimum spanning tree, and labels for each node in the graph
 MST_mat = scipy.io.loadmat("MST.mat")["MST"]
 G = nx.from_numpy_matrix(MST_mat)
-MST_label = pd.read_csv("MST.csv",index_col=False)
+MST_label = pd.read_csv("MST.csv", index_col=False)
 
 # root node (least diseased node)
 root_node = np.argmin(MST_label["pseudotime"])
@@ -35,17 +36,64 @@ trajectories = [] # this will contain every node in the MST
 for n in end_nodes: # for each node without child nodes
 
     path, path_node = [], n
+
+    # traverse from the end node back to the root node and store all nodes along the path
     while path_node != -1: # backtrack through dijkstra until root node is reached
         path.append(path_node)
         path_node = dijkstra_F[path_node]
 
     trajectories.append(np.array(path)) # add to list of trajectories
 
-# reduce trajectories from >1000 to ~10
-traj_reduced = np.zeros(len(trajectories))
+# define matrix of number of similar elements between every combination of paths
+overlap = np.zeros([len(trajectories), len(trajectories)])
+
+# loop through upper triangular matrix of pair-wise comparison matrix
 for i in range(len(trajectories)):
+
+    # define the path to compare with every other path with
+    path_set = set(trajectories[i])
+    path_length = len(path_set)
+
     for j in range(i+1,len(trajectories)):
-        print("")
+        overlap[i,j] = len(path_set & set(trajectories[j]))
+        overlap[i,j] -= 1 # dont count root node
+        overlap[i,j] /= path_length
+
+# using the similarities, collate lists of indices of paths which are similar
+trajectory_groups = [] # list of indices of trajectory which are highly similar
+for i in range(overlap.shape[0]):
+    
+    # check which paths have enough overlap to be considered the same
+    ij = np.where(overlap[i,:] >= 0.5)[0]
+    set_i = set().union(set([i]),set(ij))
+
+    # check current list of trajectories groups to see if these can be added to existing groups
+    list_similar = []
+    for j in range(len(trajectory_groups)):
+        
+        # if there are overlapping paths, 
+        if len(set(trajectory_groups[j]) & set_i) > 0:
+            trajectory_groups[j] = set.union(set_i, set(trajectory_groups[j]))
+            list_similar.append(j)
+
+    # if there are more than 1 overlapping set of paths, then merge into the first one
+    if len(list_similar) > 1:
+        
+        k0 = list_similar[0]
+
+        # go in reverse order and merge onto first 1st list and delete element once merged
+        for k in sorted(list_similar[1:], reverse=True):
+            trajectory_groups[k0] = set.union(trajectory_groups[k0], trajectory_groups[k])
+            del trajectory_groups[k]
+    
+    # if the current set has no similarities with the previous sets, add this as new unique set
+    if len(list_similar) == 0:
+        trajectory_groups.append(set_i)
+
+
+
+# create sets of unique merged trajectory paths using the indices derived above
+
 
 # add the trajectory to the MST label
 
