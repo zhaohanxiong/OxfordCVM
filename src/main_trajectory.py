@@ -1,5 +1,4 @@
 import os
-from this import s
 import plotly
 import scipy.io
 import numpy as np
