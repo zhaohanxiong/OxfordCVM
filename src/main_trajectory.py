@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 from scipy.sparse.csgraph import laplacian
 
 # source path & set the current working directory
-path = "fmrib/NeuroPM/io/"
+path = "src/fmrib/NeuroPM/io/"
 os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
@@ -159,12 +159,11 @@ edge_trace = go.Scattergl(x=edge_x, y=edge_y,
 
 node_trace = go.Scattergl(x=node_x, y=node_y,
                           mode='markers',hoverinfo='text',
-                          marker=dict(showscale=True,reversescale=False,
-                                      color=[],colorscale='YlOrRd',
-                                      size=15,
-                                      opacity=0.75,
+                          marker=dict(#showscale=True,reversescale=False,
+                                      size=15,opacity=0.75,
                                       colorbar=dict(thickness=15,title='Disease Score',
                                                     xanchor='left',titleside='right'),
+                                      color=[],colorscale='YlOrRd',
                                       line=dict(width=2.5,color='black'))
                          )
 
@@ -172,6 +171,7 @@ node_trace = go.Scattergl(x=node_x, y=node_y,
 score_col = np.copy(MST_label["pseudotime"].to_numpy())
 score_col[MST_label["bp_group"]==2] *= 3
 score_col[score_col>1] = 1
+# color by traj: np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) for i in range(MST_label.shape[0])])
 node_trace.marker.color = score_col
 
 # highlight most healthy and most diseased nodes
