@@ -54,6 +54,7 @@ for i in range(len(trajectories)):
     path_set = set(trajectories[i])
     path_length = len(path_set)
 
+    # compare current path to every other path
     for j in range(i+1,len(trajectories)):
         overlap[i,j] = len(path_set & set(trajectories[j]))
         overlap[i,j] -= 1 # dont count root node
@@ -90,12 +91,30 @@ for i in range(overlap.shape[0]):
     if len(list_similar) == 0:
         trajectory_groups.append(set_i)
 
-
-
 # create sets of unique merged trajectory paths using the indices derived above
+reduced_traj = []
+traj_list = [[] for _ in range(MST_label.shape[0])]
+MST_label["trajectory"] = ""
+MST_label["n_trajectory"] = 0
 
+for i, traj in enumerate(trajectory_groups):
 
-# add the trajectory to the MST label
+    # retire all paths from this trajectory group
+    reduced_traj_i = []
+    for traj_i in traj:
+        reduced_traj_i.extend(trajectories[traj_i])
+
+    # make nodes unique and assign the traj to the node
+    reduced_traj_i = np.unique(np.array(reduced_traj_i))
+    for j in reduced_traj_i:
+        traj_list[j].append(i)
+
+    MST_label.loc[reduced_traj_i, "n_trajectory"] += 1
+    reduced_traj.append(set(reduced_traj_i))
+
+# add the trajectory to the MST label as list for each element
+for i in range(MST_label.shape[0]):
+    MST_label.at[i, "trajectory"] = ','.join(str(x) for x in traj_list[i])
 
 # map this back to the label file
 
@@ -107,9 +126,6 @@ L = laplacian((MST_mat>0).astype(int))
 vals, vecs = np.linalg.eigh(L)
 x, y = vecs[:,0], vecs[:,2]
 graph_coordinates = {i: (x[i], y[i]) for i in range(MST_mat.shape[0])}
-
-# compute spring layout (3 minutes run time), but looks very messy
-#graph_coordinates = nx.spring_layout(G)
 
 # build list of edges and nodes
 edge_x,edge_y = [],[]
