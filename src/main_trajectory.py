@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 from scipy.sparse.csgraph import laplacian
 
 # source path & set the current working directory
-path = "src/fmrib/NeuroPM/io/"
+path = "fmrib/NeuroPM/io/"
 os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
@@ -93,7 +93,6 @@ for i in range(overlap.shape[0]):
         trajectory_groups.append(set_i)
 
 # create sets of unique merged trajectory paths using the indices derived above
-reduced_traj = []
 traj_list = [[] for _ in range(MST_label.shape[0])]
 MST_label["trajectory"] = ""
 MST_label["n_trajectory"] = 0
@@ -111,7 +110,6 @@ for i, traj in enumerate(trajectory_groups):
         traj_list[j].append(i)
 
     MST_label.loc[reduced_traj_i, "n_trajectory"] += 1
-    reduced_traj.append(set(reduced_traj_i))
 
 # add the trajectory to the MST label as list for each element
 for i in range(MST_label.shape[0]):
@@ -159,7 +157,7 @@ edge_trace = go.Scattergl(x=edge_x, y=edge_y,
 
 node_trace = go.Scattergl(x=node_x, y=node_y,
                           mode='markers',hoverinfo='text',
-                          marker=dict(#showscale=True,reversescale=False,
+                          marker=dict(showscale=True,reversescale=False,
                                       size=15,opacity=0.75,
                                       colorbar=dict(thickness=15,title='Disease Score',
                                                     xanchor='left',titleside='right'),
@@ -197,3 +195,6 @@ fig = go.Figure(data=[edge_trace, node_trace, node_trace_b],
 
 # save the plot to offline html file
 plotly.offline.plot(fig, filename='Trajectory.html', auto_open=False)
+
+# write data to output
+labels.to_csv("pseudotimes.csv", index=False)
