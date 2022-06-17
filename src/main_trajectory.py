@@ -14,6 +14,7 @@ os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
 labels = pd.read_csv("pseudotimes.csv", index_col = False)
+MST_ind = np.append(np.where(labels["bp_group"] == 1)[0], np.where(labels["bp_group"] == 2)[0])
 
 # load minimum spanning tree, and labels for each node in the graph
 MST_mat = scipy.io.loadmat("MST.mat")["MST"]
@@ -117,9 +118,19 @@ for i in range(MST_label.shape[0]):
     MST_label.at[i, "trajectory"] = ','.join(str(x) for x in traj_list[i])
 
 # map this back to the label file
+labels["trajectory"] = ""
+labels["n_trajectory"] = 0
+labels.loc[MST_ind, "trajectory"] = MST_label["trajectory"].to_numpy()
+labels.loc[MST_ind, "n_trajectory"] = MST_label["n_trajectory"].to_numpy()
 
 # infer the traj of between group with the same pseudotime score as the background/target nodes
+for i in np.where(labels["bp_group"] == 0)[0]:
+    
+    ind = np.where((labels["global_pseudotimes"][i] == labels["global_pseudotimes"]).to_numpy() & 
+                            (labels["bp_group"] != 0).to_numpy())[0][0]
 
+    labels.at[i,"trajectory"] = labels.at[ind,"trajectory"]
+    labels.at[i,"n_trajectory"] = labels.at[ind,"n_trajectory"]
 
 # compute spectral layout using lapacian and eigen decomp (1 minute run time)
 L = laplacian((MST_mat>0).astype(int))
