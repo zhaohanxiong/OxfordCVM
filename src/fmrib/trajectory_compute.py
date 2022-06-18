@@ -158,8 +158,9 @@ edge_trace = go.Scattergl(x=edge_x, y=edge_y,
 #score_col[MST_label["bp_group"]==2] *= 3
 #score_col[score_col>1] = 1
 
-# define colors for trajectories
+# define colors for trajectories/bp_group
 score_col = np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) for i in range(MST_label.shape[0])])
+#score_col = MST_label["bp_group"].to_numpy()
 score_col = np.array(plotly.colors.qualitative.Light24)[score_col] # Alphabet Dark24 Light24
 
 # define node plots using GPU rendering
@@ -196,7 +197,7 @@ fig = go.Figure(data=[edge_trace, node_trace, node_trace_b],
                 )
 
 # save the plot to offline html file
-plotly.offline.plot(fig, filename='Trajectory_Groups.html', auto_open=False)
+plotly.offline.plot(fig, filename='Trajectory_Paths.html', auto_open=False)
 
 # write data to output
 labels.to_csv("pseudotimes.csv", index=False)
