@@ -149,27 +149,30 @@ for node in G.nodes():
     node_x.append(x)
     node_y.append(y)
 
-# define edge and node plots using GPU rendering
+# define edge plots using GPU rendering
 edge_trace = go.Scattergl(x=edge_x, y=edge_y,
-                          line=dict(width=1, color='black'),
-                          hoverinfo='none',mode='lines')
+                          line=dict(width=1, color='black'), mode='lines')
 
+# define colors for nodes, re-scale colors in disease group to make them more pronouced
+#score_col = np.copy(MST_label["pseudotime"].to_numpy())
+#score_col[MST_label["bp_group"]==2] *= 3
+#score_col[score_col>1] = 1
+
+# define colors for trajectories
+score_col = np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) for i in range(MST_label.shape[0])])
+score_col = np.array(plotly.colors.qualitative.Light24)[score_col] # Alphabet Dark24 Light24
+
+# define node plots using GPU rendering
 node_trace = go.Scattergl(x=node_x, y=node_y,
-                          mode='markers',hoverinfo='text',
+                          mode='markers', hoverinfo="x+y",
                           marker=dict(showscale=True,reversescale=False,
                                       size=15,opacity=0.75,
-                                      colorbar=dict(thickness=15,title='Disease Score',
-                                                    xanchor='left',titleside='right'),
-                                      color=[],colorscale='YlOrRd',
+                                      #colorbar=dict(thickness=15,title='Disease Score',
+                                      #              xanchor='left',titleside='right'),
+                                      #colorscale='Plasma', # Jet
+                                      color=score_col,
                                       line=dict(width=2.5,color='black'))
                          )
-
-# re-scale colors in disease group to make them more pronouced
-score_col = np.copy(MST_label["pseudotime"].to_numpy())
-score_col[MST_label["bp_group"]==2] *= 3
-score_col[score_col>1] = 1
-# color by traj: np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) for i in range(MST_label.shape[0])])
-node_trace.marker.color = score_col
 
 # highlight most healthy and most diseased nodes
 node_trace_b = go.Scatter(x=[node_x[root_node]], y=[node_y[root_node]],
@@ -193,7 +196,7 @@ fig = go.Figure(data=[edge_trace, node_trace, node_trace_b],
                 )
 
 # save the plot to offline html file
-plotly.offline.plot(fig, filename='Trajectory.html', auto_open=False)
+plotly.offline.plot(fig, filename='Trajectory_Groups.html', auto_open=False)
 
 # write data to output
 labels.to_csv("pseudotimes.csv", index=False)
