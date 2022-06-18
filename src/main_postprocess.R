@@ -9,8 +9,8 @@ ukb_df = data.frame(fread(file.path(path,"ukb_num_norm.csv"),header=TRUE))
 labels = read.csv(file.path(path,"labels.csv"), header=TRUE)
 psuedotimes = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
 weight_vars = read.csv(file.path(path,"var_weighting.csv"), header=TRUE)
-#weight_thres = as.numeric(read.csv(file.path(path,"threshold_weighting.csv"), 
-#                                   header=TRUE))
+weight_thres = as.numeric(read.csv(file.path(path,"threshold_weighting.csv"), 
+                                   header=TRUE))
 
 # assign bp_groups as the real labels
 psuedotimes$bp_group[psuedotimes$bp_group == 0] = "Between"
@@ -20,11 +20,11 @@ psuedotimes$bp_group = ordered(psuedotimes$bp_group,
                                levels = c("Background","Between","Disease"))
 
 # new column for whether weight is above or below thresholding
-#weight_vars$thres_above = weight_vars$Node_contributions > weight_thres
+weight_vars$thres_above = weight_vars$Node_contributions > weight_thres
 
 # display number of variables above the threshold
-#print(sprintf("Number of Variables Above Weight Threshold is %.0f/%0.f",
-#              sum(weight_vars$thres_above),nrow(weight_vars)))
+print(sprintf("Number of Variables Above Weight Threshold is %.0f/%0.f",
+              sum(weight_vars$thres_above),nrow(weight_vars)))
 
 # normalize weighting vars
 weight_vars$Node_contributions = weight_vars$Node_contributions / 
@@ -43,13 +43,13 @@ var_list = sub("\\.","-",var_list)
 #fwrite(data.frame(x=var_list), file.path(path, "var_list.csv"))
 
 # box plot by group
-#plot_boxplot_by_group(data = psuedotimes,
-#                      y = psuedotimes$global_pseudotimes,
-#                      group = psuedotimes$bp_group,
-#                      ylim=c(0, 1),
-#                      title = "Disease Progression by Blood Pressure Group",
-#                      xlab = "Blood Pressure Groups", ylab = "Disease Score",
-#                      labels = levels(psuedotimes$bp_group))
+plot_boxplot_by_group(data = psuedotimes,
+                      y = psuedotimes$global_pseudotimes,
+                      group = psuedotimes$bp_group,
+                      ylim=c(0, 1),
+                      title = "Disease Progression by Blood Pressure Group",
+                      xlab = "Blood Pressure Groups", ylab = "Disease Score",
+                      labels = levels(psuedotimes$bp_group))
 
 # perform statistical tests to evaluate model
 # seperate groups into different variable
@@ -58,8 +58,9 @@ g2 = psuedotimes$global_pseudotimes[psuedotimes$bp_group=="Between"]
 g3 = psuedotimes$global_pseudotimes[psuedotimes$bp_group=="Disease"]
 
 # perform t-test between groups
-t.test(g1,g3)
-t.test(g2,g3)
+t.test(g1,g2) # background vs between
+t.test(g2,g3) # between vs disease
+t.test(g1,g3) # background vs disease
 
 # perform quantile differences between groups, % overlap
 g1_box = unname(c(quantile(g1, 0.25), quantile(g1, 0.75))) # background
@@ -76,13 +77,8 @@ sprintf(paste0("Overlap in IQR of Boxes Between vs Disease is ",
         (g2_box[2] - g3_box[1]) / diff(g3_box) * 100)
 
 # analysis for variable weightings compared to disease score
-#plot(psuedotimes$global_pseudotimes, ukb_df[, var_sorted[1]],
-#     col=alpha(c("green","blue","red")[labels$bp_group+1], 0.25), pch=20)
+plot(psuedotimes$global_pseudotimes, ukb_df[, var_sorted[1]],
+     col=alpha(c("green","blue","red")[labels$bp_group+1], 0.25), pch=20)
 
 # View unusually high weight variables and their variable distribution
-#View(cbind(psuedotimes[,4:5],ukb_df[,var_sorted[1:15]]))
-
-# load distance matrix and visualize distance distributions
-#mat = readMat(file.path(path,"all.mat"))$dist.matrix
-#range(mat)
-#hist(mat, breaks = seq(0,max(mat)+0.1,by=0.1))
+View(cbind(psuedotimes[,4:5],ukb_df[,var_sorted[1:15]]))

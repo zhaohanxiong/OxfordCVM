@@ -4,7 +4,7 @@
 cd /home/fs0/winokl/zxiong/OxfordCVM/src/fmrib
 
 - run R preprocessing script on raw UKB file
-Rscript main_preprocess.R
+Rscript preprocess.R
 
 - run executible for NeuroPM (compile and run)
 ./NeuroPM/run_NeuroPM.sh

@@ -4,7 +4,7 @@
 #Rscript ukb_whole_data_subset.R
 
 # run R preprocessing script, writes to NeuroPM/io directory
-Rscript main_preprocess.R
+Rscript preprocess.R
 
 # navigate to directory containing source code
 cd ./NeuroPM
@@ -16,9 +16,9 @@ cd ./NeuroPM
 nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 
 # run post-analysis evaluation
-cd ../..
-Rscript main_postprocess.R
+cd ..
+Rscript postprocess.R
 
-# run python trajectory visualization
-source ../../env/bin/activate
-python main_trajectory.py
+# run python trajectory visualization/computation
+source ../../../env/bin/activate
+python trajectory_compute.py
