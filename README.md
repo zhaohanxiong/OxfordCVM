@@ -1,3 +1,6 @@
+## Projects Lead By Me
+•	Bayesian dimensionality reduction, cluster analysis, and network analysis of population-wide medical databases (UK Biobank) for isolating predictive biomarkers and constructing disease progression trajectories
+
 ### FMRIB Server Connection and Setup
 ##### VPN Connection using Cisco
 ```
