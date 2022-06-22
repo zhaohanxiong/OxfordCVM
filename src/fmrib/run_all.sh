@@ -19,6 +19,5 @@ nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 cd ..
 Rscript postprocess.R
 
-# run python trajectory visualization/computation
-source ../../../env/bin/activate
-python trajectory_compute.py
+# run python trajectory visualization/computation (in virtual env)
+../../../env/bin/python trajectory_compute.py

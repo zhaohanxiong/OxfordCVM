@@ -26,8 +26,8 @@ classes_for_colours(ind_between) = 2;
 %data = TSR(data);
 
 %% adjust for covariates
-cov = table2array(readtable('io/cov.csv'));
-data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
+%cov = table2array(readtable('io/cov.csv'));
+%data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
 
 %% feature selection
 %[selected_features, ratio_sigma2_s2, sigma2_g, S2_g] = select_features(data, 1, 0.5);
