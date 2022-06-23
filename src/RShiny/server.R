@@ -1,3 +1,5 @@
+### This file defines the logic and functionality of the R Shiny App
+
 # Define server logic required to draw a histogram ----
 server <- function(input, output) {
   
@@ -9,14 +11,48 @@ server <- function(input, output) {
   # 1. It is "reactive" and therefore should be automatically
   #    re-executed when inputs (input$bins) change
   # 2. Its output type is a plot
-  output$distPlot <- renderPlot({
+
+  # define plot to feed into UI
+  output$pseudo_time_plot = renderPlot({
     
-    x    <- faithful$waiting
-    bins <- seq(min(x), max(x), length.out = input$bins + 1)
+    # define name of variable to plot
+    x_var_name = "global_pseudotimes"
+    y_var_name = input$y_var_name
+  
+    # define grouping variable
+    group_name = input$groupby # "bp_group"
     
-    hist(x, breaks = bins, col = "#75AADB", border = "white",
-         xlab = "Waiting time to next eruption (in mins)",
-         main = "Histogram of waiting times")
+    # # # TO DO!!!!!
+    # query y_var_name column from ukb SQL DB with matching patient IDs
+    ukb_column = ukb_df[, y_var_name]
+
+    # # # TO DO!!!!!
+    # filter outliers so plots are displayed nicely
+
+    # # # TO DO!!!!!
+    # query UKB variable list to find the descriptor for the variable name
+    y_var_describe = y_var_name
+    
+    # add variable column to pseudotime dataframe
+    pseudotimes[, y_var_name] = ukb_column
+    
+    # calculate regression line (upper and lower bounds)
+    fit = lowess(pseudotimes[ ,x_var_name], pseudotimes[, y_var_name])
+    fit$upper = fit$y + qt(0.90, fit$y) * sd(fit$y)
+    fit$lower = fit$y - qt(0.90, fit$y) * sd(fit$y)
+
+    # produce plot
+    ggplot(pseudotimes, aes_string(x = x_var_name, y = y_var_name)) +
+           geom_point(aes_string(color = group_name), shape = 19, alpha = 0.25, size = 2) +
+           geom_line(aes(x = fit$x, y = fit$y), size = 1, color = "deepskyblue4", alpha = 0.5) +
+           geom_ribbon(aes(fit$x, ymin = fit$lower, ymax = fit$upper), fill = "skyblue", alpha = 0.25) +
+           #scale_x_continuous(trans = 'log10') +
+           ggtitle("Distribution/Trend of Disease Progression Scores") +
+           xlab("Pseudotime (Disease Progression) Scores (0-1)") + 
+           ylab(y_var_describe) +
+           coord_cartesian(xlim = input$xlim) +
+           #theme(legend.title = element_blank()) +
+           scale_colour_brewer(palette = "Dark2")
     
   })
   

@@ -1,8 +1,33 @@
 library(shiny)
+library(ggplot2)
+library(data.table)
 
-# load R-shiny application setups
-source("ui.R") # layout and appearance
-source("server.R") # building the app
+# load data
+path = "../fmrib/NeuroPM/io/" # "C:/Users/zxiong/Desktop/io"
+
+# # # TO DO!!!!!
+# load ukb raw variables
+ukb_df = data.frame(fread(file.path(path,"ukb_num.csv"),header=TRUE))
+
+# # # TO DO!!!!!
+# load bb variable list
+
+# load output of cTI
+pseudotimes = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
+
+# assign bp_groups as the real labels
+pseudotimes$bp_group[pseudotimes$bp_group == 0] = "Between"
+pseudotimes$bp_group[pseudotimes$bp_group == 1] = "Background"
+pseudotimes$bp_group[pseudotimes$bp_group == 2] = "Disease"
+pseudotimes$bp_group = ordered(pseudotimes$bp_group,
+                               levels = c("Background", "Between", "Disease"))
+
+# get first trajectory for nodes in multiple traj (~10 only)
+pseudotimes$trajectory = sapply(strsplit(pseudotimes$trajectory, ","), function(x) x[1])
+
+# load variables used in cTI
+varnames = read.csv(file.path(path, "var_weighting.csv"), header=TRUE)$Var1
+varnames = gsub("_", ".", gsub("x", "X", varnames))
 
 # set deploy option as true or false
 deploy = FALSE
@@ -28,7 +53,6 @@ if (deploy) {
 } else { # host locally on computer
   
   # Create the R shiny app
-  #shinyApp(ui = ui, server = server)
   runApp(appDir = ".",
          display.mode = "showcase",
          test.mode = getOption("shiny.testmode", FALSE))
