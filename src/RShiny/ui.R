@@ -25,12 +25,13 @@ ui = fluidPage(
                    label = h3("Line Of Best Fit:"),
                    choices = list("Linear Regression" = "lr",
                                   "Local Regression (LOESS)" = "loess"),
-                   selected = "lr"),
+                   selected = "loess"),
 
       # Input: Buttons to select for grouping variable
       radioButtons(inputId = "groupby",
                    label = h3("Group Plot By:"),
                    choices = list("Blood Pressure Group" = "bp_group",
+                                  "Sex" = "X31.0.0",
                                   "Trajectory" = "trajectory"),
                    selected = "bp_group"),
       

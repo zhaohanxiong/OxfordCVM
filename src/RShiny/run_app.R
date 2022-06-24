@@ -29,6 +29,10 @@ pseudotimes$trajectory = sapply(strsplit(pseudotimes$trajectory, ","), function(
 # combine data frames together
 ukb_df = cbind(pseudotimes, ukb_df)
 
+# set some variables as categoric
+ukb_df$X31.0.0 = factor(ukb_df$X31.0.0)
+ukb_df$trajectory = factor(ukb_df$trajectory)
+
 # -------------------- Run Shiny Application --------------------
 # set deploy option as true or false
 deploy = FALSE # TRUE FALSE
