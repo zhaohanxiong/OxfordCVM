@@ -11,6 +11,7 @@ ukb_df = data.frame(fread(file.path(path,"ukb_num.csv"),header=TRUE))
 
 # # # TO DO!!!!!
 # load bb variable list
+ukb_varnames = read.csv(file.path(path,"bb_variablelist.csv"), header=TRUE)
 
 # load output of cTI
 pseudotimes = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
@@ -28,9 +29,15 @@ pseudotimes$trajectory = sapply(strsplit(pseudotimes$trajectory, ","), function(
 # load variables used in cTI
 varnames = read.csv(file.path(path, "var_weighting.csv"), header=TRUE)$Var1
 varnames = gsub("_", ".", gsub("x", "X", varnames))
+varnames_instance = substring(varnames, regexpr("\\.", varnames) + 1, regexpr("\\.", varnames) + 1)
+varnames = data.frame(colname = varnames,
+                      FieldID = substring(varnames, 2, regexpr("\\.", varnames) - 1))
+varnames$Field = ukb_varnames$Field[sapply(varnames$FieldID, function(v) which(ukb_varnames$FieldID == v))]
+varnames$instance = varnames_instance
+varnames$display = paste0(varnames$Field, ifelse(varnames$instance == "0", "", paste0(" (", varnames$instance, ")")))
 
 # set deploy option as true or false
-deploy = FALSE
+deploy = FALSE # TRUE FALSE
 
 # deploy on shinyapp.io (hosted by R-Shiny)
 if (deploy) {

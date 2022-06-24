@@ -14,33 +14,38 @@ server <- function(input, output) {
 
   # define plot to feed into UI
   output$pseudo_time_plot = renderPlot({
-    
+
     # define name of variable to plot
     x_var_name = "global_pseudotimes"
-    y_var_name = input$y_var_name
-  
+    y_var_name = varnames$colname[varnames$display == input$y_var_name]
+    
     # define grouping variable
     group_name = input$groupby # "bp_group"
     
     # # # TO DO!!!!!
     # query y_var_name column from ukb SQL DB with matching patient IDs
     ukb_column = ukb_df[, y_var_name]
-
-    # # # TO DO!!!!!
-    # filter outliers so plots are displayed nicely
-
-    # # # TO DO!!!!!
-    # query UKB variable list to find the descriptor for the variable name
-    y_var_describe = y_var_name
     
+    # # # TO DO!!!!!
+    # filter outliers so plots are displayed nicely (when raw UKB df is used)
+
     # add variable column to pseudotime dataframe
     pseudotimes[, y_var_name] = ukb_column
     
-    # calculate regression line (upper and lower bounds)
-    fit = lowess(pseudotimes[ ,x_var_name], pseudotimes[, y_var_name])
-    fit$upper = fit$y + qt(0.90, fit$y) * sd(fit$y)
-    fit$lower = fit$y - qt(0.90, fit$y) * sd(fit$y)
-
+    # calculate regression line
+    #y_var_name = "BPSys_2_0"
+    if (input$lobf == "lr") {
+      lr_model = lm(pseudotimes[, y_var_name] ~ pseudotimes[, x_var_name])
+      fit = list(x = seq(0, 1, length = nrow(pseudotimes)))
+      fit$y = lr_model$coefficients[1] + fit$x * lr_model$coefficients[2]
+    } else if (input$lobf == "loess") {
+      fit = lowess(pseudotimes[ ,x_var_name], pseudotimes[, y_var_name])
+    }
+  
+    # calculate regression line upper and lower boundaries
+    fit$upper = fit$y + qt(0.75, fit$y) * sd(fit$y)
+    fit$lower = fit$y - qt(0.75, fit$y) * sd(fit$y)
+    
     # produce plot
     ggplot(pseudotimes, aes_string(x = x_var_name, y = y_var_name)) +
            geom_point(aes_string(color = group_name), shape = 19, alpha = 0.25, size = 2) +
@@ -49,7 +54,7 @@ server <- function(input, output) {
            #scale_x_continuous(trans = 'log10') +
            ggtitle("Distribution/Trend of Disease Progression Scores") +
            xlab("Pseudotime (Disease Progression) Scores (0-1)") + 
-           ylab(y_var_describe) +
+           ylab(input$y_var_name) +
            coord_cartesian(xlim = input$xlim) +
            #theme(legend.title = element_blank()) +
            scale_colour_brewer(palette = "Dark2")

@@ -19,11 +19,18 @@ ui <- fluidPage(
       sliderInput(inputId = "xlim",
                   label = h3("Adjust Axis Limits:"), pre = "x = ",
                   min = 0, max = 1, value = c(0, 1)),
+
+      # Input: change between loess and linear regression
+      radioButtons(inputId = "lobf",
+                   label = h3("Line Of Best Fit:"),
+                   choices = list("Linear Regression" = "lr",
+                                  "Local Regression (LOESS)" = "loess"),
+                   selected = "lr"),
       
       # Input: Slider for smoothing factor of the line of best fit
-      sliderInput(inputId = "smooth",
-                  label = h3("Adjust Linear Smoothing:"), 
-                  min = 0, max = 5, value = 1, step = 0.1, animate = TRUE),
+      #sliderInput(inputId = "smooth",
+      #            label = h3("Adjust Linear Smoothing:"), 
+      #            min = 0, max = 5, value = 1, step = 0.1, animate = TRUE),
       
       # Input: Buttons to select for grouping variable
       radioButtons(inputId = "groupby",
@@ -35,8 +42,8 @@ ui <- fluidPage(
       # Input: Drop down list of variables to plot against
       selectInput(inputId = "y_var_name",
                   label = "Choose Y-Axis Variable To Plot:",
-                  choices = sort(names(ukb_df)),
-                  selected = "X25781.2.0"),
+                  choices = sort(varnames$display),
+                  selected = "LV ejection fraction (2)"),
       
     ),
     
