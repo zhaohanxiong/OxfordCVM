@@ -14,6 +14,9 @@ server = function(input, output) {
 
   # define plot to feed into UI
   output$pseudo_time_plot = renderPlot({
+    
+    # data base to plot from (currently in RAM, but need to switch to SQL)
+    df = ukb_df
 
     # define name of variable to plot
     x_var_name = "global_pseudotimes"
@@ -24,11 +27,11 @@ server = function(input, output) {
 
     # calculate regression line
     if (input$lobf == "lr") {
-      lr_model = lm(ukb_df[, y_var_name] ~ ukb_df[, x_var_name])
-      fit = list(x = seq(0, 1, length = nrow(ukb_df)))
+      lr_model = lm(df[, y_var_name] ~ df[, x_var_name])
+      fit = list(x = seq(0, 1, length = nrow(df)))
       fit$y = lr_model$coefficients[1] + fit$x * lr_model$coefficients[2]
     } else if (input$lobf == "loess") {
-      fit = lowess(ukb_df[ ,x_var_name], ukb_df[, y_var_name])
+      fit = lowess(df[ ,x_var_name], df[, y_var_name])
     }
   
     # calculate regression line upper and lower boundaries
@@ -36,7 +39,7 @@ server = function(input, output) {
     fit$lower = fit$y - qt(0.75, fit$y) * sd(fit$y)
     
     # produce plot
-    ggplot(ukb_df, aes_string(x = x_var_name, y = y_var_name)) +
+    ggplot(df, aes_string(x = x_var_name, y = y_var_name)) +
            geom_point(aes_string(color = group_name), shape = 19, alpha = 0.25, size = 2) +
            geom_line(aes(x = fit$x, y = fit$y), size = 1, color = "deepskyblue4", alpha = 0.5) +
            geom_ribbon(aes(fit$x, ymin = fit$lower, ymax = fit$upper), fill = "skyblue", alpha = 0.25) +
