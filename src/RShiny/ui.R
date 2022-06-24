@@ -1,7 +1,7 @@
 ### This file defines the layout and apperance of the R Shiny App
 
 # Define UI for app that draws a histogram ----
-ui <- fluidPage(
+ui = fluidPage(
   
   # App title ----
   titlePanel("Hypertension Progression in the UK Biobank"),

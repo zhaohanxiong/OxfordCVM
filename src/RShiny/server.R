@@ -1,7 +1,7 @@
 ### This file defines the logic and functionality of the R Shiny App
 
 # Define server logic required to draw a histogram ----
-server <- function(input, output) {
+server = function(input, output) {
   
   # Histogram of the Old Faithful Geyser Data ----
   # with requested number of bins
