@@ -1,15 +1,15 @@
-### This file defines the layout and apperance of the R Shiny App
+### This file defines the layout and appearance of the R Shiny App
 
-# Define UI for app that draws a histogram ----
+# Define UI for app that draws a histogram
 ui = fluidPage(
   
-  # App title ----
+  # App title
   titlePanel("Hypertension Progression in the UK Biobank"),
   
-  # Sidebar layout with input and output definitions ----
+  # Sidebar layout with input and output definitions
   sidebarLayout(
     
-    # ---- Sidebar panel for inputs ----
+    # sidebar panel for interactive inputs
     sidebarPanel(
       
       # display help text
@@ -26,12 +26,7 @@ ui = fluidPage(
                    choices = list("Linear Regression" = "lr",
                                   "Local Regression (LOESS)" = "loess"),
                    selected = "lr"),
-      
-      # Input: Slider for smoothing factor of the line of best fit
-      #sliderInput(inputId = "smooth",
-      #            label = h3("Adjust Linear Smoothing:"), 
-      #            min = 0, max = 5, value = 1, step = 0.1, animate = TRUE),
-      
+
       # Input: Buttons to select for grouping variable
       radioButtons(inputId = "groupby",
                    label = h3("Group Plot By:"),
@@ -43,11 +38,11 @@ ui = fluidPage(
       selectInput(inputId = "y_var_name",
                   label = "Choose Y-Axis Variable To Plot:",
                   choices = sort(varnames$display),
-                  selected = "LV ejection fraction (2)"),
+                  selected = varnames$display[1]),
       
     ),
     
-    # ---- Main panel for displaying outputs ----
+    # Main panel for displaying outputs
     mainPanel(
       
       # Output: Main Display

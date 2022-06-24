@@ -4,6 +4,12 @@ path = "NeuroPM/io/"
 # load pseudotime scores
 psuedotimes = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
 
+# rename first column
+names(psuedotimes)[1:3] = c("patid", "BPSys.2.0", "BPDia.2.0")
+
+# save psuedotimes with renamed columns
+write.csv(psuedotimes, file.path(path,"pseudotimes.csv"), row.names = FALSE)
+
 # assign bp_groups as the real labels
 psuedotimes$bp_group[psuedotimes$bp_group == 0] = "Between"
 psuedotimes$bp_group[psuedotimes$bp_group == 1] = "Background"
@@ -13,9 +19,9 @@ psuedotimes$bp_group = ordered(psuedotimes$bp_group,
 
 # perform statistical tests to evaluate model
 # seperate groups into different variable
-g1 = psuedotimes$global_pseudotimes[psuedotimes$bp_group=="Background"]
-g2 = psuedotimes$global_pseudotimes[psuedotimes$bp_group=="Between"]
-g3 = psuedotimes$global_pseudotimes[psuedotimes$bp_group=="Disease"]
+g1 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Background"]
+g2 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Between"]
+g3 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Disease"]
 
 # perform t-test between groups
 t.test(g1,g2) # background vs between
@@ -43,13 +49,15 @@ varnames = read.csv(file.path(path, "var_weighting.csv"), header=TRUE)$Var1
 ukb_varnames = read.csv("../../../bb_variablelist.csv", header=TRUE)
 
 # match field codes with field descriptors
+varnames = c(names(psuedotimes)[2:3], varnames)
 varnames = gsub("_", ".", gsub("x", "X", varnames))
+
 var_regexpr = regexpr("\\.", varnames) + 1
 varnames_instance = substring(varnames, var_regexpr, var_regexpr)
 varnames = data.frame(colname = varnames,
-                      FieldID = substring(varnames, 2, regexpr("\\.", varnames) - 1))
+                      FieldID = substring(varnames, regexpr("X", varnames) + 1, regexpr("\\.", varnames) - 1))
 varnames$Field = ukb_varnames$Field[sapply(varnames$FieldID, function(v) 
-                                                    (ukb_varnames$FieldID == v))]
+                                               which(ukb_varnames$FieldID == v))]
 varnames$instance = varnames_instance
 varnames$display = paste0(varnames$Field, ifelse(varnames$instance == "0",
                                                  "",

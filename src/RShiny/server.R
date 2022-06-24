@@ -20,26 +20,15 @@ server = function(input, output) {
     y_var_name = varnames$colname[varnames$display == input$y_var_name]
     
     # define grouping variable
-    group_name = input$groupby # "bp_group"
-    
-    # # # TO DO!!!!!
-    # query y_var_name column from ukb SQL DB with matching patient IDs
-    ukb_column = ukb_df[, y_var_name]
-    
-    # # # TO DO!!!!!
-    # filter outliers so plots are displayed nicely (when raw UKB df is used)
+    group_name = input$groupby
 
-    # add variable column to pseudotime dataframe
-    pseudotimes[, y_var_name] = ukb_column
-    
     # calculate regression line
-    #y_var_name = "BPSys_2_0"
     if (input$lobf == "lr") {
-      lr_model = lm(pseudotimes[, y_var_name] ~ pseudotimes[, x_var_name])
-      fit = list(x = seq(0, 1, length = nrow(pseudotimes)))
+      lr_model = lm(ukb_df[, y_var_name] ~ ukb_df[, x_var_name])
+      fit = list(x = seq(0, 1, length = nrow(ukb_df)))
       fit$y = lr_model$coefficients[1] + fit$x * lr_model$coefficients[2]
     } else if (input$lobf == "loess") {
-      fit = lowess(pseudotimes[ ,x_var_name], pseudotimes[, y_var_name])
+      fit = lowess(ukb_df[ ,x_var_name], ukb_df[, y_var_name])
     }
   
     # calculate regression line upper and lower boundaries
@@ -47,7 +36,7 @@ server = function(input, output) {
     fit$lower = fit$y - qt(0.75, fit$y) * sd(fit$y)
     
     # produce plot
-    ggplot(pseudotimes, aes_string(x = x_var_name, y = y_var_name)) +
+    ggplot(ukb_df, aes_string(x = x_var_name, y = y_var_name)) +
            geom_point(aes_string(color = group_name), shape = 19, alpha = 0.25, size = 2) +
            geom_line(aes(x = fit$x, y = fit$y), size = 1, color = "deepskyblue4", alpha = 0.5) +
            geom_ribbon(aes(fit$x, ymin = fit$lower, ymax = fit$upper), fill = "skyblue", alpha = 0.25) +

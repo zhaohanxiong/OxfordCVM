@@ -1,16 +1,17 @@
+# -------------------- Application Dependencies --------------------
 library(shiny)
 library(ggplot2)
 library(data.table)
 
+# -------------------- Connect to Data Base --------------------
 # load data
 path = "../fmrib/NeuroPM/io/" # "C:/Users/zxiong/Desktop/io"
 
-# # # TO DO!!!!!
-# load ukb raw variables
-ukb_df = data.frame(fread(file.path(path, "ukb_num.csv"),header=TRUE))
-
 # load variables used in cTI
 varnames = read.csv(file.path(path, "ukb_varnames.csv"), header=TRUE)
+
+# load ukb raw variables
+ukb_df = data.frame(fread(file.path(path, "ukb_num.csv"),header=TRUE))
 
 # load output of cTI
 pseudotimes = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
@@ -25,6 +26,10 @@ pseudotimes$bp_group = ordered(pseudotimes$bp_group,
 # get first trajectory for nodes in multiple traj (~10 only)
 pseudotimes$trajectory = sapply(strsplit(pseudotimes$trajectory, ","), function(x) x[1])
 
+# combine data frames together
+ukb_df = cbind(pseudotimes, ukb_df)
+
+# -------------------- Run Shiny Application --------------------
 # set deploy option as true or false
 deploy = FALSE # TRUE FALSE
 
@@ -50,7 +55,7 @@ if (deploy) {
   
   # Create the R shiny app
   runApp(appDir = ".",
-         #display.mode = "showcase",
+         display.mode = "showcase",
          test.mode = getOption("shiny.testmode", FALSE))
   
 }
