@@ -59,6 +59,6 @@ server = function(input, output) {
            #theme(legend.title = element_blank()) +
            scale_colour_brewer(palette = "Dark2")
     
-  })
+  }, height = 600, width = 800)
   
 }

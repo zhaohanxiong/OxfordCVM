@@ -50,7 +50,7 @@ if (deploy) {
   
   # Create the R shiny app
   runApp(appDir = ".",
-         display.mode = "showcase",
+         #display.mode = "showcase",
          test.mode = getOption("shiny.testmode", FALSE))
   
 }

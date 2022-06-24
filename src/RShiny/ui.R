@@ -51,7 +51,7 @@ ui = fluidPage(
     mainPanel(
       
       # Output: Main Display
-      plotOutput(outputId = "pseudo_time_plot")
+      plotOutput(outputId = "pseudo_time_plot", width = "100%")
       
     )
   
