@@ -44,8 +44,8 @@ if (deploy) {
   library(rsconnect)
   
   # read token and secret
-  shiny_io_token = readLines("account.token")
-  shiny_io_secret = readLines("account.secret")
+  shiny_io_token = readLines("../../../keys/shiny/account.token")
+  shiny_io_secret = readLines("../../../keys/shiny/account.secret")
   
   # connect to account hosted on shinyapps.io
   rsconnect::setAccountInfo(name = 'zhaohanxiong',
