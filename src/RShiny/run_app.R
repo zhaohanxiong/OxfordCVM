@@ -7,14 +7,13 @@ path = "../fmrib/NeuroPM/io/" # "C:/Users/zxiong/Desktop/io"
 
 # # # TO DO!!!!!
 # load ukb raw variables
-ukb_df = data.frame(fread(file.path(path,"ukb_num.csv"),header=TRUE))
+ukb_df = data.frame(fread(file.path(path, "ukb_num.csv"),header=TRUE))
 
-# # # TO DO!!!!!
-# load bb variable list
-ukb_varnames = read.csv(file.path(path,"bb_variablelist.csv"), header=TRUE)
+# load variables used in cTI
+varnames = read.csv(file.path(path, "ukb_varnames.csv"), header=TRUE)
 
 # load output of cTI
-pseudotimes = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
+pseudotimes = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
 
 # assign bp_groups as the real labels
 pseudotimes$bp_group[pseudotimes$bp_group == 0] = "Between"
@@ -25,16 +24,6 @@ pseudotimes$bp_group = ordered(pseudotimes$bp_group,
 
 # get first trajectory for nodes in multiple traj (~10 only)
 pseudotimes$trajectory = sapply(strsplit(pseudotimes$trajectory, ","), function(x) x[1])
-
-# load variables used in cTI
-varnames = read.csv(file.path(path, "var_weighting.csv"), header=TRUE)$Var1
-varnames = gsub("_", ".", gsub("x", "X", varnames))
-varnames_instance = substring(varnames, regexpr("\\.", varnames) + 1, regexpr("\\.", varnames) + 1)
-varnames = data.frame(colname = varnames,
-                      FieldID = substring(varnames, 2, regexpr("\\.", varnames) - 1))
-varnames$Field = ukb_varnames$Field[sapply(varnames$FieldID, function(v) which(ukb_varnames$FieldID == v))]
-varnames$instance = varnames_instance
-varnames$display = paste0(varnames$Field, ifelse(varnames$instance == "0", "", paste0(" (", varnames$instance, ")")))
 
 # set deploy option as true or false
 deploy = FALSE # TRUE FALSE

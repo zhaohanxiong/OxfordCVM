@@ -35,3 +35,25 @@ sprintf(paste0("Overlap in IQR of Boxes Between vs Disease is ",
                "%0.1f%% (Between) %0.1f%% (Disease)"),
         (g2_box[2] - g3_box[1]) / diff(g2_box) * 100,
         (g2_box[2] - g3_box[1]) / diff(g3_box) * 100)
+
+# preprare dataframe of variable names and their descriptors
+varnames = read.csv(file.path(path, "var_weighting.csv"), header=TRUE)$Var1
+
+# load bb variable list
+ukb_varnames = read.csv("../../../bb_variablelist.csv", header=TRUE)
+
+# match field codes with field descriptors
+varnames = gsub("_", ".", gsub("x", "X", varnames))
+var_regexpr = regexpr("\\.", varnames) + 1
+varnames_instance = substring(varnames, var_regexpr, var_regexpr)
+varnames = data.frame(colname = varnames,
+                      FieldID = substring(varnames, 2, regexpr("\\.", varnames) - 1))
+varnames$Field = ukb_varnames$Field[sapply(varnames$FieldID, function(v) 
+                                                    (ukb_varnames$FieldID == v))]
+varnames$instance = varnames_instance
+varnames$display = paste0(varnames$Field, ifelse(varnames$instance == "0",
+                                                 "",
+                                                 paste0(" (", varnames$instance, ")")))
+
+# write this to file
+write.csv(varnames, file.path(path, "ukb_varnames.csv"), row.names = FALSE)
