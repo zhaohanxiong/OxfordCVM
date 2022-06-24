@@ -15,7 +15,7 @@ varnames = read.csv(file.path(path, "ukb_varnames.csv"), header=TRUE)
 # load output of cTI
 pseudotimes = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
 
-# assign bp_groups as the real labels
+# redefine groups for analysis: assign bp_groups as the real labels
 pseudotimes$bp_group[pseudotimes$bp_group == 0] = "Between"
 pseudotimes$bp_group[pseudotimes$bp_group == 1] = "Background"
 pseudotimes$bp_group[pseudotimes$bp_group == 2] = "Disease"
