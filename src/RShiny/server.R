@@ -15,7 +15,7 @@ server = function(input, output) {
   # define plot to feed into UI
   output$pseudo_time_plot = renderPlot({
     
-    # data base to plot from (currently in RAM, but need to switch to SQL)
+    # data base to plot from (currently locally, but need to switch to remote)
     df = ukb_df
 
     # define name of variable to plot
