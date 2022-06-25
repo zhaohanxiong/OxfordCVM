@@ -23,11 +23,12 @@ for i = 1:(length(fold_ranges) - 1)
     end_ind = fold_ranges(i + 1) - (i ~= folds);
     
     % leave out indices of this fold for training
-    fold_leave_in = setdiff(1:N_patients, start_ind:end_ind);
+    fold_leave_in = setdiff(1:N_patients, start_ind:end_ind, 'stable');
     
     % subset data for each fold
-    data_i = data(fold_leave_in ,:);
-    bp_group_i = table2array(labels(fold_leave_in, 'bp_group'));
+    data_i = data(fold_leave_in, :);
+    labels_i = labels(fold_leave_in, :)
+    bp_group_i = table2array(labels_i(:, 'bp_group'));
     
     % set indices of background/target/between
     ind_between = find(bp_group_i == 0);
@@ -45,6 +46,6 @@ for i = 1:(length(fold_ranges) - 1)
         pseudotimes_cTI_v2(data_i, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
 
     % convert outputs to dataframe and write to csv for fold i
-    writetable([labels, table(global_pseudotimes)], strcat(['io/pseudotimes_fold' num2str(i) '.csv']));
+    writetable([labels_i, table(global_pseudotimes)], strcat(['io/pseudotimes_fold' num2str(i) '.csv']));
 
 end
