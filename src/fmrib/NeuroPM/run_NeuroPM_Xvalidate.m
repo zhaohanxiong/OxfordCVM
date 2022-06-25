@@ -27,7 +27,7 @@ for i = 1:(length(fold_ranges) - 1)
     
     % subset data for each fold
     data_i = data(fold_leave_in, :);
-    labels_i = labels(fold_leave_in, :)
+    labels_i = labels(fold_leave_in, :);
     bp_group_i = table2array(labels_i(:, 'bp_group'));
     
     % set indices of background/target/between
