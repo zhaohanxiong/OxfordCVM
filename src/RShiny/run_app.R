@@ -30,7 +30,7 @@ pseudotimes$trajectory = sapply(strsplit(pseudotimes$trajectory, ","), function(
 ukb_df = cbind(pseudotimes, ukb_df)
 
 # set some variables as categoric
-ukb_df$X31.0.0 = factor(ukb_df$X31.0.0)
+ukb_df$X31.0.0 = factor(ifelse(ukb_df$X31.0 == 0, "Female", "Male"))
 ukb_df$trajectory = factor(ukb_df$trajectory)
 
 # -------------------- Run Shiny Application --------------------
