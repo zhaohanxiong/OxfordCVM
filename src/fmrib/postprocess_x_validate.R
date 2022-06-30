@@ -44,5 +44,5 @@ mean_sd_confint = unname(quantile(mean_sd, c(0.025, 0.975)))
 print(sprintf("----------- Evaluating Stability of Disease Scores (Raw Values)"))
 print(sprintf("Root Mean Squared Error is: %0.2f +- %0.2f [%0.2f, %0.2f]",
               mean(mean_rms), sd(mean_rms), mean_rms_confint[1], mean_rms_confint[2]))
-print(sprintf("Standard Deviation is: %0.2f +- %0.2f [%0.2f, %0.2f]",
+print(sprintf("Mean Standard Deviation is: %0.2f +- %0.2f [%0.2f, %0.2f]",
               mean(mean_sd), sd(mean_sd), mean_sd_confint[1], mean_sd_confint[2]))
