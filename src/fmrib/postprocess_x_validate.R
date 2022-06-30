@@ -4,66 +4,45 @@ path = "NeuroPM/io/"
 # load pseudotime scores
 psuedotimes = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
 
-# rename first column
-names(psuedotimes)[1:3] = c("patid", "BPSys.2.0", "BPDia.2.0")
+# list X validation files
+X_val_files = list.files(path)
+X_val_files = X_val_files[grepl("pseudotimes_fold", X_val_files)]
 
-# save psuedotimes with renamed columns
-write.csv(psuedotimes, file.path(path,"pseudotimes.csv"), row.names = FALSE)
+# define number of fold used
+n_folds = length(X_val_files)
 
-# assign bp_groups as the real labels
-psuedotimes$bp_group[psuedotimes$bp_group == 0] = "Between"
-psuedotimes$bp_group[psuedotimes$bp_group == 1] = "Background"
-psuedotimes$bp_group[psuedotimes$bp_group == 2] = "Disease"
-psuedotimes$bp_group = ordered(psuedotimes$bp_group,
-                               levels = c("Background","Between","Disease"))
+# initialize matrix of scores
+pseudotime_mat = matrix(NA, nrow = nrow(psuedotimes), ncol = n_folds)
 
-# perform statistical tests to evaluate model
-# seperate groups into different variable
-g1 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Background"]
-g2 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Between"]
-g3 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Disease"]
+# define row indices for each fold to place into X validation matrix
+ind = floor(seq(from = 1, to = nrow(psuedotimes), length = n_folds + 1))
 
-# perform t-test between groups
-t.test(g1,g2) # background vs between
-t.test(g2,g3) # between vs disease
-t.test(g1,g3) # background vs disease
+# load pseudotime scores for each fold
+for (i in 1:n_folds) {
+  
+  # load file from i'th fold
+  pseudotimes = read.csv(file.path(path, paste0("pseudotimes_fold",i,".csv")), header=TRUE)
+  
+  # create indices for indexing
+  ind_i = ind[i]:(ind[i + 1] - (i != n_folds))
+  
+  # assign values to matrix with negative indexing
+  pseudotime_mat[-ind_i ,i] = pseudotimes$global_pseudotimes
+  
+}
 
-# perform quantile differences between groups, % overlap
-g1_box = unname(c(quantile(g1, 0.25), quantile(g1, 0.75))) # background
-g2_box = unname(c(quantile(g2, 0.25), quantile(g2, 0.75))) # between
-g3_box = unname(c(quantile(g3, 0.25), quantile(g3, 0.75))) # disease
+# perform row-wise analysis to evaluate stability of scores
+# root mean squared variation
+mean_rms = apply(pseudotime_mat, 1, function(x) sqrt(mean(x^2, na.rm = TRUE)))
+mean_rms_confint = unname(quantile(mean_rms, c(0.025, 0.975)))
 
-sprintf(paste0("Overlap in IQR of Background vs Between is ",
-               "%0.1f%% (Background) %0.1f%% of (Between)"),
-        (g1_box[2] - g2_box[1]) / diff(g1_box) * 100,
-        (g1_box[2] - g2_box[1]) / diff(g2_box) * 100)
-sprintf(paste0("Overlap in IQR of Boxes Between vs Disease is ",
-               "%0.1f%% (Between) %0.1f%% (Disease)"),
-        (g2_box[2] - g3_box[1]) / diff(g2_box) * 100,
-        (g2_box[2] - g3_box[1]) / diff(g3_box) * 100)
+# standard deviation variation
+mean_sd = apply(pseudotime_mat, 1, function(x) sd(x, na.rm = TRUE))
+mean_sd_confint = unname(quantile(mean_sd, c(0.025, 0.975)))
 
-# preprare dataframe of variable names and their descriptors
-varnames = read.csv(file.path(path, "var_weighting.csv"), header=TRUE, stringsAsFactor=FALSE)$Var1
-
-# load bb variable list
-ukb_varnames = read.csv("../../../bb_variablelist.csv", header=TRUE, stringsAsFactor=FALSE)
-
-# match field codes with field descriptors
-varnames = c(names(psuedotimes)[2:3], varnames)
-varnames = gsub("_", ".", gsub("x", "X", varnames))
-
-var_regexpr = regexpr("\\.", varnames) + 1
-varnames_instance = substring(varnames, var_regexpr, var_regexpr)
-varnames = data.frame(colname = varnames,
-                      FieldID = substring(varnames, regexpr("X", varnames) + 1, regexpr("\\.", varnames) - 1))
-varnames$colname = as.character(varnames$colname)
-varnames$FieldID = as.character(varnames$FieldID)
-varnames$Field = ukb_varnames$Field[sapply(varnames$FieldID, function(v) 
-                                               which(ukb_varnames$FieldID == v))]
-varnames$instance = varnames_instance
-varnames$display = paste0(varnames$Field, ifelse(varnames$instance == "0",
-                                                 "",
-                                                 paste0(" (", varnames$instance, ")")))
-
-# write this to file
-write.csv(varnames, file.path(path, "ukb_varnames.csv"), row.names = FALSE)
+# display outputs (raw values)
+print(sprintf("----------- Evaluating Stability of Disease Scores (Raw Values)"))
+print(sprintf("Root Mean Squared Error is: %0.2f +- %0.2f [%0.2f, %0.2f]",
+              mean(mean_rms), sd(mean_rms), mean_rms_confint[1], mean_rms_confint[2]))
+print(sprintf("Standard Deviation is: %0.2f +- %0.2f [%0.2f, %0.2f]",
+              mean(mean_sd), sd(mean_sd), mean_sd_confint[1], mean_sd_confint[2]))
