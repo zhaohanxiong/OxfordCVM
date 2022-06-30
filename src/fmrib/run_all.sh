@@ -14,7 +14,6 @@ cd ./NeuroPM
 
 # execute the compiled matlab program (single run or X-validation)
 nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
-#nohup ./run_run_NeuroPM_Xvalidate.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 
 # run post-analysis evaluation
 cd ..
