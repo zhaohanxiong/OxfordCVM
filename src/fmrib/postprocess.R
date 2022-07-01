@@ -33,6 +33,7 @@ g1_box = unname(c(quantile(g1, 0.25), quantile(g1, 0.75))) # background
 g2_box = unname(c(quantile(g2, 0.25), quantile(g2, 0.75))) # between
 g3_box = unname(c(quantile(g3, 0.25), quantile(g3, 0.75))) # disease
 
+# display results
 sprintf(paste0("Overlap in IQR of Background vs Between is ",
                "%0.1f%% (Background) %0.1f%% of (Between)"),
         (g1_box[2] - g2_box[1]) / diff(g1_box) * 100,
@@ -42,11 +43,34 @@ sprintf(paste0("Overlap in IQR of Boxes Between vs Disease is ",
         (g2_box[2] - g3_box[1]) / diff(g2_box) * 100,
         (g2_box[2] - g3_box[1]) / diff(g3_box) * 100)
 
-# preprare dataframe of variable names and their descriptors
-varnames = read.csv(file.path(path, "var_weighting.csv"), header=TRUE, stringsAsFactor=FALSE)$Var1
+# compute overlap between background and disease group scores
+sample_background = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Background"]
+sample_disease = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Disease"]
+overlap = max(sample_background) - min(sample_disease)
+
+# calculate number of overlapping samples in the background and disease groups
+n_background_overlap = sum(sample_background > min(sample_disease))
+n_disease_overlap = sum(sample_disease < max(sample_background))
+
+# quantifying the quantiles for the overlapping values
+background_q = 1 - n_background_overlap/length(sample_background)
+disease_q = 1 - n_disease_overlap/length(sample_disease)
+
+# display results
+sprintf("Comparing the Amount of Overlap Between Background and Disease")
+sprintf("There is an Overall %0.1f%% Overlap in Scores", overlap * 100)
+sprintf("%% of Non-Overlapping Scores in the Background Group is %0.1f%%",
+        background_q * 100)
+sprintf("%% of Non-Overlapping Scores in the Disease Group is %0.1f%%",
+        disease_q * 100)
+
+# prepare dataframe of variable names and their descriptors
+varnames = read.csv(file.path(path, "var_weighting.csv"), 
+                    header=TRUE, stringsAsFactor=FALSE)$Var1
 
 # load bb variable list
-ukb_varnames = read.csv("../../../bb_variablelist.csv", header=TRUE, stringsAsFactor=FALSE)
+ukb_varnames = read.csv("../../../bb_variablelist.csv", 
+                        header=TRUE, stringsAsFactor=FALSE)
 
 # match field codes with field descriptors
 varnames = c(names(psuedotimes)[2:3], varnames)
@@ -55,11 +79,13 @@ varnames = gsub("_", ".", gsub("x", "X", varnames))
 var_regexpr = regexpr("\\.", varnames) + 1
 varnames_instance = substring(varnames, var_regexpr, var_regexpr)
 varnames = data.frame(colname = varnames,
-                      FieldID = substring(varnames, regexpr("X", varnames) + 1, regexpr("\\.", varnames) - 1))
+                      FieldID = substring(varnames, 
+                                          regexpr("X", varnames) + 1, 
+                                          regexpr("\\.", varnames) - 1))
 varnames$colname = as.character(varnames$colname)
 varnames$FieldID = as.character(varnames$FieldID)
 varnames$Field = ukb_varnames$Field[sapply(varnames$FieldID, function(v) 
-                                               which(ukb_varnames$FieldID == v))]
+                                             which(ukb_varnames$FieldID == v))]
 varnames$instance = varnames_instance
 varnames$display = paste0(varnames$Field, ifelse(varnames$instance == "0",
                                                  "",
