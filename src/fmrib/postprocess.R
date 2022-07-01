@@ -58,7 +58,7 @@ disease_q = 1 - n_disease_overlap/length(sample_disease)
 
 # display results
 sprintf("Comparing the Amount of Overlap Between Background and Disease")
-sprintf("There is an Overall %0.1f%% Overlap in Scores", overlap * 100)
+sprintf("Overlapping Interval of Scores is %0.3f Out of 1", overlap)
 sprintf("%% of Non-Overlapping Scores in the Background Group is %0.1f%%",
         background_q * 100)
 sprintf("%% of Non-Overlapping Scores in the Disease Group is %0.1f%%",
