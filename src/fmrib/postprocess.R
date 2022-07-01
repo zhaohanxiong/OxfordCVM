@@ -56,12 +56,19 @@ n_disease_overlap = sum(sample_disease < max(sample_background))
 background_q = 1 - n_background_overlap/length(sample_background)
 disease_q = 1 - n_disease_overlap/length(sample_disease)
 
+# quantifying the proportion of patients inside the overlapping interval
+overlap_prop = (n_background_overlap + n_disease_overlap) /
+                      (length(sample_background) + length(sample_disease))
+
 # display results
 sprintf("Comparing the Amount of Overlap Between Background and Disease")
-sprintf("Overlapping Interval of Scores is %0.3f Out of 1", overlap)
-sprintf("%% of Non-Overlapping Scores in the Background Group is %0.1f%%",
+sprintf("Overlapping Interval of Scores is %0.1f%% of the entire range (%0.3f to %0.3f)", 
+        overlap * 100, min(sample_disease), max(sample_background))
+sprintf("%% of Samples with Non-Overlapping Scores Overall is %0.1f%%",
+        (1 - overlap_prop) * 100)
+sprintf("%% of Samples in the Background Group with Non-Overlapping Scores is %0.1f%%",
         background_q * 100)
-sprintf("%% of Non-Overlapping Scores in the Disease Group is %0.1f%%",
+sprintf("%% of Samples in the Disease Group with Non-Overlapping Scores is %0.1f%%",
         disease_q * 100)
 
 # prepare dataframe of variable names and their descriptors
