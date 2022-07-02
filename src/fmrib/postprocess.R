@@ -78,7 +78,7 @@ y_true = ifelse(psuedotimes$bp_group[psuedotimes$bp_group != "Between"] ==
 
 # compute FPR (false positive rate) and TPR (true positive rate) for different thresholds
 intervals = c(seq(0, 0.1, by = 0.01), seq(0.2, 1, by = 0.1))
-threshold_mat = sapply(intervals, function(thres) ifelse(y_pred >= thres, 1, 0))
+threshold_mat = sapply(intervals, function(thres) ifelse(y_pred > thres, 1, 0))
 fpr = apply(threshold_mat, 2, function(x) 
                                 sum(x == 1 & y_true == 0) / 
                                   (sum(x == 1 & y_true == 0) + sum(x == 0 & y_true == 0)))
