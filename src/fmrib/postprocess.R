@@ -17,6 +17,9 @@ psuedotimes$bp_group[psuedotimes$bp_group == 2] = "Disease"
 psuedotimes$bp_group = ordered(psuedotimes$bp_group,
                                levels = c("Background","Between","Disease"))
 
+# --------------------------------------------------------------------------------------------
+# Basic Statistical Evaluation
+# --------------------------------------------------------------------------------------------
 # perform statistical tests to evaluate model
 # seperate groups into different variable
 g1 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Background"]
@@ -24,9 +27,9 @@ g2 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Between"]
 g3 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Disease"]
 
 # perform t-test between groups
-t.test(g1,g2) # background vs between
-t.test(g2,g3) # between vs disease
-t.test(g1,g3) # background vs disease
+t.test(g1, g2) # background vs between
+t.test(g2, g3) # between vs disease
+t.test(g1, g3) # background vs disease
 
 # perform quantile differences between groups, % overlap
 g1_box = unname(c(quantile(g1, 0.25), quantile(g1, 0.75))) # background
@@ -71,10 +74,12 @@ sprintf("%% of Samples in the Background Group with Non-Overlapping Scores is %0
 sprintf("%% of Samples in the Disease Group with Non-Overlapping Scores is %0.1f%%",
         disease_q * 100)
 
+# --------------------------------------------------------------------------------------------
+# AUROC Evaluation
+# --------------------------------------------------------------------------------------------
 # define pred/ground truths in a labelled structure
 y_pred = psuedotimes$global_pseudotimes[psuedotimes$bp_group != "Between"]
-y_true = ifelse(psuedotimes$bp_group[psuedotimes$bp_group != "Between"] == 
-                                                              "Background", 0, 1)
+y_true = ifelse(psuedotimes$bp_group[psuedotimes$bp_group != "Between"] == "Background", 0, 1)
 
 # compute FPR (false positive rate) and TPR (true positive rate) for different thresholds
 intervals = c(seq(0, 0.1, by = 0.01), seq(0.2, 1, by = 0.1))
@@ -86,19 +91,18 @@ tpr = apply(threshold_mat, 2, function(x)
                                 sum(x == 1 & y_true == 1) / 
                                   (sum(x == 1 & y_true == 1) + sum(x == 0 & y_true == 1)))
 
-# create a data frame to view variation of threshold to fpr/tpr
-df = data.frame(threshold = intervals,
-                specificity = 1 - fpr,
-                sensitivity = tpr)
-if (FALSE) {
-  View(df)
-}
-
 # compute AUC (using sum of trapeziums)
 auc = sum((tpr[1:(length(intervals) - 1)] + tpr[2:length(intervals)]) * diff(1 - fpr) / 2)
 
 # display output
 sprintf("AUC is %0.5f when using %0.0f Logarithmic Intervals", auc, length(intervals))
+
+# create a data frame to view variation of threshold to fpr/tpr
+if (FALSE) {
+  View(data.frame(threshold = intervals,
+                  specificity = 1 - fpr,
+                  sensitivity = tpr))
+}
 
 # plot AUROC (area under receiver operating characteristic curve)
 if (FALSE) {
@@ -121,6 +125,9 @@ if (FALSE) {
 
 }
 
+# --------------------------------------------------------------------------------------------
+# Map Variable Codes to UKB Descriptions
+# --------------------------------------------------------------------------------------------
 # prepare data frame of variable names and their descriptors
 varnames = read.csv(file.path(path, "var_weighting.csv"), 
                     header=TRUE, stringsAsFactor=FALSE)$Var1

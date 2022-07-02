@@ -31,21 +31,18 @@ for (i in 1:n_folds) {
   
 }
 
+# --------------------------------------------------------------------------------------------
+# Perform Stability Evaluation
+# --------------------------------------------------------------------------------------------
 # perform row-wise analysis to evaluate stability of scores
-# root mean squared variation
-mean_rms = apply(pseudotime_mat, 1, function(x) sqrt(mean(x^2, na.rm = TRUE)))
+# root mean squared variation from complete run
+mean_rms = sapply(1:nrow(pseudotimes_full), function(i) 
+                                sqrt(mean((pseudotime_mat[i,] - 
+                                    pseudotimes_full$global_pseudotimes[i])^2, na.rm = TRUE)))
 mean_rms_confint = unname(quantile(mean_rms, c(0.025, 0.975)))
 
 # standard deviation variation
 mean_sd = apply(pseudotime_mat, 1, function(x) sd(x, na.rm = TRUE))
-mean_sd_confint = unname(quantile(mean_sd, c(0.025, 0.975)))
-
-# root mean squared variation from complete run
-mean_rms = sapply(1:nrow(pseudotimes_full), function(i) sqrt(mean((pseudotime_mat[i,] - pseudotimes_full$global_pseudotimes[i])^2, na.rm = TRUE)))
-mean_rms_confint = unname(quantile(mean_rms, c(0.025, 0.975)))
-
-# standard deviation variation
-mean_sd = sapply(1:nrow(pseudotimes_full), function(i) sd(pseudotime_mat[i,] - pseudotimes_full$global_pseudotimes[i], na.rm = TRUE))
 mean_sd_confint = unname(quantile(mean_sd, c(0.025, 0.975)))
 
 # display outputs (raw values)
