@@ -77,7 +77,7 @@ y_true = ifelse(psuedotimes$bp_group[psuedotimes$bp_group != "Between"] ==
                                                               "Background", 0, 1)
 
 # compute FPR (false positive rate) and TPR (true positive rate) for different thresholds
-intervals = unique(c(0:10 %o% 10^(-2:-1)))
+intervals = c(seq(0, 0.1, by = 0.01), seq(0.2, 1, by = 0.1))
 threshold_mat = sapply(intervals, function(thres) ifelse(y_pred >= thres, 1, 0))
 fpr = apply(threshold_mat, 2, function(x) 
                                 sum(x == 1 & y_true == 0) / 
@@ -88,8 +88,8 @@ tpr = apply(threshold_mat, 2, function(x)
 
 # create a data frame to view variation of threshold to fpr/tpr
 df = data.frame(threshold = intervals,
-                false_positive_rate = fpr,
-                true_positive_rate = tpr)
+                specificity = 1 - fpr,
+                sensitivity = tpr)
 if (FALSE) {
   View(df)
 }
@@ -102,13 +102,23 @@ sprintf("AUC is %0.5f when using %0.0f Logarithmic Intervals", auc, length(inter
 
 # plot AUROC (area under receiver operating characteristic curve)
 if (FALSE) {
+  
+  par(mfrow = c(1, 2))
+  boxplot(psuedotimes$global_pseudotimes ~ psuedotimes$bp_group,
+          main = "Distribution of Disease Scores Between Groups",
+          ylab = "Disease Score", xlab = "")
+  abline(h = c(min(sample_disease), max(sample_background)), col = "red")
+  
   plot(c(fpr[1], rep(fpr, each = 2)[-length(fpr)]), rep(tpr, each = 2),
        type = "l", col = "purple", lwd = 1,
-       main = "AUC", xlab = "False Positive Rate", ylab = "True Positive Rate")
+       main = "ROC (Receiver Operating Characteristic) Curve",
+       xlab = "False Positive Rate (1 - Specificity)", 
+       ylab = "True Positive Rate (Sensitivity)")
   abline(0, 1, col = "red", lty = 2)
   #abline(v = seq(0, 1, by = 0.01), col = "grey25", lty = 5)
   lines(c(fpr[1], rep(fpr, each = 2)[-length(fpr)]), rep(tpr, each = 2),
         lwd = 3, col = "purple")
+
 }
 
 # prepare data frame of variable names and their descriptors
