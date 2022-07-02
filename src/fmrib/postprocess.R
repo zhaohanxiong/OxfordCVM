@@ -119,7 +119,6 @@ if (FALSE) {
        xlab = "False Positive Rate (1 - Specificity)", 
        ylab = "True Positive Rate (Sensitivity)")
   abline(0, 1, col = "red", lty = 2)
-  #abline(v = seq(0, 1, by = 0.01), col = "grey25", lty = 5)
   lines(c(fpr[1], rep(fpr, each = 2)[-length(fpr)]), rep(tpr, each = 2),
         lwd = 3, col = "purple")
 
