@@ -90,7 +90,9 @@ tpr = apply(threshold_mat, 2, function(x)
 df = data.frame(threshold = intervals,
                 false_positive_rate = fpr,
                 true_positive_rate = tpr)
-
+if (FALSE) {
+  View(df)
+}
 # compute AUC (using sum of trapeziums)
 auc = sum((tpr[1:(length(intervals) - 1)] + tpr[2:length(intervals)]) * diff(1 - fpr) / 2)
 
