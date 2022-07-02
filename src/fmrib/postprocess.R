@@ -103,9 +103,12 @@ sprintf("AUC is %0.5f when using %0.0f Logarithmic Intervals", auc, length(inter
 # plot AUROC (area under receiver operating characteristic curve)
 if (FALSE) {
   plot(c(fpr[1], rep(fpr, each = 2)[-length(fpr)]), rep(tpr, each = 2),
-       type = "l", col = "purple", lwd = 3,
+       type = "l", col = "purple", lwd = 1,
        main = "AUC", xlab = "False Positive Rate", ylab = "True Positive Rate")
   abline(0, 1, col = "red", lty = 2)
+  #abline(v = seq(0, 1, by = 0.01), col = "grey25", lty = 5)
+  lines(c(fpr[1], rep(fpr, each = 2)[-length(fpr)]), rep(tpr, each = 2),
+        lwd = 3, col = "purple")
 }
 
 # prepare data frame of variable names and their descriptors
