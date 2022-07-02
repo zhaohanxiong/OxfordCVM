@@ -1353,3 +1353,444 @@ Batch 9 Number of cPCs -> 15
 Batch 9 Alpha Selected -> 62.8029
 Batch 10 Number of cPCs -> 14
 Batch 10 Alpha Selected -> 100
+------------------------------------------
+Batch 1 Number of cPCs -> 15
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 62.8029
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 43.2876
+Batch 4 Number of cPCs -> 15
+Batch 4 Alpha Selected -> 57.2237
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 39.4421
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 62.8029
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 57.2237
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 68.9261
+Batch 9 Number of cPCs -> 14
+Batch 9 Alpha Selected -> 57.2237
+Batch 10 Number of cPCs -> 14
+Batch 10 Alpha Selected -> 47.5081
+------------------------------------------
+Batch 1 Number of cPCs -> 15
+Batch 1 Alpha Selected -> 57.2237
+Batch 2 Number of cPCs -> 14
+Batch 2 Alpha Selected -> 35.9381
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 47.5081
+Batch 4 Number of cPCs -> 15
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 15
+Batch 5 Alpha Selected -> 52.1401
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 47.5081
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 2
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 35.9381
+Batch 2 Number of cPCs -> 14
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 47.5081
+Batch 4 Number of cPCs -> 15
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 57.2237
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 52.1401
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 3
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 14
+Batch 2 Alpha Selected -> 39.4421
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 47.5081
+Batch 4 Number of cPCs -> 15
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 15
+Batch 5 Alpha Selected -> 52.1401
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 47.5081
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 4
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 57.2237
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 47.5081
+Batch 4 Number of cPCs -> 15
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 57.2237
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 52.1401
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 5
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 47.5081
+Batch 4 Number of cPCs -> 15
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 15
+Batch 5 Alpha Selected -> 52.1401
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 47.5081
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 6
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 14
+Batch 3 Alpha Selected -> 57.2237
+Batch 4 Number of cPCs -> 15
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 57.2237
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 52.1401
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 7
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 15
+Batch 4 Alpha Selected -> 47.5081
+Batch 5 Number of cPCs -> 15
+Batch 5 Alpha Selected -> 52.1401
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 47.5081
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 8
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 15
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 57.2237
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 52.1401
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 9
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 16
+Batch 5 Alpha Selected -> 91.1163
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 47.5081
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 10
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 47.5081
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 52.1401
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 11
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 47.5081
+Batch 6 Number of cPCs -> 16
+Batch 6 Alpha Selected -> 43.2876
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 12
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 47.5081
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 62.8029
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 13
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 47.5081
+Batch 6 Number of cPCs -> 16
+Batch 6 Alpha Selected -> 57.2237
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 52.1401
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 14
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 47.5081
+Batch 6 Number of cPCs -> 16
+Batch 6 Alpha Selected -> 57.2237
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 91.1163
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 62.8029
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 15
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 47.5081
+Batch 6 Number of cPCs -> 16
+Batch 6 Alpha Selected -> 57.2237
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 39.4421
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 52.1401
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 16
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 47.5081
+Batch 6 Number of cPCs -> 16
+Batch 6 Alpha Selected -> 57.2237
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 39.4421
+Batch 8 Number of cPCs -> 15
+Batch 8 Alpha Selected -> 52.1401
+Batch 9 Number of cPCs -> 16
+Batch 9 Alpha Selected -> 62.8029
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 17
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 47.5081
+Batch 6 Number of cPCs -> 16
+Batch 6 Alpha Selected -> 57.2237
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 39.4421
+Batch 8 Number of cPCs -> 14
+Batch 8 Alpha Selected -> 57.2237
+Batch 9 Number of cPCs -> 15
+Batch 9 Alpha Selected -> 100
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 18
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 47.5081
+Batch 6 Number of cPCs -> 16
+Batch 6 Alpha Selected -> 57.2237
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 39.4421
+Batch 8 Number of cPCs -> 14
+Batch 8 Alpha Selected -> 57.2237
+Batch 9 Number of cPCs -> 15
+Batch 9 Alpha Selected -> 27.1859
+Batch 10 Number of cPCs -> 15
+Batch 10 Alpha Selected -> 52.1401
+..... Running Cross Validation Fold 19
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 47.5081
+Batch 6 Number of cPCs -> 16
+Batch 6 Alpha Selected -> 57.2237
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 39.4421
+Batch 8 Number of cPCs -> 14
+Batch 8 Alpha Selected -> 57.2237
+Batch 9 Number of cPCs -> 15
+Batch 9 Alpha Selected -> 43.2876
+Batch 10 Number of cPCs -> 16
+Batch 10 Alpha Selected -> 47.5081
+..... Running Cross Validation Fold 20
+Batch 1 Number of cPCs -> 14
+Batch 1 Alpha Selected -> 52.1401
+Batch 2 Number of cPCs -> 15
+Batch 2 Alpha Selected -> 47.5081
+Batch 3 Number of cPCs -> 15
+Batch 3 Alpha Selected -> 68.9261
+Batch 4 Number of cPCs -> 14
+Batch 4 Alpha Selected -> 52.1401
+Batch 5 Number of cPCs -> 14
+Batch 5 Alpha Selected -> 57.2237
+Batch 6 Number of cPCs -> 15
+Batch 6 Alpha Selected -> 24.7708
+Batch 7 Number of cPCs -> 15
+Batch 7 Alpha Selected -> 39.4421
+Batch 8 Number of cPCs -> 14
+Batch 8 Alpha Selected -> 57.2237
+Batch 9 Number of cPCs -> 15
+Batch 9 Alpha Selected -> 57.2237
+Batch 10 Number of cPCs -> 14
+Batch 10 Alpha Selected -> 39.4421
