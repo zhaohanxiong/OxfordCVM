@@ -4,12 +4,6 @@ path = "NeuroPM/io/"
 # load pseudotime scores
 psuedotimes = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
 
-# rename first column
-names(psuedotimes)[1:3] = c("patid", "BPSys.2.0", "BPDia.2.0")
-
-# save psuedotimes with renamed columns
-write.csv(psuedotimes, file.path(path,"pseudotimes.csv"), row.names = FALSE)
-
 # assign bp_groups as the real labels
 psuedotimes$bp_group[psuedotimes$bp_group == 0] = "Between"
 psuedotimes$bp_group[psuedotimes$bp_group == 1] = "Background"
@@ -59,16 +53,10 @@ n_disease_overlap = sum(sample_disease < max(sample_background))
 background_q = 1 - n_background_overlap/length(sample_background)
 disease_q = 1 - n_disease_overlap/length(sample_disease)
 
-# quantifying the proportion of patients inside the overlapping interval
-overlap_prop = (n_background_overlap + n_disease_overlap) /
-                      (length(sample_background) + length(sample_disease))
-
 # display results for quantifying distribution overlap
 sprintf("Comparing the Amount of Overlap Between Background and Disease")
 sprintf("Overlapping Interval of Scores is %0.1f%% of the entire range (%0.3f to %0.3f)", 
         overlap * 100, min(sample_disease), max(sample_background))
-sprintf("%% of Samples with Non-Overlapping Scores Overall is %0.1f%%",
-        (1 - overlap_prop) * 100)
 sprintf("%% of Samples in the Background Group with Non-Overlapping Scores is %0.1f%%",
         background_q * 100)
 sprintf("%% of Samples in the Disease Group with Non-Overlapping Scores is %0.1f%%",
@@ -123,36 +111,3 @@ if (FALSE) {
         lwd = 3, col = "purple")
 
 }
-
-# --------------------------------------------------------------------------------------------
-# Map Variable Codes to UKB Descriptions
-# --------------------------------------------------------------------------------------------
-# prepare data frame of variable names and their descriptors
-varnames = read.csv(file.path(path, "var_weighting.csv"), 
-                    header=TRUE, stringsAsFactor=FALSE)$Var1
-
-# load bb variable list to compare
-ukb_varnames = read.csv("../../../bb_variablelist.csv", 
-                        header=TRUE, stringsAsFactor=FALSE)
-
-# match field codes with field descriptors
-varnames = c(names(psuedotimes)[2:3], varnames)
-varnames = gsub("_", ".", gsub("x", "X", varnames))
-
-var_regexpr = regexpr("\\.", varnames) + 1
-varnames_instance = substring(varnames, var_regexpr, var_regexpr)
-varnames = data.frame(colname = varnames,
-                      FieldID = substring(varnames, 
-                                          regexpr("X", varnames) + 1, 
-                                          regexpr("\\.", varnames) - 1))
-varnames$colname = as.character(varnames$colname)
-varnames$FieldID = as.character(varnames$FieldID)
-varnames$Field = ukb_varnames$Field[sapply(varnames$FieldID, function(v) 
-                                             which(ukb_varnames$FieldID == v))]
-varnames$instance = varnames_instance
-varnames$display = paste0(varnames$Field, ifelse(varnames$instance == "0",
-                                                 "",
-                                                 paste0(" (", varnames$instance, ")")))
-
-# write this to file for dataframe of variable codes and original names
-write.csv(varnames, file.path(path, "ukb_varnames.csv"), row.names = FALSE)
