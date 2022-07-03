@@ -40,6 +40,9 @@ sprintf(paste0("Overlap in IQR of Boxes Between vs Disease is ",
         (g2_box[2] - g3_box[1]) / diff(g2_box) * 100,
         (g2_box[2] - g3_box[1]) / diff(g3_box) * 100)
 
+# --------------------------------------------------------------------------------------------
+# Quantifying Group Overlap Evaluation
+# --------------------------------------------------------------------------------------------
 # compute overlap between background and disease group scores
 sample_background = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Background"]
 sample_disease = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Disease"]
