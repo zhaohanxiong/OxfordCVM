@@ -6,10 +6,8 @@
 # run R preprocessing script, writes to NeuroPM/io directory
 Rscript preprocess.R
 
-# navigate to directory containing source code
-cd ./NeuroPM
-
 # compile matlab script (only if there were code changes)
+cd ./NeuroPM
 ./compile_NeuroPM.sh
 
 # execute the compiled matlab program (single run or X-validation)
