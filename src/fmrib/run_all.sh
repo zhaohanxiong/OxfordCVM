@@ -21,4 +21,4 @@ Rscript postprocess_files.R
 Rscript postprocess_eval.R
 
 # run python trajectory visualization/computation (in virtual env)
-./home/fs0/winokl/zxiong/env/bin/python3 trajectory_compute.py
+./home/fs0/winokl/zxiong/env/bin/python3 postprocess_traj.py
