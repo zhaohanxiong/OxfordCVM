@@ -153,24 +153,37 @@ for node in G.nodes():
 edge_trace = go.Scattergl(x=edge_x, y=edge_y,
                           line=dict(width=1, color='black'), mode='lines')
 
-# define colors for nodes, re-scale colors in disease group to make them more pronouced
-#score_col = np.copy(MST_label["pseudotime"].to_numpy())
-#score_col[MST_label["bp_group"]==2] *= 3
-#score_col[score_col>1] = 1
+# define colors for nodes based on disease score,
+if True:
 
-# define colors for trajectories/bp_group
-score_col = np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) for i in range(MST_label.shape[0])])
-#score_col = MST_label["bp_group"].to_numpy()
-score_col = np.array(plotly.colors.qualitative.Light24)[score_col] # Alphabet Dark24 Light24
+    # continuous scale for disease scores
+    score_col = np.copy(MST_label["pseudotime"].to_numpy())
+
+    # re-scale colors in disease group to make them more pronouced
+    score_col[MST_label["bp_group"]==2] *= 3
+    score_col[score_col>1] = 1
+
+# define colors grouped by trajectories/bp_group
+if False:
+    
+    # group by trajectory
+    score_col = np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) 
+                                                        for i in range(MST_label.shape[0])])
+    
+    # group by bp
+    #score_col = MST_label["bp_group"].to_numpy()
+
+    # assign discrete color
+    score_col = np.array(plotly.colors.qualitative.Light24)[score_col] # Alphabet Dark24 Light24
 
 # define node plots using GPU rendering
 node_trace = go.Scattergl(x=node_x, y=node_y,
                           mode='markers', hoverinfo="x+y",
                           marker=dict(showscale=True,reversescale=False,
                                       size=15,opacity=0.75,
-                                      #colorbar=dict(thickness=15,title='Disease Score',
-                                      #              xanchor='left',titleside='right'),
-                                      #colorscale='Plasma', # Jet
+                                      colorbar=dict(thickness=15,title='Disease Score',
+                                                    xanchor='left',titleside='right'),
+                                      #colorscale='Plasma',
                                       color=score_col,
                                       line=dict(width=2.5,color='black'))
                          )
