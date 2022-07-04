@@ -57,7 +57,6 @@ background_q = 1 - n_background_overlap/length(sample_background)
 disease_q = 1 - n_disease_overlap/length(sample_disease)
 
 # display results for quantifying distribution overlap
-sprintf("Comparing the Amount of Overlap Between Background and Disease")
 sprintf("Overlapping Interval of Scores is %0.1f%% of the entire range (%0.3f to %0.3f)", 
         overlap * 100, min(sample_disease), max(sample_background))
 sprintf("%% of Samples in the Background Group with Non-Overlapping Scores is %0.1f%%",
