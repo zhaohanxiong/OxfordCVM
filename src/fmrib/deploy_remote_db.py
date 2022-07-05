@@ -4,10 +4,10 @@ import sqlalchemy
 import pandas as pd
 
 # source path & set the current working directory
-path = "src/fmrib/NeuroPM/io/"
+path = "NeuroPM/io/"
 
 # credentials
-aws_cred = json.load(open("../keys/aws/postgresql.json"))
+aws_cred = json.load(open("../../../keys/aws/postgresql.json"))
 
 # set up connection to database
 url = 'postgresql+psycopg2://' + aws_cred['user'] + ':' + aws_cred['passw'] + \
