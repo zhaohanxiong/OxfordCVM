@@ -17,10 +17,3 @@ nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 cd ..
 Rscript postprocess_files.R
 Rscript postprocess_eval.R
-
-# run python trajectory visualization/computation (in virtual env)
-source /home/fs0/winokl/zxiong/env/bin/activate
-python postprocess_traj.py
-
-# deploy data to remote database
-python deploy_remote_db.py
