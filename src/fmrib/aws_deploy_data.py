@@ -5,7 +5,7 @@ import sqlalchemy
 import pandas as pd
 
 # source path of data and switch to this path
-path = "src/fmrib/NeuroPM/io/"
+path = "NeuroPM/io/" # "src/fmrib/NeuroPM/io/" (vscode debug)
 os.chdir(path)
 
 # AWS RDS credentials
@@ -38,7 +38,7 @@ ukb_num = pd.read_csv("ukb_num.csv", index_col = False)
 response = s3_client.upload_file("ukb_num.csv", "biobank-s3", "ukb_num.csv")
 
 '''
-# query tool
+# RDS query tool
 # initialize connected database
 connection = engine.connect()
 metadata = sqlalchemy.MetaData()
@@ -53,4 +53,15 @@ sql_query = sqlalchemy.select([table.columns.patid, \
                 where(sqlalchemy.and_(table.columns.bp_group == 2, \
                                       table.columns.global_pseudotimes > 0.8))
 query_result = connection.execute(sql_query).fetchall()
+
+# retrive s3 object
+# connect to bucket
+s3 = boto3.resource(service_name = 's3',
+                    aws_access_key_id = aws_cred['Access key ID'][0],
+                    aws_secret_access_key = aws_cred['Secret access key'][0]
+                    )
+
+# Load csv file directly into python
+s3_obj = s3.Bucket('biobank-s3').Object('ukb_num.csv').get()
+ukb_mat = pd.read_csv(s3_obj['Body'], index_col=0)
 '''
