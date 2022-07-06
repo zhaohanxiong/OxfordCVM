@@ -1,20 +1,60 @@
 # -------------------- Application Dependencies --------------------
-library(shiny)
-library(ggplot2)
+#library(rjson)
+#library(aws.s3)
+#library(RPostgres)
 library(data.table)
 
+library(shiny)
+library(ggplot2)
+
 # -------------------- Connect to Data Base --------------------
-# load data
-path = "../fmrib/NeuroPM/io/" # "C:/Users/zxiong/Desktop/io"
+# read from AWS or locally
+local = TRUE
 
-# load variables used in cTI
-varnames = read.csv(file.path(path, "ukb_varnames.csv"), header=TRUE)
-
-# load ukb raw variables
-ukb_df = data.frame(fread(file.path(path, "ukb_num.csv"),header=TRUE))
-
-# load output of cTI
-pseudotimes = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
+if (!local) { # connecting to AWS
+  
+  # retrieve s3 credentials
+  aws_cred = read.csv("../../../keys/aws/s3.csv")
+  
+  # create connection to S3
+  Sys.setenv("AWS_ACCESS_KEY_ID" = aws_cred$Access.key.ID,
+             "AWS_SECRET_ACCESS_KEY" = aws_cred$Secret.access.key,
+             "AWS_DEFAULT_REGION" = "us-east-1"
+  )
+  
+  # read table from s3 using data.table and convert to dataframe
+  ukb_df = s3read_using(FUN = data.table::fread,
+                        bucket = "biobank-s3", object = "ukb_num.csv")
+  ukb_df = data.frame(ukb_df)
+  
+  # retrieve rds credentials
+  aws_cred =  fromJSON(file = "../../../keys/aws/postgresql.json")
+  
+  # create connection to RDS
+  con = dbConnect(RPostgres::Postgres(),
+                  dbname = aws_cred$database, 
+                  host = aws_cred$host, port = 5432, 
+                  user = aws_cred$user, password = aws_cred$passw)
+  
+  # load and store tables
+  varnames = dbFetch(dbSendQuery(con, "SELECT * FROM ukb_varnames"))
+  pseudotimes = dbFetch(dbSendQuery(con, "SELECT * FROM pseudotimes"))
+  
+} else { # read from local storage
+  
+  # set data path
+  path = "../fmrib/NeuroPM/io/" # "C:/Users/zxiong/Desktop/io"
+  
+  # load variables used in cTI
+  varnames = read.csv(file.path(path, "ukb_varnames.csv"), header=TRUE)
+  
+  # load ukb raw variables
+  ukb_df = data.frame(fread(file.path(path, "ukb_num.csv"),header=TRUE))
+  
+  # load output of cTI
+  pseudotimes = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
+  
+}
 
 # redefine groups for analysis: assign bp_groups as the real labels
 pseudotimes$bp_group[pseudotimes$bp_group == 0] = "Between"
@@ -29,13 +69,13 @@ pseudotimes$trajectory = sapply(strsplit(pseudotimes$trajectory, ","), function(
 # combine data frames together
 ukb_df = cbind(pseudotimes, ukb_df)
 
-# set some variables as categoric
+# set some variables as categorical
 ukb_df$X31.0.0 = factor(ifelse(ukb_df$X31.0 == 0, "Female", "Male"))
 ukb_df$trajectory = factor(ukb_df$trajectory)
 
 # -------------------- Run Shiny Application --------------------
 # set deploy option as true or false
-deploy = FALSE # TRUE FALSE
+deploy = FALSE
 
 # deploy on shinyapp.io (hosted by R-Shiny)
 if (deploy) {
