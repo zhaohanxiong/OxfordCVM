@@ -17,3 +17,12 @@ nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 cd ..
 Rscript postprocess_files.R
 Rscript postprocess_eval.R
+
+# activate anaconda environment (need conda for fmrib)
+source activate env_conda
+
+# run python trajectory visualization/computation
+python postprocess_traj.py
+
+# deploy output data to remote database
+python aws_deploy_data.py
