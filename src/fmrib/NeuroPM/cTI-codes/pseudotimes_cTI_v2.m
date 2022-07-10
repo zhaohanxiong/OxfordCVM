@@ -141,7 +141,7 @@ clear Tree dist_matrix0 dist_matrix
 dijkstra_F = datas.F;
 save('io/dijkstra.mat','dijkstra_F'); % dijkstra father nodes of every node for computing trajectories
 save('io/MST.mat','MST'); % save minimum spanning tree individually
-save('io/all.mat'); % save all variables to workspace to study intermediary values
+%save('io/all.mat'); % save all variables to workspace to study intermediary values
 
 return;
 
