@@ -22,8 +22,8 @@ ukb_filtered_rows = get_ukb_subset_rows(df = ukb$ukb_data,
 
 # subset UKB dataframe based on row/column filters, and remove missing
 ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
-                                    cols = ukb_filtered_cols,
-                                    rows = ukb_filtered_rows)
+                                    cols = colnames(ukb$ukb_data),#ukb_filtered_cols,
+                                    rows = rownames(ukb$ukb_data))#ukb_filtered_rows)
 
 # free up memory
 rm(ukb)

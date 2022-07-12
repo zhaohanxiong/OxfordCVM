@@ -17,7 +17,6 @@ nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 cd ..
 Rscript postprocess_files.R
 Rscript postprocess_eval_model.R
-Rscript postprocess_eval_KNNpred.R
 
 # activate anaconda environment (need conda for fmrib)
 source activate env_conda

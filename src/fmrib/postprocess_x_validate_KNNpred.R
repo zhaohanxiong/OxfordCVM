@@ -1,7 +1,7 @@
 library(data.table)
 
 # load outputs from NeuroPM
-path = "NeuroPM/io/"
+path = "NeuroPM/io"
 
 # load pseudotime scores
 pseudotimes_full = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
@@ -61,12 +61,13 @@ for (i in 1:n_folds) {
   
   # compute err and accuracy
   eval$mse = sqrt((eval$pred - eval$gt)**2)
+  eval$acc = abs(eval$pred - eval$gt)/eval$g
   err = mean(eval$mse)
-  acc = (1 - err) * 100
+  acc = mean(eval$acc)
   
   # append 
   err_all[i] = err
-  acc_all[i] = err
+  acc_all[i] = acc
   
   # display summaries, also by group
   sprintf(paste0("Fold %.0f: Predictions were %0.3f from the Ground",
