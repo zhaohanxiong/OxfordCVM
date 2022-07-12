@@ -80,9 +80,7 @@ for (i in 1:n_folds) {
   
   # display summaries, also by group
   print(sprintf("------------------------------ Evaluating Fold %.0f", i))
-  print(sprintf(paste0("Predictions were %0.3f from the Ground",
-                       " Truth (N = %.0f)"),
-                mean(eval$err), length(ind_i)))
+  print(sprintf("RMSE = %0.3f (N = %.0f)", mean(eval$err), length(ind_i)))
   print(sprintf("Mean by Group:"))
   print(aggregate(eval[, c("err", "knn_dist")], list(eval$group), mean))
   print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivty = %0.1f%%, ",
@@ -97,7 +95,7 @@ for (i in 1:n_folds) {
 
 # display overall results
 print(sprintf(paste0("Overall: %.0f-Fold X-Validation Results in an ",
-                     "Average Error of %0.3f"),
+                     "RMSE of %0.3f"),
               n_folds, mean(pseudotimes_full$err)))
 print(sprintf("Mean by Group:"))
 print(aggregate(pseudotimes_full[, c("err", "knn_dist")],
