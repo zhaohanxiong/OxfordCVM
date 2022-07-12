@@ -31,14 +31,14 @@ g2_box = unname(c(quantile(g2, 0.25), quantile(g2, 0.75))) # between
 g3_box = unname(c(quantile(g3, 0.25), quantile(g3, 0.75))) # disease
 
 # display results for quantifying IQR overlap
-sprintf(paste0("Overlap in IQR of Background vs Between is ",
-               "%0.1f%% (Background) %0.1f%% of (Between)"),
-        (g1_box[2] - g2_box[1]) / diff(g1_box) * 100,
-        (g1_box[2] - g2_box[1]) / diff(g2_box) * 100)
-sprintf(paste0("Overlap in IQR of Boxes Between vs Disease is ",
-               "%0.1f%% (Between) %0.1f%% (Disease)"),
-        (g2_box[2] - g3_box[1]) / diff(g2_box) * 100,
-        (g2_box[2] - g3_box[1]) / diff(g3_box) * 100)
+print(sprintf(paste0("Overlap in IQR of Background vs Between is ",
+                     "%0.1f%% (Background) %0.1f%% of (Between)"),
+              (g1_box[2] - g2_box[1]) / diff(g1_box) * 100,
+              (g1_box[2] - g2_box[1]) / diff(g2_box) * 100))
+print(sprintf(paste0("Overlap in IQR of Boxes Between vs Disease is ",
+                     "%0.1f%% (Between) %0.1f%% (Disease)"),
+              (g2_box[2] - g3_box[1]) / diff(g2_box) * 100,
+              (g2_box[2] - g3_box[1]) / diff(g3_box) * 100))
 
 # --------------------------------------------------------------------------------------------
 # Quantifying Group Overlap Evaluation
@@ -57,12 +57,12 @@ background_q = 1 - n_background_overlap/length(sample_background)
 disease_q = 1 - n_disease_overlap/length(sample_disease)
 
 # display results for quantifying distribution overlap
-sprintf("Overlapping Interval of Scores is %0.1f%% of the entire range (%0.3f to %0.3f)", 
-        overlap * 100, min(sample_disease), max(sample_background))
-sprintf("%% of Samples in the Background Group with Non-Overlapping Scores is %0.1f%%",
-        background_q * 100)
-sprintf("%% of Samples in the Disease Group with Non-Overlapping Scores is %0.1f%%",
-        disease_q * 100)
+print(sprintf("Overlapping Interval of Scores is %0.1f%% of the entire range (%0.3f to %0.3f)", 
+        overlap * 100, min(sample_disease), max(sample_background)))
+print(sprintf("%% of Samples in the Background Group with Non-Overlapping Scores is %0.1f%%",
+        background_q * 100))
+print(sprintf("%% of Samples in the Disease Group with Non-Overlapping Scores is %0.1f%%",
+        disease_q * 100))
 
 # --------------------------------------------------------------------------------------------
 # AUROC Evaluation
@@ -72,27 +72,21 @@ y_pred = psuedotimes$global_pseudotimes[psuedotimes$bp_group != "Between"]
 y_true = ifelse(psuedotimes$bp_group[psuedotimes$bp_group != "Between"] == "Background", 0, 1)
 
 # compute FPR (false positive rate) and TPR (true positive rate) for different thresholds
-intervals = c(seq(0, 0.1, by = 0.01), seq(0.2, 1, by = 0.1))
+intervals = seq(0, 1, by = 0.001)
 threshold_mat = sapply(intervals, function(thres) ifelse(y_pred > thres, 1, 0))
 fpr = apply(threshold_mat, 2, function(x) 
-                                sum(x == 1 & y_true == 0) / 
-                                  (sum(x == 1 & y_true == 0) + sum(x == 0 & y_true == 0)))
+                sum(x == 1 & y_true == 0) / 
+                  (sum(x == 1 & y_true == 0) + sum(x == 0 & y_true == 0)))
 tpr = apply(threshold_mat, 2, function(x)
-                                sum(x == 1 & y_true == 1) / 
-                                  (sum(x == 1 & y_true == 1) + sum(x == 0 & y_true == 1)))
+                  sum(x == 1 & y_true == 1) / 
+                    (sum(x == 1 & y_true == 1) + sum(x == 0 & y_true == 1)))
 
 # compute AUC (using sum of trapeziums)
 auc = sum((tpr[1:(length(intervals) - 1)] + tpr[2:length(intervals)]) * diff(1 - fpr) / 2)
 
 # display output
-sprintf("AUC is %0.5f when using %0.0f Logarithmic Intervals", auc, length(intervals))
-
-# create a data frame to view variation of threshold to fpr/tpr
-if (FALSE) {
-  View(data.frame(threshold = intervals,
-                  specificity = 1 - fpr,
-                  sensitivity = tpr))
-}
+print(sprintf("AUC is %0.5f when using %0.0f Logarithmic Intervals", 
+              auc, length(intervals)))
 
 # plot AUROC (area under receiver operating characteristic curve)
 if (FALSE) {
@@ -113,3 +107,16 @@ if (FALSE) {
         lwd = 3, col = "purple")
 
 }
+
+# create a data frame to view variation of threshold to fpr/tpr
+if (FALSE) {
+  View(data.frame(threshold = intervals,
+                  specificity = 1 - fpr,
+                  sensitivity = tpr))
+}
+
+# perform optimization to find optimal threshold, x = threshold
+ind = which.max(1 - fpr + tpr)
+print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivty = %0.1f%%, ",
+                     "Specificity = %0.1f%%)"), 
+              intervals[ind], tpr[ind] * 100, (1 - fpr)[ind] * 100))
