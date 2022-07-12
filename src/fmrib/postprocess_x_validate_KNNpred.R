@@ -1,7 +1,7 @@
 library(data.table)
 
 # load outputs from NeuroPM
-path = "C:/Users/86155/Desktop/11_10_fold_X_validation" #"NeuroPM/io"
+path = "NeuroPM/io"
 
 # set K (for KNN)
 K = 10
