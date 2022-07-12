@@ -61,7 +61,7 @@ for (i in 1:n_folds) {
   
   # compute err and accuracy
   eval$mse = sqrt((eval$pred - eval$gt)**2)
-  eval$acc = abs(eval$pred - eval$gt)/eval$g
+  eval$acc = abs(eval$pred - eval$gt) / eval$gt * 100
   err = mean(eval$mse)
   acc = mean(eval$acc)
   
@@ -74,7 +74,7 @@ for (i in 1:n_folds) {
                  " Truth (Accuracy = %0.1f%%, N = %.0f)"),
           i, err, acc, length(ind_i))
   sprintf("Mean by Group:")
-  print(aggregate(eval$mse, list(eval$bp_group), mean))
+  print(aggregate(eval$mse, list(eval$group), mean))
   
 }
 
