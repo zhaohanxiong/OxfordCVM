@@ -13,10 +13,11 @@ cd ./NeuroPM
 # execute the compiled matlab program (single run or X-validation)
 nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 
-# run post-analysis evaluation/file organization
+# run post-processing file organization/evaluation
 cd ..
 Rscript postprocess_files.R
-Rscript postprocess_eval.R
+Rscript postprocess_eval_model.R
+Rscript postprocess_eval_KNNpred.R
 
 # activate anaconda environment (need conda for fmrib)
 source activate env_conda

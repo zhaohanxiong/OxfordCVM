@@ -19,6 +19,10 @@ n_folds = length(X_val_files)
 # define row indices for each fold to place into X validation matrix
 ind = floor(seq(from = 1, to = nrow(pseudotimes_full), length = n_folds + 1))
 
+# store outputs
+err_all = rep(NA, n_folds)
+acc_all = rep(NA, n_folds)
+
 # load pseudotime scores for each fold
 for (i in 1:n_folds) {
   
@@ -37,10 +41,11 @@ for (i in 1:n_folds) {
 
   # create dataframe of ground truth and predictions for disease score
   eval = data.frame(gt = pseudotimes_full$global_pseudotimes[ind_i],
-                    pred = NA)
+                    pred = NA,
+                    group = pseudotimes_full$bp_group[ind_i])
   
   # set K (for KNN)
-  K = 25
+  K = 10
   
   # perform KNN to infer disease score
   for (j in 1:nrow(pred_data)) {
@@ -55,12 +60,23 @@ for (i in 1:n_folds) {
   }
   
   # compute err and accuracy
-  err = mean(abs(eval$pred - eval$gt))
+  eval$mse = sqrt((eval$pred - eval$gt)**2)
+  err = mean(eval$mse)
   acc = (1 - err) * 100
   
-  # display
+  # append 
+  err_all[i] = err
+  acc_all[i] = err
+  
+  # display summaries, also by group
   sprintf(paste0("Fold %.0f: Predictions were %0.3f from the Ground",
                  " Truth (Accuracy = %0.1f%%, N = %.0f)"),
           i, err, acc, length(ind_i))
+  sprintf("Mean by Group:")
+  print(aggregate(eval$mse, list(eval$bp_group), mean))
   
 }
+
+sprintf(paste0("Overall: %.0f-Fold X-Validation Results in an ",
+               "Average Error of %0.2f (Accuracy = %0.1f%%)"),
+        n_folds, mean(err_all), mean(acc_all))
