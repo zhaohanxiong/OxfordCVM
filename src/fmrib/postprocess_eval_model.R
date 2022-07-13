@@ -117,6 +117,6 @@ if (FALSE) {
 
 # perform optimization to find optimal threshold, x = threshold
 ind = which.max(1 - fpr + tpr)
-print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivty = %0.1f%%, ",
+print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivity = %0.1f%%, ",
                      "Specificity = %0.1f%%)"), 
               intervals[ind], tpr[ind] * 100, (1 - fpr)[ind] * 100))
