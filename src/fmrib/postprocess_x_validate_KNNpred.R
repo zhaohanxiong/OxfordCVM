@@ -4,7 +4,7 @@ library(data.table)
 path = "NeuroPM/io"
 
 # set K (for KNN)
-K = 10
+K = 1
 
 # load pseudotime scores
 pseudotimes_full = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
