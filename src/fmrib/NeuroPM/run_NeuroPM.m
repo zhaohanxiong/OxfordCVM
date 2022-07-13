@@ -41,9 +41,9 @@ classes_for_colours(ind_between) = 2;
 %% convert outputs to dataframes
 pseudotimes_file = [labels, table(global_pseudotimes)];
 node_contributions = table(ukb_data.Properties.VariableNames', Node_contributions);
-%expected_contribution = table(Expected_contribution);
+expected_contribution = table(Expected_contribution);
 
 %% output csv
 writetable(pseudotimes_file, strcat('io/pseudotimes.csv'));
 writetable(node_contributions, strcat('io/var_weighting.csv'));
-%writetable(expected_contribution, strcat('io/threshold_weighting.csv'));
+writetable(expected_contribution, strcat('io/threshold_weighting.csv'));
