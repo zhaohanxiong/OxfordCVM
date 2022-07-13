@@ -64,19 +64,20 @@ for (i in 1:n_folds) {
   eval$err = sqrt((eval$pred - eval$gt)**2)
   
   # compute sensitivity/specificity
+  y_pred = eval$pred[eval$group != 0]
   y_true = ifelse(pseudotimes_full$bp_group[ind_i][pseudotimes_full$
                                                 bp_group[ind_i] != 0] == 1,
                   0, 1)
   intervals = seq(0, 1, by = 0.001)
   threshold_mat = sapply(intervals, function(thres)
-                                            ifelse(eval$pred > thres, 1, 0))
+                                            ifelse(y_pred > thres, 1, 0))
   fpr = apply(threshold_mat, 2, function(x) 
                 sum(x == 1 & y_true == 0) / 
                   (sum(x == 1 & y_true == 0) + sum(x == 0 & y_true == 0)))
   tpr = apply(threshold_mat, 2, function(x)
                 sum(x == 1 & y_true == 1) / 
                   (sum(x == 1 & y_true == 1) + sum(x == 0 & y_true == 1)))
-  ind = which.max(1 - fpr + tpr)
+  opt_ind = which.max(1 - fpr + tpr)
   
   # display summaries, also by group
   print(sprintf("------------------------------ Evaluating Fold %.0f", i))
@@ -85,7 +86,7 @@ for (i in 1:n_folds) {
   print(aggregate(eval[, c("err", "knn_dist")], list(eval$group), mean))
   print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivty = %0.1f%%, ",
                        "Specificity = %0.1f%%)"), 
-                intervals[ind], tpr[ind] * 100, (1 - fpr)[ind] * 100))
+                intervals[opt_ind], tpr[opt_ind] * 100, (1 - fpr)[opt_ind] * 100))
   
   # append
   pseudotimes_full$err[ind_i] = eval$err
