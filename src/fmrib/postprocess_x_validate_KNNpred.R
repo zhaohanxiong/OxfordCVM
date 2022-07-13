@@ -84,7 +84,7 @@ for (i in 1:n_folds) {
   print(sprintf("RMSE = %0.3f (N = %.0f)", mean(eval$err), length(ind_i)))
   print(sprintf("Mean by Group:"))
   print(aggregate(eval[, c("err", "knn_dist")], list(eval$group), mean))
-  print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivty = %0.1f%%, ",
+  print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivity = %0.1f%%, ",
                        "Specificity = %0.1f%%)"), 
                 intervals[opt_ind], tpr[opt_ind] * 100, (1 - fpr)[opt_ind] * 100))
   
