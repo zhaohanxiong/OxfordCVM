@@ -102,7 +102,7 @@ for (i in 1:n_folds) {
   # compute metrics
   sensitivity = tp / (tp + fn) * 100
   specificity = tn / (tn + fp) * 100
-  #f1 = 2 * tp / (2 * tp + fp + fn) * 100
+  f1 = 2 * tp / (2 * tp + fp + fn) * 100
 
   # display summaries, also by group
   print(sprintf("------------------------------ Evaluating Fold %.0f", i))
@@ -110,8 +110,8 @@ for (i in 1:n_folds) {
   print(sprintf("Mean by Group:"))
   print(aggregate(eval[, c("err", "knn_dist")], list(eval$group), mean))
   print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivity = %0.1f%%, ",
-                       "Specificity = %0.1f%%)"),
-                opt_thres, sensitivity, specificity))
+                       "Specificity = %0.1f%%, F1 = %0.1f%%)"),
+                opt_thres, sensitivity, specificity, f1))
   
   # append
   pseudotimes_full$err[ind_i] = eval$err
