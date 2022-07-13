@@ -1,7 +1,7 @@
 library(data.table)
 
 # load outputs from NeuroPM
-path = "NeuroPM/io"
+path = "NeuroPM/io/temp_10_fold_10batches"
 
 # set K (for KNN)
 K = 5
@@ -10,10 +10,6 @@ K = 5
 pseudotimes_full = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
 pseudotimes_full$err = NA
 pseudotimes_full$knn_dist = NA
-
-print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivity = %0.1f%%, ",
-                     "Specificity = %0.1f%%)"), 
-              intervals[opt_ind], tpr[opt_ind] * 100, (1 - fpr)[opt_ind] * 100))
 
 # load ukb raw variables
 ukb_df = data.frame(fread(file.path(path, "ukb_num_norm.csv"), header=TRUE))
