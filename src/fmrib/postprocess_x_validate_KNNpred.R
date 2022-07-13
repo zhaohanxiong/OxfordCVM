@@ -1,7 +1,7 @@
 library(data.table)
 
 # load outputs from NeuroPM
-path = "NeuroPM/io/temp_10_fold_10batches"
+path = "NeuroPM/io"
 
 # set K (for KNN)
 K = 5
@@ -10,23 +10,6 @@ K = 5
 pseudotimes_full = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
 pseudotimes_full$err = NA
 pseudotimes_full$knn_dist = NA
-
-# define pred/ground truths in a labelled structure
-y_pred = pseudotimes_full$global_pseudotimes[pseudotimes_full$bp_group != 0]
-y_true = ifelse(pseudotimes_full$bp_group[pseudotimes_full$bp_group != 0] == 1, 
-                0, 1)
-
-# compute optimal threshold interval for prediction
-intervals = seq(0, 1, by = 0.001)
-threshold_mat = sapply(intervals, function(thres) ifelse(y_pred > thres, 1, 0))
-fpr = apply(threshold_mat, 2, function(x) 
-                sum(x == 1 & y_true == 0) / 
-                  (sum(x == 1 & y_true == 0) + sum(x == 0 & y_true == 0)))
-tpr = apply(threshold_mat, 2, function(x)
-                  sum(x == 1 & y_true == 1) / 
-                    (sum(x == 1 & y_true == 1) + sum(x == 0 & y_true == 1)))
-opt_ind = which.max(1 - fpr + tpr)
-opt_thres = intervals[opt_ind]
 
 print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivity = %0.1f%%, ",
                      "Specificity = %0.1f%%)"), 
@@ -53,6 +36,23 @@ for (i in 1:n_folds) {
   pseudotimes = read.csv(file.path(path, paste0("pseudotimes_fold", i, 
                                                 ".csv")), header=TRUE)
   
+  # define pred/ground truths in a labelled structure
+  y_pred = pseudotimes$global_pseudotimes[pseudotimes$bp_group != 0]
+  y_true = ifelse(pseudotimes$bp_group[pseudotimes$bp_group != 0] == 1, 
+                  0, 1)
+
+  # compute optimal threshold interval for prediction
+  intervals = seq(0, 1, by = 0.001)
+  threshold_mat = sapply(intervals, function(thres) ifelse(y_pred > thres, 1, 0))
+  fpr = apply(threshold_mat, 2, function(x) 
+                  sum(x == 1 & y_true == 0) / 
+                    (sum(x == 1 & y_true == 0) + sum(x == 0 & y_true == 0)))
+  tpr = apply(threshold_mat, 2, function(x)
+                    sum(x == 1 & y_true == 1) / 
+                      (sum(x == 1 & y_true == 1) + sum(x == 0 & y_true == 1)))
+  opt_ind = which.max(1 - fpr + tpr)
+  opt_thres = intervals[opt_ind]
+
   # create indices for indexing
   ind_i = ind[i]:(ind[i + 1] - (i != n_folds))
   
@@ -72,8 +72,8 @@ for (i in 1:n_folds) {
                     knn_dist = 0)
   
   # perform KNN to infer disease score
-  for (j in 1:100){#nrow(pred_data)) {
-
+  for (j in 1:nrow(pred_data)) {
+    
     # compute distance with each row
     dist_j = colSums(abs(t(ref_data) - pred_data[j,]), na.rm = TRUE)
     
@@ -88,45 +88,30 @@ for (i in 1:n_folds) {
 
   # compute err
   eval$err = sqrt((eval$pred - eval$gt)**2)
-  
+
   # define prediction and ground truth
-  y_true = ifelse(eval$gt > opt_thres, 1, 0)
-  y_pred = ifelse(eval$pred > opt_thres, 1, 0)
-  
-  # create table of evaluation
-  metric = data.frame(sensitivity = rep(0, n_class),
-                      specificity = rep(0, n_class),
-                      f1 = rep(0, n_class))
-  rownames(metric) = 1:n_class - 1
+  y_true = ifelse(eval$gt[eval$group != 0] > opt_thres, 1, 0)
+  y_pred = ifelse(eval$pred[eval$group != 0] > opt_thres, 1, 0)
 
-  # compute metric for each class
-  for (j in 1:n_class) {
+  # compute true/false positive/negatives
+  tp = sum(y_true == 1 & y_pred == 1)
+  tn = sum(y_true == 0 & y_pred == 0)
+  fp = sum(y_true == 0 & y_pred == 1)
+  fn = sum(y_true == 1 & y_pred == 0)
 
-      # compute true/false positive/negatives
-      tp = sum(y_true == j & y_pred == j)
-      tn = sum(y_true != j & y_pred != j)
-      fp = sum(y_true != j & y_pred == j)
-      fn = sum(y_true == j & y_pred != j)
-
-      # compute metrics
-      metric$sensitivity[j] = tp / (tp + fn) * 100
-      metric$specificity[j] = tn / (tn + fp) * 100
-      metric$f1[j] = 2 * tp / (2 * tp + fp + fn) * 100
-
-  }
+  # compute metrics
+  sensitivity = tp / (tp + fn) * 100
+  specificity = tn / (tn + fp) * 100
+  #f1 = 2 * tp / (2 * tp + fp + fn) * 100
 
   # display summaries, also by group
   print(sprintf("------------------------------ Evaluating Fold %.0f", i))
   print(sprintf("RMSE = %0.3f (N = %.0f)", mean(eval$err), length(ind_i)))
   print(sprintf("Mean by Group:"))
   print(aggregate(eval[, c("err", "knn_dist")], list(eval$group), mean))
-
-  print(sprintf(paste0("Background (Sensitivity = %0.1f%%, Specificity = %0.1f%%) ",
-                       "Disease (Sensitivity = %0.1f%%, Specificity = %0.1f%%)"), 
-                metric$sensitivity[rownames(metric) == 1],
-                metric$specificity[rownames(metric) == 1],
-                metric$sensitivity[rownames(metric) == 2],
-                metric$specificity[rownames(metric) == 2]))
+  print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivity = %0.1f%%, ",
+                       "Specificity = %0.1f%%)"),
+                opt_thres, sensitivity, specificity))
   
   # append
   pseudotimes_full$err[ind_i] = eval$err
