@@ -74,7 +74,7 @@ for b = 1:(length(batch_ranges) - 1)
     mappedX = padarray(mappedX, [0 (max_cPCs - size(mappedX, 2))], 0, 'post');
 
     % perform filtering of the principle components in each group
-    mappedX(abs(mappedX) > std(mappedX,0,"all")*3) = 0;
+    mappedX(abs(mappedX) > std(mappedX,0,"all")*2.5) = 0;
     scale_group = [1, 7.5, 10];
     scale_factor = scale_group(classes_for_colours);
     mappedX = mappedX .* scale_factor';
