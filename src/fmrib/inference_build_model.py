@@ -4,8 +4,7 @@ import pandas as pd
 import tensorflow.compat.v1 as tf
 
 # set path
-path = "NeuroPM/io/" # "src/fmrib/NeuroPM/io/" (vscode debug)
-os.chdir(path)
+os.chdir("NeuroPM/io/")
 
 # load dataframes as model parameters
 pseudotimes = pd.read_csv("pseudotimes.csv", index_col = False)
@@ -36,7 +35,6 @@ with graph.as_default() as g:
        inference_score = tf.reduce_mean(tf.gather(pseudo, top_k_ind),
                                         name = "output")
 
-         
 # run session to test and write graph to file
 with tf.Session(graph = graph) as sess:
 

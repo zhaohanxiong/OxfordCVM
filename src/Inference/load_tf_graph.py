@@ -3,7 +3,7 @@ import pandas as pd
 import tensorflow.compat.v1 as tf
 
 # set path
-path = "IG" # "src/fmrib/NeuroPM/io/" (vscode debug)
+path = "IG"
 os.chdir(path)
 
 # disable tensorflow 2 behaviour
