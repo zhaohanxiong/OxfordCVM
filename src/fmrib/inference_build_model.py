@@ -58,7 +58,7 @@ with tf.Session(graph = graph) as sess:
               f.write(output_graph_def.SerializeToString())
 
        # run test case
-       if True:
+       if False:
               # test samples, these are assuming ukb_mat has 1082 columns (update test data if it changes)
               sample = pd.read_csv("sample_test_data/sample_disease.csv").fillna(0).to_numpy()
 
