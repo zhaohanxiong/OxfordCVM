@@ -5,7 +5,7 @@ import tensorflow.compat.v1 as tf
 
 # set path
 path = "NeuroPM/io/" # "src/fmrib/NeuroPM/io/" (vscode debug)
-os.chdir("src/fmrib/NeuroPM/io/")
+os.chdir(path)
 
 # load dataframes as model parameters
 pseudotimes = pd.read_csv("pseudotimes.csv", index_col = False)
@@ -19,7 +19,8 @@ graph = tf.Graph()
 with graph.as_default() as g:
 
        # define input placeholder
-       data_in = tf.placeholder(dtype = tf.float32, shape = (1, ukb_num.shape[1]))
+       data_in = tf.placeholder(dtype = tf.float32, shape = (1, ukb_num.shape[1]),
+                               name = "input")
 
        # define 
        ukb_mat = tf.constant(ukb_num.to_numpy(), dtype = tf.float32)
@@ -32,21 +33,16 @@ with graph.as_default() as g:
        # compute nearest neighbor
        K = 3
        top_k_ind = tf.argsort(euc_dist, direction = "ASCENDING")[0:K]
-       inference_score = tf.reduce_mean(tf.gather(pseudo, top_k_ind))
+       inference_score = tf.reduce_mean(tf.gather(pseudo, top_k_ind),
+                                        name = "output")
 
-# test samples, these are assuming ukb_mat has 1082 columns (update test data if it changes)
-sample = pd.read_csv("sample_test_data/sample_disease.csv").fillna(0).to_numpy()
-              
+         
 # run session to test and write graph to file
 with tf.Session(graph = graph) as sess:
 
        # initialize computational graph
        initialize = tf.global_variables_initializer()
        sess.run(initialize)
-
-       # test: feed data through computational graph and produce output
-       pred = sess.run(inference_score, feed_dict = {data_in: sample})
-       print(pred)
 
        # list output nodes
        output_node_names = [n.name for n in tf.get_default_graph().as_graph_def().node]
@@ -60,3 +56,12 @@ with tf.Session(graph = graph) as sess:
        # serialize and dump the output graph to output directory
        with tf.gfile.GFile("../../../Inference/IG/frozen_model.pb", "wb") as f:
               f.write(output_graph_def.SerializeToString())
+
+       # run test case
+       if True:
+              # test samples, these are assuming ukb_mat has 1082 columns (update test data if it changes)
+              sample = pd.read_csv("sample_test_data/sample_disease.csv").fillna(0).to_numpy()
+
+              # feed data into input and obtain output from session
+              pred = sess.run(inference_score, feed_dict = {data_in: sample})
+              print(pred)
