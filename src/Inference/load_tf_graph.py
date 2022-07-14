@@ -3,8 +3,7 @@ import pandas as pd
 import tensorflow.compat.v1 as tf
 
 # set path
-path = "IG"
-os.chdir(path)
+os.chdir("IG")
 
 # disable tensorflow 2 behaviour
 tf.disable_v2_behavior()
