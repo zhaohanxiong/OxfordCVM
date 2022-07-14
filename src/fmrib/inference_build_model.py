@@ -1,7 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 
 # set path
 path = "NeuroPM/io/" # "src/fmrib/NeuroPM/io/" (vscode debug)
@@ -11,15 +11,15 @@ os.chdir("src/fmrib/NeuroPM/io/")
 pseudotimes = pd.read_csv("pseudotimes.csv", index_col = False)
 ukb_num = pd.read_csv("ukb_num.csv", index_col = False).fillna(0)
 
+# disable tensorflow 2 behaviour as we are still using tf 1
+tf.disable_v2_behavior()
+
 # build tensorflow model
 graph = tf.Graph()
 with graph.as_default() as g:
 
-       # define settings for tensorflow 1 converting to 2 migration
-       tf.compat.v1.disable_eager_execution()
-
        # define input placeholder
-       data_in = tf.compat.v1.placeholder(dtype = tf.float32, shape = (1, ukb_num.shape[1]))
+       data_in = tf.placeholder(dtype = tf.float32, shape = (1, ukb_num.shape[1]))
 
        # define 
        ukb_mat = tf.constant(ukb_num.to_numpy(), dtype = tf.float32)
@@ -36,17 +36,27 @@ with graph.as_default() as g:
 
 # test samples, these are assuming ukb_mat has 1082 columns (update test data if it changes)
 sample = pd.read_csv("sample_test_data/sample_disease.csv").fillna(0).to_numpy()
-
-# run session
-with tf.compat.v1.Session(graph = graph) as sess:
+              
+# run session to test and write graph to file
+with tf.Session(graph = graph) as sess:
 
        # initialize computational graph
-       initialize = tf.compat.v1.global_variables_initializer()
+       initialize = tf.global_variables_initializer()
        sess.run(initialize)
-
-       # write computational graph to file
-       
 
        # test: feed data through computational graph and produce output
        pred = sess.run(inference_score, feed_dict = {data_in: sample})
        print(pred)
+
+       # list output nodes
+       output_node_names = [n.name for n in tf.get_default_graph().as_graph_def().node]
+
+       # freeze graph by converting all variables to constants
+       output_graph_def = tf.graph_util.convert_variables_to_constants(
+                                   sess,
+                                   tf.get_default_graph().as_graph_def(),
+                                   output_node_names)
+
+       # serialize and dump the output graph to output directory
+       with tf.gfile.GFile("../../../Inference/IG/frozen_model.pb", "wb") as f:
+              f.write(output_graph_def.SerializeToString())
