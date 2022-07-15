@@ -132,7 +132,7 @@ for i in np.where(labels["bp_group"] == 0)[0]:
 # compute spectral layout using lapacian and eigen decomp (1 minute run time)
 L = laplacian((MST_mat>0).astype(int))
 vals, vecs = np.linalg.eigh(L)
-x, y = vecs[:,0], vecs[:,2]
+x, y = vecs[:,1], vecs[:,3]
 graph_coordinates = {i: (x[i], y[i]) for i in range(MST_mat.shape[0])}
 
 # build list of edges and nodes
