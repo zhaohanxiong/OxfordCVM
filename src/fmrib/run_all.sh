@@ -27,7 +27,5 @@ python postprocess_traj.py
 # deploy output data to remote database
 python aws_deploy_data.py
 
-# build/package/deploy model inference in tensorflow
+# build/package model inference in tensorflow
 python inference_build_model.py
-cd ../Inference
-python load_tf_graph.py

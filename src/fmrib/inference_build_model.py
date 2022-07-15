@@ -63,3 +63,6 @@ with tf.Session(graph = graph) as sess:
               # feed data into input and obtain output from session
               pred = sess.run(inference_score, feed_dict = {data_in: sample})
               print(pred)
+
+# print message to indicate completion
+print("Python -- Successfully Built and Packaged Model")
