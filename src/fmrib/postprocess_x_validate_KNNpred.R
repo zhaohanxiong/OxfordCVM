@@ -1,4 +1,4 @@
-library(data.table)
+#library(data.table)
 
 # load outputs from NeuroPM
 path = "NeuroPM/io/temp_10_fold_10batches"
@@ -12,7 +12,7 @@ pseudotimes_full$err = NA
 pseudotimes_full$knn_dist = NA
 
 # load ukb raw variables
-ukb_df = data.frame(fread(file.path(path, "ukb_num_norm.csv"), header=TRUE))
+ukb_df = data.frame(read.csv(file.path(path, "ukb_num_norm.csv"), header=TRUE))
 
 # list X validation files
 X_val_files = list.files(path)

@@ -22,7 +22,7 @@ ukb_filtered_rows = get_ukb_subset_rows(df = ukb$ukb_data,
 
 # subset UKB dataframe based on row/column filters, and remove missing
 ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
-                                    cols = ukb_filtered_cols,
+                                    cols = ukb_filtered_cols, #colnames(ukb$ukb_data),
                                     rows = ukb_filtered_rows)
 
 # free up memory
@@ -48,7 +48,7 @@ print(sprintf("Cleaned Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
 
 # write raw dataframe to file so we can check pre-normalization values
-fwrite(ukb_df[, 4:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")
+write.csv(ukb_df[, 4:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv", row.names = FALSE)
 
 # get corresponding vector of labels depending on criteria background (1), 
 # target (2), between (0). The first 4 columns are now ID/label columns
@@ -95,8 +95,8 @@ print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
 
 # write to output (data & labels)
-fwrite(ukb_df[, 1:4], "NeuroPM/io/labels.csv")
-fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
+write.csv(ukb_df[, 1:4], "NeuroPM/io/labels.csv", row.names = FALSE)
+write.csv(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv", row.names = FALSE)
 
 # write to output (covariates)
 #cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
