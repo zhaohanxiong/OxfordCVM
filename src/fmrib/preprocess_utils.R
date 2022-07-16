@@ -1,6 +1,5 @@
-
 # load dependencies
-#library(data.table)
+library(data.table)
 
 load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   
@@ -10,8 +9,8 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   # tidied and returned
   
   # read data in
-  df = read.csv(path_ukb_data, header=TRUE)
-  df_vars = read.csv(path_ukb_vars, header=TRUE)
+  df = fread(path_ukb_data, header=TRUE)
+  df_vars = fread(path_ukb_vars, header=TRUE)
   
   # convert to dataframe
   df = data.frame(df)

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# activate conda environment (need conda for fmrib) for Python/R Libraries
+source activate env_conda
+
 # preprocess entire UKB data set to subset into smaller data frame
 #Rscript ukb_whole_data_subset.R
 
@@ -17,9 +20,6 @@ nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 cd ..
 Rscript postprocess_files.R
 Rscript postprocess_eval_model.R
-
-# activate anaconda environment (need conda for fmrib)
-source activate env_conda
 
 # run python trajectory visualization/computation
 python postprocess_traj.py
