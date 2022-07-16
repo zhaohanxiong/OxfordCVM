@@ -52,7 +52,7 @@ with tf.Session(graph = graph) as sess:
                                    output_node_names)
 
        # serialize and dump the output graph to output directory
-       with tf.gfile.GFile("../../../Inference/IG/frozen_model.pb", "wb") as f:
+       with tf.gfile.GFile("../../../Deploy_ML/IG/saved_model.pb", "wb") as f:
               f.write(output_graph_def.SerializeToString())
 
        # run test case
