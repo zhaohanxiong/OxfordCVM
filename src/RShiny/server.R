@@ -15,15 +15,20 @@ server = function(input, output) {
   # define plot to feed into UI
   output$pseudo_time_plot = renderPlot({
     
-    # data base to plot from (currently locally, but need to switch to remote)
+    # data base to plot from, dont need this later as remote
     df = ukb_df
 
-    # define name of variable to plot
+    # define name of x variable to plot
     x_var_name = "global_pseudotimes"
+
+    # define name of y variable to plot (query names table)
     y_var_name = varnames$colname[varnames$display == input$y_var_name]
     
     # define grouping variable
     group_name = input$groupby
+
+    # run queries on ukb_num table to obtain all variables below with "df"
+    # run queries on the pseudotimes table to obtain the disease score
 
     # calculate regression line
     if (input$lobf == "lr") {

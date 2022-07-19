@@ -1,31 +1,31 @@
 # -------------------- Application Dependencies --------------------
-#library(rjson)
-#library(aws.s3)
-#library(RPostgres)
 library(data.table)
-
 library(shiny)
 library(ggplot2)
 
 # -------------------- Connect to Data Base --------------------
 # read from AWS or locally
-local = TRUE
+local = FALSE
 
 if (!local) { # connecting to AWS
   
+  library(rjson)
+  #library(aws.s3)
+  library(RPostgres)
+
   # retrieve s3 credentials
-  aws_cred = read.csv("../../../keys/aws/s3.csv")
+  #aws_cred = read.csv("../../../keys/aws/s3.csv")
   
   # create connection to S3
-  Sys.setenv("AWS_ACCESS_KEY_ID" = aws_cred$Access.key.ID,
-             "AWS_SECRET_ACCESS_KEY" = aws_cred$Secret.access.key,
-             "AWS_DEFAULT_REGION" = "us-east-1"
-  )
+  #Sys.setenv("AWS_ACCESS_KEY_ID" = aws_cred$Access.key.ID,
+  #           "AWS_SECRET_ACCESS_KEY" = aws_cred$Secret.access.key,
+  #           "AWS_DEFAULT_REGION" = "us-east-1"
+  #)
   
   # read table from s3 using data.table and convert to dataframe
-  ukb_df = s3read_using(FUN = data.table::fread,
-                        bucket = "biobank-s3", object = "ukb_num.csv")
-  ukb_df = data.frame(ukb_df)
+  #ukb_df = s3read_using(FUN = data.table::fread,
+  #                      bucket = "biobank-s3", object = "ukb_num.csv")
+  #ukb_df = data.frame(ukb_df)
   
   # retrieve rds credentials
   aws_cred =  fromJSON(file = "../../../keys/aws/postgresql.json")
@@ -39,6 +39,7 @@ if (!local) { # connecting to AWS
   # load and store tables
   varnames = dbFetch(dbSendQuery(con, "SELECT * FROM ukb_varnames"))
   pseudotimes = dbFetch(dbSendQuery(con, "SELECT * FROM pseudotimes"))
+  ukb_df = dbFetch(dbSendQuery(con, "SELECT * FROM ukb_num"))
   
 } else { # read from local storage
   
