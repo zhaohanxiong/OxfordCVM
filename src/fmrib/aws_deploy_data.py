@@ -1,6 +1,5 @@
 import os
 import json
-import boto3
 import sqlalchemy
 import pandas as pd
 
@@ -19,10 +18,16 @@ engine = sqlalchemy.create_engine(url, echo = False)
 # load data frames to deploy
 pseudotimes = pd.read_csv("pseudotimes.csv", index_col = False)
 ukb_varnames = pd.read_csv("ukb_varnames.csv", index_col = False)
+ukb_num = pd.read_csv("ukb_num_reduced.csv", index_col = False)
 
 # deploy data frames to to AWS
 pseudotimes.to_sql(name = "psuedotimes", con = engine, if_exists = "replace")
 ukb_varnames.to_sql(name = "ukb_varnames", con = engine, if_exists = "replace")
+ukb_num.to_sql(name = "ukb_num", con = engine, if_exists = "replace")
+
+'''
+# for writing to s3 (when ukb_num was too big for RDS)
+import boto3
 
 # AWS S3 credentials
 aws_cred = pd.read_csv("../../../../../keys/aws/s3.csv")
@@ -36,6 +41,7 @@ ukb_num = pd.read_csv("ukb_num.csv", index_col = False)
 
 # deploy to AWS S3
 response = s3_client.upload_file("ukb_num.csv", "biobank-s3", "ukb_num.csv")
+'''
 
 '''
 # RDS query tool

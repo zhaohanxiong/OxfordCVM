@@ -49,7 +49,7 @@ if (!local) { # connecting to AWS
   varnames = read.csv(file.path(path, "ukb_varnames.csv"), header=TRUE)
   
   # load ukb raw variables
-  ukb_df = data.frame(fread(file.path(path, "ukb_num.csv"),header=TRUE))
+  ukb_df = data.frame(fread(file.path(path, "ukb_num_reduced.csv"),header=TRUE))
   
   # load output of cTI
   pseudotimes = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
