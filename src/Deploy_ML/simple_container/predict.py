@@ -5,7 +5,7 @@ import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 
 # We load the protobuf file andretrieve the unserialized graph_def
-with tf.gfile.GFile("IG/saved_model.pb", "rb") as f:
+with tf.gfile.GFile("saved_model.pb", "rb") as f:
        graph_def = tf.GraphDef()
        graph_def.ParseFromString(f.read())
 
@@ -19,12 +19,13 @@ with tf.Graph().as_default() as graph:
 data_in = graph.get_tensor_by_name('prefix/input:0')
 data_out = graph.get_tensor_by_name('prefix/output:0')
 
-# run test case
-if False:
-       # load test data
-       sample = pd.read_csv("sample_disease.csv").fillna(0).to_numpy()
+print("succesfully loaded packaged docker container")
 
-       # create session and make inference using our loaded parameters
-       with tf.Session(graph = graph) as sess:
-              y_out = sess.run(data_out, feed_dict = {data_in: sample})
-              print(y_out)
+# load test data
+#sample = pd.read_csv("sample_disease.csv").fillna(0).to_numpy()
+
+# create session and make inference using our loaded parameters
+#with tf.Session(graph = graph) as sess:
+       
+#       y_out = sess.run(data_out, feed_dict = {data_in: sample})
+#       print(y_out)
