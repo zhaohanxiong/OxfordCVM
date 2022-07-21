@@ -1,0 +1,12 @@
+# pull image from docker repo
+docker pull tensorflow/serving
+
+# build image
+docker build -t tensorflow/serving .
+
+# run docker image using current model to create container (file structure needs to be under /saved_models/1/)
+docker run -p 8501:8501 --mount type=bind,source=C:/Users/86155/OneDrive/Post-Doc/OxfordCVM/src/Deploy_ML/tf_serving_container/saved_models/,target=/models/cti_model -e MODEL_NAME=cti_model -t tensorflow/serving
+
+
+
+# 

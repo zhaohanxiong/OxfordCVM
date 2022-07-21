@@ -29,7 +29,10 @@ class cTI_tf_layer(tf.keras.layers.Layer):
               inference_score = tf.reduce_mean(tf.gather(self.psuedo, top_k_ind),
                                                                       name = "output")
               
-              return inference_score
+              # add dimension as outputs need to have a tensor shape
+              shaped_output = tf.expand_dims(inference_score, 0)
+              
+              return shaped_output
 
 # load dataframes as model parameters
 pseudotimes = pd.read_csv("NeuroPM/io/pseudotimes.csv", index_col = False)[
