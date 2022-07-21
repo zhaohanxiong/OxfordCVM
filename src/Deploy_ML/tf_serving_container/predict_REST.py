@@ -13,5 +13,5 @@ endpoint = "http://localhost:8501/v1/models/cti_model:predict"
 # send request using REST API
 response = requests.post(endpoint, json=json_data)
 
-# retrive preidction
-print(response.json()["predictions"][0])
+# retrieve prediction
+print(response.json()["predictions"])
