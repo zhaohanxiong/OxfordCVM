@@ -1,14 +1,9 @@
-import os
-import numpy as np
 import pandas as pd
 import tensorflow.compat.v1 as tf
 
-# set path
-os.chdir("NeuroPM/io/")
-
 # load dataframes as model parameters
-pseudotimes = pd.read_csv("pseudotimes.csv", index_col = False)
-ukb_num = pd.read_csv("ukb_num.csv", index_col = False).fillna(0)
+pseudotimes = pd.read_csv("fmrib/NeuroPM/io/pseudotimes.csv", index_col = False)
+ukb_num = pd.read_csv("fmrib/NeuroPM/io/ukb_num.csv", index_col = False).fillna(0)
 
 # disable tensorflow 2 behaviour as we are still using tf 1
 tf.disable_v2_behavior()
@@ -52,7 +47,7 @@ with tf.Session(graph = graph) as sess:
                                    output_node_names)
 
        # serialize and dump the output graph to output directory
-       with tf.gfile.GFile("../../../Deploy_ML/IG/saved_model.pb", "wb") as f:
+       with tf.gfile.GFile("saved_model.pb", "wb") as f:
               f.write(output_graph_def.SerializeToString())
 
        # run test case
@@ -63,6 +58,3 @@ with tf.Session(graph = graph) as sess:
               # feed data into input and obtain output from session
               pred = sess.run(inference_score, feed_dict = {data_in: sample})
               print(pred)
-
-# print message to indicate completion
-print("Python -- Successfully Built and Packaged Model")
