@@ -2,8 +2,8 @@ import pandas as pd
 import tensorflow.compat.v1 as tf
 
 # load dataframes as model parameters
-pseudotimes = pd.read_csv("fmrib/NeuroPM/io/pseudotimes.csv", index_col = False)
-ukb_num = pd.read_csv("fmrib/NeuroPM/io/ukb_num.csv", index_col = False).fillna(0)
+pseudotimes = pd.read_csv("../fmrib/NeuroPM/io/pseudotimes.csv", index_col = False)
+ukb_num = pd.read_csv("../fmrib/NeuroPM/io/ukb_num.csv", index_col = False).fillna(0)
 
 # disable tensorflow 2 behaviour as we are still using tf 1
 tf.disable_v2_behavior()

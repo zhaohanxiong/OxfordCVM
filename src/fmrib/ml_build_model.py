@@ -1,5 +1,3 @@
-import os
-import numpy as np
 import pandas as pd
 import tensorflow as tf
 
@@ -55,6 +53,6 @@ model = tf.keras.Sequential([k_input, k_cTI_layer])
 '''
 
 # save model
-model.save("../../../Deploy_ML/tf_serving_container/saved_models/1/")
+model.save("../Deploy_ML/tf_serving_container/saved_models/2/")
 
 print("Python -- Successfully Built and Packaged Model")

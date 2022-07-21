@@ -3,7 +3,7 @@ import requests
 import pandas as pd
 
 # load test data
-sample = pd.read_csv("../sample_disease.csv").fillna(0).to_numpy()
+sample = pd.read_csv("../fmrib/NeuroPM/io/sample_test_data/sample_disease.csv").fillna(0).to_numpy()
 
 # set request
 url = 'http://localhost:8501/v1/IG/default:predict'

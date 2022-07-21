@@ -20,7 +20,7 @@ data_in = graph.get_tensor_by_name('prefix/input:0')
 data_out = graph.get_tensor_by_name('prefix/output:0')
 
 # run test case
-sample = pd.read_csv("fmrib/NeuroPM/io/sample_test_data/sample_background.csv").fillna(0).to_numpy()
+sample = pd.read_csv("../fmrib/NeuroPM/io/sample_test_data/sample_background.csv").fillna(0).to_numpy()
 
 # create session and make inference using our loaded parameters
 with tf.Session(graph = graph) as sess:
