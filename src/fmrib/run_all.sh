@@ -28,4 +28,4 @@ python postprocess_traj.py
 python aws_deploy_data.py
 
 # build/package model inference in tensorflow
-python inference_build_model.py
+python ml_build_model.py
