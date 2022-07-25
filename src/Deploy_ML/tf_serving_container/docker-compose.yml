@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+  cti_model:
+    restart: unless-stopped
+    image: cti_model
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ".:/app"
+    command: --model_config_file=/app/model.config
+    ports:
+      - 8500:8500
+      - 8501:8501
