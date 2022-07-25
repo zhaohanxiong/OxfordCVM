@@ -47,14 +47,9 @@ k_cTI_layer = cTI_tf_layer(ukb_num, pseudotimes)(k_input)
 # create keras model from keras layer
 model = tf.keras.Model(k_input, k_cTI_layer)
 
-'''
-# alternate method of building keras graph
-k_input = tf.keras.backend.placeholder(shape = [1, ukb_num.shape[1]])
-k_cTI_layer = cTI_tf_layer(ukb_num, pseudotimes)
-model = tf.keras.Sequential([k_input, k_cTI_layer])
-'''
-
-# save model
+# save model (get two versions ready for testing multi-config)
+# must be in the format of /model/n/ for serving
+model.save("../Deploy_ML/tf_serving_container/saved_models/1/")
 model.save("../Deploy_ML/tf_serving_container/saved_models/2/")
 
 print("Python -- Successfully Built and Packaged Model")
