@@ -12,7 +12,7 @@ docker run -p8500:8500 -p8501:8501 --mount type=bind,source=C:/Users/86155/OneDr
 ```
 
 ### Running with dockerfile to build custom image which can host multiple models (expose both 8500/8501)
-### In the model.config file you can define multiple models by seperating with "," and adding new "config:" and copy/pasting previous config format
+### In the model.config file you can define multiple models by seperating with "," and adding new "config:"
 ```
 docker build -t cti_model .
 docker run -p8500:8500 -p8501:8501 cti_model
