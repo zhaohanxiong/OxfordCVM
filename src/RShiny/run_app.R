@@ -5,7 +5,7 @@ library(ggplot2)
 
 # -------------------- Connect to Data Base --------------------
 # read from AWS or locally
-local = FALSE
+local = TRUE
 
 if (!local) { # connecting to AWS
   
@@ -57,6 +57,7 @@ if (!local) { # connecting to AWS
   
 }
 
+# -------------------- Preprocess On-The-Fly --------------------
 # redefine groups for analysis: assign bp_groups as the real labels
 pseudotimes$bp_group[pseudotimes$bp_group == 0] = "Between"
 pseudotimes$bp_group[pseudotimes$bp_group == 1] = "Background"
@@ -73,6 +74,9 @@ ukb_df = cbind(pseudotimes, ukb_df)
 # set some variables as categorical
 ukb_df$X31.0.0 = factor(ifelse(ukb_df$X31.0 == 0, "Female", "Male"))
 ukb_df$trajectory = factor(ukb_df$trajectory)
+
+# only keep varnames which are in UKB dataframe
+varnames = varnames[varnames$colname %in% colnames(ukb_df), ]
 
 # -------------------- Run Shiny Application --------------------
 # set deploy option as true or false

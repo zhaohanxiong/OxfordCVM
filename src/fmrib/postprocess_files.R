@@ -56,7 +56,7 @@ var_weights = read.csv(file.path(path, "var_weighting.csv"),
                        header=TRUE, stringsAsFactor=FALSE)
 var_thresh = read.csv(file.path(path, "threshold_weighting.csv"),
                       header=TRUE, stringsAsFactor=FALSE)$Expected_contribution
-ukb_df = data.frame(fread(file.path(path, "ukb_num_norm.csv"),header=TRUE))
+ukb_df = data.frame(fread(file.path(path, "ukb_num.csv"),header=TRUE))
 
 # rename variable weightings
 var_weights$Var1 = gsub("_", ".", var_weights$Var1)
@@ -89,6 +89,7 @@ var_weights$significant_cor = var_weights$cor > sort(abs(var_weights$cor),
                               var_weights$pval < 0.0001
 
 # keep variables which are significant (by cTI) and strongly correlated
+var_weights$significant[var_weights$Var1 == "X31.0.0"] = TRUE
 var_weights = var_weights[var_weights$significant | var_weights$significant_cor, ]
 
 # retrieve original names
