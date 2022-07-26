@@ -1,7 +1,7 @@
 library(data.table)
 
 # load outputs from NeuroPM
-path = "NeuroPM/io/temp_10_fold_10batches"
+path = "NeuroPM/io"
 
 # set K (for KNN)
 K = 5
