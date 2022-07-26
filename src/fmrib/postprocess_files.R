@@ -56,7 +56,7 @@ var_weights = read.csv(file.path(path, "var_weighting.csv"),
                        header=TRUE, stringsAsFactor=FALSE)
 var_thresh = read.csv(file.path(path, "threshold_weighting.csv"),
                       header=TRUE, stringsAsFactor=FALSE)$Expected_contribution
-ukb_df = data.frame(fread(file.path(path, "ukb_num.csv"),header=TRUE))
+ukb_df = data.frame(fread(file.path(path, "ukb_num_norm.csv"),header=TRUE))
 
 # rename variable weightings
 var_weights$Var1 = gsub("_", ".", var_weights$Var1)
