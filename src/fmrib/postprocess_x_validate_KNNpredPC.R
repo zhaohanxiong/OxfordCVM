@@ -18,13 +18,7 @@ pseudotimes_full$specificity = NA
 ukb_df = data.frame(fread(file.path(path, "ukb_num_norm.csv"), header=TRUE))
 
 # load transformation matrix into PC space
-PC_mat = readMat(file.path(path, "all.mat"))
-
-j = which.max(PC_mat$gap.values)
-no_dims = 1:PC_mat$no.dims[j]
-
-ukb_df_PC = PC_mat$cPCs[, no_dims, j]
-PC_transform = PC_mat$Vmedoid[, no_dims, j]
+PC_transform = readMat(file.path(path, "PC_Transform.mat"))$Node.Weights
 
 # list X validation files
 X_val_files = list.files(path)
@@ -66,7 +60,7 @@ for (i in 1:n_folds) {
   # and reference labels and data for inference
   ref_label = pseudotimes_full$global_pseudotimes[-ind_i]
   ref_group = pseudotimes_full$bp_group[-ind_i]
-  ref_data = unname(as.matrix(ukb_df_PC[-ind_i, ]))
+  ref_data = unname(as.matrix(ukb_df[-ind_i, ])) %*% PC_transform
 
   # compute subset index of which have well defined disease scores
   max_background = max(pseudotimes$global_pseudotimes[
@@ -82,31 +76,27 @@ for (i in 1:n_folds) {
   ref_data = ref_data[new_ind_i, ]
 
   # extract data to predict
-  #pred_data = unname(as.matrix(ukb_df[ind_i, ]))
-  pred_data = unname(as.matrix(ukb_df_PC[ind_i, ]))
+  pred_data = unname(as.matrix(ukb_df[ind_i, ]))
 
   # create dataframe of ground truth and predictions for disease score
   eval = data.frame(gt = pseudotimes_full$global_pseudotimes[ind_i],
                     group = pseudotimes_full$bp_group[ind_i],
                     pred = 0,
-                    #pred_group = 0,
                     knn_dist = 0)
   
   # perform KNN to infer disease score
   for (j in 1:nrow(pred_data)) {
     
     # transform data into cPC space
-    #pred_PC = (pred_data[j,] %*% PC_transform)[1,]
-    pred_PC = pred_data[j,]
-    
+    # do this one at a time to demonstrate speed/applicability
+    pred_PC = (pred_data[j,] %*% PC_transform)[1,]
+
     # compute distance with each row
     dist_j = rowMeans(t(abs(t(ref_data) - pred_PC)), na.rm = TRUE)
     
     # compute KNN and prediction
     sorted_ind = order(dist_j)[1:K]
     eval$pred[j] = sum(ref_label[sorted_ind])/K
-    #eval$pred_group[j] = as.numeric(names(sort(table(ref_group[sorted_ind]),
-    #                                            decreasing = TRUE)[1]))
     eval$knn_dist[j] = mean(dist_j[sorted_ind])
     
   }
