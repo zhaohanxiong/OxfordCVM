@@ -23,18 +23,9 @@ if nargin < 6 || isempty(alphas)
 end
 n_alphas = length(alphas);
 
-% Transforming non-normal features into a normal shape (didn't change our results, but may be help with some data).
-%for d = 1:size(X,2)
-%    [~,lambda] = boxcox(X([indices_background; indices_target],d)-min(X(:,d))+eps);
-%    if lambda > 0,
-%        X(:,d) = ((X(:,d)-min(X(:,d))+eps).^lambda - 1)/lambda;
-%    elseif lambda == 0,
-%        X(:,d) = log(X(:,d)-min(X(:,d))+eps);
-%    end
-%end
-mean_data = mean(X); std_data = std(X);
-%X = (X - repmat(mean(X([indices_background; indices_target],:)),[size(X,1) 1]))./ ...
-%    repmat(std(X([indices_background; indices_target],:)),[size(X,1) 1]); % Standardizing data after box-cox
+% compute mean and standard deviation
+mean_data = mean(X)
+std_data = std(X);
 
 % Assigning background and target data.
 X_background = X(indices_background,:); %X(randsample(indices_background,2500),:);
@@ -111,37 +102,7 @@ for clus_i = 1:n_clusters
     % Transforming data, applying mapping on the data
     cPCs(:,:,clus_i)    = X * Vmedoid(:,:,clus_i);
     contrasted_data(:,:,clus_i) = cPCs(:,:,clus_i)*Vmedoid(:,:,clus_i)'*diag(std_data) + mean_data; % see https://stats.stackexchange.com/questions/229092/how-to-reverse-pca-and-reconstruct-original-variables-from-several-principal-com
-    
-%     figure;  hold on;
-%     if clus_i == 1
-%         unique_classes_for_colours = unique(classes_for_colours);
-%         colours2classes = [1 1 0; ... % yellow
-%             0 1 1; ... % cyan
-%             0 1 0; ... % green
-%             0 0 1; ... % blue
-%             1 0 1; ... % magenta
-%             1 0 0; ... % red
-%             0.5430 0 0]; % dark red
-%         if length(unique_classes_for_colours) > 7
-%             disp('Warning: Only 7 different classes (plus background) are considered for the colouring...');
-%             color_class = colours2classes(end,:);
-%         end
-%     end
-%     for class = 1:length(unique_classes_for_colours)
-%         ind = find(classes_for_colours == unique_classes_for_colours(class));
-%         if no_dims(clus_i) < 3
-%             plot(cPCs(ind,1,clus_i),cPCs(ind,2,clus_i),'.','color',colours2classes(class,:));
-%         else
-%             plot3(cPCs(ind,1,clus_i),cPCs(ind,2,clus_i),cPCs(ind,3,clus_i),'.','color',colours2classes(class,:));
-%         end
-%     end
-%     if no_dims(clus_i) < 3
-%         plot(cPCs(indices_background,1,clus_i),cPCs(indices_background,2,clus_i),'.','color',[0 0 0]); % Background in black.
-%     else
-%         plot3(cPCs(indices_background,1,clus_i),cPCs(indices_background,2,clus_i),cPCs(indices_background,3,clus_i),'.','color',[0 0 0]); % Background in black.
-%     end
-%     title(['cPC, alpha -> ' num2str(alphas_f(clus_i))]);
-    
+
     % Calculating intrinsic dimensionality for current alpha
     lambda = Dmedoid(:,clus_i) ./ sum(Dmedoid(:,clus_i));
     no_dims(clus_i) = 0;
@@ -158,7 +119,7 @@ for clus_i = 1:n_clusters
     gap_values(clus_i)  = max(eva.CriterionValues);
 end
 
-save('io/cPCA_interm.mat'); % save all variables to workspace to study intermediary values
+%save('io/cPCA_interm.mat'); % save all variables to workspace to study intermediary values
 
 return;
 

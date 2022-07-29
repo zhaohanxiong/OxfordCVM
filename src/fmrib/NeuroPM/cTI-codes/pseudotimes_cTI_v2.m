@@ -53,7 +53,7 @@ for b = 1:(length(batch_ranges) - 1)
     [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = cPCA(data_batch,starting_point_batch,final_subjects_batch,max_cPCs,classes_for_colours);
 
     % normalize cPC space
-    cPCs = (cPCs - mean(cPCs,"all"))/std(cPCs,0,"all")*100;
+    %cPCs = (cPCs - mean(cPCs,"all"))/std(cPCs,0,"all")*100;
     
     % store the output values
     [~,j]           = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
@@ -107,6 +107,7 @@ MST = full(Tree + Tree'); %alternate: MST = minspantree(graph(dist_matrix, "uppe
 
 %--- Shortest paths to the starting point(s) and pseudotimes
 datas = dijkstra(MST, Root_node');
+dijkstra_F = datas.F; % dijkstra father nodes for trajectory analysis
 max_distance = max(datas.A(~isinf(datas.A)));
 global_pseudotimes(in_background_target,1) = datas.A/max_distance;
 
@@ -144,10 +145,10 @@ writetable(MST_labels,'io/MST.csv', 'WriteVariableNames', true);
 
 % clear and save variables
 clear Tree dist_matrix0 dist_matrix
-dijkstra_F = datas.F;
+save('io/PC_Transform.mat','Node_Weights'); % eigen matrix to perform transformation into PCA space
 save('io/dijkstra.mat','dijkstra_F'); % dijkstra father nodes of every node for computing trajectories
 save('io/MST.mat','MST'); % save minimum spanning tree individually
-save('io/all.mat'); % save all variables to workspace to study intermediary values
+%save('io/all.mat'); % save all variables to workspace to study intermediary values
 
 return;
 
