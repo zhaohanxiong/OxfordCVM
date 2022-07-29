@@ -24,7 +24,7 @@ end
 n_alphas = length(alphas);
 
 % compute mean and standard deviation
-mean_data = mean(X)
+mean_data = mean(X);
 std_data = std(X);
 
 % Assigning background and target data.
