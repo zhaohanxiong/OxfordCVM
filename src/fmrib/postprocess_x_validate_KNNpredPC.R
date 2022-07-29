@@ -3,7 +3,7 @@ library(R.matlab)
 
 # load outputs from NeuroPM
 path = "NeuroPM/io"
-path = "C:/Users/86155/Desktop/io - 6k full run+x_val"
+
 # set K (for KNN)
 K = 1
 
