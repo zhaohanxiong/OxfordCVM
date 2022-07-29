@@ -14,6 +14,9 @@ pseudotimes_full$knn_dist = NA
 # load ukb raw variables
 ukb_df = data.frame(fread(file.path(path, "ukb_num_norm.csv"), header=TRUE))
 
+# load variable weightings
+var_weight = data.frame(fread(file.path(path, "var_weighting.csv"), header=TRUE))
+
 # list X validation files
 X_val_files = list.files(path)
 X_val_files = X_val_files[grepl("pseudotimes_fold", X_val_files)]
@@ -56,19 +59,6 @@ for (i in 1:n_folds) {
   ref_label = pseudotimes_full$global_pseudotimes[-ind_i]
   ref_group = pseudotimes_full$bp_group[-ind_i]
   ref_data = unname(as.matrix(ukb_df[-ind_i, ]))
-  
-  # compute subset index of which have well defined disease scores
-  max_background = max(pseudotimes$global_pseudotimes[
-                                              pseudotimes$bp_group == 1])
-  min_disease = min(pseudotimes$global_pseudotimes[
-                                              pseudotimes$bp_group == 2])
-  new_ind_i = (ref_label < (min_disease * 0.3) | 
-               ref_label > (max_background * 1.75)) & (ref_group != 0)
-
-  # subset rows based on new row index filter
-  ref_label = ref_label[new_ind_i]
-  ref_group = ref_group[new_ind_i]
-  ref_data = ref_data[new_ind_i, ]
 
   # extract data to predict
   pred_data = unname(as.matrix(ukb_df[ind_i, ]))
@@ -82,7 +72,7 @@ for (i in 1:n_folds) {
   
   # perform KNN to infer disease score
   for (j in 1:nrow(pred_data)) {
-
+    
     # compute distance with each row
     dist_j = colSums(abs(t(ref_data) - pred_data[j,]), na.rm = TRUE)
     
@@ -129,10 +119,12 @@ for (i in 1:n_folds) {
 }
 
 # display overall results
-print(sprintf(paste0("Overall: %.0f-Fold X-Validation Results in an ",
-                     "RMSE of %0.3f"),
-              n_folds, mean(pseudotimes_full$err)))
-print(sprintf("Mean by Group:"))
-print(aggregate(pseudotimes_full[, c("err", "knn_dist")],
-                list(pseudotimes_full$bp_group), 
-                function(x) mean(x, na.rm = TRUE)))
+if (FALSE) {
+  print(sprintf(paste0("Overall: %.0f-Fold X-Validation Results in an ",
+                      "RMSE of %0.3f"),
+                n_folds, mean(pseudotimes_full$err)))
+  print(sprintf("Mean by Group:"))
+  print(aggregate(pseudotimes_full[, c("err", "knn_dist")],
+                  list(pseudotimes_full$bp_group), 
+                  function(x) mean(x, na.rm = TRUE)))
+}
