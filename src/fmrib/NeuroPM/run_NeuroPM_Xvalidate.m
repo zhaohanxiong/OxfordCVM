@@ -43,7 +43,7 @@ for i = 1:(length(fold_ranges) - 1)
 
     % run cTI for this fold
     [~, global_pseudotimes, ~, ~, ~, ~] = ...
-        pseudotimes_cTI_v2(data_i, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
+        pseudotimes_cTI_v2_Xvalidate(data_i, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
 
     % convert outputs to dataframe and write to csv for fold i
     writetable([labels_i, table(global_pseudotimes)], strcat(['io/pseudotimes_fold' num2str(i) '.csv']));
