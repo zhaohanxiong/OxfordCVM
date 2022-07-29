@@ -71,7 +71,7 @@ for b = 1:(length(batch_ranges) - 1)
     disp(['Batch ' num2str(b) ' Alpha Selected -> ' num2str(alphas(j))]);
 
     % pad intermediary values for concatenation
-    mappedX = padarray(mappedX, [0 (max_cPCs - size(mappedX, 2))], 0, 'post');
+    %mappedX = padarray(mappedX, [0 (max_cPCs - size(mappedX, 2))], 0, 'post');
 
     % perform filtering of the principle components in each group
     %mappedX(abs(mappedX) > std(mappedX,0,"all")*2.5) = 0;
