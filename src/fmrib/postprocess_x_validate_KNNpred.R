@@ -2,9 +2,9 @@ library(data.table)
 
 # load outputs from NeuroPM
 path = "NeuroPM/io"
-
+path = "C:/Users/86155/Desktop/io - 6k full run+x_val"
 # set K (for KNN)
-K = 5
+K = 1
 
 # load pseudotime scores
 pseudotimes_full = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
@@ -15,7 +15,8 @@ pseudotimes_full$knn_dist = NA
 ukb_df = data.frame(fread(file.path(path, "ukb_num_norm.csv"), header=TRUE))
 
 # load variable weightings
-var_weight = data.frame(fread(file.path(path, "var_weighting.csv"), header=TRUE))
+var_weight = data.frame(fread(file.path(path, "var_weighting_reduced.csv"), 
+                                                                header=TRUE))
 
 # list X validation files
 X_val_files = list.files(path)
@@ -37,8 +38,7 @@ for (i in 1:n_folds) {
   
   # define pred/ground truths in a labelled structure
   y_pred = pseudotimes$global_pseudotimes[pseudotimes$bp_group != 0]
-  y_true = ifelse(pseudotimes$bp_group[pseudotimes$bp_group != 0] == 1, 
-                  0, 1)
+  y_true = ifelse(pseudotimes$bp_group[pseudotimes$bp_group != 0] == 1, 0, 1)
 
   # compute optimal threshold interval for prediction
   intervals = seq(0, 1, by = 0.001)
@@ -53,7 +53,7 @@ for (i in 1:n_folds) {
   opt_thres = intervals[opt_ind]
 
   # create indices for indexing
-  ind_i = ind[i]:(ind[i + 1] - (i != n_folds))
+  ind_i = (ind[i] + (i != 1)):ind[i + 1]
   
   # and reference labels and data for inference
   ref_label = pseudotimes_full$global_pseudotimes[-ind_i]
@@ -63,25 +63,34 @@ for (i in 1:n_folds) {
   # extract data to predict
   pred_data = unname(as.matrix(ukb_df[ind_i, ]))
 
+  # define weighting factor for each column in KNN
+  col_var_weight = sapply(colnames(ukb_df), function(c) {
+                        ci = which(c == var_weight$Var1[var_weight$significant])
+                        return(ifelse(length(ci) == 0, 0, 
+                                   var_weight$Node_contributions[ci]))
+                   })
+  col_var_weight = unname(col_var_weight)
+
   # create dataframe of ground truth and predictions for disease score
   eval = data.frame(gt = pseudotimes_full$global_pseudotimes[ind_i],
                     group = pseudotimes_full$bp_group[ind_i],
                     pred = 0,
-                    pred_group = 0,
+                    #pred_group = 0,
                     knn_dist = 0)
   
   # perform KNN to infer disease score
   for (j in 1:nrow(pred_data)) {
     
     # compute distance with each row
-    dist_j = colSums(abs(t(ref_data) - pred_data[j,]), na.rm = TRUE)
+    dist_j = rowSums(t(abs(t(ref_data) - pred_data[j,]) * col_var_weight), 
+                                                                  na.rm = TRUE)
     
     # compute KNN and prediction
     sorted_ind = order(dist_j)[1:K]
     eval$pred[j] = mean(ref_label[sorted_ind])
-    eval$pred_group[j] = as.numeric(names(sort(table(ref_group[sorted_ind]),
-                                                decreasing = TRUE)[1]))
-    eval$knn_dist[j] = mean(sort(dist_j)[1:K])
+    #eval$pred_group[j] = as.numeric(names(sort(table(ref_group[sorted_ind]),
+    #                                            decreasing = TRUE)[1]))
+    eval$knn_dist[j] = mean(dist_j[sorted_ind])
     
   }
 
