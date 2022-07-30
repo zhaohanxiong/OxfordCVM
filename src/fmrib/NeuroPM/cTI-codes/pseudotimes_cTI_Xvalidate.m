@@ -1,4 +1,4 @@
-function [global_pseudotimes] = pseudotimes_cTI_v2_Xvalidate(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
+function [global_pseudotimes] = pseudotimes_cTI_Xvalidate(data,starting_point,final_subjects,max_cPCs)
 
 %--- Reducing dimensionality
 % compute number of batches to use & define index ranges for patient sub-batches
@@ -26,7 +26,7 @@ for b = 1:(length(batch_ranges) - 1)
     N_nodes = size(data_batch, 1);
 
     % perform contrastive PCA (using background and disease as priors into PCA)
-    [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = cPCA(data_batch,starting_point_batch,final_subjects_batch,max_cPCs,classes_for_colours);
+    [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = cPCA(data_batch,starting_point_batch,final_subjects_batch,max_cPCs);
 
     % store the output values
     [~,j]           = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset

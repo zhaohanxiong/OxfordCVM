@@ -1,6 +1,3 @@
-%% add paths (not for compile version)
-%addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\");
-
 %% read data
 % loads data (main feature matrix) and labels (bp_group)
 ukb_data = readtable('io/ukb_num_norm.csv');
@@ -35,15 +32,8 @@ for i = 1:(length(fold_ranges) - 1)
     ind_background = find(bp_group_i == 1);
     ind_target = find(bp_group_i == 2);
 
-    % set colors to use for each class
-    classes_for_colours = [];
-    classes_for_colours(ind_target) = 3;
-    classes_for_colours(ind_background) = 1;
-    classes_for_colours(ind_between) = 2;
-
     % run cTI for this fold
-    [global_pseudotimes] = ...
-        pseudotimes_cTI_v2_Xvalidate(data_i, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
+    [global_pseudotimes] = pseudotimes_cTI_Xvalidate(data_i, ind_background, ind_target, 25);
 
     % convert outputs to dataframe and write to csv for fold i
     writetable([labels_i, table(global_pseudotimes)], strcat(['io/pseudotimes_fold' num2str(i) '.csv']));
