@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# run R preprocessing script, writes to NeuroPM/io directory
-Rscript preprocess.R
+# must be run after run_all.sh to obtain input/val data
 
 # navigate to directory containing source code
 cd ./NeuroPM
