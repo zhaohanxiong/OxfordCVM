@@ -3,11 +3,13 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow_serving.apis import predict_pb2, prediction_service_pb2_grpc
 
-# load data
-sample = pd.read_csv("../../fmrib/NeuroPM/io/sample_test_data/sample_background.csv").fillna(0)
+# load data (change index to change different sample)
+sample = pd.read_csv("../../fmrib/NeuroPM/io/ukb_num_norm.csv").iloc[666]
 
-# transform into input tensor for model
-input_tensor = tf.make_tensor_proto(sample.to_numpy().tolist())
+# (to do later) normalize data values according to original ukb_mat column-wise mean/sd
+
+# transform into input tensor for model (expand first index for tf input)
+input_tensor = tf.make_tensor_proto(sample.to_numpy()[None,:].tolist())
 
 # open challenge
 channel = grpc.insecure_channel('localhost:8500')

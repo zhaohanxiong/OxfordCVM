@@ -2,10 +2,12 @@ import requests
 import pandas as pd
 
 # load data
-sample = pd.read_csv("../../fmrib/NeuroPM/io/sample_test_data/sample_background.csv").fillna(0)
+sample = pd.read_csv("../../fmrib/NeuroPM/io/ukb_num_norm.csv").iloc[0]
+
+# (to do later) normalize data values according to original ukb_mat column-wise mean/sd
 
 # convert to dict list for input
-json_data = {"instances": sample.to_numpy().tolist()}
+json_data = {"instances": sample.to_numpy()[None,:].tolist()}
 
 # define endpoint
 endpoint = "http://localhost:8501/v1/models/cti_model:predict"

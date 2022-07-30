@@ -2,6 +2,7 @@ version: "3"
 
 services:
   cti_model:
+    container_name: cti-inference
     restart: unless-stopped
     image: cti_model
     build:
