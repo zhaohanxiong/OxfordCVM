@@ -1,4 +1,4 @@
-function [global_ordering,global_pseudotimes,mappedX,contrasted_data,Node_contributions,Expected_contribution] = pseudotimes_cTI_v2_Xvalidate(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
+function [global_pseudotimes] = pseudotimes_cTI_v2_Xvalidate(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
 
 %-- INPUTS:
 %     data: [Nsubjects, Nfeatures] data matrix.

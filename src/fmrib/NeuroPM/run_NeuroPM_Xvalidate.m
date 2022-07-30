@@ -42,7 +42,7 @@ for i = 1:(length(fold_ranges) - 1)
     classes_for_colours(ind_between) = 2;
 
     % run cTI for this fold
-    [~, global_pseudotimes, ~, ~, ~, ~] = ...
+    [global_pseudotimes] = ...
         pseudotimes_cTI_v2_Xvalidate(data_i, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
 
     % convert outputs to dataframe and write to csv for fold i
