@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# assume run_all.sh has already been run, and data has been preprocessed
+# must be run after run_all.sh to obtain input/val data
+
 # navigate to directory containing source code
 cd ./NeuroPM
 
