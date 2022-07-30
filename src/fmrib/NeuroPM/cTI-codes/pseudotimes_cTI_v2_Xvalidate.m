@@ -1,29 +1,5 @@
 function [global_pseudotimes] = pseudotimes_cTI_v2_Xvalidate(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
 
-%-- INPUTS:
-%     data: [Nsubjects, Nfeatures] data matrix.
-%     starting_point: indices of the background subjects.
-%     classes_for_colours(optional): [Nsubjects, 1] subjects categories/labels, if
-%         available, only for results visualization.
-%     final_subjects (optional): you may specify the indices of a target group (a subgroup of the 
-%         whole population, e.g. subjects a advanced disease pathology). By
-%     default, the algorithm takes all the subjects that don't belong to the
-%         background.
-%     method: 'cPCA', 'PCA' or 'UMAP'. Notice that the original cTI method uses
-%         cPCA by definition, PCA and UMAP should be considered only for comparison analyses.
-%     max_cPCs (optional): maximum number of principal components to consider.
-%     Default: 10.
-%
-%-- OUTPUTS:
-%     global_ordering: subjects ordering in the pseudotime line.
-%     global_pseudotimes
-%     mappedX: obtained contrasted Principal Components (cPCs).
-%     contrasted_data: reconstructed data considering only the final cPCs (of note, output 
-%         may not be in the same scale that the initial data).
-%     Node_contributions: contribution of each node to the final representation space.
-%     Expected_contribution: expected nodes contribution assuming equal weights
-%         in the final representation space (usefull as cut-off value).
-
 %--- Reducing dimensionality
 % compute number of batches to use & define index ranges for patient sub-batches
 starting_point = starting_point(:);
@@ -52,9 +28,6 @@ for b = 1:(length(batch_ranges) - 1)
     % perform contrastive PCA (using background and disease as priors into PCA)
     [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = cPCA(data_batch,starting_point_batch,final_subjects_batch,max_cPCs,classes_for_colours);
 
-    % normalize cPC space
-    %cPCs = (cPCs - mean(cPCs,"all"))/std(cPCs,0,"all")*100;
-    
     % store the output values
     [~,j]           = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
     mappedX         = cPCs(:,1:no_dims(j),j);
@@ -69,15 +42,6 @@ for b = 1:(length(batch_ranges) - 1)
     % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
     disp(['Batch ' num2str(b) ' Number of cPCs -> ' num2str(no_dims(j))]);
     disp(['Batch ' num2str(b) ' Alpha Selected -> ' num2str(alphas(j))]);
-
-    % pad intermediary values for concatenation
-    %mappedX = padarray(mappedX, [0 (max_cPCs - size(mappedX, 2))], 0, 'post');
-
-    % perform filtering of the principle components in each group
-    %mappedX(abs(mappedX) > std(mappedX,0,"all")*2.5) = 0;
-    %scale_group = [1, 7.5, 10];
-    %scale_factor = scale_group(classes_for_colours);
-    %mappedX = mappedX .* scale_factor';
 
     % append to final output
     final_cPCs = [final_cPCs; mappedX];
