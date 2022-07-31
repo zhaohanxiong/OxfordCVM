@@ -51,7 +51,7 @@ for (i in 1:n_folds) {
   tpr = apply(threshold_mat, 2, function(x)
                     sum(x == 1 & y_true == 1) / 
                       (sum(x == 1 & y_true == 1) + sum(x == 0 & y_true == 1)))
-  opt_ind = which.max(1 - fpr + tpr)
+  opt_ind = which.min(abs((1 - fpr) - tpr))
   opt_thres = intervals[opt_ind]
 
   # create indices for indexing
