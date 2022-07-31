@@ -51,6 +51,9 @@ pc_transform = scipy.io.loadmat("NeuroPM/io/PC_Transform.mat")["Node_Weights"]
 # transform data into PC space
 ukb_pc = np.matmul(ukb_num, pc_transform)
 
+# preprocess to remove rows which correspond to between group
+# preprocess to remove rows which have ambiguous disease scores (overlap region)
+
 # initialize tf model input layer
 k_input = tf.keras.Input(shape = (ukb_num.shape[1]), name = "cTI_input")
 
