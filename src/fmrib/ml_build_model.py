@@ -41,8 +41,10 @@ class cTI_tf_layer(tf.keras.layers.Layer):
               return shaped_output
 
 # load disease scores as reference groups for neighrest neighbor
-pseudotimes = pd.read_csv("NeuroPM/io/pseudotimes.csv", index_col = False)[
-                                                        "global_pseudotimes"].to_numpy()
+pseudotimes = pd.read_csv("NeuroPM/io/pseudotimes.csv", index_col = False)
+
+# extract disease scores
+reference_scores = pseudotimes["global_pseudotimes"].to_numpy()
 
 # load features and transformation matrix into principle component space
 ukb_num = pd.read_csv("NeuroPM/io/ukb_num_norm.csv", index_col = False).fillna(0).to_numpy()
@@ -53,12 +55,23 @@ ukb_pc = np.matmul(ukb_num, pc_transform)
 
 # preprocess to remove rows which correspond to between group
 # preprocess to remove rows which have ambiguous disease scores (overlap region)
+bp_groups = pseudotimes["bp_group"].to_numpy()
+filter_min_disease = reference_scores < np.min(reference_scores[bp_groups == 2])
+filter_max_background = reference_scores > np.max(reference_scores[bp_groups == 0]) * 0.5
+filter_between = bp_groups != 1
+
+# construct boolean vector to remove ambiguous rows
+row_remove = np.logical_and(np.logical_or(filter_min_disease, filter_max_background), filter_between)
+
+# filter inputs based on the filter contructed above
+reference_scores = reference_scores[row_remove]
+ukb_pc = ukb_pc[row_remove, :]
 
 # initialize tf model input layer
 k_input = tf.keras.Input(shape = (ukb_num.shape[1]), name = "cTI_input")
 
 # initialize cTI inference with keras layer
-k_cTI_layer = cTI_tf_layer(pseudotimes, ukb_pc, pc_transform)(k_input)
+k_cTI_layer = cTI_tf_layer(reference_scores, ukb_pc, pc_transform)(k_input)
 
 # create keras model from keras layer
 model = tf.keras.Model(k_input, k_cTI_layer)
