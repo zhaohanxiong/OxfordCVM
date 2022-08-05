@@ -62,7 +62,7 @@ for i in range(len(trajectories)):
 
 # using the similarities, collate lists of indices of paths which are similar
 trajectory_groups = [] # list of indices of trajectory which are highly similar
-overlap_threshold = 0.1 # threshold to determine unique trajectories
+overlap_threshold = 0.1 # threshold to determine unique trajectories, smaller = less trajectories
 for i in range(overlap.shape[0]):
     
     # check which paths have enough overlap to be considered the same
