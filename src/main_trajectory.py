@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from scipy.sparse.csgraph import laplacian
 
 # source path & set the current working directory
-path = "fmrib/NeuroPM/io/"
+path = "NeuroPM/io/"
 os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
@@ -62,10 +62,11 @@ for i in range(len(trajectories)):
 
 # using the similarities, collate lists of indices of paths which are similar
 trajectory_groups = [] # list of indices of trajectory which are highly similar
+overlap_threshold = 0.1 # threshold to determine unique trajectories
 for i in range(overlap.shape[0]):
     
     # check which paths have enough overlap to be considered the same
-    ij = np.where(overlap[i,:] >= 0.5)[0]
+    ij = np.where(overlap[i,:] >= overlap_threshold)[0]
     set_i = set().union(set([i]),set(ij))
 
     # check current list of trajectories groups to see if these can be added to existing groups
@@ -114,6 +115,10 @@ for i, traj in enumerate(trajectory_groups):
 for i in range(MST_label.shape[0]):
     MST_label.at[i, "trajectory"] = ','.join(str(x) for x in traj_list[i])
 
+# assign the root node as trajectory "0"
+MST_label.loc[np.where(MST_label["pseudotime"] == 0)[0][0], "trajectory"] = 0
+MST_label.loc[np.where(MST_label["pseudotime"] == 0)[0][0], "n_trajectory"] = 0
+
 # map this back to the label file
 labels["trajectory"] = ""
 labels["n_trajectory"] = 0
@@ -132,7 +137,7 @@ for i in np.where(labels["bp_group"] == 0)[0]:
 # compute spectral layout using lapacian and eigen decomp (1 minute run time)
 L = laplacian((MST_mat>0).astype(int))
 vals, vecs = np.linalg.eigh(L)
-x, y = vecs[:,0], vecs[:,2]
+x, y = vecs[:,1], vecs[:,3]
 graph_coordinates = {i: (x[i], y[i]) for i in range(MST_mat.shape[0])}
 
 # build list of edges and nodes
@@ -160,7 +165,8 @@ node_trace = go.Scattergl(x=node_x, y=node_y,
                                       size=15,opacity=0.75,
                                       colorbar=dict(thickness=15,title='Disease Score',
                                                     xanchor='left',titleside='right'),
-                                      color=[],colorscale='YlOrRd',
+                                      color=[],
+                                      #colorscale='Spectral', # use default color scale
                                       line=dict(width=2.5,color='black'))
                          )
 
@@ -168,8 +174,17 @@ node_trace = go.Scattergl(x=node_x, y=node_y,
 score_col = np.copy(MST_label["pseudotime"].to_numpy())
 score_col[MST_label["bp_group"]==2] *= 3
 score_col[score_col>1] = 1
-# color by traj: np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) for i in range(MST_label.shape[0])])
-node_trace.marker.color = score_col
+
+# compute discrete colors for coloring by trajectory
+traj_group = np.array([int(str(MST_label.at[i, "trajectory"]).split(",")[0]) 
+                                            for i in range(MST_label.shape[0])])
+traj_col = np.array(plotly.colors.qualitative.Light24)[traj_group]
+
+# compute discrete colors for coloring by disease group
+group_col = MST_label["bp_group"].to_numpy()
+
+# assign color to points (choose which you want above)
+node_trace.marker.color = traj_col
 
 # highlight most healthy and most diseased nodes
 node_trace_b = go.Scatter(x=[node_x[root_node]], y=[node_y[root_node]],
@@ -177,7 +192,7 @@ node_trace_b = go.Scatter(x=[node_x[root_node]], y=[node_y[root_node]],
                           marker_size=30,marker_line_width=2,marker_color="Green",
                           hovertemplate="Root Node (Least Diseased Node)"
                           )
-                    
+
 # produce the overall plot
 fig = go.Figure(data=[edge_trace, node_trace, node_trace_b],
                 layout=go.Layout(
