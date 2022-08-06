@@ -5,7 +5,7 @@ import tensorflow as tf
 def test_cti_model():
 
     # load model
-    cTI_model = tf.keras.models.load_model("tf_serving_container/saved_models/1/")
+    cTI_model = tf.keras.models.load_model("tf_serving_container/saved_models/2/")
 
     # Arrange
     # load test data
@@ -18,11 +18,11 @@ def test_cti_model():
     # Action
     # make inference for each row
     pred = []
-    for i in range(200,500):#range(test_sample.shape[0]):
+    for i in range(1000,1200):#range(test_sample.shape[0]):
         pred.append(cTI_model.predict(test_sample[None, i, :])[0])
 
     gt, pred = test_label["global_pseudotimes"].to_numpy(), np.array(pred)
-    gt = gt[200:500]
+    gt = gt[1000:1200]
 
     # compute accuracy
     rmse = np.mean(np.sqrt((gt - pred)**2))
