@@ -56,8 +56,8 @@ ukb_pc = np.matmul(ukb_num, pc_transform)
 # preprocess to remove rows which correspond to between group
 # preprocess to remove rows which have ambiguous disease scores (overlap region)
 bp_groups = pseudotimes["bp_group"].to_numpy()
-filter_min_disease = reference_scores < np.min(reference_scores[bp_groups == 2])
-filter_max_background = reference_scores > np.max(reference_scores[bp_groups == 0]) * 0.5
+filter_min_disease = reference_scores < np.min(reference_scores[bp_groups == 2]) # * 0.5
+filter_max_background = reference_scores > np.max(reference_scores[bp_groups == 0]) # * 0.5
 filter_between = bp_groups != 1
 
 # construct boolean vector to remove ambiguous rows
@@ -78,6 +78,6 @@ model = tf.keras.Model(k_input, k_cTI_layer)
 
 # save model (get two versions ready for testing multi-config)
 # must be in the format of /model/n/ for serving
-model.save("../Deploy_ML/tf_serving_container/saved_models/1/")
+model.save("../Deploy_ML/tf_serving_container/saved_models/2/")
 
 print("Python -- Successfully Built and Packaged Model")
