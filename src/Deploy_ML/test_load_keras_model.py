@@ -10,11 +10,12 @@ def test_cti_model():
     # Arrange
     # load test data
     #test_sample1 = pd.read_csv("../fmrib/NeuroPM/io/ukb_num_norm.csv").iloc[0].fillna(0).to_numpy()
-    test_sample = pd.read_csv("../fmrib/NeuroPM/io/ukb_num_norm.csv").fillna(0).to_numpy()
-    #test_sample = pd.read_csv("../fmrib/NeuroPM/io/all_ukb_num_norm.csv").fillna(0).to_numpy()
+    #test_sample = pd.read_csv("../fmrib/NeuroPM/io/ukb_num_norm.csv").fillna(0).to_numpy()
+    test_sample = pd.read_csv("../fmrib/NeuroPM/io/all_ukb_num_norm.csv").fillna(0).to_numpy()
 
     # load labels
     test_label = pd.read_csv("../fmrib/NeuroPM/io/pseudotimes.csv")
+    #test_label = pd.read_csv("../fmrib/NeuroPM/io/all_pseudotimes.csv")
 
     # Action
     # make inference for each row
@@ -31,10 +32,10 @@ def test_cti_model():
     # Assert
     assert rmse < 0.02
 
-    return(pred)
+    # write to output
+    pd.DataFrame({"score": pred,
+                  "bp_group": test_label["bp_group"]}).to_csv(
+                                                "cTI_inference_all_data.csv", index = False)
 
 # make prediction
-out = test_cti_model()
-
-# write to output
-pd.DataFrame({"score": out}).to_csv("cTI_inference_all_data.csv", index = False)
+test_cti_model()
