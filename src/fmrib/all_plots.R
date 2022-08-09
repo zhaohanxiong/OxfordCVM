@@ -88,10 +88,20 @@ grid.arrange(p1, p2, ncol = 2)
 dev.off()
 
 # ------------------------------------------------------------------------------
-# 
+# Plot3 - Individual Trajectory Scores
 # ------------------------------------------------------------------------------
-#  
+psuedotimes$trajectory = as.factor(as.numeric(sapply(strsplit(psuedotimes$trajectory, ","), 
+                                                    function(x) x[1])))
+major_traj = names(which(table(psuedotimes$trajectory) > nrow(psuedotimes) * 0.01))
+psuedotimes$trajectory[!(psuedotimes$trajectory %in% major_traj)] = NA
 
+ggplot(psuedotimes, aes(y = global_pseudotimes, x = as.factor(trajectory), 
+                        fill = as.factor(trajectory))) +
+          geom_boxplot(alpha = 0.8) +
+          ggtitle("Disease Score in Each Trajectory") + 
+          ylab("Disease Score") + 
+          xlab("Trajectory")
+  
 # ------------------------------------------------------------------------------
 # 
 # ------------------------------------------------------------------------------
