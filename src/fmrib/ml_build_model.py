@@ -58,7 +58,7 @@ ukb_pc = np.matmul(ukb_num, pc_transform)
 bp_groups = pseudotimes["bp_group"].to_numpy()
 filter_min_disease = reference_scores < np.min(reference_scores[bp_groups == 2]) # * 0.5
 filter_max_background = reference_scores > np.max(reference_scores[bp_groups == 1]) * 0.5
-filter_between = bp_groups != 1
+filter_between = bp_groups != 0
 
 # construct boolean vector to remove ambiguous rows
 row_remove = np.logical_and(np.logical_or(filter_min_disease, filter_max_background), filter_between)
