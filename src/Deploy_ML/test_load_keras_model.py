@@ -33,9 +33,9 @@ def test_cti_model():
     assert rmse < 0.02
 
     # write to output
-    pd.DataFrame({"score": pred,
-                  "bp_group": test_label["bp_group"]}).to_csv(
-                                                "cTI_inference_all_data.csv", index = False)
+    #pd.DataFrame({"score": pred,
+    #              "bp_group": test_label["bp_group"]}).to_csv(
+    #                                            "cTI_inference_all_data.csv", index = False)
 
 # make prediction
 test_cti_model()
