@@ -88,7 +88,7 @@ grid.arrange(p1, p2, ncol = 2)
 dev.off()
 
 # ------------------------------------------------------------------------------
-# Plot3 - Individual Trajectory Scores
+# Plot 3 - Individual Trajectory Scores
 # ------------------------------------------------------------------------------
 psuedotimes$trajectory = as.factor(as.numeric(sapply(strsplit(psuedotimes$trajectory, ","), 
                                                     function(x) x[1])))

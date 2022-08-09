@@ -10,7 +10,7 @@ def test_cti_model():
     # Arrange
     # load test data
     #test_sample1 = pd.read_csv("../fmrib/NeuroPM/io/ukb_num_norm.csv").iloc[0].fillna(0).to_numpy()
-    test_sample = pd.read_csv("../fmrib/NeuroPM/io/ukb_num_norm.csv").fillna(0).to_numpy()
+    test_sample = pd.read_csv("../fmrib/NeuroPM/io/all_ukb_num_norm.csv").fillna(0).to_numpy()
 
     # load labels
     test_label = pd.read_csv("../fmrib/NeuroPM/io/pseudotimes.csv")
@@ -18,17 +18,23 @@ def test_cti_model():
     # Action
     # make inference for each row
     pred = []
-    for i in range(1000,1200):#range(test_sample.shape[0]):
+    for i in range(test_sample.shape[0]):
+        print(i)
         pred.append(cTI_model.predict(test_sample[None, i, :])[0])
 
     gt, pred = test_label["global_pseudotimes"].to_numpy(), np.array(pred)
-    gt = gt[1000:1200]
 
     # compute accuracy
-    rmse = np.mean(np.sqrt((gt - pred)**2))
+    #rmse = np.mean(np.sqrt((gt - pred)**2))
 
     # Assert
-    assert rmse < 0.1
-    assert rmse < 0.05
+    #assert rmse < 0.1
+    #assert rmse < 0.05
 
-test_cti_model()
+    return(pred)
+
+# make prediction
+out = test_cti_model()
+
+# write to output
+pd.DataFrame({"score": out}).to_csv("cTI_inference_all_data.csv", index = False)

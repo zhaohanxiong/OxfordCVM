@@ -57,7 +57,7 @@ ukb_pc = np.matmul(ukb_num, pc_transform)
 # preprocess to remove rows which have ambiguous disease scores (overlap region)
 bp_groups = pseudotimes["bp_group"].to_numpy()
 filter_min_disease = reference_scores < np.min(reference_scores[bp_groups == 2]) # * 0.5
-filter_max_background = reference_scores > np.max(reference_scores[bp_groups == 0]) # * 0.5
+filter_max_background = reference_scores > np.max(reference_scores[bp_groups == 1]) * 0.5
 filter_between = bp_groups != 1
 
 # construct boolean vector to remove ambiguous rows
