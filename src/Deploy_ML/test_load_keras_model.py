@@ -29,8 +29,7 @@ def test_cti_model():
     rmse = np.mean(np.sqrt((gt - pred)**2))
 
     # Assert
-    assert rmse < 0.1
-    assert rmse < 0.05
+    assert rmse < 0.02
 
     return(pred)
 
