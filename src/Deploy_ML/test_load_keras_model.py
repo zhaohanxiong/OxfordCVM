@@ -10,8 +10,8 @@ def test_cti_model():
     # Arrange
     # load test data
     #test_sample1 = pd.read_csv("../fmrib/NeuroPM/io/ukb_num_norm.csv").iloc[0].fillna(0).to_numpy()
-    #test_sample = pd.read_csv("../fmrib/NeuroPM/io/ukb_num_norm.csv").fillna(0).to_numpy()
-    test_sample = pd.read_csv("../fmrib/NeuroPM/io/all_ukb_num_norm.csv").fillna(0).to_numpy()
+    test_sample = pd.read_csv("../fmrib/NeuroPM/io/ukb_num_norm.csv").fillna(0).to_numpy()
+    #test_sample = pd.read_csv("../fmrib/NeuroPM/io/all_ukb_num_norm.csv").fillna(0).to_numpy()
 
     # load labels
     test_label = pd.read_csv("../fmrib/NeuroPM/io/pseudotimes.csv")
