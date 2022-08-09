@@ -66,8 +66,10 @@ pseudotimes$bp_group = ordered(pseudotimes$bp_group,
                                levels = c("Background", "Between", "Disease"))
 
 # get first trajectory for nodes in multiple traj (~10 only)
-psuedotimes$trajectory = as.numeric(sapply(strsplit(psuedotimes$trajectory, ","), 
+pseudotimes$trajectory = as.numeric(sapply(strsplit(pseudotimes$trajectory, ","), 
                                                                  function(x) x[1]))
+major_traj = names(which(table(pseudotimes$trajectory) > nrow(pseudotimes) * 0.01))
+pseudotimes$trajectory[!(pseudotimes$trajectory %in% major_traj)] = NA
 
 # combine data frames together
 ukb_df = cbind(pseudotimes, ukb_df)
