@@ -9,6 +9,7 @@ from scipy.sparse.csgraph import laplacian
 
 # source path & set the current working directory
 path = "NeuroPM/io/"
+path = "src/fmrib/NeuroPM/io/"
 os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
@@ -91,9 +92,12 @@ for i in range(overlap.shape[0]):
     if len(list_similar) == 0:
         trajectory_groups.append(set_i)
 
+# given unique set of trajectories
+
+
 # create sets of unique merged trajectory paths using the indices derived above
 traj_list = [[] for _ in range(MST_label.shape[0])]
-MST_label["trajectory"] = ""
+MST_label["trajectory"] = -1
 MST_label["n_trajectory"] = 0
 
 for i, traj in enumerate(trajectory_groups):
@@ -113,9 +117,10 @@ for i, traj in enumerate(trajectory_groups):
 # add the trajectory to the MST label as list for each element
 for i in range(MST_label.shape[0]):
     MST_label.at[i, "trajectory"] = ','.join(str(x) for x in traj_list[i])
+    #MST_label.at[i, "trajectory"] = traj_list[i][0]
 
 # map this back to the label file
-labels["trajectory"] = ""
+labels["trajectory"] = -1
 labels["n_trajectory"] = 0
 labels.loc[MST_ind, "trajectory"] = MST_label["trajectory"].to_numpy()
 labels.loc[MST_ind, "n_trajectory"] = MST_label["n_trajectory"].to_numpy()
@@ -174,7 +179,11 @@ if False:
     #score_col = MST_label["bp_group"].to_numpy()
 
     # assign discrete color
-    score_col = np.array(plotly.colors.qualitative.Light24)[score_col] # Alphabet Dark24 Light24
+    plotly_cols = array(['#FD3216', '#00FE35', '#6A76FC', '#FED4C4', '#FE00CE', '#0DF9FF',
+                         '#F6F926', '#FF9616', '#479B55', '#EEA6FB', '#DC587D', '#D626FF',
+                         '#6E899C', '#00B5F7', '#B68E00', '#C9FBE5', '#FF0092', '#22FFA7',
+                         '#E3EE9E', '#86CE00', '#BC7196', '#7E7DCD', '#FC6955', '#E48F72'])
+    score_col = np.array(plotly_cols)[score_col] # Alphabet Dark24 Light24
 
 # define node plots using GPU rendering
 node_trace = go.Scattergl(x=node_x, y=node_y,
