@@ -9,7 +9,6 @@ from scipy.sparse.csgraph import laplacian
 
 # source path & set the current working directory
 path = "NeuroPM/io/"
-path = "src/fmrib/NeuroPM/io/"
 os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
