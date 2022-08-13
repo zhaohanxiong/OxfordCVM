@@ -117,6 +117,39 @@ temp_dist = dist_matrix0(out_background_target, in_background_target);
 global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_target(j), 1);
 [~, global_ordering] = sort(global_pseudotimes);
 
+% filter out large scores which are outliers, then re-build tree
+filter_scores = true;
+if filter_scores
+    
+    % define threshold for scores which are too high (90% quantile for disease scores
+    score_outliers = quantile(global_pseudotimes(classes_for_colours == 3), 0.9);
+    
+    % re-assign principle component values to filter out large scores
+    filtered_final_cPCs = final_cPCs;
+    filtered_final_cPCs(global_pseudotimes > score_outliers, :) = 0;
+    
+    % re-compute pseudotime score
+    dist_matrix = double(L2_distance(filtered_final_cPCs', filtered_final_cPCs'));
+    [~,j] = min(sum(dist_matrix(starting_point, starting_point),2));
+    Root_node = j;
+    in_background_target = [starting_point(:); final_subjects(:)];
+    dist_matrix0 = dist_matrix;   
+    out_background_target = setdiff(1:N_patients, in_background_target)';
+    dist_matrix = dist_matrix(in_background_target, in_background_target);
+    Tree = graphminspantree(sparse(dist_matrix), Root_node);
+    Tree(Tree > 0) = dist_matrix(Tree > 0);
+    MST = full(Tree + Tree');
+    datas = dijkstra(MST, Root_node');
+    dijkstra_F = datas.F;
+    max_distance = max(datas.A(~isinf(datas.A)));
+    global_pseudotimes(in_background_target,1) = datas.A/max_distance;
+    temp_dist = dist_matrix0(out_background_target, in_background_target);
+    [~, j] = min(temp_dist,[],2);
+    global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_target(j), 1);
+    [~, global_ordering] = sort(global_pseudotimes);
+
+end
+
 % convert MST from adjacency matrix into graph object
 MST_graph = graph(MST);
 
