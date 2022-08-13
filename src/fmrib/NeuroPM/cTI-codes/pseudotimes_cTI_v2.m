@@ -118,7 +118,7 @@ global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_
 [~, global_ordering] = sort(global_pseudotimes);
 
 % filter out large scores which are outliers, then re-build tree
-filter_scores = true;
+filter_scores = false;
 if filter_scores
     
     % define threshold for scores which are too high (90% quantile for disease scores
