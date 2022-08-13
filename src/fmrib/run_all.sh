@@ -29,3 +29,7 @@ python aws_deploy_data.py
 
 # build/package model inference for tf-serving
 python ml_build_model.py
+
+# run test case to test model accuracy
+cd ../Deploy_ML
+pytest

@@ -24,8 +24,8 @@ source /home/fs0/winokl/zxiong/env/bin/activate
 
 ##### Copying Data Files to/from Server to/from Local Windows (Example)
 ```
-pscp temp.txt winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong
-pscp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/fmrib/NeuroPM/io .
+scp temp.txt winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong
+scp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/fmrib/NeuroPM/io .
 ```
 
 ##### FMRIB Cluster Run Commands
