@@ -24,7 +24,7 @@ docker-compose build
 docker-compose up
 ```
 
-##### AWS configure ECR (access keys = IAM.csv, account ID = 956279893231)
+##### AWS configure ECR with CLI (access keys = IAM.csv, account ID = 956279893231)
 ```
 aws configure
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 956279893231.dkr.ecr.us-east-1.amazonaws.com
