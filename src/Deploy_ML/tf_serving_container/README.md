@@ -23,3 +23,10 @@ docker run -p8500:8500 -p8501:8501 cti_model
 docker-compose build
 docker-compose up
 ```
+
+##### Push image to AWS ECR
+```
+docker tag cti_model public.ecr.aws/v4u9u1t8/cti_pred
+docker push public.ecr.aws/v4u9u1t8/cti_pred
+
+```
