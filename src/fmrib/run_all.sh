@@ -24,9 +24,6 @@ Rscript postprocess_eval_model.R
 # run python trajectory visualization/computation
 python postprocess_traj.py
 
-# deploy output data to remote database for R-Shiny App
-#python aws_deploy_data.py
-
 # build/package model inference for tf-serving
 python ml_build_model.py
 
