@@ -9,10 +9,15 @@ K = 1
 
 # load pseudotime scores
 pseudotimes_full = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
+pseudotimes_full$pred_score = NA
 pseudotimes_full$err = NA
 pseudotimes_full$knn_dist = NA
 pseudotimes_full$sensitivity = NA
 pseudotimes_full$specificity = NA
+
+# make groups categorical
+pseudotimes_full$bp_group = ordered(pseudotimes_full$bp_group,
+                                    levels = c(1, 0, 2))
 
 # load ukb raw variables
 ukb_df = data.frame(fread(file.path(path, "ukb_num_norm.csv"), header=TRUE))
@@ -127,6 +132,7 @@ for (i in 1:n_folds) {
                 opt_thres, sensitivity, specificity, f1))
   
   # append
+  pseudotimes_full$pred_score[ind_i] = eval$pred
   pseudotimes_full$err[ind_i] = eval$err
   pseudotimes_full$knn_dist[ind_i] = eval$knn_dist
   pseudotimes_full$sensitivity[ind_i] = sensitivity
@@ -145,3 +151,21 @@ print(sprintf("Mean by Group:"))
 print(aggregate(pseudotimes_full[, c("err", "knn_dist")],
                 list(pseudotimes_full$bp_group), 
                 function(x) mean(x, na.rm = TRUE)))
+
+# plot side by side ground truth vs predictions
+if (FALSE) {
+  
+  # create subplots
+  par(mfrow = c(1, 2))
+  boxplot(pseudotimes_full$global_pseudotimes ~ pseudotimes_full$bp_group,
+          main = "cTI Modelled Scores",
+          xlab = "Blood Pressure Group", ylab = "Disease Score",
+          col = c("tomato", "lawngreen", "deepskyblue"),
+          ylim = c(0, 1))
+  boxplot(pseudotimes_full$pred_score ~ pseudotimes_full$bp_group,
+          main = "Predicted Score Over 10-fold Cross-Validation", 
+          xlab = "Blood Pressure Group", ylab = "Disease Score",
+          col = c("tomato", "lawngreen", "deepskyblue"),
+          ylim = c(0, 1))
+  
+}
