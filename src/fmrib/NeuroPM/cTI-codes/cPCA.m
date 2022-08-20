@@ -19,7 +19,7 @@ if ~exist('classes_for_colours') || isempty(classes_for_colours)
     classes_for_colours = ones(size(X,1),1);
 end
 if nargin < 6 || isempty(alphas)
-    alphas = logspace(-2,2,100); %alphas = alphas(alphas > 25); alphas = alphas(alphas < 75);
+    alphas = logspace(-2,2,100); alphas = alphas(alphas > 25); alphas = alphas(alphas < 75);
 end
 n_alphas = length(alphas);
 
@@ -40,7 +40,8 @@ for alpha_i = 1:n_alphas
 
     if alpha_i == 1,
         beta = regress(Ct(:),Cb(:));
-        C = Ct - beta*Cb; alphas(alpha_i) = beta;
+        C = Ct - beta*Cb;
+        alphas(alpha_i) = beta;
     else
         C = (Ct - alphas(alpha_i)*Cb);
     end
