@@ -19,7 +19,7 @@ if ~exist('classes_for_colours') || isempty(classes_for_colours)
     classes_for_colours = ones(size(X,1),1);
 end
 if nargin < 6 || isempty(alphas)
-    alphas = logspace(-2,2,100);
+    alphas = logspace(-2,2,100); %alphas = alphas(alphas > 25); alphas = alphas(alphas < 75);
 end
 n_alphas = length(alphas);
 
@@ -37,17 +37,21 @@ Ct = cov(X_target);
 
 % cPCA with multiple alphas:
 for alpha_i = 1:n_alphas
+
     if alpha_i == 1,
         beta = regress(Ct(:),Cb(:));
         C = Ct - beta*Cb; alphas(alpha_i) = beta;
     else
         C = (Ct - alphas(alpha_i)*Cb);
     end
+
     C(isnan(C)) = 0;
     C(isinf(C)) = 0;
     rng('default');  % For reproducibility
+
     % eigenmodes decomposition
     [V_i,D_i] = eig(C);
+
     % sort eigenvalues in descending order
     [D_i, ind] = sort(diag(D_i), 'descend');
     %ind = ind(~ismember(ind, find(max(abs(V_i),[],1) >= 0.3)'));
@@ -55,16 +59,19 @@ for alpha_i = 1:n_alphas
     %V_sort(abs(V_sort) > std(V_sort,0,"all")*3) = 0;
     V(:,:,alpha_i) = V_sort;
     D(:,alpha_i)   = D_i(1:min([d_max length(ind)])); clear V_i D_i ind
+
     % calculating intrinsic dimensionality for current alpha
     D(:,alpha_i) = D(:,alpha_i) - min(D(:,alpha_i));
     lambda = D(:,alpha_i)/sum(D(:,alpha_i));
     no_dims_alpha(alpha_i) = 0;
     ind = find(lambda > 0.025);
+
     if length(ind) > d_max
         no_dims_alpha(alpha_i) = d_max;
     else
         no_dims_alpha(alpha_i) = max([2 length(ind)]);
     end
+    
 end
 
 % Affinity_matrix
