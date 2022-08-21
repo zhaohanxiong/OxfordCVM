@@ -2,7 +2,7 @@ library(ggplot2)
 library(gridExtra)
 
 # load outputs from NeuroPM
-path = "NeuroPM/io/"
+path = "fmrib/NeuroPM/io/"
 
 # load data
 psuedotimes = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)

@@ -28,5 +28,4 @@ python postprocess_traj.py
 python ml_build_model.py
 
 # run test case to test model accuracy
-cd ../Deploy_ML
 pytest
