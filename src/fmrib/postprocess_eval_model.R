@@ -74,12 +74,18 @@ y_true = ifelse(psuedotimes$bp_group[psuedotimes$bp_group != "Between"] == "Back
 # compute FPR (false positive rate) and TPR (true positive rate) for different thresholds
 intervals = seq(0, 1, by = 0.001)
 threshold_mat = sapply(intervals, function(thres) ifelse(y_pred > thres, 1, 0))
-fpr = apply(threshold_mat, 2, function(x) 
-                sum(x == 1 & y_true == 0) / 
-                  (sum(x == 1 & y_true == 0) + sum(x == 0 & y_true == 0)))
 tpr = apply(threshold_mat, 2, function(x)
-                  sum(x == 1 & y_true == 1) / 
+                sum(x == 1 & y_true == 1) /
                     (sum(x == 1 & y_true == 1) + sum(x == 0 & y_true == 1)))
+tnr = apply(threshold_mat, 2, function(x)
+                sum(x == 0 & y_true == 0) /
+                    (sum(x == 0 & y_true == 0) + sum(x == 1 & y_true == 0)))
+fnr = apply(threshold_mat, 2, function(x)
+                sum(x == 0 & y_true == 1) /
+                    (sum(x == 0 & y_true == 1) + sum(x == 1 & y_true == 1)))
+fpr = apply(threshold_mat, 2, function(x)
+                sum(x == 1 & y_true == 0) /
+                    (sum(x == 1 & y_true == 0) + sum(x == 0 & y_true == 0)))
 
 # compute AUC (using sum of trapeziums)
 auc = sum((tpr[1:(length(intervals) - 1)] + tpr[2:length(intervals)]) * diff(1 - fpr) / 2)
@@ -120,3 +126,9 @@ ind = which.min(abs((1 - fpr) - tpr))
 print(sprintf(paste0("Optimal Threshold at %0.3f (Sensitivity = %0.1f%%, ",
                      "Specificity = %0.1f%%)"), 
               intervals[ind], tpr[ind] * 100, (1 - fpr)[ind] * 100))
+
+# print confusion matrix
+print(sprintf("Confusion Matrix:"))
+print(sprintf("(Pred/GT) True  False"))
+print(sprintf("True      %0.1f%% %0.1f%%", tpr[ind]*100, fpr[ind]*100))
+print(sprintf("False     %0.1f%% %0.1f%%", fnr[ind]*100, tnr[ind]*100))
