@@ -141,10 +141,11 @@ for (i in 1:n_folds) {
 }
 
 # display overall results
-print(sprintf(paste0("Overall: %.0f-Fold X-Validation Results in an RMSE of %0.3f,",
-                    " Sensitivity of %0.1f%%, Specificity of %0.1f%%"),
+print(sprintf(paste0("Overall: %.0f-Fold X-Validation Results in an RMSE of %0.3f ",
+                    "(%0.3f), Sensitivity of %0.1f%%, Specificity of %0.1f%%"),
               n_folds,
               mean(pseudotimes_full$err),
+              sd(pseudotimes_full$err),
               mean(pseudotimes_full$sensitivity),
               mean(pseudotimes_full$specificity)))
 print(sprintf("Mean by Group:"))

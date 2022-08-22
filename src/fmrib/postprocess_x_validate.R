@@ -27,7 +27,7 @@ for (i in 1:n_folds) {
   ind_i = ind[i]:(ind[i + 1] - (i != n_folds))
   
   # assign values to matrix with negative indexing
-  pseudotime_mat[-ind_i ,i] = pseudotimes$global_pseudotimes
+  pseudotime_mat[-ind_i, i] = pseudotimes$global_pseudotimes
   
 }
 
@@ -36,9 +36,10 @@ for (i in 1:n_folds) {
 # --------------------------------------------------------------------------------------------
 # perform row-wise analysis to evaluate stability of scores
 # root mean squared variation from complete run
-mean_rms = sapply(1:nrow(pseudotimes_full), function(i) 
-                                sqrt(mean((pseudotime_mat[i,] - 
-                                    pseudotimes_full$global_pseudotimes[i])^2, na.rm = TRUE)))
+mean_rms = sapply(1:ncol(pseudotime_mat), function(i)
+                            mean(sqrt((pseudotime_mat[, i] - 
+                                pseudotimes_full$global_pseudotimes)^2), na.rm = TRUE))
+
 mean_rms_confint = unname(quantile(mean_rms, c(0.025, 0.975)))
 
 # standard deviation variation
@@ -47,7 +48,7 @@ mean_sd_confint = unname(quantile(mean_sd, c(0.025, 0.975)))
 
 # display outputs (raw values)
 print(sprintf("\n----------- Evaluating Stability of Disease Scores (Against Full Run)"))
-print(sprintf("Root Mean Squared Error is: %0.2f +- %0.2f [%0.2f, %0.2f]",
+print(sprintf("Root Mean Squared Error is: %0.3f +- %0.3f [%0.3f, %0.3f]",
               mean(mean_rms), sd(mean_rms), mean_rms_confint[1], mean_rms_confint[2]))
-print(sprintf("Mean Standard Deviation is: %0.2f +- %0.2f [%0.2f, %0.2f]",
+print(sprintf("Mean Standard Deviation is: %0.3f +- %0.3f [%0.3f, %0.3f]",
               mean(mean_sd), sd(mean_sd), mean_sd_confint[1], mean_sd_confint[2]))
