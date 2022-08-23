@@ -10,5 +10,5 @@ pseudotimes = read.csv('NeuroPM/io/pseudotimes.csv');
 features = features[pseudotimes$global_pseudotimes < 0.65, ]
 labels = labels[pseudotimes$global_pseudotimes < 0.65, ]
 
-write.csv(features, "NeuroPM/io/ukb_num_norm.csv", row.names = FALSE)
-write.csv(labels, "NeuroPM/io/labels.csv", row.names = FALSE)
+fwrite(features, "NeuroPM/io/ukb_num_norm.csv", row.names = FALSE)
+fwrite(labels, "NeuroPM/io/labels.csv", row.names = FALSE)
