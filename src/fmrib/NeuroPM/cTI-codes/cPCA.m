@@ -38,7 +38,7 @@ Ct = cov(X_target);
 % cPCA with multiple alphas:
 for alpha_i = 1:n_alphas
 
-    if alpha_i == 1,
+    if alpha_i == 0,
         beta = regress(Ct(:),Cb(:));
         C = Ct - beta*Cb;
         alphas(alpha_i) = beta;
