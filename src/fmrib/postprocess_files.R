@@ -88,9 +88,12 @@ var_weights$significant_cor = var_weights$cor > sort(abs(var_weights$cor),
                                   decreasing=TRUE)[floor(nrow(var_weights)*0.1)] & 
                               var_weights$pval < 0.0001
 
-# keep variables which are significant (by cTI) and strongly correlated
+# manually define columns we want to keep
 var_weights$significant[var_weights$Var1 == "X31.0.0"] = TRUE
-var_weights = var_weights[var_weights$significant | var_weights$significant_cor, ]
+
+# keep variables which are significant (by cTI) and strongly correlated
+#var_weights = var_weights[var_weights$significant | var_weights$significant_cor, ]
+var_weights = var_weights[var_weights$significant, ]
 
 # retrieve original names
 var_weights$name = sapply(1:nrow(var_weights), function(i) varnames$Field[
