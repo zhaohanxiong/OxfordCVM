@@ -36,11 +36,11 @@ alphas_all = logspace(-2,2,100);
 ind_remove_mask = zeros(size(data, 1), 1);
 
 % define counters/storage arrays
-max_iter        = 4;
-prev_alpha      = 50;
-iter            = 1;
-n_removed       = [];
-removed_inds    = [];
+max_iter        = 50; % maximum number of iterations
+prev_alpha      = 50; % initialze alpha
+iter            = 1;  % iteration counter
+n_removed       = []; % number of outliers removed in each iteration
+removed_inds    = []; % indices of outliers removed in each iteration
 
 % while loop to continuously loop through
 while iter < max_iter

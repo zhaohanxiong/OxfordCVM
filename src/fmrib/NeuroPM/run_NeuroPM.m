@@ -45,11 +45,11 @@ node_contributions = table(ukb_data.Properties.VariableNames', Node_contribution
 expected_contribution = table(Expected_contribution);
 
 % store outlier removal outputs
-non_outliers = table(global_ordering);
-non_outliers.Properties.VariableNames = ["keep_ind"];
+%non_outliers = table(global_ordering);
+%non_outliers.Properties.VariableNames = ["keep_ind"];
 
 %% output csv
 writetable(pseudotimes_file, strcat('io/pseudotimes.csv'));
 writetable(node_contributions, strcat('io/var_weighting.csv'));
 writetable(expected_contribution, strcat('io/threshold_weighting.csv'));
-writetable(non_outliers, strcat('io/keep_after_removing_outliers.csv'));
+%writetable(non_outliers, strcat('io/keep_after_removing_outliers.csv'));
