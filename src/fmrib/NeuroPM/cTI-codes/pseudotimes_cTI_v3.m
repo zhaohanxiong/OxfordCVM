@@ -26,27 +26,32 @@ function [global_ordering,global_pseudotimes,mappedX,contrasted_data,Node_contri
 
 % Reducing dimensionality
 % define disease/background and number of patients in the dataset
-N_patients = size(data, 1);
 starting_point = starting_point(:);
 final_subjects = final_subjects(:);
 
+% define range of alphas to compute
+alphas_all = logspace(-2,2,100);
+
+% define original indices to remove patients from
+ind_remove_mask = zeros(size(data, 1), 1);
+
 % define counters/storage arrays
-iter = 0;
-n_removed = [];
-removed_inds = [];
-prev_alpha = 50;
+max_iter        = 4;
+prev_alpha      = 50;
+iter            = 1;
+n_removed       = [];
+removed_inds    = [];
 
 % while loop to continuously loop through
-while iter < 2
-
+while iter < max_iter
+    
     % define alphas
-    alphas = logspace(-2,2,100);
-    mid_point = find(alphas >= prev_alpha);
-    mid_point = mid_point(1);
-    alphas = alphas((mid_point - 5):(mid_point + 5));
+    mid_point = find(alphas_all >= prev_alpha);
+    alphas_iter = alphas_all((mid_point(1) - 5):(mid_point(1) + 5));
 
     % perform contrastive PCA (using background and disease as priors into PCA)
-    [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas);
+    [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = ... 
+            cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_iter);
     
     % store the output values
     [~,j]           = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
@@ -54,6 +59,13 @@ while iter < 2
     Node_Weights    = Vmedoid(:,1:no_dims(j),j);
     Lambdas         = Dmedoid(1:no_dims(j),j);
     contrasted_data = contrasted_data(:,:,j);
+
+    % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
+    disp(['Iteration ' num2str(iter) ' Number of cPCs -> ' num2str(no_dims(j))]);
+    disp(['Iteration ' num2str(iter) ' Alpha Selected -> ' num2str(alphas(j))]);
+
+    % use alpha to determine the range of alphas to search in next iteration
+    prev_alpha = alphas(j);
 
     % compute nodal weightings (values of the final eigen vectors)
     Node_contributions = (100*(Node_Weights.^2)./repmat(sum(Node_Weights.^2,1),size(Node_Weights,1),1))*Lambdas;
@@ -70,7 +82,7 @@ while iter < 2
     % subset background and diseased groups
     in_background_target = [starting_point(:); final_subjects(:)];
     dist_matrix0 = dist_matrix;   
-    out_background_target = setdiff(1:N_patients, in_background_target)';
+    out_background_target = setdiff(1:size(data, 1), in_background_target)';
     dist_matrix = dist_matrix(in_background_target, in_background_target);
 
     % calculate minimum spanning tree
@@ -83,7 +95,10 @@ while iter < 2
     datas = dijkstra(MST, Root_node');
     dijkstra_F = datas.F; % dijkstra father nodes for trajectory analysis
     max_distance = max(datas.A(~isinf(datas.A)));
-    global_pseudotimes(in_background_target,1) = datas.A/max_distance;
+    
+    % initialie and define pseudotimes array
+    global_pseudotimes = zeros(size(data, 1), 1);
+    global_pseudotimes(in_background_target, 1) = datas.A/max_distance;
 
     % extrapolate between group values
     temp_dist = dist_matrix0(out_background_target, in_background_target);
@@ -96,24 +111,31 @@ while iter < 2
     Q3 = quantile(global_pseudotimes(classes_for_colours == 3), 0.75);
     score_lim = Q3 + 1.5 * IQR;
 
-    % filter out patients with large scores in the original inputs
-    data                = data(global_pseudotimes < score_lim, :);
-    classes_for_colours = classes_for_colours(global_pseudotimes < score_lim);
-    starting_point      = find(classes_for_colours == 1);
-    final_subjects      = find(classes_for_colours == 3);
-
-    % store patients who were removed
-    remove_ind = find(global_pseudotimes >= score_lim);
-
-    % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
-    disp(['Iteration ' num2str(iter) ' Number of cPCs -> ' num2str(no_dims(j))]);
-    disp(['Iteration ' num2str(iter) ' Alpha Selected -> ' num2str(alphas(j))]);
-
-    % increment counter/store outputs
+    % increment counter
     iter = iter + 1;
-    n_removed = [n_removed, length(remove_ind)];
-    removed_inds = [removed_inds, remove_ind];
-    prev_alpha = alphas(j);
+
+    % only remove outlier if this is not the last iteration
+    if iter < max_iter
+ 
+        % defines patients who will be removed
+        remove_ind = find(global_pseudotimes >= score_lim);
+    
+        % store points removed
+        n_removed = [n_removed, length(remove_ind)];
+        removed_inds = [removed_inds; remove_ind];
+    
+        % filter out patients with large scores in the original inputs
+        data                = data(global_pseudotimes < score_lim, :);
+        classes_for_colours = classes_for_colours(global_pseudotimes < score_lim);
+        starting_point      = find(classes_for_colours == 1)';
+        final_subjects      = find(classes_for_colours == 3)';
+        
+        % update list of indices for patients we are still keeping
+        temp = ind_remove_mask(ind_remove_mask == 0);
+        temp(remove_ind) = 1;
+        ind_remove_mask(ind_remove_mask == 0) = temp;
+
+    end
 
 end
 
@@ -121,7 +143,7 @@ end
 MST_graph = graph(MST);
 
 % produce visualization and save the plots
-colours_target_disease = classes_for_colours(in_background_target);
+colours_healthy_disease = classes_for_colours(classes_for_colours ~= 2);
 f = figure('visible','off');
 subplot(2,1,1);
 boxplot(global_pseudotimes,classes_for_colours);
@@ -129,15 +151,15 @@ title('Disease Score By Group (Background/Between/Disease)');
 subplot(2,1,2);
 p = plot(MST_graph);
 highlight(p, MST_graph, 'EdgeColor', 'black', 'LineWidth',1);
-highlight(p, find(colours_target_disease==1), 'NodeColor', 'g', 'MarkerSize',2);
-highlight(p, find(colours_target_disease==3), 'NodeColor', 'r', 'MarkerSize',2);
+highlight(p, find(colours_healthy_disease==1), 'NodeColor', 'g', 'MarkerSize',2);
+highlight(p, find(colours_healthy_disease==3), 'NodeColor', 'r', 'MarkerSize',2);
 highlight(p, Root_node, 'NodeColor', 'black', 'Marker', '^', 'MarkerSize', 5);
 title('Minimum Spanning Tree (Background/Disease)');
 set(gcf, 'PaperPosition', [0 0 10 20]);
 saveas(f, 'io/results.png');
 
 % save MST labels as table to output file
-MST_groups = colours_target_disease';
+MST_groups = colours_healthy_disease';
 MST_groups(MST_groups==3) = 2;
 MST_labels = table(MST_groups, global_pseudotimes(in_background_target,1), ...
                    'VariableNames', {'bp_group', 'pseudotime', });

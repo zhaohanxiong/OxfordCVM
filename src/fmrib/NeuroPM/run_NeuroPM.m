@@ -36,7 +36,7 @@ classes_for_colours(ind_between) = 2;
 
 %% call function
 [global_ordering, global_pseudotimes, mappedX, contrasted_data, Node_contributions, Expected_contribution] = ...
-                        pseudotimes_cTI_v2(data, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
+                        pseudotimes_cTI_v3(data, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
 
 %% convert outputs to dataframes
 pseudotimes_file = [labels, table(global_pseudotimes)];
