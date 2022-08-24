@@ -47,8 +47,8 @@ while iter < max_iter
     
     % define alphas
     mid_point = find(alphas_all >= prev_alpha);
-    start_point = max([mid_point(1) - 5, 1]);
-    end_point = min([(mid_point(1) + 5), 100]);
+    start_point = max([mid_point(1) - 7, 1]);
+    end_point = min([(mid_point(1) + 7), 100]);
     alphas_iter = alphas_all(start_point:end_point);
 
     % perform contrastive PCA (using background and disease as priors into PCA)
