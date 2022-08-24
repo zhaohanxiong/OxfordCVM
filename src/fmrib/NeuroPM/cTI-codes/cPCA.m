@@ -19,7 +19,7 @@ if ~exist('classes_for_colours') || isempty(classes_for_colours)
     classes_for_colours = ones(size(X,1),1);
 end
 if nargin < 6 || isempty(alphas)
-    alphas = logspace(-2,2,100); %alphas = alphas(alphas > 35); alphas = alphas(alphas < 75);
+    alphas = logspace(-2,2,100); %alphas = alphas(alphas > 25); alphas = alphas(alphas < 75);
 end
 n_alphas = length(alphas);
 
@@ -100,7 +100,12 @@ n_clusters = length(unique(Ci));
 
 % Computing medoid for each cluster
 for clus_i = 1:n_clusters
+    
+    % identify cluster to analyze, if non existent then skip
     ind = find(Ci == clus_i);
+    if isempty(ind)
+        continue;
+    end    
     [~,j] = max(sum(affinity_matrix(ind,ind),2));
     Vmedoid(:,:,clus_i) = V(:,:,ind(j));
     Dmedoid(:,clus_i)   = D(:,ind(j));
