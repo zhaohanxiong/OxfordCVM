@@ -36,7 +36,7 @@ alphas_all = logspace(-2,2,100);
 ind_remove_mask = zeros(size(data, 1), 1);
 
 % define counters/storage arrays
-max_iter        = 50; % maximum number of iterations
+max_iter        = 100; % maximum number of iterations
 prev_alpha      = 50; % initialze alpha
 iter            = 1;  % iteration counter
 n_removed       = []; % number of outliers removed in each iteration
@@ -45,11 +45,12 @@ removed_inds    = []; % indices of outliers removed in each iteration
 % while loop to continuously loop through
 while iter < max_iter
     
-    % define alphas
+    % define alphas, make sure range is always within range provided
     mid_point = find(alphas_all >= prev_alpha);
-    start_point = max([mid_point(1) - 7, 1]);
-    end_point = min([(mid_point(1) + 7), 100]);
-    alphas_iter = alphas_all(start_point:end_point);
+    mid_point = mid_point(1);
+    mid_point = max([mid_point, 6]);
+    mid_point = min([mid_point, 95]);
+    alphas_iter = alphas_all((mid_point - 5):(mid_point + 5));
 
     % perform contrastive PCA (using background and disease as priors into PCA)
     [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = ... 
