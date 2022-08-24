@@ -39,11 +39,17 @@ classes_for_colours(ind_between) = 2;
                         pseudotimes_cTI_v3(data, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
 
 %% convert outputs to dataframes
-pseudotimes_file = [labels, table(global_pseudotimes)];
+% store cTI outputs
+pseudotimes_file = [labels(global_ordering,:), table(global_pseudotimes)];
 node_contributions = table(ukb_data.Properties.VariableNames', Node_contributions);
 expected_contribution = table(Expected_contribution);
+
+% store outlier removal outputs
+non_outliers = table(global_ordering);
+non_outliers.Properties.VariableNames = ["keep_ind"];
 
 %% output csv
 writetable(pseudotimes_file, strcat('io/pseudotimes.csv'));
 writetable(node_contributions, strcat('io/var_weighting.csv'));
 writetable(expected_contribution, strcat('io/threshold_weighting.csv'));
+writetable(non_outliers, strcat('io/keep_after_removing_outliers.csv'));

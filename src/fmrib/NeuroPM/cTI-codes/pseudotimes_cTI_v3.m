@@ -174,6 +174,9 @@ save('io/dijkstra.mat','dijkstra_F'); % dijkstra father nodes of every node for 
 save('io/MST.mat','MST'); % save minimum spanning tree individually
 %save('io/all.mat'); % save all variables to workspace to study intermediary values
 
+% re-use useless variable global_ordering to output indices to keep 
+global_ordering = find(ind_remove_mask == 0);
+
 return;
 
 function [theta,varargout] = subspacea(F,G,A)
