@@ -115,7 +115,7 @@ while iter <= max_iter && ~is_accurate
     lower_disease = min(global_pseudotimes(classes_for_colours == 3));
 
     Q1_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.25);
-    Q2_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.66);
+    Q2_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.666);
     
     Q3_background = quantile(global_pseudotimes(classes_for_colours == 1), 0.75);
     
@@ -134,8 +134,8 @@ while iter <= max_iter && ~is_accurate
     % increment counter
     iter = iter + 1;
 
-    % only remove outlier if this is not the last iteration
-    if iter <= max_iter
+    % only remove outlier if this is not the last iteration and model is not accurate
+    if iter <= max_iter && ~is_accurate
 
         % find distribution (boxplot) thresholds & define upper threshold for scores
         score_lim = quantile(global_pseudotimes(classes_for_colours == 3), 0.95);
