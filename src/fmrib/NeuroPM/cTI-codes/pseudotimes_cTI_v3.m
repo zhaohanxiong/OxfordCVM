@@ -1,4 +1,4 @@
-function [global_ordering,global_pseudotimes,mappedX,contrasted_data,Node_contributions,Expected_contribution] = pseudotimes_cTI_v2(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
+function [keep_indices,global_pseudotimes,mappedX,contrasted_data,Node_contributions,Expected_contribution] = pseudotimes_cTI_v3(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
 
 %-- INPUTS:
 %     data: [Nsubjects, Nfeatures] data matrix.
@@ -36,14 +36,15 @@ alphas_all = logspace(-2,2,100);
 ind_remove_mask = zeros(size(data, 1), 1);
 
 % define counters/storage arrays
-max_iter        = 100; % maximum number of iterations
-prev_alpha      = 50; % initialze alpha
-iter            = 1;  % iteration counter
-n_removed       = []; % number of outliers removed in each iteration
-removed_inds    = []; % indices of outliers removed in each iteration
+max_iter     = 100;   % maximum number of iterations
+prev_alpha   = 50;    % initialze alpha
+iter         = 1;     % iteration counter
+n_removed    = [];    % number of outliers removed in each iteration
+removed_inds = [];    % indices of outliers removed in each iteration
+is_accurate  = false; % is current model accurate
 
 % while loop to continuously loop through
-while iter < max_iter
+while iter <= max_iter || ~is_accurate
     
     % define alphas, make sure range is always within range provided
     mid_point = find(alphas_all >= prev_alpha);
@@ -66,6 +67,7 @@ while iter < max_iter
     % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
     disp(['Iteration ' num2str(iter) ' Number of cPCs -> ' num2str(no_dims(j))]);
     disp(['Iteration ' num2str(iter) ' Alpha Selected -> ' num2str(alphas(j))]);
+    disp(['Iteration ' num2str(iter) ' Number of Outliers Removed -> ' num2str(sum(ind_remove_mask == 1))]);
 
     % use alpha to determine the range of alphas to search in next iteration
     prev_alpha = alphas(j);
@@ -107,19 +109,33 @@ while iter < max_iter
     temp_dist = dist_matrix0(out_background_target, in_background_target);
     [~, j] = min(temp_dist,[],2);
     global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_target(j), 1);
-    [~, global_ordering] = sort(global_pseudotimes);
 
-    % find distribution (boxplot) thresholds & define upper threshold for scores
-    IQR = iqr(global_pseudotimes(classes_for_colours == 3));
-    Q3 = quantile(global_pseudotimes(classes_for_colours == 3), 0.75);
-    score_lim = Q3 + 1.5 * IQR;
+    % evaluate current model efficacy
+    IQR_disease = iqr(global_pseudotimes(classes_for_colours == 3));
+    Q1_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.25);
+    lower_disease = Q1_disease - 1.5 * IQR_disease;
 
+    Q1_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.25);
+    Q3_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.75);
+    
+    Q3_background = quantile(global_pseudotimes(classes_for_colours == 3), 0.25);
+    
+    % define conditions for model efficacy
+    condition_1 = lower_disease > Q3_background; % minimal overlap for background and disease
+    condition_2 = Q1_disease > Q3_between;       % no overlap for IQR of disease and between
+    condition_3 = Q1_between > Q3_background;    % no overlap for IQR of between and background
+    is_accurate = condition_1 && condition_2 && condition_3;
+    
     % increment counter
     iter = iter + 1;
 
     % only remove outlier if this is not the last iteration
-    if iter < max_iter
- 
+    if iter <= max_iter
+        
+        % find distribution (boxplot) thresholds & define upper threshold for scores
+        Q3_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.75);
+        score_lim = Q3_disease + 1.5 * IQR_disease;
+
         % defines patients who will be removed
         remove_ind = find(global_pseudotimes >= score_lim);
     
@@ -176,7 +192,7 @@ save('io/MST.mat','MST'); % save minimum spanning tree individually
 %save('io/all.mat'); % save all variables to workspace to study intermediary values
 
 % re-use useless variable global_ordering to output indices to keep 
-global_ordering = find(ind_remove_mask == 0);
+keep_indices = find(ind_remove_mask == 0);
 
 return;
 
