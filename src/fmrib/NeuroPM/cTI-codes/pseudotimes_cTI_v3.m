@@ -119,7 +119,7 @@ while iter <= max_iter || ~is_accurate
     Q1_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.25);
     Q3_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.75);
     
-    Q3_background = quantile(global_pseudotimes(classes_for_colours == 3), 0.25);
+    Q3_background = quantile(global_pseudotimes(classes_for_colours == 1), 0.75);
     
     % define conditions for model efficacy
     condition_1 = lower_disease > Q3_background; % minimal overlap for background and disease
@@ -127,7 +127,7 @@ while iter <= max_iter || ~is_accurate
     condition_3 = Q1_between > Q3_background;    % no overlap for IQR of between and background
     is_accurate = condition_1 && condition_2 && condition_3;
 
-    % store 
+    % store visualization in each iteration
     f = figure('visible', 'off');
     boxplot(global_pseudotimes, classes_for_colours);
     set(gcf, 'PaperPosition', [0 0 10 15]);
