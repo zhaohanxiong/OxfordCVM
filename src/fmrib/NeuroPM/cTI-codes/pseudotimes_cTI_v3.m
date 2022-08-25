@@ -44,7 +44,7 @@ n_removed    = [];    % number of outliers removed in each iteration
 removed_inds = [];    % indices of outliers removed in each iteration
 
 % while loop to continuously loop through
-while iter <= max_iter || ~is_accurate
+while iter <= max_iter && ~is_accurate
     
     % define alphas, make sure range is always within range provided
     mid_point = find(alphas_all >= prev_alpha);
