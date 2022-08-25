@@ -138,7 +138,7 @@ while iter <= max_iter || ~is_accurate
     if iter <= max_iter
 
         % find distribution (boxplot) thresholds & define upper threshold for scores
-        score_lim = quantile(global_pseudotimes(classes_for_colours == 3), 0.925);
+        score_lim = quantile(global_pseudotimes(classes_for_colours == 3), 0.95);
 
         % defines patients who will be removed
         remove_ind = find(global_pseudotimes >= score_lim);
