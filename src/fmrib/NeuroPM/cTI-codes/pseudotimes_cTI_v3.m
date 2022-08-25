@@ -117,13 +117,13 @@ while iter <= max_iter || ~is_accurate
     lower_disease = Q1_disease - 1.5 * IQR_disease;
 
     Q1_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.25);
-    Q3_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.75);
+    Q2_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.66);
     
     Q3_background = quantile(global_pseudotimes(classes_for_colours == 1), 0.75);
     
     % define conditions for model efficacy
     condition_1 = lower_disease > Q3_background; % minimal overlap for background and disease
-    condition_2 = Q1_disease > Q3_between;       % no overlap for IQR of disease and between
+    condition_2 = Q1_disease > Q2_between;       % no overlap for IQR of disease and between
     condition_3 = Q1_between > Q3_background;    % no overlap for IQR of between and background
     is_accurate = condition_1 && condition_2 && condition_3;
 
