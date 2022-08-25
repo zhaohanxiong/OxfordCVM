@@ -36,12 +36,12 @@ alphas_all = logspace(-2,2,100);
 ind_remove_mask = zeros(size(data, 1), 1);
 
 % define counters/storage arrays
-max_iter     = 100;   % maximum number of iterations
+max_iter     = 25;    % maximum number of iterations
+is_accurate  = false; % is current model accurate
 prev_alpha   = 50;    % initialze alpha
 iter         = 1;     % iteration counter
 n_removed    = [];    % number of outliers removed in each iteration
 removed_inds = [];    % indices of outliers removed in each iteration
-is_accurate  = false; % is current model accurate
 
 % while loop to continuously loop through
 while iter <= max_iter || ~is_accurate
@@ -113,6 +113,7 @@ while iter <= max_iter || ~is_accurate
     % evaluate current model efficacy
     IQR_disease = iqr(global_pseudotimes(classes_for_colours == 3));
     Q1_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.25);
+    Q3_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.75);
     lower_disease = Q1_disease - 1.5 * IQR_disease;
 
     Q1_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.25);
@@ -125,6 +126,12 @@ while iter <= max_iter || ~is_accurate
     condition_2 = Q1_disease > Q3_between;       % no overlap for IQR of disease and between
     condition_3 = Q1_between > Q3_background;    % no overlap for IQR of between and background
     is_accurate = condition_1 && condition_2 && condition_3;
+
+    % store 
+    f = figure('visible', 'off');
+    boxplot(global_pseudotimes, classes_for_colours);
+    set(gcf, 'PaperPosition', [0 0 10 15]);
+    saveas(f, ['io/results' num2str(iter) '.png']);
     
     % increment counter
     iter = iter + 1;
@@ -133,7 +140,6 @@ while iter <= max_iter || ~is_accurate
     if iter <= max_iter
         
         % find distribution (boxplot) thresholds & define upper threshold for scores
-        Q3_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.75);
         score_lim = Q3_disease + 1.5 * IQR_disease;
 
         % defines patients who will be removed
@@ -175,7 +181,7 @@ highlight(p, find(colours_healthy_disease==3), 'NodeColor', 'r', 'MarkerSize',2)
 highlight(p, Root_node, 'NodeColor', 'black', 'Marker', '^', 'MarkerSize', 5);
 title('Minimum Spanning Tree (Background/Disease)');
 set(gcf, 'PaperPosition', [0 0 10 20]);
-saveas(f, 'io/results.png');
+saveas(f, 'io/results_final.png');
 
 % save MST labels as table to output file
 MST_groups = colours_healthy_disease';
