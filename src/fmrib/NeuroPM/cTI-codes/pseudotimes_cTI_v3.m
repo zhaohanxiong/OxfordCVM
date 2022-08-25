@@ -114,7 +114,7 @@ while iter <= max_iter || ~is_accurate
     IQR_disease = iqr(global_pseudotimes(classes_for_colours == 3));
     Q1_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.25);
     Q3_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.75);
-    lower_disease = Q1_disease - 1.5 * IQR_disease;
+    lower_disease = min(global_pseudotimes(classes_for_colours == 3));
 
     Q1_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.25);
     Q2_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.66);
@@ -141,7 +141,7 @@ while iter <= max_iter || ~is_accurate
         
         % find distribution (boxplot) thresholds & define upper threshold for scores
         score_lim = Q3_disease + 1.5 * IQR_disease;
-
+        disp(score_lim)
         % defines patients who will be removed
         remove_ind = find(global_pseudotimes >= score_lim);
     
