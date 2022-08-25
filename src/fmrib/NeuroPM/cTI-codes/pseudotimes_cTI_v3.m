@@ -65,9 +65,9 @@ while iter <= max_iter || ~is_accurate
     contrasted_data = contrasted_data(:,:,j);
 
     % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
-    disp(['Iteration ' num2str(iter) ' Number of cPCs -> ' num2str(no_dims(j))]);
-    disp(['Iteration ' num2str(iter) ' Alpha Selected -> ' num2str(alphas(j))]);
-    disp(['Iteration ' num2str(iter) ' Number of Outliers Removed -> ' num2str(sum(ind_remove_mask == 1))]);
+    disp(['Iteration ' num2str(iter) ' Number of cPCs: ' num2str(no_dims(j))]);
+    disp(['Iteration ' num2str(iter) ' Alpha Selected: ' num2str(alphas(j))]);
+    disp(['Iteration ' num2str(iter) ' Number of Outliers Removed: ' num2str(sum(ind_remove_mask == 1))]);
 
     % use alpha to determine the range of alphas to search in next iteration
     prev_alpha = alphas(j);
@@ -138,10 +138,10 @@ while iter <= max_iter || ~is_accurate
 
     % only remove outlier if this is not the last iteration
     if iter <= max_iter
-        
+
         % find distribution (boxplot) thresholds & define upper threshold for scores
-        score_lim = Q3_disease + 1.5 * IQR_disease;
-        disp(score_lim)
+        score_lim = quantile(global_pseudotimes(classes_for_colours == 3), 0.925);
+
         % defines patients who will be removed
         remove_ind = find(global_pseudotimes >= score_lim);
     
