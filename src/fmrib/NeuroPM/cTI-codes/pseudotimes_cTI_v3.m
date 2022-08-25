@@ -111,9 +111,7 @@ while iter <= max_iter || ~is_accurate
     global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_target(j), 1);
 
     % evaluate current model efficacy
-    IQR_disease = iqr(global_pseudotimes(classes_for_colours == 3));
     Q1_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.25);
-    Q3_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.75);
     lower_disease = min(global_pseudotimes(classes_for_colours == 3));
 
     Q1_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.25);
