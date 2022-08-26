@@ -7,7 +7,8 @@ source activate env_conda
 #Rscript ukb_whole_data_subset.R
 
 # run R preprocessing script, writes to NeuroPM/io directory
-Rscript preprocess.R
+Rscript preprocess_data_preparation.R
+Rscript preprocess_feature_selection.R
 
 # compile matlab script (only if there were code changes)
 cd ./NeuroPM
