@@ -84,9 +84,9 @@ var_weights$pvals = sapply(1:nrow(var_weights), function(i)
                                   pvals[var_weights$Var1[i] == names(pvals)])
 
 # get top 10% of highly correlated variables which are also significant
-var_weights$significant_cor = var_weights$cor > sort(abs(var_weights$cor), 
-                                  decreasing=TRUE)[floor(nrow(var_weights)*0.1)] & 
-                              var_weights$pval < 0.0001
+#var_weights$significant_cor = var_weights$cor > sort(abs(var_weights$cor), 
+#                                  decreasing=TRUE)[floor(nrow(var_weights)*0.1)] & 
+#                              var_weights$pval < 0.0001
 
 # manually define columns we want to keep
 var_weights$significant[var_weights$Var1 == "X31.0.0"] = TRUE
