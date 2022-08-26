@@ -134,7 +134,7 @@ while iter <= max_iter && ~is_accurate
         % store visualization in each iteration
         f = figure('visible', 'off');
         boxplot(global_pseudotimes, classes_for_colours);
-        title(['Iteration' num2str(iter - 1)]);
+        title(['Iteration ' num2str(iter - 1) ' (Removed ' num2str(sum(ind_remove_mask == 1)) ' Outliers)']);
         set(gcf, 'PaperPosition', [0 0 10 15]);
         saveas(f, ['io/results' num2str(iter - 1) '.png']);
 
