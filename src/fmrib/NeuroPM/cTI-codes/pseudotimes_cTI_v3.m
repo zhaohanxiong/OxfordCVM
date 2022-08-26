@@ -36,7 +36,7 @@ alphas_all = logspace(-2,2,100);
 ind_remove_mask = zeros(size(data, 1), 1);
 
 % define counters/storage arrays
-max_iter     = 25;    % maximum number of iterations
+max_iter     = 1;     % maximum number of iterations
 is_accurate  = false; % is current model accurate
 prev_alpha   = 50;    % initialze alpha
 iter         = 1;     % iteration counter
@@ -125,17 +125,18 @@ while iter <= max_iter && ~is_accurate
     condition_3 = Q1_between > Q3_background;    % no overlap for IQR of between and background
     is_accurate = condition_1 && condition_2 && condition_3;
 
-    % store visualization in each iteration
-    f = figure('visible', 'off');
-    boxplot(global_pseudotimes, classes_for_colours);
-    set(gcf, 'PaperPosition', [0 0 10 15]);
-    saveas(f, ['io/results' num2str(iter) '.png']);
-    
     % increment counter
     iter = iter + 1;
 
     % only remove outlier if this is not the last iteration and model is not accurate
     if iter <= max_iter && ~is_accurate
+
+        % store visualization in each iteration
+        f = figure('visible', 'off');
+        boxplot(global_pseudotimes, classes_for_colours);
+        title(['Iteration' num2str(iter - 1)]);
+        set(gcf, 'PaperPosition', [0 0 10 15]);
+        saveas(f, ['io/results' num2str(iter - 1) '.png']);
 
         % find distribution (boxplot) thresholds & define upper threshold for scores
         score_lim = quantile(global_pseudotimes(classes_for_colours == 3), 0.95);
