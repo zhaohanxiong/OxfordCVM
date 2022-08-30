@@ -4,6 +4,7 @@
 source activate env_conda
 
 # preprocess entire UKB data set to subset into smaller data frame
+cd ./fmrib
 #Rscript ukb_whole_data_subset.R
 
 # run R preprocessing script, writes to NeuroPM/io directory
@@ -25,12 +26,9 @@ Rscript postprocess_eval_model.R
 # run python trajectory visualization/computation
 python postprocess_traj.py
 
-# build/package model inference for tf-serving
+# ml lifecycle (train, test, save, log, deploy, monitor)
 cd ../ml_lifecycle
 python ./mlflow/ml_build_model.py
 
-# run mlflow for ML ops
-
-
 # deploy db & models to AWS
-
+cd ../aws
