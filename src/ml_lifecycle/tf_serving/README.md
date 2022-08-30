@@ -23,3 +23,9 @@ docker run -p8500:8500 -p8501:8501 cti_model
 docker-compose build
 docker-compose up
 ```
+
+##### Push container to docker hub
+```
+- get repo link after creating account and repo
+docker push <hub-user>/<repo-name>:<tag>
+```
