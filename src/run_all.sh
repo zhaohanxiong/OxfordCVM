@@ -15,7 +15,7 @@ Rscript preprocess_feature_selection.R
 cd ./NeuroPM
 ./compile_NeuroPM.sh
 
-# execute the compiled matlab program (single run or X-validation)
+# execute the compiled matlab program
 nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 
 # run post-processing file organization/evaluation
@@ -30,7 +30,7 @@ python postprocess_traj.py
 cd ../ml_lifecycle
 #pytest
 python ./mlflow/ml_build_model.py
-
+python ./mlflow/log_model.py
 
 # deploy db & models to AWS
 cd ../aws

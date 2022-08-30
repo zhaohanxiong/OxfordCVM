@@ -41,14 +41,14 @@ class cTI_tf_layer(tf.keras.layers.Layer):
               return shaped_output
 
 # load disease scores as reference groups for neighrest neighbor
-pseudotimes = pd.read_csv("NeuroPM/io/pseudotimes.csv", index_col = False)
+pseudotimes = pd.read_csv("../../fmrib/NeuroPM/io/pseudotimes.csv", index_col = False)
 
 # extract disease scores
 reference_scores = pseudotimes["global_pseudotimes"].to_numpy()
 
 # load features and transformation matrix into principle component space
-ukb_num = pd.read_csv("NeuroPM/io/ukb_num_norm.csv", index_col = False).fillna(0).to_numpy()
-pc_transform = scipy.io.loadmat("NeuroPM/io/PC_Transform.mat")["Node_Weights"]
+ukb_num = pd.read_csv("../../fmrib/NeuroPM/io/ukb_num_norm.csv", index_col = False).fillna(0).to_numpy()
+pc_transform = scipy.io.loadmat("../../fmrib/NeuroPM/io/PC_Transform.mat")["Node_Weights"]
 
 # transform data into PC space
 ukb_pc = np.matmul(ukb_num, pc_transform)
@@ -78,6 +78,6 @@ model = tf.keras.Model(k_input, k_cTI_layer)
 
 # save model (get two versions ready for testing multi-config)
 # must be in the format of /model/n/ for serving
-model.save("../Deploy_ML/tf_serving_container/saved_models/2/")
+model.save("../tf_serving/saved_models/2/")
 
 print("Python -- Successfully Built and Packaged Model")
