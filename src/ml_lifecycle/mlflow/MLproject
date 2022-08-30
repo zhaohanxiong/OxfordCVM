@@ -4,5 +4,8 @@ conda_env: conda.yaml
 entry_points:
   main:
     parameters:
+      random_n: {type: int, default: 100}
       random_seed: {type: int, default: 1234}
-    command: "python log_model.py --random_seed={random_seed}"
+    command: python log_model.py \
+                --random_n={random_n} \
+                --random_seed={random_seed}

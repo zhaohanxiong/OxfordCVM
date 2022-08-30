@@ -30,7 +30,7 @@ python postprocess_traj.py
 cd ../ml_lifecycle
 #pytest
 python ./mlflow/ml_build_model.py
-python ./mlflow/log_model.py --random_seed=1234
+python ./mlflow/log_model.py --random_n=100 --random_seed=1234
 
 # deploy db & models to AWS
 cd ../aws

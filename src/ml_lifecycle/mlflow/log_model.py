@@ -10,14 +10,15 @@ cTI_model = tf.keras.models.load_model("../tf_serving/saved_models/2/")
 
 # set random seed
 parser = argparse.ArgumentParser()
+parser.add_argument("--random_n", default = 100, type = int, help = "random N")
 parser.add_argument("--random_seed", default = 1234, type = int, help = "random seed")
 args = parser.parse_args(sys.argv[1:])
 
 # load data & labels
 test_sample = pd.read_csv("../../fmrib/NeuroPM/io/ukb_num_norm.csv").fillna(0)
-test_sample = test_sample.sample(n = 100, random_state = args.random_seed).to_numpy()
+test_sample = test_sample.sample(n = args.random_n, random_state = args.random_seed).to_numpy()
 test_label = pd.read_csv("../../fmrib/NeuroPM/io/pseudotimes.csv")
-test_label = test_label.sample(n = 100, random_state = args.random_seed)
+test_label = test_label.sample(n = args.random_n, random_state = args.random_seed)
 
 # initialize mlflow session, this can be used for remote tracking too
 mlflow.set_tracking_uri("http://localhost:5000/")
