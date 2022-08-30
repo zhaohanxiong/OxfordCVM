@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/zxiong/OneDrive%20-%20Nexus365/OxfordCVM/src/ml_lifecycle/mlflow/mlruns/0/842582cd117349ebb8c76501739aa63e/artifacts
+end_time: 1661870590496
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: 842582cd117349ebb8c76501739aa63e
+run_uuid: 842582cd117349ebb8c76501739aa63e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1661870585601
+status: 3
+tags: []
+user_id: zxiong
