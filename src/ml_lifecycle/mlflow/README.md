@@ -3,7 +3,7 @@
 - activate user interface
 mlflow ui
 
-- navigate to this location to acccess ui board
+- navigate to this location to acccess ui board (or click link in terminal)
 http://localhost:5000/
 ```
 
