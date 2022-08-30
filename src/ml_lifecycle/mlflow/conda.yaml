@@ -1,0 +1,11 @@
+name: tensorflow-cti
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - mlflow
+    - tensorflow==2.0.0
+    - numpy
+    - pandas
