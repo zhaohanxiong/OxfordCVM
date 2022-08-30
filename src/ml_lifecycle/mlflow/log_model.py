@@ -4,10 +4,10 @@ import pandas as pd
 import tensorflow as tf
 
 # load model
-cTI_model = tf.keras.models.load_model("../tf_serving_container/saved_models/2/")
+cTI_model = tf.keras.models.load_model("../tf_serving/saved_models/2/")
 
 # set random seed
-rs = 2
+rs = 123
 
 # load data & labels
 test_sample = pd.read_csv("../../fmrib/NeuroPM/io/ukb_num_norm.csv").fillna(0)

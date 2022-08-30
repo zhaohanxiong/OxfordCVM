@@ -1,6 +1,6 @@
 ##### Tracking
 ```
-
+mlflow ui
 ```
 
 ##### Projects
