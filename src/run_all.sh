@@ -28,7 +28,9 @@ python postprocess_traj.py
 
 # ml lifecycle (train, test, save, log, deploy, monitor)
 cd ../ml_lifecycle
+#pytest
 python ./mlflow/ml_build_model.py
+
 
 # deploy db & models to AWS
 cd ../aws
