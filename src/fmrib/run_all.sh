@@ -26,7 +26,8 @@ Rscript postprocess_eval_model.R
 python postprocess_traj.py
 
 # build/package model inference for tf-serving
-python ml_build_model.py
+cd ../ml_lifecycle
+python ./mlflow/ml_build_model.py
 
 # run mlflow for ML ops
 
