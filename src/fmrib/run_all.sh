@@ -28,5 +28,8 @@ python postprocess_traj.py
 # build/package model inference for tf-serving
 python ml_build_model.py
 
-# run test case to test model accuracy
-pytest
+# run mlflow for ML ops
+
+
+# deploy db & models to AWS
+
