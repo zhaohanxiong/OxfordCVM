@@ -25,7 +25,7 @@ mlflow.set_tracking_uri("http://localhost:5000/")
 mlflow.set_experiment("cti_predict")
 
 # start mlflow session for tracking
-with mlflow.start_run():
+with mlflow.start_run(run_name = "test run"):
 
     # make inference for each row
     pred = []
@@ -37,6 +37,11 @@ with mlflow.start_run():
 
     # evaluate accuracy of predictions against ground truths
     rmse = np.mean(np.sqrt((gt - pred)**2))
+
+    # log model
+    mlflow.keras.log_model(keras_model = cTI_model,
+                           artifact_path = "keras_models", 
+                           registered_model_name = "keras cTI")
 
     # log metric to mlflow server manually
     # automatic logging can also be performed: https://www.mlflow.org/docs/latest/tracking.html#tensorflow-and-keras

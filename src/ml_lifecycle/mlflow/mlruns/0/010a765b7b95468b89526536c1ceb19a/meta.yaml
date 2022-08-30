@@ -1,0 +1,15 @@
+artifact_uri: ./mlruns/0/010a765b7b95468b89526536c1ceb19a/artifacts
+end_time: 1661883891814
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: 010a765b7b95468b89526536c1ceb19a
+run_uuid: 010a765b7b95468b89526536c1ceb19a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1661883887683
+status: 3
+tags: []
+user_id: zxiong
