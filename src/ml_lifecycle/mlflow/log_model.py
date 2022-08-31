@@ -77,9 +77,12 @@ with mlflow.start_run(run_name = "test run"):
     mlflow.log_params({"n_rows": test_label.shape[0]})
 
     # update model stage: Staging, Production, Archived
+    # achieve previous version and stage new model
     client = mlflow.MlflowClient()
+    client.transition_model_version_stage(name = "keras_cTI", version = ver, 
+                                          stage = "Archived")
     client.transition_model_version_stage(name = "keras_cTI", version = ver + 1, 
-                                          stage = "Production")
+                                          stage = "Staging")
 
     # rename model name
     client.rename_registered_model(name = "keras_cTI", new_name = "keras_cTI")
@@ -89,5 +92,5 @@ with mlflow.start_run(run_name = "test run"):
                                 description = "nereast neighbor cTI prediction")
 
     # delete model all versions & single version of model
-    #client.delete_model_version(name="registered_model_name", version = n)
-    #client.delete_registered_model(name="registered_model_name")
+    #client.delete_model_version(name = "registered_model_name", version = n)
+    #client.delete_registered_model(name = "registered_model_name")
