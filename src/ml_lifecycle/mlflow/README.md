@@ -20,5 +20,5 @@ mlflow server --backend-store-uri sqlite:///mlruns.db --default-artifact-root ./
 
 - transition from stored -> staging -> production -> archieve, click on models/versions then see the drop-down menu
 
-- ml lifecycle workflow can be managed using conditional statements based on accuracy filters to declare the version and stage of model for deployment
+- ml lifecycle workflow logic can be managed using conditional statements based on accuracy filters to declare the version and stage of model for deployment
 ```
