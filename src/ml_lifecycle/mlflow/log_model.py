@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import matplotlib.pyplot as plt
 
 # load model
 cTI_model = tf.keras.models.load_model("../tf_serving/saved_models/2/")
@@ -23,7 +24,7 @@ test_label = test_label.sample(n = args.random_n,
                                random_state = args.random_seed)
 
 # initialize mlflow session, this can be used for remote tracking too
-mlflow.set_tracking_uri("mlruns") # can be aws s3 bucket link
+mlflow.set_tracking_uri("http://localhost:5000") # can be aws s3 bucket link
 mlflow.set_registry_uri("sqlite:///mlruns.db") # can be aws rds postgres link
 mlflow.set_experiment("cti_predict")
 
@@ -70,3 +71,5 @@ with mlflow.start_run(run_name = "test run"):
     mlflow.log_metrics({"RMSE": rmse, "RMSE_background": rmse_0, 
                         "RMSE_between": rmse_1, "RMSE_disease": rmse_2})
     mlflow.log_params({"n_rows": test_label.shape[0]})
+
+    # 

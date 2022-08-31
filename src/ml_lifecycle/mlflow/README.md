@@ -11,21 +11,10 @@ http://localhost:5000/
 ```
 - running locally
 mlflow run .
-
-
 ```
 
-##### Models
+##### Model Registry & Lifecycle Management
 ```
-
-```
-
-##### Model Registry
-```
-
-```
-
-##### Pipelines
-```
-
+- running ml server for model lifecycle management, use this to view ui when managing models
+mlflow server --backend-store-uri sqlite:///mlruns.db --default-artifact-root ./mlruns
 ```
