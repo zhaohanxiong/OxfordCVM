@@ -85,11 +85,11 @@ with mlflow.start_run(run_name = "test run"):
                                           stage = "Staging")
 
     # rename model name
-    client.rename_registered_model(name = "keras_cTI", new_name = "keras_cTI")
+    #client.rename_registered_model(name = "keras_cTI", new_name = "keras_cTI")
 
     # update model version
-    client.update_model_version(name = "keras_cTI", version = ver + 1,
-                                description = "nereast neighbor cTI prediction")
+    #client.update_model_version(name = "keras_cTI", version = ver + 1,
+    #                            description = "nereast neighbor cTI prediction")
 
     # delete model all versions & single version of model
     #client.delete_model_version(name = "registered_model_name", version = n)
