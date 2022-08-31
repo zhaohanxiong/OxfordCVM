@@ -23,8 +23,8 @@ test_label = test_label.sample(n = args.random_n,
                                random_state = args.random_seed)
 
 # initialize mlflow session, this can be used for remote tracking too
-mlflow.set_tracking_uri("mlruns")
-mlflow.set_registry_uri("sqlite:///mlruns.db")
+mlflow.set_tracking_uri("mlruns") # can be aws s3 bucket link
+mlflow.set_registry_uri("sqlite:///mlruns.db") # can be aws rds postgres link
 mlflow.set_experiment("cti_predict")
 
 # start mlflow session for tracking
@@ -51,11 +51,11 @@ with mlflow.start_run(run_name = "test run"):
     # log model
     mlflow.keras.log_model(keras_model = cTI_model,
                            artifact_path = "keras_models", 
-                           registered_model_name = "keras cTI")
+                           registered_model_name = "keras_cTI")
 
     # log metric to mlflow server manually
     # automatic logging can also be performed: https://www.mlflow.org/docs/latest/tracking.html#tensorflow-and-keras
     mlflow.set_tags({"version": "0.0", "model": "keras"})
     mlflow.log_metrics({"RMSE": rmse, "RMSE_background": rmse_0, 
                         "RMSE_between": rmse_1, "RMSE_disease": rmse_2})
-    mlflow.log_param(key = "ver", value = "2")
+    mlflow.log_params({"n_rows": test_label.shape[0]})
