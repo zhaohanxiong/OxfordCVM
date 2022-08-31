@@ -1,0 +1,16 @@
+artifact_uri: mlruns/0/1872c3d7b53a4d789d145f9a6f82d429/artifacts
+deleted_time: null
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: 1872c3d7b53a4d789d145f9a6f82d429
+run_uuid: 1872c3d7b53a4d789d145f9a6f82d429
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1661958877120
+status: 1
+tags: []
+user_id: zxiong

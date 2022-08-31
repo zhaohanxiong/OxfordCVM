@@ -48,10 +48,21 @@ with mlflow.start_run(run_name = "test run"):
     rmse_2 = np.mean(rmse[bp_group == 2])
     rmse = np.mean(rmse)
 
+    # define model signatures 
+    input_schema = mlflow.types.schema.Schema([
+                        mlflow.types.schema.TensorSpec(np.dtype(np.float32), 
+                                                       (-1, 1, test_sample.shape[1]))])
+    output_schema = mlflow.types.schema.Schema([
+                        mlflow.types.schema.TensorSpec(np.dtype(np.float32),
+                                                       (-1, 1))])
+    signature = mlflow.models.signature.ModelSignature(inputs = input_schema,
+                                                       outputs = output_schema)
+    
     # log model
     mlflow.keras.log_model(keras_model = cTI_model,
                            artifact_path = "keras_models", 
-                           registered_model_name = "keras_cTI")
+                           registered_model_name = "keras_cTI",
+                           signature = signature)
 
     # log metric to mlflow server manually
     # automatic logging can also be performed: https://www.mlflow.org/docs/latest/tracking.html#tensorflow-and-keras
