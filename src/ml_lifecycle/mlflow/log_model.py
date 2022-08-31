@@ -1,3 +1,4 @@
+import os
 import sys
 import mlflow
 import argparse
@@ -6,7 +7,10 @@ import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-# load model
+# current latest version
+ver = len(os.listdir("./mlruns"))
+
+# load model new model
 cTI_model = tf.keras.models.load_model("../tf_serving/saved_models/2/")
 
 # set random seed
@@ -59,7 +63,7 @@ with mlflow.start_run(run_name = "test run"):
     signature = mlflow.models.signature.ModelSignature(inputs = input_schema,
                                                        outputs = output_schema)
     
-    # log model
+    # log model, also register model using ml-flow
     mlflow.keras.log_model(keras_model = cTI_model,
                            artifact_path = "keras_models", 
                            registered_model_name = "keras_cTI",
@@ -72,4 +76,18 @@ with mlflow.start_run(run_name = "test run"):
                         "RMSE_between": rmse_1, "RMSE_disease": rmse_2})
     mlflow.log_params({"n_rows": test_label.shape[0]})
 
-    # 
+    # update model stage: Staging, Production, Archived
+    client = mlflow.MlflowClient()
+    client.transition_model_version_stage(name = "keras_cTI", version = ver + 1, 
+                                          stage = "Production")
+
+    # rename model name
+    client.rename_registered_model(name = "keras_cTI", new_name = "keras_cTI")
+
+    # update model version
+    client.update_model_version(name = "keras_cTI", version = ver + 1,
+                                description = "nereast neighbor cTI prediction")
+
+    # delete model all versions & single version of model
+    #client.delete_model_version(name="registered_model_name", version = n)
+    #client.delete_registered_model(name="registered_model_name")
