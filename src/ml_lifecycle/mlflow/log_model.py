@@ -8,7 +8,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 
 # current latest version
-ver = len(os.listdir("./mlruns"))
+ver = len(os.listdir("./mlruns/1"))
 
 # load model new model
 cTI_model = tf.keras.models.load_model("../tf_serving/saved_models/2/")
