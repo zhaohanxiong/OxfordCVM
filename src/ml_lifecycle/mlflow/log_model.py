@@ -4,18 +4,19 @@ import mlflow
 import argparse
 import numpy as np
 import pandas as pd
+import seaborn as sns
 import tensorflow as tf
-import matplotlib.pyplot as plt
 
 # current latest version
-ver = len(os.listdir("./mlruns/1"))
+experiment_id = "1"
+ver = len(os.listdir("./mlruns/" + experiment_id))
 
 # load model new model
 cTI_model = tf.keras.models.load_model("../tf_serving/saved_models/2/")
 
 # set random seed
 parser = argparse.ArgumentParser()
-parser.add_argument("--random_n", default = 100, type = int, help = "random N")
+parser.add_argument("--random_n", default = 1000, type = int, help = "random N")
 parser.add_argument("--random_seed", default = 1234, type = int, help = "random seed")
 args = parser.parse_args(sys.argv[1:])
 
@@ -33,7 +34,7 @@ mlflow.set_registry_uri("sqlite:///mlruns.db") # can be aws rds postgres link
 mlflow.set_experiment("cti_predict")
 
 # start mlflow session for tracking
-with mlflow.start_run(run_name = "test run"):
+with mlflow.start_run(run_name = "test run") as run:
 
     # make inference for each row
     pred = []
@@ -94,3 +95,10 @@ with mlflow.start_run(run_name = "test run"):
     # delete model all versions & single version of model
     #client.delete_model_version(name = "registered_model_name", version = n)
     #client.delete_registered_model(name = "registered_model_name")
+
+    # store output visualization for results
+    plot_path = "./mlruns/" + experiment_id + "/" + run.info.run_id + "artifacts/keras_models"
+    
+    plt = sns.boxplot(x = 'bp_group', y = 'global_pseudotimes', data = test_label)
+    fig = plt.get_figure()
+    fig.savefig(plot_path + "/disease score distribution") 
