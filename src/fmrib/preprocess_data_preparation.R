@@ -85,8 +85,7 @@ print(sprintf("Final Distribution is E(x) = %0.3f +- %0.3f [%0.3f, %0.3f]",
                    sd(as.matrix(ukb_df[, 5:ncol(ukb_df)])),
                    min(ukb_df[, 5:ncol(ukb_df)]),max(ukb_df[, 5:ncol(ukb_df)])))
 
-# shuffle/sample 10% of data to reduce number of rows for faster job runtimes
-#ukb_df = ukb_df[sample(1:nrow(ukb_df), nrow(ukb_df)), ]
+# sample 10% of data to reduce number of rows for faster job runtimes
 #ukb_df = ukb_df[sample(1:nrow(ukb_df), round(nrow(ukb_df)*0.1)), ]
 
 # display number of rows after sampling
