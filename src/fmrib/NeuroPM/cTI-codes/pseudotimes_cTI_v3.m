@@ -169,10 +169,10 @@ MST_graph = graph(MST);
 % produce visualization and save the plots
 colours_healthy_disease = classes_for_colours(classes_for_colours ~= 2);
 f = figure('visible','off');
-subplot(2,1,1);
+subplot(1,2,1);
 boxplot(global_pseudotimes,classes_for_colours);
 title('Disease Score By Group (Background/Between/Disease)');
-subplot(2,2,1);
+subplot(1,2,2);
 p = plot(MST_graph);
 highlight(p, MST_graph, 'EdgeColor', 'black', 'LineWidth',1);
 highlight(p, find(colours_healthy_disease==1), 'NodeColor', 'g', 'MarkerSize',2);
