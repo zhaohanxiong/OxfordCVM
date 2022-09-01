@@ -17,9 +17,10 @@ ssh -C -L 5931:localhost:5931 winokl@jalapeno.fmrib.ox.ac.uk
 cd /home/fs0/winokl/zxiong/OxfordCVM
 ```
 
-##### Python Activating Virtual Environment
+##### Python Activating Virtual Environment/Conda Environment
 ```
 source /home/fs0/winokl/zxiong/env/bin/activate
+source activate env_conda
 ```
 
 ##### Copying Data Files to/from Server to/from Local Windows (Example)
