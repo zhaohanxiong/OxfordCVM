@@ -99,8 +99,13 @@ var_weights = var_weights[var_weights$significant, ]
 var_weights$name = sapply(1:nrow(var_weights), function(i) varnames$Field[
                                          varnames$colname == var_weights$Var1[i]])
 
+# sort data frame by weighting
+var_weights = var_weights[order(var_weights$Node_contributions,
+                                decreasing = TRUE), ]
+
 # write the reduced variable list to file
-write.csv(var_weights, file.path(path, "var_weighting_reduced.csv"))
+write.csv(var_weights, file.path(path, "var_weighting_reduced.csv"),
+          row.names = FALSE)
 
 # print summary statistics for output
 print(sprintf(paste0("%.0f Significant Columns (cTI Selected) Contributed to "

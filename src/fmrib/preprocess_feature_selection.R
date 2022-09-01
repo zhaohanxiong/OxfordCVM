@@ -14,7 +14,7 @@ diag(cov_all) = 0
 ind_filter = !unname(apply(cov_all, 1, function(x) any(abs(x) > 0.75)))
 
 # filter columns
-ft_norm = ft_norm[, ind_filter]
+#ft_norm = ft_norm[, ind_filter]
 
 # write to output
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
