@@ -171,7 +171,7 @@ colours_healthy_disease = classes_for_colours(classes_for_colours ~= 2);
 f = figure('visible','off');
 subplot(1,2,1);
 boxplot(global_pseudotimes,classes_for_colours);
-title('Disease Score By Group (Background/Between/Disease)');
+title('Disease Score By Group');
 subplot(1,2,2);
 p = plot(MST_graph);
 highlight(p, MST_graph, 'EdgeColor', 'black', 'LineWidth',1);
@@ -179,7 +179,7 @@ highlight(p, find(colours_healthy_disease==1), 'NodeColor', 'g', 'MarkerSize',2)
 highlight(p, find(colours_healthy_disease==3), 'NodeColor', 'r', 'MarkerSize',2);
 highlight(p, Root_node, 'NodeColor', 'black', 'Marker', '^', 'MarkerSize', 5);
 title('Minimum Spanning Tree (Background/Disease)');
-set(gcf, 'PaperPosition', [0 0 20 10]);
+set(gcf, 'PaperPosition', [0 0 30 10]);
 saveas(f, 'io/results_final.png');
 
 % save MST labels as table to output file
