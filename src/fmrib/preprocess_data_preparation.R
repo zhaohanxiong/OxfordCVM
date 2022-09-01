@@ -41,7 +41,7 @@ ukb_df = return_clean_df(df = ukb_df, threshold_col = 0.5, threshold_row = 0.05,
 
 # remove rows with missing blood pressure values
 ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
-ukb_df = ukb_df[1:6000,]
+
 # display cleaned dataframe size
 print(sprintf("Cleaned Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
@@ -75,7 +75,7 @@ ukb_df = edit_ukb_columns(ukb_df,
 #                          keep_cols = c("31-0.0", "21003-2.0",
 #                                        fread("../../../var_list.csv")$x),
                           remove_cols = c("6150-0.0", "23098-0.0"))
-ukb_df = ukb_df[1:6000,]
+
 # display final dataframe size
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
                                                     nrow(ukb_df), ncol(ukb_df)))
