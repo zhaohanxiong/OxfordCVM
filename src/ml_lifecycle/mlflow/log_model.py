@@ -21,7 +21,7 @@ parser.add_argument("--random_seed", default = 1234, type = int, help = "random 
 args = parser.parse_args(sys.argv[1:])
 
 # load data & labels
-test_sample = pd.read_csv("../../fmrib/NeuroPM/io/ukb_num_norm.csv").fillna(0)
+test_sample = pd.read_csv("../../fmrib/NeuroPM/io/ukb_num_norm_ft_select.csv").fillna(0)
 test_sample = test_sample.sample(n = args.random_n, 
                                  random_state = args.random_seed).to_numpy()
 test_label = pd.read_csv("../../fmrib/NeuroPM/io/pseudotimes.csv")

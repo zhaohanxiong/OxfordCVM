@@ -3,7 +3,6 @@ library(data.table)
 
 # load data
 ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
-ft = data.frame(fread('NeuroPM/io/ukb_num.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
 
 # compute covariance and preprocess
@@ -20,12 +19,9 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 # only keep subset of background/disease
 #ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1101:2000, ],
 #                ft_norm[labels$bp_group != 1, ])
-#ft = rbind(ft[labels$bp_group == 1, ][1101:2000, ],
-#           ft[labels$bp_group != 1, ])
 #labels = rbind(labels[labels$bp_group == 1, ][1101:2000, ],
 #               labels[labels$bp_group != 1, ])
 
 # write to output
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
-fwrite(ft, "NeuroPM/io/ukb_num.csv")
 fwrite(labels, "NeuroPM/io/labels_select.csv")
