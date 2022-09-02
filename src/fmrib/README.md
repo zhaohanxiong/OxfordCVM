@@ -35,8 +35,8 @@ scp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/fmri
 https://sharepoint.nexus.ox.ac.uk/sites/NDCN/FMRIB/IT/User%20Guides/GridEngine.aspx
 
 - to run preprocessing + neuroPM in one script (Unlimited RAM and Hours, needed for full UKB, but slow)
-fsl_sub -q bigmem.q ./run_all.sh
-fsl_sub -q bigmem.q ./run_x_validate.sh
+fsl_sub -q bigmem.q bash ./run_all.sh
+fsl_sub -q bigmem.q bash ./run_x_validate.sh
 
 - manage active jobs
 qstat (check status)
