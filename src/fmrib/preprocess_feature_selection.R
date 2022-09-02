@@ -27,4 +27,5 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 
 # write to output
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
+fwrite(ft, "NeuroPM/io/ukb_num.csv")
 fwrite(labels, "NeuroPM/io/labels_select.csv")
