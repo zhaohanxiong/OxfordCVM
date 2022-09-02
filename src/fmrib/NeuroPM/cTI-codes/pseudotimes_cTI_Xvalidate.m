@@ -1,58 +1,50 @@
 function [global_pseudotimes] = pseudotimes_cTI_Xvalidate(data,starting_point,final_subjects,max_cPCs)
 
-%--- Reducing dimensionality
-% compute number of batches to use & define index ranges for patient sub-batches
+% Reducing dimensionality
+% define disease/background and number of patients in the dataset
 starting_point = starting_point(:);
-N_patients = size(data, 1);
-N_batches = 1; %N_batches = ceil(N_patients/2000);
-batch_ranges = floor(linspace(1, N_patients, N_batches + 1));
+final_subjects = final_subjects(:);
 
-% define output variable
-final_cPCs = [];
-Node_contributions = 0;
+% make up array for classes as input into cPCA.m
+classes_for_colours = ones(size(data,1),1);
 
-for b = 1:(length(batch_ranges) - 1)
+% define range of alphas to compute
+alphas_all = logspace(-2,2,100);
 
-    % define data subset for sub-batch
-    start_ind = batch_ranges(b);
-    end_ind = batch_ranges(b + 1) - (b ~= (length(batch_ranges) - 1));
+% define original indices to remove patients from
+ind_remove_mask = zeros(size(data, 1), 1);
 
-    % subset data inputted
-    data_batch = data(start_ind:end_ind, :);
-    starting_point_batch = starting_point(starting_point >= start_ind & starting_point <= end_ind) - start_ind + 1;
-    final_subjects_batch = final_subjects(final_subjects >= start_ind & final_subjects <= end_ind) - start_ind + 1;
+% define counters/storage arrays
+max_iter     = 1;     % maximum number of iterations
+is_accurate  = false; % is current model accurate
+prev_alpha   = 50;    % initialze alpha
+iter         = 1;     % iteration counter
+n_removed    = [];    % number of outliers removed in each iteration
+removed_inds = [];    % indices of outliers removed in each iteration
 
-    % define numbe of nodes
-    N_nodes = size(data_batch, 1);
+% define alphas, make sure range is always within range provided
+mid_point = find(alphas_all >= prev_alpha);
+mid_point = mid_point(1);
+mid_point = max([mid_point, 6]);
+mid_point = min([mid_point, 95]);
+alphas_iter = alphas_all((mid_point - 5):(mid_point + 5));
 
-    % perform contrastive PCA (using background and disease as priors into PCA)
-    [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = cPCA(data_batch,starting_point_batch,final_subjects_batch,max_cPCs);
+% perform contrastive PCA (using background and disease as priors into PCA)
+[cPCs,gap_values,alphas,no_dims,~,~,~] = ... 
+        cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_iter);
 
-    % store the output values
-    [~,j]           = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
-    mappedX         = cPCs(:,1:no_dims(j),j);
-    Node_Weights    = Vmedoid(:,1:no_dims(j),j);
-    Lambdas         = Dmedoid(1:no_dims(j),j);
-    contrasted_data = contrasted_data(:,:,j);
+% store the output values
+[~,j]   = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
+mappedX = cPCs(:,1:no_dims(j),j);
 
-    % compute nodal weightings (values of the final eigen vectors)
-    Node_contributions_batch = (100*(Node_Weights.^2)./repmat(sum(Node_Weights.^2,1),size(Node_Weights,1),1))*Lambdas;
-    Expected_contribution = sum(100*1/size(Node_Weights,1)*Lambdas);
+% print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
+disp(['Iteration ' num2str(iter) ' Number of cPCs: ' num2str(no_dims(j))]);
+disp(['Iteration ' num2str(iter) ' Alpha Selected: ' num2str(alphas(j))]);
 
-    % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
-    disp(['Batch ' num2str(b) ' Number of cPCs -> ' num2str(no_dims(j))]);
-    disp(['Batch ' num2str(b) ' Alpha Selected -> ' num2str(alphas(j))]);
+% Node-node distance
+dist_matrix = double(L2_distance(mappedX', mappedX'));
 
-    % append to final output
-    final_cPCs = [final_cPCs; mappedX];
-    Node_contributions = Node_contributions + Node_contributions_batch;
-
-end
-
-%--- Node-node distance
-dist_matrix = double(L2_distance(final_cPCs', final_cPCs'));
-
-%--- Minimal spanning tree across all the points
+% Minimal spanning tree across all the points
 % Specifying which node is the root, the closest one to all the starting points
 [~,j] = min(sum(dist_matrix(starting_point, starting_point),2));
 Root_node = j;
@@ -60,7 +52,7 @@ Root_node = j;
 % subset background and diseased groups
 in_background_target = [starting_point(:); final_subjects(:)];
 dist_matrix0 = dist_matrix;   
-out_background_target = setdiff(1:N_patients, in_background_target)';
+out_background_target = setdiff(1:size(data, 1), in_background_target)';
 dist_matrix = dist_matrix(in_background_target, in_background_target);
 
 % calculate minimum spanning tree
@@ -69,11 +61,14 @@ Tree = graphminspantree(sparse(dist_matrix), Root_node);
 Tree(Tree > 0) = dist_matrix(Tree > 0);
 MST = full(Tree + Tree'); %alternate: MST = minspantree(graph(dist_matrix, "upper"));
 
-%--- Shortest paths to the starting point(s) and pseudotimes
+% Shortest paths to the starting point(s) and pseudotimes
 datas = dijkstra(MST, Root_node');
 dijkstra_F = datas.F; % dijkstra father nodes for trajectory analysis
 max_distance = max(datas.A(~isinf(datas.A)));
-global_pseudotimes(in_background_target,1) = datas.A/max_distance;
+
+% initialie and define pseudotimes array
+global_pseudotimes = zeros(size(data, 1), 1);
+global_pseudotimes(in_background_target, 1) = datas.A/max_distance;
 
 % extrapolate between group values
 temp_dist = dist_matrix0(out_background_target, in_background_target);

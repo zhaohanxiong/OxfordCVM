@@ -22,6 +22,11 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 #labels = rbind(labels[labels$bp_group == 1, ][1101:2000, ],
 #               labels[labels$bp_group != 1, ])
 
+# shuffle before writing to output
+ind_rand = sample(1:nrow(labels), nrow(labels))
+ft_norm = ft_norm[ind_rand, ]
+labels = labels[ind_rand, ]
+
 # write to output
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
 fwrite(labels, "NeuroPM/io/labels_select.csv")
