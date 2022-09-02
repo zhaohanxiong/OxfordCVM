@@ -17,7 +17,7 @@ def test_cti_model():
     # load labels
     test_label = pd.read_csv("../fmrib/NeuroPM/io/pseudotimes.csv")
     #test_label = pd.read_csv("../fmrib/NeuroPM/io/all_pseudotimes.csv")
-    test_label = test_label.sample(n = test_label.shape[0], random_state = 1).to_numpy()
+    test_label = test_label.sample(n = test_label.shape[0], random_state = 1)
 
     # Action
     # make inference for each row
