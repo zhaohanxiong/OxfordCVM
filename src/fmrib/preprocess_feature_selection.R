@@ -17,10 +17,10 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 #ft_norm = ft_norm[, ind_filter]
 
 # only keep subset of background/disease
-#ft_norm = rbind(ft_norm[labels$bp_group == 2, ][1:500, ],
-#                ft_norm[labels$bp_group != 2, ])
-#labels = rbind(labels[labels$bp_group == 2, ][1:500, ],
-#               labels[labels$bp_group != 2, ])
+#ft_norm = rbind(ft_norm[labels$bp_group == 1, ][4501:5400, ],
+#                ft_norm[labels$bp_group != 1, ])
+#labels = rbind(labels[labels$bp_group == 1, ][4501:5400, ],
+#               labels[labels$bp_group != 1, ])
 
 # write to output
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
