@@ -10,14 +10,14 @@ def test_cti_model():
     # Arrange
     # load test data
     #test_sample1 = pd.read_csv("NeuroPM/io/ukb_num_norm.csv").iloc[0].fillna(0).to_numpy()
-    test_sample = pd.read_csv("../fmrib/NeuroPM/io/ukb_num_norm.csv").fillna(0).to_numpy()
+    test_sample = pd.read_csv("../fmrib/NeuroPM/io/ukb_num_norm.csv").fillna(0)
     #test_sample = pd.read_csv("../fmrib/NeuroPM/io/all_ukb_num_norm.csv").fillna(0).to_numpy()
-    #test_sample = test_sample.sample(n = 100, random_state = 1)
+    test_sample = test_sample.sample(n = test_sample.shape[0], random_state = 1).to_numpy()
 
     # load labels
     test_label = pd.read_csv("../fmrib/NeuroPM/io/pseudotimes.csv")
     #test_label = pd.read_csv("../fmrib/NeuroPM/io/all_pseudotimes.csv")
-    #test_label = test_label.sample(n = 100, random_state = 1)
+    test_label = test_label.sample(n = test_label.shape[0], random_state = 1).to_numpy()
 
     # Action
     # make inference for each row

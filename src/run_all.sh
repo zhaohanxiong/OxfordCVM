@@ -8,7 +8,7 @@ cd ./fmrib
 #Rscript ukb_whole_data_subset.R
 
 # run R preprocessing script, writes to NeuroPM/io directory
-Rscript preprocess_data_preparation.R
+#Rscript preprocess_data_preparation.R
 Rscript preprocess_feature_selection.R
 
 # compile matlab script (only if there were code changes)
@@ -26,11 +26,14 @@ Rscript postprocess_eval_model.R
 # run python trajectory visualization/computation
 python postprocess_traj.py
 
-# ml lifecycle (train, test, save, log, deploy, monitor)
+# run test cases
 cd ../ml_lifecycle
 pytest
-python ./mlflow/ml_build_model.py
-#python ./mlflow/log_model.py --random_n=1000 --random_seed=1234
+
+# ml lifecycle (train, test, save, log, deploy, monitor)
+cd ./mlflow
+python ./ml_build_model.py
+#python ./log_model.py --random_n=1000 --random_seed=1234
 
 # deploy db & models to AWS
-cd ../aws
+cd ../../AWS
