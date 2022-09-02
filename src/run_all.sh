@@ -28,9 +28,9 @@ python postprocess_traj.py
 
 # ml lifecycle (train, test, save, log, deploy, monitor)
 cd ../ml_lifecycle
-#pytest
+pytest
 python ./mlflow/ml_build_model.py
-python ./mlflow/log_model.py --random_n=1000 --random_seed=1234
+#python ./mlflow/log_model.py --random_n=1000 --random_seed=1234
 
 # deploy db & models to AWS
 cd ../aws
