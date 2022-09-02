@@ -20,7 +20,7 @@ pseudotimes_full$bp_group = ordered(pseudotimes_full$bp_group,
                                     levels = c(1, 0, 2))
 
 # load ukb raw variables
-ukb_df = data.frame(fread(file.path(path, "ukb_num_norm.csv"), header=TRUE))
+ukb_df = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"), header=TRUE))
 
 # load transformation matrix into PC space
 PC_transform = readMat(file.path(path, "PC_Transform.mat"))$Node.Weights
