@@ -38,13 +38,8 @@ Ct = cov(X_target);
 % cPCA with multiple alphas:
 for alpha_i = 1:n_alphas
 
-    if alpha_i == 1,
-        beta = regress(Ct(:),Cb(:));
-        C = Ct - beta*Cb;
-        alphas(alpha_i) = beta;
-    else
-        C = (Ct - alphas(alpha_i)*Cb);
-    end
+    % weighted sum of covariance of target vs background
+    C = Ct - alphas(alpha_i) * Cb;
 
     C(isnan(C)) = 0;
     C(isinf(C)) = 0;
