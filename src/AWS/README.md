@@ -19,8 +19,13 @@ docker push 956279893231.dkr.ecr.us-east-1.amazonaws.com/cti_pred
 
 ##### Setup Fargate, connect with ECS and ECR, and deploy
 ```
-- define ECS task definition by linking with ECR URI and exposing port 8500
+- create IAM policy, attach policies to ECS/ECR
+- create ECR registery
+- tag docker image on ur own device
+- give docker CLI permission to access AWS
+- push docker image to ECR
 - create AWS ECS cluster with fargate for serverless compute (without managing EC2)
+- define ECS task definition by linking with ECR URI and exposing port 8500
 - create task in ECS cluster by linking with task definition from above, also expose port 8500
 - copy public IP address from newly running task and copy into python grpc channel handle
 ```
