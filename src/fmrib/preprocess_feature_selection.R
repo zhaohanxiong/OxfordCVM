@@ -17,10 +17,10 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 #ft_norm = ft_norm[, ind_filter]
 
 # only keep subset of background/disease
-#ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1101:2000, ],
-#                ft_norm[labels$bp_group != 1, ])
-#labels = rbind(labels[labels$bp_group == 1, ][1101:2000, ],
-#               labels[labels$bp_group != 1, ])
+ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:1200, ],
+                ft_norm[labels$bp_group != 1, ])
+labels = rbind(labels[labels$bp_group == 1, ][1:1200, ],
+               labels[labels$bp_group != 1, ])
 
 # shuffle before writing to output
 ind_rand = sample(1:nrow(labels), nrow(labels))
