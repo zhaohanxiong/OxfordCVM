@@ -1,5 +1,5 @@
-## AI Framework Bluepoint/Tech Stack for Hypertensive Cardiovascular Disease Modelling
-![image](https://user-images.githubusercontent.com/29684281/188916007-10de5d23-d183-486a-8622-2eb9dcee1d8d.png)
+## AI Framework Bluepoint/Tech Stack for Cardiovascular Disease Modelling
+![image](https://user-images.githubusercontent.com/29684281/188947616-5185127b-2c2e-40d7-a0df-9eab95b7c213.png)
 
 ## Projects Lead By Me
 •	Bayesian dimensionality reduction, cluster analysis, and network analysis of population-wide medical databases (UK Biobank) for isolating predictive biomarkers and constructing disease progression trajectories
