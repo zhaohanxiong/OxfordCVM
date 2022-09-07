@@ -26,14 +26,14 @@ Rscript postprocess_eval_model.R
 # run python trajectory visualization/computation
 python postprocess_traj.py
 
-# run test cases
-cd ../ml_lifecycle
-pytest
-
 # ml lifecycle (train, test, save, log, deploy, monitor)
-cd ./mlflow
-python ./ml_build_model.py
+cd ../ml_lifecycle/mlflow
+#python ./ml_build_model.py
 #python ./log_model.py --random_n=1000 --random_seed=1234
+
+# run test cases
+cd ..
+pytest
 
 # deploy db & models to AWS
 cd ../../AWS

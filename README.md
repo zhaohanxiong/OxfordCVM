@@ -18,6 +18,9 @@ pip install dvc dvc-s3
 - initialize dvc in the same directory with the .git to track code changes
 dvc init
 
+- set up aws CLI (type the command below and input IAM access key/secret access from .csv file)
+aws configure
+
 - add remote storage server to dvc
 dvc remote add -d remote_storage s3://cti-ukb-data/io -f
 
