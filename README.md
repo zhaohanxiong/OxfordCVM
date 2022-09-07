@@ -1,5 +1,5 @@
 ## AI Framework Bluepoint/Tech Stack for Hypertensive Cardiovascular Disease Modelling
-![image](https://user-images.githubusercontent.com/29684281/187767345-a49e0ca8-d66f-4a0e-8057-6b35b33736fb.png)
+![image](https://user-images.githubusercontent.com/29684281/188916007-10de5d23-d183-486a-8622-2eb9dcee1d8d.png)
 
 ## Projects Lead By Me
 •	Bayesian dimensionality reduction, cluster analysis, and network analysis of population-wide medical databases (UK Biobank) for isolating predictive biomarkers and constructing disease progression trajectories
@@ -13,8 +13,8 @@
 #### Data Version Control (DVC) - Used in Tandem with Git
 ```
 - install dependencies
-pip install dvc
-pip install dvc-s3
+pip install dvc dvc-s3
+
 - initialize dvc in the same directory with the .git to track code changes
 dvc init
 
