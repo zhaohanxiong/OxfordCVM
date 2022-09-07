@@ -1,5 +1,8 @@
 ##### Tracking
 ```
+- install dependencies
+pip install mlflow
+
 - activate user interface
 mlflow ui
 

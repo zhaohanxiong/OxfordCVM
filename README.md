@@ -12,17 +12,24 @@
 
 #### Data Version Control (DVC) - Used in Tandem with Git
 ```
+- install dependencies
+pip install dvc
+pip install dvc-s3
 - initialize dvc in the same directory with the .git to track code changes
 dvc init
 
 - add remote storage server to dvc
-dvc remote add -d remote_storage https://s3.<region-code>.amazonaws.com/<bucket-name>/<key-name>
-dvc remote add -d remote_storage https://s3.us-east-1.amazonaws.com/cti-ukb-data
+dvc remote add -d remote_storage s3://cti-ukb-data/io -f
 
 - add data to dvc tracking, this makes sure that they wont be accidentally added to github
 dvc track ./<directory>
+git add .\src\fmrib\NeuroPM\io.dvc
 git commit -m "commit message"
 
-- 
+- upload to remote storage
+dvc push
+git push
 
+- retrieve data from remote storage
+dvc pull
 ```
