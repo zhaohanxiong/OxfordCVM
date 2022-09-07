@@ -39,4 +39,5 @@ git push
 
 - retrieve data from remote storage (make sure AWS CLI is set up)
 dvc pull
+git pull origin
 ```
