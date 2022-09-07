@@ -22,7 +22,7 @@ dvc init
 dvc remote add -d remote_storage s3://cti-ukb-data/io -f
 
 - add data to dvc tracking, this makes sure that they wont be accidentally added to github
-dvc track ./<directory>
+dvc add ./<directory>
 git add .\src\fmrib\NeuroPM\io.dvc
 git commit -m "commit message"
 
