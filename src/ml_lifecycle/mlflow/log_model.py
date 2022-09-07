@@ -85,6 +85,11 @@ with mlflow.start_run(run_name = "test run") as run:
     client.transition_model_version_stage(name = "keras_cTI", version = ver + 1, 
                                           stage = "Staging")
 
+    # store current best model into tf-serving directory for deployment
+    #df = mlflow.search_runs(experiment_names = ["cti_predict"])
+    #run_id = df.loc[df['metrics.RMSE'].idxmin()]['run_id']
+    #best_model_dir = "./mlruns/" + experiment_id + "/" + run_id + "/data/model/"
+
     # rename model name
     #client.rename_registered_model(name = "keras_cTI", new_name = "keras_cTI")
 

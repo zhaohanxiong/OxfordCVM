@@ -21,6 +21,7 @@ mlflow server --backend-store-uri sqlite:///mlruns.db --default-artifact-root ./
 - transition from stored -> staging -> production -> archieve, click on models/versions then see the drop-down menu
 
 - ml lifecycle workflow logic can be managed using conditional statements based on accuracy filters (TDD) to declare the version and stage of model for deployment (automated ml-ops)
+- tf-serving can be done by using mlflow to retrieve the best existing model and copying the model into tf-serving model directory
 ```
 
 ##### Model Deployment & Serving
