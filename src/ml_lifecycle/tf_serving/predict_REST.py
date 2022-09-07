@@ -10,7 +10,7 @@ sample = pd.read_csv("../../fmrib/NeuroPM/io/ukb_num_norm.csv").iloc[0]
 json_data = {"instances": sample.to_numpy()[None,:].tolist()}
 
 # define endpoint
-endpoint = "http://localhost:8501/v1/models/cti_model:predict"
+endpoint = "http://localhost:8501/v2/models/cti_model_current:predict"
 
 # send request using REST API
 response = requests.post(endpoint, json=json_data)

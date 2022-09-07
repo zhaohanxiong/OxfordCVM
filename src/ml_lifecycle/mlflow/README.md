@@ -28,6 +28,6 @@ mlflow server --backend-store-uri sqlite:///mlruns.db --default-artifact-root ./
 - models can be served using the below based on the run_id we want
 mlflow models serve --model-uri ./mlruns/<job_id>/data/model
 
-- the deployed model can then be invoked through a REST API query ()
+- the deployed model can then be invoked through a REST API query
 curl -d '{"data":<insert data here>}' -H 'Content-Type: application/json'  localhost:5000/invocations
 ```

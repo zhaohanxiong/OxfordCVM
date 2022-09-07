@@ -12,15 +12,15 @@ sample = pd.read_csv("../../fmrib/NeuroPM/io/ukb_num_norm.csv").iloc[1]
 input_tensor = tf.make_tensor_proto(sample.to_numpy()[None,:].tolist())
 
 # open channel
-#channel = grpc.insecure_channel('localhost:8500') # local docker
-channel = grpc.insecure_channel('3.234.183.226:8500') # aws fargate/ECS/ECR
+channel = grpc.insecure_channel('localhost:8500') # local docker
+#channel = grpc.insecure_channel('3.234.183.226:8500') # aws fargate/ECS/ECR
 
 # create connection
 stub = prediction_service_pb2_grpc.PredictionServiceStub(channel)
 
 # build request
 req = predict_pb2.PredictRequest()
-req.model_spec.name = "cti_model"
+req.model_spec.name = "cti_model_current"
 req.model_spec.signature_name = "serving_default"
 req.inputs["cTI_input"].CopyFrom(input_tensor)
 
