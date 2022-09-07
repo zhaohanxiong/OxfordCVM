@@ -1,4 +1,4 @@
 [core]
     remote = remote_storage
 ['remote "remote_storage"']
-    url = https://s3.us-east-1.amazonaws.com/cti-ukb-data
+    url = s3://cti-ukb-data/
