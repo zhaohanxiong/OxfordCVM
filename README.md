@@ -9,3 +9,20 @@
 ![Plotly_Demo](https://user-images.githubusercontent.com/29684281/177753046-d20de5fe-b60b-4b54-928b-d15dc5917caa.png)
 
 ![Rshiny_Demo](https://user-images.githubusercontent.com/29684281/177753060-3b01057d-e711-4a42-9106-7d2cec58ea29.png)
+
+#### Data Version Control (DVC) - Used in Tandem with Git
+```
+- initialize dvc in the same directory with the .git to track code changes
+dvc init
+
+- add remote storage server to dvc
+dvc remote add -d remote_storage https://s3.<region-code>.amazonaws.com/<bucket-name>/<key-name>
+dvc remote add -d remote_storage https://s3.us-east-1.amazonaws.com/cti-ukb-data
+
+- add data to dvc tracking, this makes sure that they wont be accidentally added to github
+dvc track ./<directory>
+git commit -m "commit message"
+
+- 
+
+```
