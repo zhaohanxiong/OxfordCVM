@@ -8,6 +8,10 @@ source("preprocess_utils.R")
 ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
 
+# for exploratory analysis, only get one row/column
+#df = fread("../../../ukb51139.csv", nrows = 1)
+#df = fread("../../../ukb51139.csv", select = c("6150-0.0"))
+
 # display initial dataframe size
 print(sprintf("Initial Data Frame is of Size %0.0f by %0.0f",
                                         nrow(ukb$ukb_data), ncol(ukb$ukb_data)))

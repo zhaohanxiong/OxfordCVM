@@ -76,7 +76,9 @@ get_ukb_subset_column_names = function(df, df_vars,
   # Demographic
   Sex = "31-0.0"
   Age = grep("^21003-", names(df), value=TRUE)
-  Event = "6150-0.0"
+  Event = c("6150-0.0", "6150-0.1", "6150-0.2", "6150-0.3", # first visit
+            "6150-1.0", "6150-1.1", "6150-1.2", "6150-1.3", # second visit
+            "6150-2.0", "6150-2.1", "6150-2.2", "6150-2.3") # third visit
   
   # other, date of imaging visit 
   StudyDate = grep("^53-", names(df), value=TRUE)
