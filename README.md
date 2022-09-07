@@ -24,6 +24,10 @@ aws configure
 - add remote storage server to dvc (using S3 URI)
 dvc remote add -d remote_storage s3://cti-ukb-data/dvc -f
 
+- check status of files, always do dvc before git commands
+dvc status
+git status
+
 - add data to dvc tracking, this makes sure that they wont be accidentally added to git
 dvc add ./<directory>
 git add .\src\fmrib\NeuroPM\<directory>.dvc
