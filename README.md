@@ -1,5 +1,5 @@
-## AI Framework Bluepoint/Tech Stack for Hypertensive Cardiovascular Disease Modelling
-![image](https://user-images.githubusercontent.com/29684281/188916007-10de5d23-d183-486a-8622-2eb9dcee1d8d.png)
+## AI Framework Bluepoint/Tech Stack for Cardiovascular Disease Modelling
+![image](https://user-images.githubusercontent.com/29684281/188947616-5185127b-2c2e-40d7-a0df-9eab95b7c213.png)
 
 ## Projects Lead By Me
 •	Bayesian dimensionality reduction, cluster analysis, and network analysis of population-wide medical databases (UK Biobank) for isolating predictive biomarkers and constructing disease progression trajectories
@@ -15,24 +15,24 @@
 - install dependencies
 pip install dvc dvc-s3
 
-- initialize dvc in the same directory with the .git to track code changes
+- initialize dvc in the same directory with the ./.git to track code changes
 dvc init
 
-- set up aws CLI (type the command below and input IAM access key/secret access from .csv file)
+- set up AWS CLI (type the command below and input IAM access key/secret access from .csv file)
 aws configure
 
-- add remote storage server to dvc
+- add remote storage server to dvc (using S3 URI)
 dvc remote add -d remote_storage s3://cti-ukb-data/dvc -f
 
-- add data to dvc tracking, this makes sure that they wont be accidentally added to github
+- add data to dvc tracking, this makes sure that they wont be accidentally added to git
 dvc add ./<directory>
-git add .\src\fmrib\NeuroPM\io.dvc
-git commit -m "commit message"
+git add .\src\fmrib\NeuroPM\<directory>.dvc
 
-- upload to remote storage
+- commit all dvc/git changes and upload to remote storage (on S3 and GitHub)
+git commit -m "commit message"
 dvc push
 git push
 
-- retrieve data from remote storage
+- retrieve data from remote storage (make sure AWS CLI is set up)
 dvc pull
 ```
