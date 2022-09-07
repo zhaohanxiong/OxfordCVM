@@ -22,7 +22,7 @@ dvc init
 aws configure
 
 - add remote storage server to dvc
-dvc remote add -d remote_storage s3://cti-ukb-data/io -f
+dvc remote add -d remote_storage s3://cti-ukb-data/dvc -f
 
 - add data to dvc tracking, this makes sure that they wont be accidentally added to github
 dvc add ./<directory>
