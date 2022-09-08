@@ -312,7 +312,7 @@ get_ukb_subset_rows = function(df, subset_option="all") {
     
     # exclude those with heart attack/angina/stroke at time of imaging
     subset_rows = which(!is.na(df[,"BPSys-2.0"]) & 
-                        df[,"6150-0.0"] == -7)
+                        (df[,"6150-0.0"] == -7 | df[,"6150-0.0"] == 4))
 
   } else if (subset_option == "women no heart attack, angina, stroke") {
     
@@ -436,8 +436,7 @@ return_ukb_target_background_labels = function(df_subset, target_criteria="> 140
 
     # > 140/80
     target_rows = which(df_subset[,"BPSys-2.0"] >= 140 |
-                        df_subset[,"BPDia-2.0"] >= 90 |
-                        df_subset[,"6150-0.0"] == 4)
+                        df_subset[,"BPDia-2.0"] >= 90)
     
     background_rows = which(df_subset[,"BPSys-2.0"] < 120 &
                             df_subset[,"BPDia-2.0"] < 80 &
@@ -447,8 +446,7 @@ return_ukb_target_background_labels = function(df_subset, target_criteria="> 140
     
     # > 160/100
     target_rows = which(df_subset[,"BPSys-2.0"] >= 160 |
-                        df_subset[,"BPDia-2.0"] >= 100 |
-                        df_subset[,"6150-0.0"] == 4)
+                        df_subset[,"BPDia-2.0"] >= 100)
     
     background_rows = which(df_subset[,"BPSys-2.0"] < 120 &
                             df_subset[,"BPDia-2.0"] < 80 &
