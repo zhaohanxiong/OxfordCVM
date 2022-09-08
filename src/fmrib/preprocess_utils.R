@@ -312,7 +312,7 @@ get_ukb_subset_rows = function(df, subset_option="all") {
     
     # exclude those with heart attack/angina/stroke at time of imaging
     subset_rows = which(!is.na(df[,"BPSys-2.0"]) & 
-                        (df[,"6150-0.0"] == -7 | df[,"6150-0.0"] == 4))
+                        df[,"6150-0.0"] == -7)
 
   } else if (subset_option == "women no heart attack, angina, stroke") {
     
