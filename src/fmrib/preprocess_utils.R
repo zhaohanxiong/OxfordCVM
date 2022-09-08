@@ -284,6 +284,18 @@ get_ukb_subset_rows = function(df, subset_option="all") {
   # and returns the indices of the rows. here we focuse on the blood
   # pressure mainly to ensure no missing values are in the subset
   
+  # for prior events
+  #   remove all -3, 1, 2, 3
+  #   remove 4 from background group
+  #   keep only patients labeled with -7 in background, and -7 & 4 in disease
+  df_6150 = df[,grep("6150", colnames(df))]
+  df_6150[df_6150 == -3] = NA
+  df[, "6150-0.0"] = apply(df_6150, 1, 
+                           function(x) ifelse(all(is.na(x)),
+                                              NA,
+                                              unname(x[max(which(!is.na(x)))])
+                                              ))
+  
   if (subset_option == "all") {
     
     # all
@@ -303,14 +315,14 @@ get_ukb_subset_rows = function(df, subset_option="all") {
     
     # exclude those with heart attack/angina/stroke at time of imaging
     subset_rows = which(!is.na(df[,"BPSys-2.0"]) & 
-                              (!(df[,"6150-0.0"] > 0 & df[,"6150-0.0"] < 4)))
+                        (df[,"6150-0.0"] == -7 | df[,"6150-0.0"] == 4))
 
   } else if (subset_option == "women no heart attack, angina, stroke") {
     
     # only women: exclude those with heart attack/angina/stroke at time 
     #             of imaging
     subset_rows = which(!is.na(df[,"BPSys-2.0"]) & df[,"31-0.0"] == "0" &
-                              (!(df[,"6150-0.0"] > 0 & df[,"6150-0.0"] < 4)))
+                        (df[,"6150-0.0"] == -7 | df[,"6150-0.0"] == 4))
     
   } else {
     warning("Wrong Subset Option Error")
@@ -587,7 +599,11 @@ edit_ukb_columns = function(ukb_data, keep_cols = c(), remove_cols = c()) {
 
   # inverse index dataframe (if not empty input)
   if (length(remove_cols) > 0) {
-    data = data[, !colnames(data) %in% remove_cols]
+    to_remove = c()
+    for (i in 1:length(remove_cols)) {
+      to_remove = c(to_remove, grep(remove_cols[i], colnames(data)))
+    }
+    data = data[, -to_remove]
   }
 
   # re-combine new subset of columns with dataframe
