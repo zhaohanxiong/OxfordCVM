@@ -435,8 +435,8 @@ return_ukb_target_background_labels = function(df_subset, target_criteria="> 140
   if (target_criteria == "> 140/80") {
 
     # > 140/80
-    target_rows = which(df_subset[,"BPSys-2.0"] >= 140 |
-                        df_subset[,"BPDia-2.0"] >= 90)
+    target_rows = which(df_subset[,"BPSys-2.0"] > 140 |
+                        df_subset[,"BPDia-2.0"] > 90)
     
     background_rows = which(df_subset[,"BPSys-2.0"] < 120 &
                             df_subset[,"BPDia-2.0"] < 80 &
@@ -445,8 +445,8 @@ return_ukb_target_background_labels = function(df_subset, target_criteria="> 140
   } else if (target_criteria == "> 160/100") {
     
     # > 160/100
-    target_rows = which(df_subset[,"BPSys-2.0"] >= 160 |
-                        df_subset[,"BPDia-2.0"] >= 100)
+    target_rows = which(df_subset[,"BPSys-2.0"] > 160 |
+                        df_subset[,"BPDia-2.0"] > 100)
     
     background_rows = which(df_subset[,"BPSys-2.0"] < 120 &
                             df_subset[,"BPDia-2.0"] < 80 &
