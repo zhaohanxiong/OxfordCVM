@@ -284,10 +284,7 @@ get_ukb_subset_rows = function(df, subset_option="all") {
   # and returns the indices of the rows. here we focuse on the blood
   # pressure mainly to ensure no missing values are in the subset
   
-  # for prior events
-  #   remove all -3, 1, 2, 3
-  #   remove 4 from background group
-  #   keep only patients labeled with -7 in background, and -7 & 4 in disease
+  # for prior events use latest data, ignore -3 first, remove all 1, 2, 3, keep -7, 4
   df_6150 = df[,grep("6150", colnames(df))]
   df_6150[df_6150 == -3] = NA
   df[, "6150-0.0"] = apply(df_6150, 1, 
@@ -432,32 +429,40 @@ return_ukb_target_background_labels = function(df_subset, target_criteria="> 140
   
   # define all as between first
   bp_label_vector = rep(0, nrow(df_subset))
-  
+
+  # for prior events, remove 4 (high BP) from background group
+  # keep only patients labeled with -7 in background, and -7 & 4 in disease
   if (target_criteria == "> 140/80") {
 
     # > 140/80
-    target_rows = which(df_subset[,"BPSys-2.0"] > 140 | df_subset[,"BPDia-2.0"] > 90)
-    background_rows = which(df_subset[,"BPSys-2.0"] < 120 & df_subset[,"BPDia-2.0"] < 80)
+    target_rows = which(df_subset[,"BPSys-2.0"] >= 140 |
+                        df_subset[,"BPDia-2.0"] >= 90)
+    
+    background_rows = which(df_subset[,"BPSys-2.0"] < 120 &
+                            df_subset[,"BPDia-2.0"] < 80 &
+                              df_subset[,"6150-0.0"] == -7)
     
   } else if (target_criteria == "> 160/100") {
     
     # > 160/100
-    target_rows = which(df_subset[,"BPSys-2.0"] > 160 | df_subset[,"BPDia-2.0"] > 100)
-    background_rows = which(df_subset[,"BPSys-2.0"] < 120 & df_subset[,"BPDia-2.0"] < 80)
+    target_rows = which(df_subset[,"BPSys-2.0"] >= 160 |
+                        df_subset[,"BPDia-2.0"] >= 100)
+    
+    background_rows = which(df_subset[,"BPSys-2.0"] < 120 &
+                            df_subset[,"BPDia-2.0"] < 80 &
+                            df_subset[,"6150-0.0"] == -7)
     
   } else if (target_criteria == "event at time of imaging") {
     
-    # target: event at time of imaging. 
-    # Background: no event, no event on follow
-    target_rows = which(df_subset[,"6150-0.0"] > 0 & df_subset[,"6150-0.0"] < 4)
-    background_rows = which(df_subset[,"6150-0.0"] < 0 | df_subset[,"6150-0.0"] == 4)
+    # Target: event at time of imaging. Background: no event, no event on follow
+    #target_rows = which(df_subset[,"6150-0.0"] > 0 & df_subset[,"6150-0.0"] < 4)
+    #background_rows = which(df_subset[,"6150-0.0"] < 0 | df_subset[,"6150-0.0"] == 4)
     
   } else if (target_criteria == "no event at time of imaging, but at follow-up") {
     
-    # target: no event at time of imaging, but at follow-up. 
-    # Background: no event, no event on follow-up, low BP
-    target_rows = which(df_subset[,"6150-0.0"] > 0 & df_subset[,"6150-0.0"] < 4)
-    background_rows = which(df_subset[,"6150-0.0"] < 0 | df_subset[,"6150-0.0"] == 4)
+    # Target: no event at time of imaging, but at follow-up. Background: no event, no event on follow-up
+    #target_rows = which(df_subset[,"6150-0.0"] > 0 & df_subset[,"6150-0.0"] < 4)
+    #background_rows = which(df_subset[,"6150-0.0"] < 0 | df_subset[,"6150-0.0"] == 4)
     
   } else {
     warning("Wrong Criteria Option Error")
