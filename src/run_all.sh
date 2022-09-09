@@ -36,4 +36,4 @@ cd ..
 pytest
 
 # deploy db & models to AWS
-cd ../../AWS
+cd ../AWS

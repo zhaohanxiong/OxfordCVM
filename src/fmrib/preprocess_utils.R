@@ -76,18 +76,29 @@ get_ukb_subset_column_names = function(df, df_vars,
   # Demographic
   Sex = "31-0.0"
   Age = grep("^21003-", names(df), value=TRUE)
-  Event = c("6150-0.0", "6150-0.1", "6150-0.2", "6150-0.3", # first visit
-            "6150-1.0", "6150-1.1", "6150-1.2", "6150-1.3", # second visit
-            "6150-2.0", "6150-2.1", "6150-2.2", "6150-2.3") # third visit
+  
+  # blood pressure variables (in addition)
+  bp_var1 = grep("12674", names(df), value=TRUE) # systolic brachial PWA
+  bp_var2 = grep("12675", names(df), value=TRUE) # diastolic brachial PWA 
+  bp_var3 = grep("12677", names(df), value=TRUE) # central systolic PWA
+  bp_var4 = grep("12697", names(df), value=TRUE) # systolic brachial 
+  bp_var5 = grep("12698", names(df), value=TRUE) # diastolic brachial
+  bp_var6 = grep("^93-",  names(df), value=TRUE) # sys manual
+  bp_var7 = grep("^94-",  names(df), value=TRUE) # dia manual
+  #bp_var8 = grep("4079",  names(df), value=TRUE) # sys automated
+  #bp_var9 = grep("4080",  names(df), value=TRUE) # dia automated
+  bp_var  = c(bp_var1, bp_var2, bp_var3, bp_var4, bp_var5, bp_var6, bp_var7)
+
+  # medication
+  med_bp1 = grep("6153", names(df), value=TRUE) # cholesterol, blood pressure, diabetes
+  med_bp2 = grep("6177", names(df), value=TRUE) # cholesterol, blood pressure, diabetes
+  med_bp  = c(med_bp1, med_bp2)
+  
+  # history of heart attack, angina, stroke
+  Event = grep("6150", names(df), value=TRUE)
   
   # other, date of imaging visit 
   StudyDate = grep("^53-", names(df), value=TRUE)
-  
-  # blood pressure variables
-  BPSys = grep("^4080-", names(df), value=TRUE)
-  BPSys2 = grep("^93-", names(df), value=TRUE)
-  BPDia = grep("^4079-", names(df), value=TRUE)
-  BPDia2 = grep("94-2.0", names(df), value=TRUE)
   
   # diagnosis variables
   bb_dis_vars = df_vars$FieldID[df_vars$Category > 42 & 
@@ -221,14 +232,14 @@ get_ukb_subset_column_names = function(df, df_vars,
   bb_blood_vars = bb_blood_vars[!bb_blood_vars %in% excl]
   
   # Combine variables together
-  vars = c("eid", "12187-2.0", Age, Sex, StudyDate, BPSys, BPSys2, BPDia, Event,
-           BPDia2,bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
+  vars = c("eid", "12187-2.0", Age, Sex, StudyDate, Event,bp_var,med_bp,
+           bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
            bb_art_vars,bb_blood_vars,bb_car_vars, bb_spir_vars,
            bb_ecgrest_vars,bb_dis_vars,bb_med_vars) # bb_antro_vars
   vars = vars[!vars %in% c(bulkvars, stratavars)]
   
   vars_2 = c(grep("\\-2.0",
-                      c(Age, StudyDate,Event,BPSys,BPSys2,BPDia,BPDia2,
+                      c(Age, StudyDate,Event,bp_var,med_bp,
                         bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
                         bb_art_vars,bb_blood_vars,bb_car_vars,
                         bb_ecgrest_vars), # bb_antro_vars
@@ -243,7 +254,7 @@ get_ukb_subset_column_names = function(df, df_vars,
     
     # all
     vars_subset_cols = vars_2[vars_2 %in% c(
-                                  bb_CMR_vars,bb_BMR_vars,
+                                  bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,
                                   bb_AMR_vars,
                                   bb_bodycomp_vars,bb_art_vars,
                                   bb_car_vars,bb_blood_vars,bb_spir_vars,
@@ -252,7 +263,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   } else if (subset_option == "cardiac") {
     
     # cardiac
-    vars_subset_cols = vars_2[vars_2 %in% c(
+    vars_subset_cols = vars_2[vars_2 %in% c(bp_var,med_bp,
                                     bb_CMR_vars, bb_art_vars, bb_car_vars)]
     
   } else if (subset_option == "brain") {
@@ -263,7 +274,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   } else if (subset_option == "cardiac + brain + carotid ultrasound") {
     
     # cardiac + brain + carotid ultrasound
-    vars_subset_cols = vars_2[vars_2 %in% c(bb_CMR_vars,bb_BMR_vars,
+    vars_subset_cols = vars_2[vars_2 %in% c(bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,
                                             bb_art_vars,bb_car_vars,Sex,Age)]
     
   } else {
