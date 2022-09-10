@@ -85,9 +85,11 @@ get_ukb_subset_column_names = function(df, df_vars,
   bp_var5 = grep("12698", names(df), value=TRUE) # diastolic brachial
   bp_var6 = grep("^93-",  names(df), value=TRUE) # sys manual
   bp_var7 = grep("^94-",  names(df), value=TRUE) # dia manual
-  #bp_var8 = grep("4079",  names(df), value=TRUE) # sys automated
-  #bp_var9 = grep("4080",  names(df), value=TRUE) # dia automated
-  bp_var  = c(bp_var1, bp_var2, bp_var3, bp_var4, bp_var5, bp_var6, bp_var7)
+  bp_var8 = grep("4079",  names(df), value=TRUE) # sys automated
+  bp_var9 = grep("4080",  names(df), value=TRUE) # dia automated
+  bp_var  = c(bp_var1, bp_var2, bp_var3, bp_var4, bp_var5,
+              bp_var6, bp_var7,
+              bp_var8, bp_var9)
 
   # medication
   med_bp1 = grep("6153", names(df), value=TRUE) # cholesterol, blood pressure, diabetes
@@ -290,20 +292,17 @@ get_ukb_subset_column_names = function(df, df_vars,
 
 get_ukb_subset_rows = function(df, subset_option="all") {
 
-  # Code written by Winok
   # this function extracts the rows (patients) we want to analyse
   # and returns the indices of the rows. here we focuse on the blood
   # pressure mainly to ensure no missing values are in the subset
   
   # for prior events use latest data, ignore -3, remove all 1, 2, 3, keep -7, 4
-  df_6150 = df[,grep("6150", colnames(df))]
-  df_6150[df_6150 == -3] = NA
-  df[, "6150-0.0"] = apply(df_6150, 1, 
-                           function(x) ifelse(all(is.na(x)),
-                                              NA,
-                                              unname(x[max(which(!is.na(x)))])
-                                              ))
-  df[, "6150-0.0"][is.na(df[, "6150-0.0"])] = -999
+  # note this is repeated again below for proper variable assignment
+  events = apply(df[,grep("6150", colnames(df))], 1,
+                 function(x) ifelse(all(is.na(x)),
+                                    NA,
+                                    unname(x[max(which(!is.na(x)))])
+                                    ))
   
   if (subset_option == "all") {
     
@@ -326,7 +325,7 @@ get_ukb_subset_rows = function(df, subset_option="all") {
     
     # exclude those with heart attack/angina/stroke at time of imaging
     subset_rows = which(!is.na(df[,"BPSys-2.0"]) & !is.na(df[,"BPDia-2.0"]) & 
-                        (df[,"6150-0.0"] == -7 | df[,"6150-0.0"] == 4))
+                        (events == -7 | events == 4))
 
   } else if (subset_option == "women no heart attack, angina, stroke") {
     
@@ -334,7 +333,7 @@ get_ukb_subset_rows = function(df, subset_option="all") {
     #             of imaging
     subset_rows = which(!is.na(df[,"BPSys-2.0"]) & !is.na(df[,"BPDia-2.0"]) & 
                         df[,"31-0.0"] == 0 &
-                        (df[,"6150-0.0"] == -7 | df[,"6150-0.0"] == 4))
+                        (events == -7 | events == 4))
     
   } else {
     warning("Wrong Subset Option Error")
@@ -362,6 +361,49 @@ return_cols_rows_filter_df = function(df, cols, rows) {
   # subset columns
   df = df[, cols[cols %in% colnames(df)]]
 
+  return(df)
+  
+}
+
+return_collate_variables = function(df) {
+  
+  # given the UKB dataset, perform a set of custom column-collation steps, and
+  # assign these into custom new columns
+  
+  # helper function which retrieves value from right-most column in a row
+  get_latest_val = function(x_row) {
+    x_row = ifelse(all(is.na(x_row)),
+                   NA, unname(x_row[max(which(!is.na(x_row)))]))
+    return(x_row)
+  }
+  
+  # preprocess blood pressure variables
+  bp_sys = df[, grep("BPSys-2.0|12674|12677|12697|^93-", colnames(df))]
+  df[, "BPSys-2.0"] = apply(bp_sys, 1, function(x) max(x, na.rm = TRUE))
+  
+  bp_dia = df[, grep("BPDia-2.0|12675|12698|^94-", colnames(df))]
+  df[, "BPDia-2.0"] = apply(bp_dia, 1, function(x) max(x, na.rm = TRUE))
+  
+  # preprocess medication variables, ignore -1, -3, remove all 2, keep rest
+  df_med1 = df[, grep("6153", colnames(df))]
+  df_med1[df_med1 == -1] = NA
+  df_med1[df_med1 == -3] = NA
+  df_med1 = apply(df_med1, 1, function(x) get_latest_val(x))
+  
+  df_med2 = df[, grep("6177", colnames(df))]
+  df_med2[df_med2 == -1] = NA
+  df_med2[df_med2 == -3] = NA
+  df_med2 = apply(df_med2, 1, function(x) get_latest_val(x))
+
+  df$bp_medication = apply(cbind(df_med1, df_med2), 1,
+                                                function(x) get_latest_val(x))
+  
+  # for prior events use latest data, ignore -3, remove all 1, 2, 3, keep -7, 4
+  df_6150 = df[, grep("6150", colnames(df))]
+  df_6150[df_6150 == -3] = NA
+
+  df$prior_events = apply(df_6150, 1, function(x) get_latest_val(x))
+  
   return(df)
   
 }
@@ -446,29 +488,6 @@ return_ukb_target_background_labels = function(df_subset,
   # on the criteria provided for blood pressure. then append this new vector
   # in between at the 4th column of the original dataframe
 
-  # preprocess blood pressure variables
-  bp_sys = df_subset[, grep("BPSys-2.0|12674|12677|12697|^93-",
-                            colnames(df_subset))]
-  bp_sys = apply(bp_sys, 1, function(x) max(x, na.rm = TRUE))
-  bp_dia = df_subset[, grep("BPDia-2.0|12675|12698|^94-",
-                            colnames(df_subset))]
-  bp_dia = apply(bp_dia, 1, function(x) max(x, na.rm = TRUE))
-  
-  # preprocess medication variables, ignore -1, -3, remove all 2, keep rest
-  df_med = df_subset[, grep("6153|6177", colnames(df_subset))]
-  bp_med = apply(df_med, 1, function(x)
-                                any(x == 2 | x == -1 | x == -3, na.rm = TRUE))
-
-  # for prior events use latest data, ignore -3, remove all 1, 2, 3, keep -7, 4
-  df_6150 = df_subset[, grep("6150", colnames(df_subset))]
-  df_6150[df_6150 == -3] = NA
-  events = apply(df_6150, 1, function(x)
-                                  ifelse(all(is.na(x)),
-                                         NA,
-                                         unname(x[max(which(!is.na(x)))]))
-                 )
-  events[is.na(events)] = -999
-  
   # define all as between first
   bp_label_vector = rep(0, nrow(df_subset))
   
@@ -476,11 +495,11 @@ return_ukb_target_background_labels = function(df_subset,
   # keep only patients labeled with -7 in background, and -7 & 4 in disease
   if (target_criteria == "> 140/80") {
     
-    target_rows = which(bp_sys > 140 | bp_dia > 80)
+    target_rows = which(df_subset$`BPSys-2.0` > 140 | df_subset$`BPDia-2.0` > 80)
     
   } else if (target_criteria == "> 160/100") {
     
-    target_rows = which(bp_sys > 160 | bp_dia > 100)
+    target_rows = which(df_subset$`BPSys-2.0` > 160 | df_subset$`BPDia-2.0` > 100)
     
   } else if (target_criteria == "event at time of imaging") {
     
@@ -500,8 +519,10 @@ return_ukb_target_background_labels = function(df_subset,
   }
   
   # define background rows
-  background_rows = which(bp_sys < 120 & bp_dia < 80 &
-                          events == -7 & bp_med == FALSE)
+  background_rows = which(df_subset$`BPSys-2.0` < 120 &
+                          df_subset$`BPDia-2.0` < 80 &
+                          df_subset$prior_events == -7 &
+                          df_subset$bp_medication != -2)
   
   # clean missing value
   background_rows = background_rows[!is.na(background_rows)]

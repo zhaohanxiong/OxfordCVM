@@ -24,6 +24,9 @@ ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
                                     cols = ukb_filtered_cols,
                                     rows = ukb_filtered_rows)
 
+# define specific variables for certain filters
+ukb_df = return_collate_variables(ukb_df)
+
 # free up memory
 rm(ukb)
 
