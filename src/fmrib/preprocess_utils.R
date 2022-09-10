@@ -402,7 +402,7 @@ return_collate_variables = function(df) {
   df_6150 = df[, grep("6150", colnames(df))]
   df_6150[df_6150 == -3] = NA
 
-  df$prior_events = apply(df_6150, 1, function(x) get_latest_val(x))
+  df[, "6150-0.0"] = apply(df_6150, 1, function(x) get_latest_val(x))
   
   return(df)
   
@@ -521,7 +521,7 @@ return_ukb_target_background_labels = function(df_subset,
   # define background rows
   background_rows = which(df_subset$`BPSys-2.0` < 120 &
                           df_subset$`BPDia-2.0` < 80 &
-                          df_subset$prior_events == -7 &
+                          df_subset$`6150-0.0` == -7 &
                           df_subset$bp_medication != -2)
   
   # clean missing value
