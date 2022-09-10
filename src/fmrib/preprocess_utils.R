@@ -85,8 +85,8 @@ get_ukb_subset_column_names = function(df, df_vars,
   bp_var5 = grep("12698", names(df), value=TRUE) # diastolic brachial
   bp_var6 = grep("^93-",  names(df), value=TRUE) # sys manual
   bp_var7 = grep("^94-",  names(df), value=TRUE) # dia manual
-  bp_var8 = grep("4079",  names(df), value=TRUE) # sys automated
-  bp_var9 = grep("4080",  names(df), value=TRUE) # dia automated
+  bp_var8 = grep("4080",  names(df), value=TRUE) # sys automated
+  bp_var9 = grep("4079",  names(df), value=TRUE) # dia automated
   bp_var  = c(bp_var1, bp_var2, bp_var3, bp_var4, bp_var5,
               bp_var6, bp_var7,
               bp_var8, bp_var9)
@@ -378,11 +378,11 @@ return_collate_variables = function(df) {
   
   # preprocess blood pressure variables, set upper and lower bound thresholds
   # for patients, use upper bound for background, lower bound for disease
-  bp_sys = df[, grep("BPSys-2.0|12674|12677|12697|^93-|4079", colnames(df))]
+  bp_sys = df[, grep("BPSys-2.0|12674|12677|12697|^93-|4080", colnames(df))]
   df$bp_sys_upper = apply(bp_sys, 1, function(x) max(x, na.rm = TRUE))
   df$bp_sys_lower = apply(bp_sys, 1, function(x) min(x, na.rm = TRUE))
   
-  bp_dia = df[, grep("BPDia-2.0|12675|12698|^94-|4080", colnames(df))]
+  bp_dia = df[, grep("BPDia-2.0|12675|12698|^94-|4079", colnames(df))]
   df$bp_dia_upper = apply(bp_dia, 1, function(x) max(x, na.rm = TRUE))
   df$bp_dia_lower = apply(bp_dia, 1, function(x) min(x, na.rm = TRUE))
   
