@@ -445,25 +445,20 @@ return_ukb_target_background_labels = function(df_subset,
   # a given row is a background (1), target (2), or between (0), depending
   # on the criteria provided for blood pressure. then append this new vector
   # in between at the 4th column of the original dataframe
-  
+
   # preprocess blood pressure variables
-  bp_sys = df_subset[, grep("BPSys-2.0|12674|12677|12697|12698|^93-",
+  bp_sys = df_subset[, grep("BPSys-2.0|12674|12677|12697|^93-",
                             colnames(df_subset))]
   bp_sys = apply(bp_sys, 1, function(x) max(x, na.rm = TRUE))
   bp_dia = df_subset[, grep("BPDia-2.0|12675|12698|^94-",
                             colnames(df_subset))]
   bp_dia = apply(bp_dia, 1, function(x) max(x, na.rm = TRUE))
   
-  # preprocess medication variables
+  # preprocess medication variables, ignore -1, -3, remove all 2, keep rest
   df_med = df_subset[, grep("6153|6177", colnames(df_subset))]
-  df_med[df_med == -3 | df_med == -1] = NA
-  medication = apply(df_med, 1, function(x)
-                                      ifelse(all(is.na(x)),
-                                             NA,
-                                             unname(x[max(which(!is.na(x)))]))
-                    )
-  medication[is.na(medication)] = -999
-                                  
+  bp_med = apply(df_med, 1, function(x)
+                                any(x == 2 | x == -1 | x == -3, na.rm = TRUE))
+
   # for prior events use latest data, ignore -3, remove all 1, 2, 3, keep -7, 4
   df_6150 = df_subset[, grep("6150", colnames(df_subset))]
   df_6150[df_6150 == -3] = NA
@@ -506,7 +501,7 @@ return_ukb_target_background_labels = function(df_subset,
   
   # define background rows
   background_rows = which(bp_sys < 120 & bp_dia < 80 &
-                          events == -7 & medication != 2)
+                          events == -7 & bp_med == FALSE)
   
   # clean missing value
   background_rows = background_rows[!is.na(background_rows)]

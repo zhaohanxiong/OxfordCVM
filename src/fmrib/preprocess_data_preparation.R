@@ -74,7 +74,10 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
 ukb_df = edit_ukb_columns(ukb_df, 
 #                          keep_cols = c("31-0.0", "21003-2.0",
 #                                        fread("../../../var_list.csv")$x),
-                          remove_cols = c("6150", "23098"))
+                          remove_cols = c("6150", "6153", "6177",
+                                          "23098-0.0", "23098-1.0", "23098-3.0",
+                                          "12675", "12698", "^93-",
+                                          "12674", "12677", "12697", "^94-"))
 
 # display final dataframe size
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
