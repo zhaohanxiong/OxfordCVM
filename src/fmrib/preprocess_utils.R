@@ -111,11 +111,10 @@ get_ukb_subset_column_names = function(df, df_vars,
                     names(df), 
                     value=TRUE)
   bb_dis_vars = c(bb_dis_vars, 
-                        grep(
-                          "^40000-|^40001-|^40002-|^40007-", 
-                          names(df), 
-                          value=TRUE)
-  ) # add cause of death
+                  grep("^40000-|^40001-|^40002-|^40007-", 
+                       names(df), 
+                       value=TRUE)
+                  ) # add cause of death
   
   ## medication variables
   bb_med_vars = df_vars$FieldID[df_vars$Category=="100045"]
@@ -377,12 +376,15 @@ return_collate_variables = function(df) {
     return(x_row)
   }
   
-  # preprocess blood pressure variables
-  bp_sys = df[, grep("BPSys-2.0|12674|12677|12697|^93-", colnames(df))]
-  df[, "BPSys-2.0"] = apply(bp_sys, 1, function(x) max(x, na.rm = TRUE))
+  # preprocess blood pressure variables, set upper and lower bound thresholds
+  # for patients, use upper bound for background, lower bound for disease
+  bp_sys = df[, grep("BPSys-2.0|12674|12677|12697|^93-|4079", colnames(df))]
+  df$bp_sys_upper = apply(bp_sys, 1, function(x) max(x, na.rm = TRUE))
+  df$bp_sys_lower = apply(bp_sys, 1, function(x) min(x, na.rm = TRUE))
   
-  bp_dia = df[, grep("BPDia-2.0|12675|12698|^94-", colnames(df))]
-  df[, "BPDia-2.0"] = apply(bp_dia, 1, function(x) max(x, na.rm = TRUE))
+  bp_dia = df[, grep("BPDia-2.0|12675|12698|^94-|4080", colnames(df))]
+  df$bp_dia_upper = apply(bp_dia, 1, function(x) max(x, na.rm = TRUE))
+  df$bp_dia_lower = apply(bp_dia, 1, function(x) min(x, na.rm = TRUE))
   
   # preprocess medication variables, ignore -1, -3, remove all 2, keep rest
   df_med1 = df[, grep("6153", colnames(df))]
@@ -519,8 +521,8 @@ return_ukb_target_background_labels = function(df_subset,
   }
   
   # define background rows
-  background_rows = which(df_subset$`BPSys-2.0` < 120 &
-                          df_subset$`BPDia-2.0` < 80 &
+  background_rows = which(df_subset$bp_sys_upper < 120 &
+                          df_subset$bp_dia_upper < 80 &
                           df_subset$`6150-0.0` == -7 &
                           df_subset$bp_medication != -2)
   
