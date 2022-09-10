@@ -36,7 +36,7 @@ alphas_all = logspace(-2,2,100);
 ind_remove_mask = zeros(size(data, 1), 1);
 
 % define counters/storage arrays
-max_iter     = 25;     % maximum number of iterations
+max_iter     = 1;     % maximum number of iterations
 is_accurate  = false; % is current model accurate
 prev_alpha   = 50;    % initialze alpha
 iter         = 1;     % iteration counter
