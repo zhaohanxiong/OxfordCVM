@@ -58,6 +58,10 @@ fwrite(ukb_df[, 4:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")
 ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
                                              target_criteria = "> 160/100")
 
+# display the assigned patients per group
+print("Distribution of Patients Per Group")
+print(table(ukb_df$bp_group))
+
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
                                                      ukb_df[, 5:ncol(ukb_df)])
@@ -82,7 +86,7 @@ ukb_df = edit_ukb_columns(ukb_df,
                               "6150", #"events", # events (all)
                               "23098-0.0", "23098-1.0", "23098-3.0", # weight
                               "12675", "12698", "^93-", "4079", # dia BP
-                              "12674", "12677", "12697", "^94-", "4080", # sys BP
+                              "12674", "12677", "12697", "^94-", "4080" # sys BP
                               )
           )
 
@@ -94,8 +98,6 @@ print(sprintf("Final Distribution is E(x) = %0.3f +- %0.3f [%0.3f, %0.3f]",
                    mean(as.matrix(ukb_df[, 5:ncol(ukb_df)])),
                    sd(as.matrix(ukb_df[, 5:ncol(ukb_df)])),
                    min(ukb_df[, 5:ncol(ukb_df)]),max(ukb_df[, 5:ncol(ukb_df)])))
-print("Distribution of Patients Per Group")
-print(table(ukb_df$bp_group))
 
 # display number of rows after sampling
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f", 
