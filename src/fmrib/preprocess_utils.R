@@ -87,17 +87,20 @@ get_ukb_subset_column_names = function(df, df_vars,
   bp_var7 = grep("^94-",  names(df), value=TRUE) # dia manual
   bp_var8 = grep("4080",  names(df), value=TRUE) # sys automated
   bp_var9 = grep("4079",  names(df), value=TRUE) # dia automated
-  bp_var  = c(bp_var1, bp_var2, bp_var3, bp_var4, bp_var5,
-              bp_var6, bp_var7,
-              bp_var8, bp_var9)
+  bp_var = c(bp_var1, bp_var2, bp_var3, bp_var4, bp_var5,
+             bp_var6, bp_var7,
+             bp_var8, bp_var9)
+  bp_var = bp_var[!grepl("-3.|-4.", bp_var)]
 
   # medication
   med_bp1 = grep("6153", names(df), value=TRUE) # cholesterol, blood pressure, diabetes
   med_bp2 = grep("6177", names(df), value=TRUE) # cholesterol, blood pressure, diabetes
-  med_bp  = c(med_bp1, med_bp2)
+  med_bp = c(med_bp1, med_bp2)
+  med_bp = med_bp[!grepl("-3.|-4.", med_bp)]
   
   # history of heart attack, angina, stroke
   Event = grep("6150", names(df), value=TRUE)
+  Event = Event[!grepl("-3.|-4.", Event)]
   
   # other, date of imaging visit 
   StudyDate = grep("^53-", names(df), value=TRUE)
@@ -404,7 +407,7 @@ return_collate_variables = function(df) {
   df_6150 = df[, grep("6150", colnames(df))]
   df_6150[df_6150 == -3] = NA
 
-  df[, "6150-0.0"] = apply(df_6150, 1, function(x) get_latest_val(x))
+  df$events = apply(df_6150, 1, function(x) get_latest_val(x))
   
   return(df)
   
@@ -523,7 +526,7 @@ return_ukb_target_background_labels = function(df_subset,
   # define background rows
   background_rows = which(df_subset$bp_sys_upper < 120 &
                           df_subset$bp_dia_upper < 80 &
-                          df_subset$`6150-0.0` == -7 &
+                          df_subset$events == -7 &
                           df_subset$bp_medication != -2)
   
   # clean missing value

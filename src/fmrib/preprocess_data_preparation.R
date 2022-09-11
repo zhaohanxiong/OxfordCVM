@@ -75,14 +75,16 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
 
 # remove columns which we dont want influence the model
 ukb_df = edit_ukb_columns(ukb_df, 
-#                          keep_cols = c("31-0.0", "21003-2.0",
-#                                        fread("../../../var_list.csv")$x),
-                          remove_cols = c("bp_sys_", "bp_dia_", "bp_medication",
-                                          "6150", "6153", "6177",
-                                          "23098-0.0", "23098-1.0", "23098-3.0",
-                                          "12675", "12698", "^93-",
-                                          "4079", "4080",
-                                          "12674", "12677", "12697", "^94-"))
+#             keep_cols = c("31-0.0", "21003-2.0",
+#                           fread("../../../var_list.csv")$x),
+              remove_cols = c("bp_sys_", "bp_dia_", # blood pressure (all)
+                              "bp_medication", "6153", "6177", # medication (all)
+                              "6150", #"events", # events (all)
+                              "23098-0.0", "23098-1.0", "23098-3.0", # weight
+                              "12675", "12698", "^93-", "4079", # dia BP
+                              "12674", "12677", "12697", "^94-", "4080", # sys BP
+                              )
+          )
 
 # display final dataframe size
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
@@ -92,9 +94,8 @@ print(sprintf("Final Distribution is E(x) = %0.3f +- %0.3f [%0.3f, %0.3f]",
                    mean(as.matrix(ukb_df[, 5:ncol(ukb_df)])),
                    sd(as.matrix(ukb_df[, 5:ncol(ukb_df)])),
                    min(ukb_df[, 5:ncol(ukb_df)]),max(ukb_df[, 5:ncol(ukb_df)])))
-
-# sample 10% of data to reduce number of rows for faster job runtimes
-#ukb_df = ukb_df[sample(1:nrow(ukb_df), round(nrow(ukb_df)*0.1)), ]
+print("Distribution of Patients Per Group")
+print(table(ukb_df$bp_group))
 
 # display number of rows after sampling
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f", 
