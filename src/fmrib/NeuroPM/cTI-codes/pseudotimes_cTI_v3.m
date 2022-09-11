@@ -47,7 +47,7 @@ removed_inds = [];    % indices of outliers removed in each iteration
 while iter <= max_iter && ~is_accurate
     
     % define alphas, make sure range is always within range provided
-    n_points = 10;
+    n_points = 5;
     mid_point = find(alphas_all >= prev_alpha);
     mid_point = mid_point(1);
     mid_point = max([mid_point, 1 + n_points]);
