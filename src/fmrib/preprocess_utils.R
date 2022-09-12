@@ -87,8 +87,8 @@ get_ukb_subset_column_names = function(df, df_vars,
   bp_var7 = grep("^94-",  names(df), value=TRUE) # dia manual
   bp_var8 = grep("4080",  names(df), value=TRUE) # sys automated
   bp_var9 = grep("4079",  names(df), value=TRUE) # dia automated
-  bp_var = c(bp_var1, bp_var2, bp_var3, bp_var4, bp_var5,
-             bp_var6, bp_var7,
+  bp_var = c(#bp_var1, bp_var2, bp_var3, bp_var4, bp_var5,
+             #bp_var6, bp_var7,
              bp_var8, bp_var9)
   bp_var = bp_var[!grepl("-3.|-4.", bp_var)]
 
