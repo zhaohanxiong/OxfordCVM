@@ -28,10 +28,10 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   # set blood pressure variables if not present already
   if (length(grep("BPSys", colnames(df))) == 0) {
 
-    df[["BPSys-1.0"]] = df[["4080-0.0"]]
-    df[["BPSys-2.0"]] = df[["4080-0.1"]]
-    df[["BPDia-1.0"]] = df[["4079-0.0"]]
-    df[["BPDia-2.0"]] = df[["4079-0.1"]]
+    df[["BPSys-1.0"]] = df[["4080-1.0"]]
+    df[["BPSys-2.0"]] = df[["4080-2.0"]]
+    df[["BPDia-1.0"]] = df[["4079-1.0"]]
+    df[["BPDia-2.0"]] = df[["4079-2.0"]]
 
   }
   
