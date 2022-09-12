@@ -45,3 +45,6 @@ ukb_df = ukb_df[rowMeans(is.na(ukb_df)) < 0.95, ]
 
 # write to output (data & labels)
 fwrite(ukb_df, "../../../ukb_subset.csv")
+
+# display output to indicate full ukb dataset subsetting is complete
+print(sprintf("UKB Whole Data Subsetting is Complete"))
