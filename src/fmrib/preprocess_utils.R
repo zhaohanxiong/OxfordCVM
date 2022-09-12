@@ -28,9 +28,7 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   # set blood pressure variables if not present already
   if (length(grep("BPSys", colnames(df))) == 0) {
 
-    df[["BPSys-1.0"]] = df[["4080-1.0"]]
     df[["BPSys-2.0"]] = df[["4080-2.0"]]
-    df[["BPDia-1.0"]] = df[["4079-1.0"]]
     df[["BPDia-2.0"]] = df[["4079-2.0"]]
 
   }
@@ -91,7 +89,7 @@ get_ukb_subset_column_names = function(df, df_vars,
              #bp_var6, bp_var7,
              bp_var8, bp_var9)
   bp_var = bp_var[!grepl("-3.|-4.", bp_var)]
-
+  print(bp_var)
   # medication
   med_bp1 = grep("6153", names(df), value=TRUE) # cholesterol, blood pressure, diabetes
   med_bp2 = grep("6177", names(df), value=TRUE) # cholesterol, blood pressure, diabetes
