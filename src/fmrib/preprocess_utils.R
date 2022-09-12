@@ -89,7 +89,7 @@ get_ukb_subset_column_names = function(df, df_vars,
              #bp_var6, bp_var7,
              bp_var8, bp_var9)
   bp_var = bp_var[!grepl("-3.|-4.", bp_var)]
-  print(bp_var)
+
   # medication
   med_bp1 = grep("6153", names(df), value=TRUE) # cholesterol, blood pressure, diabetes
   med_bp2 = grep("6177", names(df), value=TRUE) # cholesterol, blood pressure, diabetes
