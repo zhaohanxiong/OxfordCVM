@@ -30,7 +30,7 @@ starting_point = starting_point(:);
 final_subjects = final_subjects(:);
 
 % define range of alphas to compute
-alphas_all = logspace(-2,2,100);
+alphas_all = logspace(-2,2,1000);
 
 % define original indices to remove patients from
 ind_remove_mask = zeros(size(data, 1), 1);
@@ -38,7 +38,7 @@ ind_remove_mask = zeros(size(data, 1), 1);
 % define counters/storage arrays
 max_iter     = 1;     % maximum number of iterations
 is_accurate  = false; % is current model accurate
-prev_alpha   = 50;    % initialze alpha
+prev_alpha   = 80;    % initialze alpha
 iter         = 1;     % iteration counter
 n_removed    = [];    % number of outliers removed in each iteration
 removed_inds = [];    % indices of outliers removed in each iteration
