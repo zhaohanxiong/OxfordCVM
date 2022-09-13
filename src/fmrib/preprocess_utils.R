@@ -76,11 +76,11 @@ get_ukb_subset_column_names = function(df, df_vars,
   Age = grep("^21003-", names(df), value=TRUE)
   
   # blood pressure variables (in addition)
-  bp_var1 = grep("12674", names(df), value=TRUE) # systolic brachial PWA
-  bp_var2 = grep("12675", names(df), value=TRUE) # diastolic brachial PWA 
-  bp_var3 = grep("12677", names(df), value=TRUE) # central systolic PWA
-  bp_var4 = grep("12697", names(df), value=TRUE) # systolic brachial 
-  bp_var5 = grep("12698", names(df), value=TRUE) # diastolic brachial
+  #bp_var1 = grep("12674", names(df), value=TRUE) # systolic brachial PWA
+  #bp_var2 = grep("12675", names(df), value=TRUE) # diastolic brachial PWA 
+  #bp_var3 = grep("12677", names(df), value=TRUE) # central systolic PWA
+  #bp_var4 = grep("12697", names(df), value=TRUE) # systolic brachial 
+  #bp_var5 = grep("12698", names(df), value=TRUE) # diastolic brachial
   bp_var6 = grep("^93-",  names(df), value=TRUE) # sys manual
   bp_var7 = grep("^94-",  names(df), value=TRUE) # dia manual
   bp_var8 = grep("4080",  names(df), value=TRUE) # sys automated
