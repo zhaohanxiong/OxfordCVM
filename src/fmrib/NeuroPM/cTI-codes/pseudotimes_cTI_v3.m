@@ -30,7 +30,7 @@ starting_point = starting_point(:);
 final_subjects = final_subjects(:);
 
 % define range of alphas to compute
-alphas_all = logspace(-2,3,100);
+alphas_all = logspace(-2,3,200);
 
 % define original indices to remove patients from
 ind_remove_mask = zeros(size(data, 1), 1);
