@@ -3,20 +3,24 @@
 ```
 - create policy in AWS Identifiy Authentication Manager (IAM)
 - download the .csv file containing the public/private keys
+
+- open CMD as administrator and type the command:
 aws configure
+
 - give CLI permission to access AWS by inputting the keys from .csv file (use empty/default settings for others)
 ```
 
 ##### Deploy Container to AWS ECR/ECS with Fargate
 ```
 - create a new repository in ECR and save the link (shown below) & access IAM token
-- configure AWS CLI to have access to new ECR (account ID = 956279893231)
+
+- configure AWS CLI to have access to new ECR (account ID = 956279893231):
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 956279893231.dkr.ecr.us-east-1.amazonaws.com
 
-- tag docker image on ur own computer (located in ..\ml_lifecycle\tf_serving)
+- tag docker image on ur own computer (located in ..\ml_lifecycle\tf_serving):
 docker tag cti_model 956279893231.dkr.ecr.us-east-1.amazonaws.com/cti_pred
 
-- push docker image to ECR (using format/link below)
+- push docker image to ECR (using format/link below):
 docker push 956279893231.dkr.ecr.us-east-1.amazonaws.com/cti_pred
 
 - create AWS ECS cluster with fargate for serverless compute (without managing EC2)
@@ -28,5 +32,17 @@ docker push 956279893231.dkr.ecr.us-east-1.amazonaws.com/cti_pred
 
 ##### Infrastructure as Code (IaC) with Terraform
 ```
+- Download terraform and add it to environment variables
+	- Search "Edit Environment Variables" in windows search bar
+	- Select "Environment variables"
+	- Under "System Variables"
+	- Under the "Variables" columns Select "Path" > "Edit" > "New"
+	- Add the path of terraform executable (C:\terraform.exe)
+	- Under "User Variables"
+	- Under the "Variables" columns Select "Path" > find variable with "%USERPROFILE%\AppData ..."
+	- Add terraform path to this existing variable with a comma in between (, C:\terraform.exe)
+
+- open CMD and navigate to location of terraform.exe
+terraform -version or (.\terraform.exe -version)
 
 ```
