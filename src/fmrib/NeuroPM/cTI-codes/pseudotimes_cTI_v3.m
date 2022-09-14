@@ -30,7 +30,8 @@ starting_point = starting_point(:);
 final_subjects = final_subjects(:);
 
 % define range of alphas to compute
-alphas_all = logspace(-2,3,200);
+n_alphas = 100;
+alphas_all = logspace(-2, 3, n_alphas);
 
 % define original indices to remove patients from
 ind_remove_mask = zeros(size(data, 1), 1);
@@ -51,7 +52,7 @@ while iter <= max_iter && ~is_accurate
     mid_point = find(alphas_all >= prev_alpha);
     mid_point = mid_point(1);
     mid_point = max([mid_point, 1 + n_points]);
-    mid_point = min([mid_point, 100 - n_points]);
+    mid_point = min([mid_point, n_alphas - n_points]);
     alphas_iter = alphas_all((mid_point - n_points):(mid_point + n_points));
 
     % perform contrastive PCA (using background and disease as priors into PCA)
