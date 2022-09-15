@@ -1,8 +1,11 @@
+# outputs from cTI
 /src/fmrib/NeuroPM/io
 
+# terraform staging files
 /src/aws/terraform/.terraform
 /src/aws/terraform/terraform.exe
 /src/aws/terraform/.terraform.lock.hcl
 
+# machine learning files
 /src/ml_lifecycle/tf_serving/saved_models
 /src/ml_lifecycle/mlflow/mlruns
