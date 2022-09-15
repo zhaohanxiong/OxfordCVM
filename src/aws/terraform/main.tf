@@ -10,38 +10,38 @@ provider "aws" {
 #   - 20,000 GET requests per month
 #   - 2,000 PUT/COPY/POST/LIST requests per month
 #   - 100 GB data transfer out each month
-#resource "aws_s3_bucket" "s3_bucket_name" {
-#    bucket = "cti-ukb-data"
-#    tags = {
-#        Name        = "cti-ukb-data"
-#        Environment = "dev"
-#    }
-#}
-#
-#resource "aws_s3_bucket_acl" "s3_acl" {
-#    bucket = aws_s3_bucket.s3_bucket_name.id
-#    acl    = "private"
-#}
-#
-#resource "aws_s3_bucket_versioning" "s3_version" {
-#    bucket = aws_s3_bucket.s3_bucket_name.id
-#    versioning_configuration {
-#        status = "Disabled"
-#    }
-#}
-#
-#resource "aws_s3_object" "s3_object" {
-#    bucket = aws_s3_bucket.s3_bucket_name.id
-#    key    = "dvc"
-#}
-#
-#resource "aws_s3_bucket_public_access_block" "example" {
-#    bucket                  = aws_s3_bucket.s3_bucket_name.id
-#    block_public_acls       = false
-#    block_public_policy     = false
-#    ignore_public_acls      = false
-#    restrict_public_buckets = false
-#}
+resource "aws_s3_bucket" "s3_bucket_name" {
+    bucket = "cti-ukb-data"
+    tags = {
+        Name        = "cti-ukb-data"
+        Environment = "dev"
+    }
+}
+
+resource "aws_s3_bucket_acl" "s3_acl" {
+    bucket = aws_s3_bucket.s3_bucket_name.id
+    acl    = "private"
+}
+
+resource "aws_s3_bucket_versioning" "s3_version" {
+    bucket = aws_s3_bucket.s3_bucket_name.id
+    versioning_configuration {
+        status = "Disabled"
+    }
+}
+
+resource "aws_s3_object" "s3_object" {
+    bucket = aws_s3_bucket.s3_bucket_name.id
+    key    = "dvc"
+}
+
+resource "aws_s3_bucket_public_access_block" "example" {
+    bucket                  = aws_s3_bucket.s3_bucket_name.id
+    block_public_acls       = false
+    block_public_policy     = false
+    ignore_public_acls      = false
+    restrict_public_buckets = false
+}
 
 # RDS configuration
 #   AWS free tier (as of 15-09-2022):
