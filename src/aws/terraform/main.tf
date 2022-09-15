@@ -1,6 +1,7 @@
 # define platform (when running with aws CLI)
 provider "aws" {
     profile = "default"
+    alias   = "us_east_1"
     region  = "us-east-1"
 }
 
@@ -57,7 +58,7 @@ resource "aws_db_instance" "rds_postgresql_name" {
     engine                              = "postgres"
     engine_version                      = "13.7"
     instance_class                      = "db.t3.micro"
-    identifier                          = "ukb_db"
+    identifier                          = "ukb-db"
     db_name                             = "ukb_postgres_db"
     username                            = "zhaohanxiong_rds_username"
     password                            = "zhaohanxiong_rds_password"
@@ -79,24 +80,24 @@ resource "aws_db_instance" "rds_postgresql_name" {
 #     transfer 5 TB of data to the Internet from a public repository each month
 #   - Unlimited bandwidth at no cost when transferring data from a public repository 
 #     to AWS compute resources in any AWS Region.
-resource "aws_ecrpublic_repository" "ecr_name" {
-    repository_name = "cti_pred"
-    provider        = aws.us_east_1
-}
-# resource "aws_ecr_repository" "ecr_name" {
-#     repository_name      = "cti_pred"
-#     image_tag_mutability = "MUTABLE"
-#     image_scanning_configuration {
-#         scan_on_push = true
-#     }
-# }
+#resource "aws_ecrpublic_repository" "ecr_name" {
+#    provider        = aws.us_east_1
+#    repository_name = "cti_pred"
+#}
+#resource "aws_ecr_repository" "ecr_name" {
+#    name                 = "cti_pred"
+#    image_tag_mutability = "MUTABLE"
+#    image_scanning_configuration {
+#        scan_on_push = true
+#    }
+#}
+
+# ECS configuration
+#   - always free and cost depends on usage of AWS compute resources
 
 # EC2 configuration
 #   AWS free tier (as of 15-09-2022):
 #   - 750 hours of t2.micro instances (use t3.micro for regions where t2.micro is 
 #     unavailable) per month
-
-# ECS configuration
-#   - always free and cost depends on usage of AWS compute resources
 
 # Fargate configuration
