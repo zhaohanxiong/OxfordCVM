@@ -79,17 +79,49 @@ resource "aws_db_instance" "rds_postgresql_name" {
 #     transfer 5 TB of data to the Internet from a public repository each month
 #   - Unlimited bandwidth at no cost when transferring data from a public repository 
 #     to AWS compute resources in any AWS Region.
-#resource "aws_ecrpublic_repository" "ecr_name" {
-#    provider        = aws.us_east_1
-#    repository_name = "cti_pred"
-#}
-resource "aws_ecr_repository" "ecr_name" {
-    name                 = "cti_pred"
-    image_tag_mutability = "MUTABLE"
-    image_scanning_configuration {
-        scan_on_push = true
-    }
+resource "aws_ecrpublic_repository" "ecr_name" {
+  repository_name = "cti-pred"
 }
+
+resource "aws_ecrpublic_repository_policy" "ecr_name" {
+  repository_name = aws_ecrpublic_repository.ecr_name.repository_name
+  policy = <<EOF
+        {
+            "Version": "2008-10-17",
+            "Statement": [
+                {
+                    "Sid": "new policy",
+                    "Effect": "Allow",
+                    "Principal": "*",
+                    "Action": [
+                        "ecr:GetDownloadUrlForLayer",
+                        "ecr:BatchGetImage",
+                        "ecr:BatchCheckLayerAvailability",
+                        "ecr:PutImage",
+                        "ecr:InitiateLayerUpload",
+                        "ecr:UploadLayerPart",
+                        "ecr:CompleteLayerUpload",
+                        "ecr:DescribeRepositories",
+                        "ecr:GetRepositoryPolicy",
+                        "ecr:ListImages",
+                        "ecr:DeleteRepository",
+                        "ecr:BatchDeleteImage",
+                        "ecr:SetRepositoryPolicy",
+                        "ecr:DeleteRepositoryPolicy"
+                    ]
+                }
+            ]
+        }
+        EOF
+}
+
+# resource "aws_ecr_repository" "ecr_name" {
+#     name                 = "cti-pred"
+#     image_tag_mutability = "MUTABLE"
+#     image_scanning_configuration {
+#         scan_on_push = true
+#     }
+# }
 
 # ECS configuration
 #   - always free and cost depends on usage of AWS compute resources
