@@ -53,7 +53,7 @@ while iter <= max_iter && ~is_accurate
     mid_point = mid_point(1);
     mid_point = max([mid_point, 1 + n_points]);
     mid_point = min([mid_point, n_alphas - n_points]);
-    alphas_iter = logspace(-2, 3, n_alphas);%alphas_all((mid_point - n_points):(mid_point + n_points));
+    alphas_iter = alphas_all((mid_point - n_points):(mid_point + n_points));
 
     % perform contrastive PCA (using background and disease as priors into PCA)
     [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = ... 
