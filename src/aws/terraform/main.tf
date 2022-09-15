@@ -1,7 +1,6 @@
 # define platform (when running with aws CLI)
 provider "aws" {
     profile = "default"
-    alias   = "us_east_1"
     region  = "us-east-1"
 }
 
