@@ -84,8 +84,8 @@ resource "aws_ecrpublic_repository" "ecr_name" {
 }
 
 resource "aws_ecrpublic_repository_policy" "ecr_name" {
-  repository_name = aws_ecrpublic_repository.ecr_name.repository_name
-  policy = <<EOF
+    repository_name = aws_ecrpublic_repository.ecr_name.repository_name
+    policy = <<EOF
         {
             "Version": "2008-10-17",
             "Statement": [
