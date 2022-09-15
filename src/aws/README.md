@@ -44,7 +44,7 @@ docker push 956279893231.dkr.ecr.us-east-1.amazonaws.com/cti_pred
 - Open CMD to check terraform correctly installed
 .\terraform.exe -version
 
-- Initialize terraform environment
+- Initialize terraform environment through terminal where main.tf is located
 .\terraform.exe init
 
 - Check the terraform infrastructure configuration it will produce
