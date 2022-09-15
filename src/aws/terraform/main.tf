@@ -6,10 +6,10 @@ provider "aws" {
 
 # s3 configuration
 #   AWS free tier (as of 15-09-2022):
-#       - 5GB standard storage
-#       - 20,000 GET requests per month
-#       - 2,000 PUT/COPY/POST/LIST requests per month
-#       - 100 GB data transfer out each month
+#   - 5GB standard storage
+#   - 20,000 GET requests per month
+#   - 2,000 PUT/COPY/POST/LIST requests per month
+#   - 100 GB data transfer out each month
 #resource "aws_s3_bucket" "s3_bucket_name" {
 #    bucket = "cti-ukb-data"
 #    tags = {
@@ -45,14 +45,14 @@ provider "aws" {
 
 # RDS configuration
 #   AWS free tier (as of 15-09-2022):
-#       - 20 GB of General Purpose (SSD) DB Storage
-#       - 20 GB of backup storage for your automated database backups and 
-#         any user-initiated DB snapshots
-#       - 750 hours of Single-AZ db.t2.micro/db.t3.micro/db.t4g.micro Instances 
-#         for MySQL/MariaDB/PostgreSQL per month
-#       - If running more than one instance, usage is aggregated across all instance
-#       - 750 hours of RDS Single-AZ db.t2.micro Instance usage running SQL Server 
-#         (running SQL Server Express Edition) per month
+#   - 20 GB of General Purpose (SSD) DB Storage
+#   - 20 GB of backup storage for your automated database backups and 
+#     any user-initiated DB snapshots
+#   - 750 hours of Single-AZ db.t2.micro/db.t3.micro/db.t4g.micro Instances 
+#     for MySQL/MariaDB/PostgreSQL per month
+#   - If running more than one instance, usage is aggregated across all instance
+#   - 750 hours of RDS Single-AZ db.t2.micro Instance usage running SQL Server 
+#     (running SQL Server Express Edition) per month
 resource "aws_db_instance" "rds_postgresql_name" {
     allocated_storage = 10
     engine = "mysql"
@@ -67,22 +67,23 @@ resource "aws_db_instance" "rds_postgresql_name" {
 
 # ECR configuration
 #   AWS free tier (as of 15-09-2022):
-#       - 500 MB per month of storage for private repositories
-#       - 50 GB of free storage for public repositories
-#       - No cost transferring data in to private or public repositories
-#       - Anonymously (without using an AWS account) transfer 500 GB of data to the 
-#         Internet from a public repository each month
-#       - If you authenticate to Amazon ECR with an existing AWS account, you can  
-#         transfer 5 TB of data to the Internet from a public repository each month
-#       - Unlimited bandwidth at no cost when transferring data from a public repository 
-#         to AWS compute resources in any AWS Region.
+#   - 500 MB per month of storage for private repositories
+#   - 50 GB of free storage for public repositories
+#   - No cost transferring data in to private or public repositories
+#   - Anonymously (without using an AWS account) transfer 500 GB of data to the 
+#     Internet from a public repository each month
+#   - If you authenticate to Amazon ECR with an existing AWS account, you can  
+#     transfer 5 TB of data to the Internet from a public repository each month
+#   - Unlimited bandwidth at no cost when transferring data from a public repository 
+#     to AWS compute resources in any AWS Region.
 
 
 # EC2 configuration
 #   AWS free tier (as of 15-09-2022):
-#       - 750 hours of t2.micro instances (use t3.micro for regions where t2.micro is 
-#         unavailable) per month
+#   - 750 hours of t2.micro instances (use t3.micro for regions where t2.micro is 
+#     unavailable) per month
 
 # ECS configuration
+#   - always free and cost depends on usage of AWS compute resources
 
 # Fargate configuration
