@@ -84,13 +84,13 @@ resource "aws_db_instance" "rds_postgresql_name" {
 #    provider        = aws.us_east_1
 #    repository_name = "cti_pred"
 #}
-#resource "aws_ecr_repository" "ecr_name" {
-#    name                 = "cti_pred"
-#    image_tag_mutability = "MUTABLE"
-#    image_scanning_configuration {
-#        scan_on_push = true
-#    }
-#}
+resource "aws_ecr_repository" "ecr_name" {
+    name                 = "cti_pred"
+    image_tag_mutability = "MUTABLE"
+    image_scanning_configuration {
+        scan_on_push = true
+    }
+}
 
 # ECS configuration
 #   - always free and cost depends on usage of AWS compute resources
