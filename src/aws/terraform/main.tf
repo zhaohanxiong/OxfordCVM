@@ -1,7 +1,7 @@
 # define platform (when running with aws CLI)
 provider "aws" {
     profile = "default"
-    region = "us-east-1"
+    region  = "us-east-1"
 }
 
 # s3 configuration
@@ -20,7 +20,7 @@ provider "aws" {
 #
 #resource "aws_s3_bucket_acl" "s3_acl" {
 #    bucket = aws_s3_bucket.s3_bucket_name.id
-#    acl = "private"
+#    acl    = "private"
 #}
 #
 #resource "aws_s3_bucket_versioning" "s3_version" {
@@ -32,14 +32,14 @@ provider "aws" {
 #
 #resource "aws_s3_object" "s3_object" {
 #    bucket = aws_s3_bucket.s3_bucket_name.id
-#    key = "dvc"
+#    key    = "dvc"
 #}
 #
 #resource "aws_s3_bucket_public_access_block" "example" {
-#    bucket = aws_s3_bucket.s3_bucket_name.id
-#    block_public_acls = false
-#    block_public_policy = false
-#    ignore_public_acls = false
+#    bucket                  = aws_s3_bucket.s3_bucket_name.id
+#    block_public_acls       = false
+#    block_public_policy     = false
+#    ignore_public_acls      = false
 #    restrict_public_buckets = false
 #}
 
@@ -54,15 +54,18 @@ provider "aws" {
 #   - 750 hours of RDS Single-AZ db.t2.micro Instance usage running SQL Server 
 #     (running SQL Server Express Edition) per month
 resource "aws_db_instance" "rds_postgresql_name" {
-    allocated_storage = 10
-    engine = "mysql"
-    engine_version = "5.7"
-    instance_class = "db.t3.micro"
-    name = "mydb"
-    username = "foo"
-    password = "foobarbaz"
-    parameter_group_name = "default.mysql5.7"
-    skip_final_snapshot = true
+    engine                              = "postgres"
+    engine_version                      = "13.7"
+    instance_class                      = "db.t3.micro"
+    identifier                          = "ukb_db"
+    db_name                             = "ukb_postgres_db"
+    username                            = "zhaohanxiong_rds_username"
+    password                            = "zhaohanxiong_rds_password"
+    publicly_accessible                 = false
+    skip_final_snapshot                 = true
+    allocated_storage                   = 10
+    port                                = 5432
+    iam_database_authentication_enabled = false
 }
 
 # ECR configuration
