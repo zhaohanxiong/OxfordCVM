@@ -18,6 +18,11 @@ resource "aws_s3_bucket" "s3_bucket_name" {
     }
 }
 
+resource "aws_s3_object" "s3_object" {
+    bucket = aws_s3_bucket.s3_bucket_name.id
+    key    = "dvc"
+}
+
 resource "aws_s3_bucket_acl" "s3_acl" {
     bucket = aws_s3_bucket.s3_bucket_name.id
     acl    = "private"
@@ -30,12 +35,7 @@ resource "aws_s3_bucket_versioning" "s3_version" {
     }
 }
 
-resource "aws_s3_object" "s3_object" {
-    bucket = aws_s3_bucket.s3_bucket_name.id
-    key    = "dvc"
-}
-
-resource "aws_s3_bucket_public_access_block" "example" {
+resource "aws_s3_bucket_public_access_block" "s3_access" {
     bucket                  = aws_s3_bucket.s3_bucket_name.id
     block_public_acls       = false
     block_public_policy     = false
@@ -79,7 +79,17 @@ resource "aws_db_instance" "rds_postgresql_name" {
 #     transfer 5 TB of data to the Internet from a public repository each month
 #   - Unlimited bandwidth at no cost when transferring data from a public repository 
 #     to AWS compute resources in any AWS Region.
-
+resource "aws_ecrpublic_repository" "ecr_name" {
+    repository_name = "cti_pred"
+    provider        = aws.us_east_1
+}
+# resource "aws_ecr_repository" "ecr_name" {
+#     repository_name      = "cti_pred"
+#     image_tag_mutability = "MUTABLE"
+#     image_scanning_configuration {
+#         scan_on_push = true
+#     }
+# }
 
 # EC2 configuration
 #   AWS free tier (as of 15-09-2022):
