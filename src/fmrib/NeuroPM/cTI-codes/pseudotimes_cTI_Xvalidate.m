@@ -17,7 +17,7 @@ ind_remove_mask = zeros(size(data, 1), 1);
 % define counters/storage arrays
 max_iter     = 1;     % maximum number of iterations
 is_accurate  = false; % is current model accurate
-prev_alpha   = 50;    % initialze alpha
+prev_alpha   = 75;    % initialze alpha
 iter         = 1;     % iteration counter
 n_removed    = [];    % number of outliers removed in each iteration
 removed_inds = [];    % indices of outliers removed in each iteration
