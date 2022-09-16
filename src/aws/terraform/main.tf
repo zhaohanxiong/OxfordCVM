@@ -173,16 +173,18 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 resource "aws_ecs_task_definition" "task_definition" {
     family                = "cti-task"
-    container_definitions = [
-        {
-            "essential": true,
-            "memory": 512,
-            "name": "worker",
-            "cpu": 2,
-            "image": "${REPOSITORY_URL}:latest",
-            "environment": []
-        }
-    ]
+    container_definitions = <<EOF
+        [
+            {
+                "essential": true,
+                "memory": 512,
+                "name": "worker",
+                "cpu": 2,
+                "image": "$public.ecr.aws/v4u9u1t8/cti-pred:latest",
+                "environment": []
+            }
+        ]
+        EOF
 }
 
 resource "aws_ecs_service" "worker" {
