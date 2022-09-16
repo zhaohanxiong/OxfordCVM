@@ -8,56 +8,39 @@ data "aws_availability_zones" "available_zones" {
   state = "available"
 }
 
-# configure resources
+# configure virtual private cloud to create isolated virtual network 
 resource "aws_vpc" "default" {
     cidr_block = "10.32.0.0/16"
+    enable_dns_support   = true
+    enable_dns_hostnames = true
+    tags       = {
+        Name = "Terraform VPC"
+    }
 }
 
-resource "aws_subnet" "public" {
-    count                   = 2
-    cidr_block              = cidrsubnet(aws_vpc.default.cidr_block, 8, 2 + count.index)
-    availability_zone       = data.aws_availability_zones.available_zones.names[count.index]
-    vpc_id                  = aws_vpc.default.id
-    map_public_ip_on_launch = true
-}
-
-resource "aws_subnet" "private" {
-    count             = 2
-    cidr_block        = cidrsubnet(aws_vpc.default.cidr_block, 8, count.index)
-    availability_zone = data.aws_availability_zones.available_zones.names[count.index]
-    vpc_id            = aws_vpc.default.id
-}
-
-resource "aws_internet_gateway" "gateway" {
+# configure communication between instances in VPC and internet
+resource "aws_internet_gateway" "internet_gateway" {
     vpc_id = aws_vpc.default.id
 }
 
-resource "aws_route" "internet_access" {
-    route_table_id         = aws_vpc.default.main_route_table_id
-    destination_cidr_block = "0.0.0.0/0"
-    gateway_id             = aws_internet_gateway.gateway.id
+# configure and create sub network
+resource "aws_subnet" "pub_subnet" {
+    vpc_id      = aws_vpc.default.id
+    cidr_block = "10.1.0.0/22"
 }
 
-resource "aws_eip" "gateway" {
-    count      = 2
-    vpc        = true
-    depends_on = [aws_internet_gateway.gateway]
+# configure where network traffic from subnets are directed
+resource "aws_route_table" "public" {
+    vpc_id = aws_vpc.default.id
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = aws_internet_gateway.internet_gateway.id
+    }
 }
 
-resource "aws_nat_gateway" "gateway" {
-    count         = 2
-    subnet_id     = element(aws_subnet.public.*.id, count.index)
-    allocation_id = element(aws_eip.gateway.*.id, count.index)
-}
-
-resource "aws_route_table" "private" {
-  count  = 2
-  vpc_id = aws_vpc.default.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    nat_gateway_id = element(aws_nat_gateway.gateway.*.id, count.index)
-  }
+resource "aws_route_table_association" "route_table_association" {
+    subnet_id      = aws_subnet.pub_subnet.id
+    route_table_id = aws_route_table.public.id
 }
 
 # s3 configuration
