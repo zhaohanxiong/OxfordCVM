@@ -49,6 +49,7 @@ resource "aws_route_table_association" "route_table_association" {
 #   - 20,000 GET requests per month
 #   - 2,000 PUT/COPY/POST/LIST requests per month
 #   - 100 GB data transfer out each month
+
 resource "aws_s3_bucket" "s3_bucket_name" {
     bucket = "cti-ukb-data"
     tags = {
@@ -92,6 +93,7 @@ resource "aws_s3_bucket_public_access_block" "s3_access" {
 #   - If running more than one instance, usage is aggregated across all instance
 #   - 750 hours of RDS Single-AZ db.t2.micro Instance usage running SQL Server 
 #     (running SQL Server Express Edition) per month
+
 resource "aws_db_instance" "rds_postgresql_name" {
     engine                              = "postgres"
     engine_version                      = "13.7"
@@ -118,6 +120,7 @@ resource "aws_db_instance" "rds_postgresql_name" {
 #     transfer 5 TB of data to the Internet from a public repository each month
 #   - Unlimited bandwidth at no cost when transferring data from a public repository 
 #     to AWS compute resources in any AWS Region.
+
 resource "aws_ecrpublic_repository" "ecr_name" {
   repository_name = "cti-pred"
 }
@@ -164,34 +167,104 @@ resource "aws_ecrpublic_repository_policy" "ecr_name" {
 
 # ECS configuration
 #   - always free and cost depends on usage of AWS compute resources
+resource "aws_ecs_cluster" "ecs_cluster" {
+    name  = "cti-cluster"
+}
+
+resource "aws_ecs_task_definition" "task_definition" {
+    family                = "cti-task"
+    container_definitions = [
+        {
+            "essential": true,
+            "memory": 512,
+            "name": "worker",
+            "cpu": 2,
+            "image": "${REPOSITORY_URL}:latest",
+            "environment": []
+        }
+    ]
+}
+
+resource "aws_ecs_service" "worker" {
+    name            = "worker"
+    cluster         = aws_ecs_cluster.ecs_cluster.id
+    task_definition = aws_ecs_task_definition.task_definition.arn
+    desired_count   = 2
+}
 
 # EC2 configuration
 #   AWS free tier (as of 15-09-2022):
 #   - 750 hours of t2.micro instances (use t3.micro for regions where t2.micro is 
 #     unavailable) per month
+
+# configure security groups to restrict access
 resource "aws_security_group" "ecs_sg" {
-    vpc_id      = aws_vpc.vpc.id
+    vpc_id = aws_vpc.vpc.id
 
     ingress {
-        from_port       = 22
-        to_port         = 22
-        protocol        = "tcp"
-        cidr_blocks     = ["0.0.0.0/0"]
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
     }
 
     ingress {
-        from_port       = 443
-        to_port         = 443
-        protocol        = "tcp"
-        cidr_blocks     = ["0.0.0.0/0"]
+        from_port   = 443
+        to_port     = 443
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
     }
 
     egress {
-        from_port       = 0
-        to_port         = 65535
-        protocol        = "tcp"
-        cidr_blocks     = ["0.0.0.0/0"]
+        from_port   = 0
+        to_port     = 65535
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
     }
 }
 
-# Fargate configuration
+# configure autoscaling group containing a collection of EC2
+data "aws_iam_policy_document" "ecs_agent" {
+    statement {
+        actions = ["sts:AssumeRole"]
+        principals {
+            type        = "Service"
+            identifiers = ["ec2.amazonaws.com"]
+        }
+    }
+}
+
+resource "aws_iam_role" "ecs_agent" {
+    name               = "ecs-agent"
+    assume_role_policy = data.aws_iam_policy_document.ecs_agent.json
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_agent" {
+    role       = "aws_iam_role.ecs_agent.name"
+    policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_instance_profile" "ecs_agent" {
+    name = "ecs-agent"
+    role = aws_iam_role.ecs_agent.name
+}
+
+# configure launch configurations
+resource "aws_launch_configuration" "ecs_launch_config" {
+    image_id             = "ami-094d4d00fd7462815"
+    iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
+    security_groups      = [aws_security_group.ecs_sg.id]
+    user_data            = "#!/bin/bash\necho ECS_CLUSTER=cti-cluster >> /etc/ecs/ecs.config"
+    instance_type        = "t2.micro"
+}
+
+resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
+    name                      = "asg"
+    vpc_zone_identifier       = [aws_subnet.pub_subnet.id]
+    launch_configuration      = aws_launch_configuration.ecs_launch_config.name
+    desired_capacity          = 2
+    min_size                  = 1
+    max_size                  = 10
+    health_check_grace_period = 300
+    health_check_type         = "EC2"
+}
