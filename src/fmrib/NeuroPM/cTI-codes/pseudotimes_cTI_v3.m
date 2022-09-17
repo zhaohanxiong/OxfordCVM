@@ -37,7 +37,7 @@ alphas_all = logspace(-2, 2, n_alphas);
 ind_remove_mask = zeros(size(data, 1), 1);
 
 % define counters/storage arrays
-max_iter          = 1;    % maximum number of iterations
+max_iter          = 50;    % maximum number of iterations
 is_accurate       = false; % is current model accurate
 prev_alpha        = 75;    % initialze alpha
 iter              = 1;     % iteration counter
@@ -146,7 +146,7 @@ while iter <= max_iter && ~is_accurate
 
         % defines patients who will be removed
         remove_ind = find(global_pseudotimes >= score_lim);
-        remove_ind_disease = find(global_pseudotimes(global_pseudotimes == 2) >= score_lim);
+        remove_ind_disease = find(global_pseudotimes(classes_for_colours == 3) >= score_lim);
 
         % store points removed
         n_removed         = [n_removed, length(remove_ind)];
