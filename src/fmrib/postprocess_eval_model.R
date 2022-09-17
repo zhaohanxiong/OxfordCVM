@@ -100,7 +100,8 @@ if (FALSE) {
   par(mfrow = c(1, 2))
   boxplot(psuedotimes$global_pseudotimes ~ psuedotimes$bp_group,
           main = "Distribution of Disease Scores Between Groups",
-          ylab = "Disease Score", xlab = "")
+          ylab = "Disease Score", xlab = "",
+          col = c("tomato", "lawngreen", "deepskyblue"))
   abline(h = c(min(sample_disease), max(sample_background)), col = "red")
   
   plot(c(fpr[1], rep(fpr, each = 2)[-length(fpr)]), rep(tpr, each = 2),
@@ -111,6 +112,7 @@ if (FALSE) {
   abline(0, 1, col = "red", lty = 2)
   lines(c(fpr[1], rep(fpr, each = 2)[-length(fpr)]), rep(tpr, each = 2),
         lwd = 3, col = "purple")
+  text(0.5, 0.5, labels = sprintf("AUC = %0.3f", auc), cex = 1)
 
 }
 
