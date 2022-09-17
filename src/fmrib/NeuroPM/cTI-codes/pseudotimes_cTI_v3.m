@@ -59,6 +59,9 @@ while iter <= max_iter && ~is_accurate
     [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = ... 
             cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_iter);
     
+    % filter out large cPCs
+    %cPCs(abs(cPCs) > std(cPCs,0,"all")*3) = 0;
+    
     % store the output values
     [~,j]           = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
     mappedX         = cPCs(:,1:no_dims(j),j);
