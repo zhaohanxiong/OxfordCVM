@@ -37,12 +37,12 @@ alphas_all = logspace(-2, 2, n_alphas);
 ind_remove_mask = zeros(size(data, 1), 1);
 
 % define counters/storage arrays
-max_iter     = 1;     % maximum number of iterations
-is_accurate  = false; % is current model accurate
-prev_alpha   = 75;    % initialze alpha
-iter         = 1;     % iteration counter
-n_removed    = [];    % number of outliers removed in each iteration
-removed_inds = [];    % indices of outliers removed in each iteration
+max_iter          = 1;    % maximum number of iterations
+is_accurate       = false; % is current model accurate
+prev_alpha        = 75;    % initialze alpha
+iter              = 1;     % iteration counter
+n_removed         = [0];   % number of outliers removed in each iteration
+n_removed_disease = [0];   % number of disease outliers removed in each iteration
 
 % while loop to continuously loop through
 while iter <= max_iter && ~is_accurate
@@ -72,7 +72,8 @@ while iter <= max_iter && ~is_accurate
     % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
     disp(['Iteration ' num2str(iter) ' Number of cPCs: ' num2str(no_dims(j))]);
     disp(['Iteration ' num2str(iter) ' Alpha Selected: ' num2str(alphas(j))]);
-    disp(['Iteration ' num2str(iter) ' Number of Outliers Removed: ' num2str(sum(ind_remove_mask == 1))]);
+    disp(['Iteration ' num2str(iter) ' Number of Outliers Removed: ' num2str(n_removed(iter))]);
+    disp(['Iteration ' num2str(iter) ' Number of Diseased Outliers Removed: ' num2str(n_removed_disease(iter))]);
 
     % use alpha to determine the range of alphas to search in next iteration
     prev_alpha = alphas(j);
@@ -144,14 +145,15 @@ while iter <= max_iter && ~is_accurate
         saveas(f, ['io/results' num2str(iter - 1) '.png']);
 
         % find distribution (boxplot) thresholds & define upper threshold for scores
-        score_lim = quantile(global_pseudotimes(classes_for_colours == 3), 0.95);
+        score_lim = quantile(global_pseudotimes(classes_for_colours == 3), 0.99);
 
         % defines patients who will be removed
         remove_ind = find(global_pseudotimes >= score_lim);
-    
+        remove_ind_disease = find(global_pseudotimes(global_pseudotimes == 2) >= score_lim);
+
         % store points removed
-        n_removed = [n_removed, length(remove_ind)];
-        removed_inds = [removed_inds; remove_ind];
+        n_removed         = [n_removed, length(remove_ind)];
+        n_removed_disease = [n_removed_disease, length(remove_ind_disease)];
     
         % filter out patients with large scores in the original inputs
         data                = data(global_pseudotimes < score_lim, :);
