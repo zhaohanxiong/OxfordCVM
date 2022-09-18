@@ -17,15 +17,20 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 #ft_norm = ft_norm[, ind_filter]
 
 # only keep subset of background/disease
-#ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:1200, ],
+#ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:1000, ],
 #                ft_norm[labels$bp_group != 1, ])
-#labels = rbind(labels[labels$bp_group == 1, ][1:1200, ],
+#labels = rbind(labels[labels$bp_group == 1, ][1:1000, ],
 #               labels[labels$bp_group != 1, ])
 
 # shuffle before writing to output
 ind_rand = sample(1:nrow(labels), nrow(labels))
 ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
+
+# display messages to see in terminal
+print(sprintf("Further Filtering Complete"))
+print(sprintf("Distribution of Classes is"))
+print(table(labels$bp_group))
 
 # write to output
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
