@@ -68,7 +68,7 @@ ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data =
 
 # further filtering outliers
 ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)], 
-                                                       sd_threshold = 10)
+                                                       sd_threshold = 5)
 
 # remove columns which contain the same value (extremely low variance)
 ukb_df = return_low_variance_columns(ukb_df, ignore_cols = c(1))
