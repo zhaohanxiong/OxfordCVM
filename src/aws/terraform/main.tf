@@ -154,38 +154,38 @@ resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
 #   - 2,000 PUT/COPY/POST/LIST requests per month
 #   - 100 GB data transfer out each month
 
-# resource "aws_s3_bucket" "s3_bucket_name" {
-#     bucket = "cti-ukb-data"
-#     tags = {
-#         Name        = "cti-ukb-data"
-#         Environment = "dev"
-#     }
-# }
+resource "aws_s3_bucket" "s3_bucket_name" {
+    bucket = "cti-ukb-data"
+    tags = {
+        Name        = "cti-ukb-data"
+        Environment = "dev"
+    }
+}
 
-# resource "aws_s3_object" "s3_object" {
-#     bucket = aws_s3_bucket.s3_bucket_name.id
-#     key    = "dvc"
-# }
+resource "aws_s3_object" "s3_object" {
+    bucket = aws_s3_bucket.s3_bucket_name.id
+    key    = "dvc"
+}
 
-# resource "aws_s3_bucket_acl" "s3_acl" {
-#     bucket = aws_s3_bucket.s3_bucket_name.id
-#     acl    = "private"
-# }
+resource "aws_s3_bucket_acl" "s3_acl" {
+    bucket = aws_s3_bucket.s3_bucket_name.id
+    acl    = "private"
+}
 
-# resource "aws_s3_bucket_versioning" "s3_version" {
-#     bucket = aws_s3_bucket.s3_bucket_name.id
-#     versioning_configuration {
-#         status = "Disabled"
-#     }
-# }
+resource "aws_s3_bucket_versioning" "s3_version" {
+    bucket = aws_s3_bucket.s3_bucket_name.id
+    versioning_configuration {
+        status = "Disabled"
+    }
+}
 
-# resource "aws_s3_bucket_public_access_block" "s3_access" {
-#     bucket                  = aws_s3_bucket.s3_bucket_name.id
-#     block_public_acls       = false
-#     block_public_policy     = false
-#     ignore_public_acls      = false
-#     restrict_public_buckets = false
-# }
+resource "aws_s3_bucket_public_access_block" "s3_access" {
+    bucket                  = aws_s3_bucket.s3_bucket_name.id
+    block_public_acls       = false
+    block_public_policy     = false
+    ignore_public_acls      = false
+    restrict_public_buckets = false
+}
 
 # RDS configuration
 #   AWS free tier (as of 15-09-2022):
@@ -199,30 +199,30 @@ resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
 #     (running SQL Server Express Edition) per month
 
 # allow VPC to access DB instance
-# resource "aws_db_subnet_group" "db_subnet_group" {
-#     subnet_ids  = [aws_subnet.pub_subnet.id]
-# }
+resource "aws_db_subnet_group" "db_subnet_group" {
+    subnet_ids  = [aws_subnet.pub_subnet.id]
+}
 
-# resource "aws_db_instance" "rds_postgresql_name" {
-#     engine                              = "postgres"
-#     engine_version                      = "13.7"
-#     instance_class                      = "db.t2.micro"
-#     identifier                          = "ukb-db"
-#     db_name                             = "ukb_postgres_db"
-#     username                            = "zhaohanxiong_rds_username"
-#     password                            = "zhaohanxiong_rds_password"
-#     publicly_accessible                 = false
-#     skip_final_snapshot                 = true
-#     multi_az                            = true
-#     allocated_storage                   = 10
-#     port                                = 5432
-#     iam_database_authentication_enabled = false
-#     db_subnet_group_name                = aws_db_subnet_group.db_subnet_group.id
-#     vpc_security_group_ids              = [aws_security_group.rds_sg.id, aws_security_group.ecs_sg.id]
-#     skip_final_snapshot                 = true
-#     final_snapshot_identifier           = "ukb-db-final"
-#     publicly_accessible                 = true
-# }
+resource "aws_db_instance" "rds_postgresql_name" {
+    engine                              = "postgres"
+    engine_version                      = "13.7"
+    instance_class                      = "db.t2.micro"
+    identifier                          = "ukb-db"
+    db_name                             = "ukb_postgres_db"
+    username                            = "zhaohanxiong_rds_username"
+    password                            = "zhaohanxiong_rds_password"
+    publicly_accessible                 = false
+    skip_final_snapshot                 = true
+    multi_az                            = true
+    allocated_storage                   = 10
+    port                                = 5432
+    iam_database_authentication_enabled = false
+    db_subnet_group_name                = aws_db_subnet_group.db_subnet_group.id
+    vpc_security_group_ids              = [aws_security_group.rds_sg.id, aws_security_group.ecs_sg.id]
+    skip_final_snapshot                 = true
+    final_snapshot_identifier           = "ukb-db-final"
+    publicly_accessible                 = true
+}
 
 # ECR configuration
 #   AWS free tier (as of 15-09-2022):
