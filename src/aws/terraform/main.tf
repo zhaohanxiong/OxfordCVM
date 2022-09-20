@@ -1,3 +1,11 @@
+# store the state of the terraform project in AWS S3
+terraform {
+    backend "s3" {
+        bucket = "terraformeksproject"
+        key    = "state.tfstate"
+    }
+}
+
 # define platform (when running with aws CLI)
 provider "aws" {
     profile = "default"
@@ -5,7 +13,7 @@ provider "aws" {
 }
 
 data "aws_availability_zones" "available_zones" {
-  state = "available"
+    state = "available"
 }
 
 # configure virtual private cloud to create isolated virtual network 
@@ -50,38 +58,38 @@ resource "aws_route_table_association" "route_table_association" {
 #   - 2,000 PUT/COPY/POST/LIST requests per month
 #   - 100 GB data transfer out each month
 
-resource "aws_s3_bucket" "s3_bucket_name" {
-    bucket = "cti-ukb-data"
-    tags = {
-        Name        = "cti-ukb-data"
-        Environment = "dev"
-    }
-}
+# resource "aws_s3_bucket" "s3_bucket_name" {
+#     bucket = "cti-ukb-data"
+#     tags = {
+#         Name        = "cti-ukb-data"
+#         Environment = "dev"
+#     }
+# }
 
-resource "aws_s3_object" "s3_object" {
-    bucket = aws_s3_bucket.s3_bucket_name.id
-    key    = "dvc"
-}
+# resource "aws_s3_object" "s3_object" {
+#     bucket = aws_s3_bucket.s3_bucket_name.id
+#     key    = "dvc"
+# }
 
-resource "aws_s3_bucket_acl" "s3_acl" {
-    bucket = aws_s3_bucket.s3_bucket_name.id
-    acl    = "private"
-}
+# resource "aws_s3_bucket_acl" "s3_acl" {
+#     bucket = aws_s3_bucket.s3_bucket_name.id
+#     acl    = "private"
+# }
 
-resource "aws_s3_bucket_versioning" "s3_version" {
-    bucket = aws_s3_bucket.s3_bucket_name.id
-    versioning_configuration {
-        status = "Disabled"
-    }
-}
+# resource "aws_s3_bucket_versioning" "s3_version" {
+#     bucket = aws_s3_bucket.s3_bucket_name.id
+#     versioning_configuration {
+#         status = "Disabled"
+#     }
+# }
 
-resource "aws_s3_bucket_public_access_block" "s3_access" {
-    bucket                  = aws_s3_bucket.s3_bucket_name.id
-    block_public_acls       = false
-    block_public_policy     = false
-    ignore_public_acls      = false
-    restrict_public_buckets = false
-}
+# resource "aws_s3_bucket_public_access_block" "s3_access" {
+#     bucket                  = aws_s3_bucket.s3_bucket_name.id
+#     block_public_acls       = false
+#     block_public_policy     = false
+#     ignore_public_acls      = false
+#     restrict_public_buckets = false
+# }
 
 # RDS configuration
 #   AWS free tier (as of 15-09-2022):
@@ -94,20 +102,20 @@ resource "aws_s3_bucket_public_access_block" "s3_access" {
 #   - 750 hours of RDS Single-AZ db.t2.micro Instance usage running SQL Server 
 #     (running SQL Server Express Edition) per month
 
-resource "aws_db_instance" "rds_postgresql_name" {
-    engine                              = "postgres"
-    engine_version                      = "13.7"
-    instance_class                      = "db.t3.micro"
-    identifier                          = "ukb-db"
-    db_name                             = "ukb_postgres_db"
-    username                            = "zhaohanxiong_rds_username"
-    password                            = "zhaohanxiong_rds_password"
-    publicly_accessible                 = false
-    skip_final_snapshot                 = true
-    allocated_storage                   = 10
-    port                                = 5432
-    iam_database_authentication_enabled = false
-}
+# resource "aws_db_instance" "rds_postgresql_name" {
+#     engine                              = "postgres"
+#     engine_version                      = "13.7"
+#     instance_class                      = "db.t3.micro"
+#     identifier                          = "ukb-db"
+#     db_name                             = "ukb_postgres_db"
+#     username                            = "zhaohanxiong_rds_username"
+#     password                            = "zhaohanxiong_rds_password"
+#     publicly_accessible                 = false
+#     skip_final_snapshot                 = true
+#     allocated_storage                   = 10
+#     port                                = 5432
+#     iam_database_authentication_enabled = false
+# }
 
 # ECR configuration
 #   AWS free tier (as of 15-09-2022):
