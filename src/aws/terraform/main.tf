@@ -1,7 +1,7 @@
 # store the state of the terraform project in AWS S3
 terraform {
     backend "s3" {
-        bucket = "terraformeksproject"
+        bucket = "cti-ukb-data"
         key    = "state.tfstate"
     }
 }
@@ -291,29 +291,35 @@ resource "aws_ecs_task_definition" "task_definition" {
     container_definitions = <<EOF
         [
             {
-                "essential": true,
-                "memory": 512,
-                "name": "worker",
+                "name": "cti-task",
+                "image": "${REPOSITORY_URL}:latest",
                 "cpu": 2,
-                "image": "$public.ecr.aws/v4u9u1t8/cti-pred:latest",
-                "environment": []
+                "memory": 512,
+                "essential": true,
+                environment: [],
+                "portMappings": [
+                    {
+                        "containerPort": 80,
+                        "hostPort": 80
+                    }
+                ]
             }
         ]
-        EOF
+    EOF
 }
 
-resource "aws_ecs_service" "worker" {
-    name            = "worker"
+resource "aws_ecs_service" "cti-task" {
+    name            = "cti-task"
     cluster         = aws_ecs_cluster.ecs_cluster.id
     task_definition = aws_ecs_task_definition.task_definition.arn
     desired_count   = 2
 }
 
 # Output parameter of provisioned component 
-output "postgresql_endpoint" {
-    value = aws_db_instance.rds_postgresql_name.endpoint
-}
+# output "postgresql_endpoint" {
+#     value = aws_db_instance.rds_postgresql_name.endpoint
+# }
 
 output "ecr_repository_worker_endpoint" {
-    value = aws_ecrpublic_repository.ecr_name.repository_url
+    value = aws_ecrpublic_repository.ecr_name.repository_uri
 }
