@@ -34,7 +34,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 # configure and create sub network
 resource "aws_subnet" "pub_subnet" {
     vpc_id     = aws_vpc.vpc.id
-    cidr_block = "10.1.0.0/22"
+    cidr_block = "10.0.0.0/22"
 }
 
 # configure where network traffic from subnets are directed
@@ -128,8 +128,24 @@ resource "aws_iam_instance_profile" "ecs_agent" {
 }
 
 # configure autoscaling group containing a collection of EC2
+data "aws_ami" "ubuntu" {
+    most_recent = true
+
+    filter {
+        name   = "name"
+        values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
+    }
+
+    filter {
+        name   = "virtualization-type"
+        values = ["hvm"]
+    }
+
+    owners = ["099720109477"] # Canonical
+}
+
 resource "aws_launch_configuration" "ecs_launch_config" {
-    image_id             = "ami-094d4d00fd7462815"
+    image_id             = data.aws_ami.ubuntu.id
     iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
     security_groups      = [aws_security_group.ecs_sg.id]
     user_data            = "#!/bin/bash\necho ECS_CLUSTER=cti-cluster >> /etc/ecs/ecs.config"
@@ -154,38 +170,38 @@ resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
 #   - 2,000 PUT/COPY/POST/LIST requests per month
 #   - 100 GB data transfer out each month
 
-resource "aws_s3_bucket" "s3_bucket_name" {
-    bucket = "cti-ukb-data"
-    tags = {
-        Name        = "cti-ukb-data"
-        Environment = "dev"
-    }
-}
+# resource "aws_s3_bucket" "s3_bucket_name" {
+#     bucket = "cti-ukb-data"
+#     tags = {
+#         Name        = "cti-ukb-data"
+#         Environment = "dev"
+#     }
+# }
 
-resource "aws_s3_object" "s3_object" {
-    bucket = aws_s3_bucket.s3_bucket_name.id
-    key    = "dvc"
-}
+# resource "aws_s3_object" "s3_object" {
+#     bucket = aws_s3_bucket.s3_bucket_name.id
+#     key    = "dvc"
+# }
 
-resource "aws_s3_bucket_acl" "s3_acl" {
-    bucket = aws_s3_bucket.s3_bucket_name.id
-    acl    = "private"
-}
+# resource "aws_s3_bucket_acl" "s3_acl" {
+#     bucket = aws_s3_bucket.s3_bucket_name.id
+#     acl    = "private"
+# }
 
-resource "aws_s3_bucket_versioning" "s3_version" {
-    bucket = aws_s3_bucket.s3_bucket_name.id
-    versioning_configuration {
-        status = "Disabled"
-    }
-}
+# resource "aws_s3_bucket_versioning" "s3_version" {
+#     bucket = aws_s3_bucket.s3_bucket_name.id
+#     versioning_configuration {
+#         status = "Disabled"
+#     }
+# }
 
-resource "aws_s3_bucket_public_access_block" "s3_access" {
-    bucket                  = aws_s3_bucket.s3_bucket_name.id
-    block_public_acls       = false
-    block_public_policy     = false
-    ignore_public_acls      = false
-    restrict_public_buckets = false
-}
+# resource "aws_s3_bucket_public_access_block" "s3_access" {
+#     bucket                  = aws_s3_bucket.s3_bucket_name.id
+#     block_public_acls       = false
+#     block_public_policy     = false
+#     ignore_public_acls      = false
+#     restrict_public_buckets = false
+# }
 
 # RDS configuration
 #   AWS free tier (as of 15-09-2022):
@@ -236,6 +252,7 @@ resource "aws_s3_bucket_public_access_block" "s3_access" {
 #   - Unlimited bandwidth at no cost when transferring data from a public repository 
 #     to AWS compute resources in any AWS Region.
 
+# create public elastic container repo
 resource "aws_ecrpublic_repository" "ecr_name" {
   repository_name = "cti-pred"
 }
@@ -282,10 +299,13 @@ resource "aws_ecrpublic_repository_policy" "ecr_name" {
 
 # ECS configuration
 #   - always free and cost depends on usage of AWS compute resources
+
+# create a cluster
 resource "aws_ecs_cluster" "ecs_cluster" {
     name  = "cti-cluster"
 }
 
+# create a task definition
 data "template_file" "task_definition_template" {
     template = file("task_definition.json.tpl")
     vars = {
@@ -298,6 +318,7 @@ resource "aws_ecs_task_definition" "task_definition" {
     container_definitions = data.template_file.task_definition_template.rendered
 }
 
+# attach task to cluster
 resource "aws_ecs_service" "cti-task" {
     name            = "cti-task"
     cluster         = aws_ecs_cluster.ecs_cluster.id
