@@ -34,7 +34,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 # configure and create sub network
 resource "aws_subnet" "pub_subnet" {
     vpc_id     = aws_vpc.vpc.id
-    cidr_block = "10.0.0.0/22"
+    cidr_block = "10.0.0.16/28"
 }
 
 # configure where network traffic from subnets are directed
@@ -128,24 +128,8 @@ resource "aws_iam_instance_profile" "ecs_agent" {
 }
 
 # configure autoscaling group containing a collection of EC2
-data "aws_ami" "ubuntu" {
-    most_recent = true
-
-    filter {
-        name   = "name"
-        values = ["ubuntu/images/hvm-ssd/ubuntu-trusty-14.04-amd64-server-*"]
-    }
-
-    filter {
-        name   = "virtualization-type"
-        values = ["hvm"]
-    }
-
-    owners = ["099720109477"] # Canonical
-}
-
 resource "aws_launch_configuration" "ecs_launch_config" {
-    image_id             = data.aws_ami.ubuntu.id
+    image_id             = "ami-05fa00d4c63e32376"
     iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
     security_groups      = [aws_security_group.ecs_sg.id]
     user_data            = "#!/bin/bash\necho ECS_CLUSTER=cti-cluster >> /etc/ecs/ecs.config"
