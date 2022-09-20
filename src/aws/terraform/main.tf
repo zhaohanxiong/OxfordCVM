@@ -18,10 +18,10 @@ data "aws_availability_zones" "available_zones" {
 
 # configure virtual private cloud to create isolated virtual network 
 resource "aws_vpc" "vpc" {
-    cidr_block = "10.32.0.0/16"
+    cidr_block = "10.0.0.0/24"
     enable_dns_support   = true
     enable_dns_hostnames = true
-    tags       = {
+    tags = {
         Name = "Terraform VPC"
     }
 }
@@ -33,7 +33,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 
 # configure and create sub network
 resource "aws_subnet" "pub_subnet" {
-    vpc_id      = aws_vpc.vpc.id
+    vpc_id     = aws_vpc.vpc.id
     cidr_block = "10.1.0.0/22"
 }
 
@@ -51,7 +51,103 @@ resource "aws_route_table_association" "route_table_association" {
     route_table_id = aws_route_table.public.id
 }
 
-# s3 configuration
+# configure security groups to restrict access
+resource "aws_security_group" "ecs_sg" {
+    vpc_id = aws_vpc.vpc.id
+
+    ingress {
+        from_port   = 22
+        to_port     = 22
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    ingress {
+        from_port   = 443
+        to_port     = 443
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+
+    egress {
+        from_port   = 0
+        to_port     = 65535
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0.0/0"]
+    }
+}
+
+resource "aws_security_group" "rds_sg" {
+    vpc_id = aws_vpc.vpc.id
+
+    ingress {
+        protocol        = "tcp"
+        from_port       = 5432
+        to_port         = 5432
+        cidr_blocks     = ["0.0.0.0/0"]
+        security_groups = [aws_security_group.ecs_sg.id]
+    }
+
+    egress {
+        from_port       = 0
+        to_port         = 65535
+        protocol        = "tcp"
+        cidr_blocks     = ["0.0.0.0/0"]
+    }
+}
+
+# EC2 configuration
+#   AWS free tier (as of 15-09-2022):
+#   - 750 hours of t2.micro instances (use t3.micro for regions where t2.micro is 
+#     unavailable) per month
+
+# create IAM policy for these instances when they are launched
+data "aws_iam_policy_document" "ecs_agent" {
+    statement {
+        actions = ["sts:AssumeRole"]
+        principals {
+            type        = "Service"
+            identifiers = ["ec2.amazonaws.com"]
+        }
+    }
+}
+
+resource "aws_iam_role" "ecs_agent" {
+    name               = "ecs-agent"
+    assume_role_policy = data.aws_iam_policy_document.ecs_agent.json
+}
+
+resource "aws_iam_role_policy_attachment" "ecs_agent" {
+    role       = "aws_iam_role.ecs_agent.name"
+    policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+}
+
+resource "aws_iam_instance_profile" "ecs_agent" {
+    name = "ecs-agent"
+    role = aws_iam_role.ecs_agent.name
+}
+
+# configure autoscaling group containing a collection of EC2
+resource "aws_launch_configuration" "ecs_launch_config" {
+    image_id             = "ami-094d4d00fd7462815"
+    iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
+    security_groups      = [aws_security_group.ecs_sg.id]
+    user_data            = "#!/bin/bash\necho ECS_CLUSTER=cti-cluster >> /etc/ecs/ecs.config"
+    instance_type        = "t2.micro"
+}
+
+resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
+    name                      = "asg"
+    vpc_zone_identifier       = [aws_subnet.pub_subnet.id]
+    launch_configuration      = aws_launch_configuration.ecs_launch_config.name
+    desired_capacity          = 2
+    min_size                  = 1
+    max_size                  = 10
+    health_check_grace_period = 300
+    health_check_type         = "EC2"
+}
+
+# S3 configuration
 #   AWS free tier (as of 15-09-2022):
 #   - 5GB standard storage
 #   - 20,000 GET requests per month
@@ -102,19 +198,30 @@ resource "aws_route_table_association" "route_table_association" {
 #   - 750 hours of RDS Single-AZ db.t2.micro Instance usage running SQL Server 
 #     (running SQL Server Express Edition) per month
 
+# allow VPC to access DB instance
+# resource "aws_db_subnet_group" "db_subnet_group" {
+#     subnet_ids  = [aws_subnet.pub_subnet.id]
+# }
+
 # resource "aws_db_instance" "rds_postgresql_name" {
 #     engine                              = "postgres"
 #     engine_version                      = "13.7"
-#     instance_class                      = "db.t3.micro"
+#     instance_class                      = "db.t2.micro"
 #     identifier                          = "ukb-db"
 #     db_name                             = "ukb_postgres_db"
 #     username                            = "zhaohanxiong_rds_username"
 #     password                            = "zhaohanxiong_rds_password"
 #     publicly_accessible                 = false
 #     skip_final_snapshot                 = true
+#     multi_az                            = true
 #     allocated_storage                   = 10
 #     port                                = 5432
 #     iam_database_authentication_enabled = false
+#     db_subnet_group_name                = aws_db_subnet_group.db_subnet_group.id
+#     vpc_security_group_ids              = [aws_security_group.rds_sg.id, aws_security_group.ecs_sg.id]
+#     skip_final_snapshot                 = true
+#     final_snapshot_identifier           = "ukb-db-final"
+#     publicly_accessible                 = true
 # }
 
 # ECR configuration
@@ -202,79 +309,11 @@ resource "aws_ecs_service" "worker" {
     desired_count   = 2
 }
 
-# EC2 configuration
-#   AWS free tier (as of 15-09-2022):
-#   - 750 hours of t2.micro instances (use t3.micro for regions where t2.micro is 
-#     unavailable) per month
-
-# configure security groups to restrict access
-resource "aws_security_group" "ecs_sg" {
-    vpc_id = aws_vpc.vpc.id
-
-    ingress {
-        from_port   = 22
-        to_port     = 22
-        protocol    = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    ingress {
-        from_port   = 443
-        to_port     = 443
-        protocol    = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
-
-    egress {
-        from_port   = 0
-        to_port     = 65535
-        protocol    = "tcp"
-        cidr_blocks = ["0.0.0.0/0"]
-    }
+# Output parameter of provisioned component 
+output "postgresql_endpoint" {
+    value = aws_db_instance.rds_postgresql_name.endpoint
 }
 
-# configure autoscaling group containing a collection of EC2
-data "aws_iam_policy_document" "ecs_agent" {
-    statement {
-        actions = ["sts:AssumeRole"]
-        principals {
-            type        = "Service"
-            identifiers = ["ec2.amazonaws.com"]
-        }
-    }
-}
-
-resource "aws_iam_role" "ecs_agent" {
-    name               = "ecs-agent"
-    assume_role_policy = data.aws_iam_policy_document.ecs_agent.json
-}
-
-resource "aws_iam_role_policy_attachment" "ecs_agent" {
-    role       = "aws_iam_role.ecs_agent.name"
-    policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
-}
-
-resource "aws_iam_instance_profile" "ecs_agent" {
-    name = "ecs-agent"
-    role = aws_iam_role.ecs_agent.name
-}
-
-# configure launch configurations
-resource "aws_launch_configuration" "ecs_launch_config" {
-    image_id             = "ami-094d4d00fd7462815"
-    iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
-    security_groups      = [aws_security_group.ecs_sg.id]
-    user_data            = "#!/bin/bash\necho ECS_CLUSTER=cti-cluster >> /etc/ecs/ecs.config"
-    instance_type        = "t2.micro"
-}
-
-resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
-    name                      = "asg"
-    vpc_zone_identifier       = [aws_subnet.pub_subnet.id]
-    launch_configuration      = aws_launch_configuration.ecs_launch_config.name
-    desired_capacity          = 2
-    min_size                  = 1
-    max_size                  = 10
-    health_check_grace_period = 300
-    health_check_type         = "EC2"
+output "ecr_repository_worker_endpoint" {
+    value = aws_ecrpublic_repository.ecr_name.repository_url
 }
