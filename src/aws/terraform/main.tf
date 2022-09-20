@@ -1,7 +1,7 @@
 # store the state of the terraform project in AWS S3
 terraform {
     backend "s3" {
-        bucket = "cti-ukb-data"
+        bucket = "cti-ukb-tf-state"
         key    = "state.tfstate"
     }
 }
