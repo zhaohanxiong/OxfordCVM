@@ -118,7 +118,7 @@ resource "aws_iam_role" "ecs_agent" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_agent" {
-    role       = "aws_iam_role.ecs_agent.name"
+    role       = aws_iam_role.ecs_agent.name
     policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
 }
 
@@ -154,38 +154,38 @@ resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
 #   - 2,000 PUT/COPY/POST/LIST requests per month
 #   - 100 GB data transfer out each month
 
-# resource "aws_s3_bucket" "s3_bucket_name" {
-#     bucket = "cti-ukb-data"
-#     tags = {
-#         Name        = "cti-ukb-data"
-#         Environment = "dev"
-#     }
-# }
+resource "aws_s3_bucket" "s3_bucket_name" {
+    bucket = "cti-ukb-data"
+    tags = {
+        Name        = "cti-ukb-data"
+        Environment = "dev"
+    }
+}
 
-# resource "aws_s3_object" "s3_object" {
-#     bucket = aws_s3_bucket.s3_bucket_name.id
-#     key    = "dvc"
-# }
+resource "aws_s3_object" "s3_object" {
+    bucket = aws_s3_bucket.s3_bucket_name.id
+    key    = "dvc"
+}
 
-# resource "aws_s3_bucket_acl" "s3_acl" {
-#     bucket = aws_s3_bucket.s3_bucket_name.id
-#     acl    = "private"
-# }
+resource "aws_s3_bucket_acl" "s3_acl" {
+    bucket = aws_s3_bucket.s3_bucket_name.id
+    acl    = "private"
+}
 
-# resource "aws_s3_bucket_versioning" "s3_version" {
-#     bucket = aws_s3_bucket.s3_bucket_name.id
-#     versioning_configuration {
-#         status = "Disabled"
-#     }
-# }
+resource "aws_s3_bucket_versioning" "s3_version" {
+    bucket = aws_s3_bucket.s3_bucket_name.id
+    versioning_configuration {
+        status = "Disabled"
+    }
+}
 
-# resource "aws_s3_bucket_public_access_block" "s3_access" {
-#     bucket                  = aws_s3_bucket.s3_bucket_name.id
-#     block_public_acls       = false
-#     block_public_policy     = false
-#     ignore_public_acls      = false
-#     restrict_public_buckets = false
-# }
+resource "aws_s3_bucket_public_access_block" "s3_access" {
+    bucket                  = aws_s3_bucket.s3_bucket_name.id
+    block_public_acls       = false
+    block_public_policy     = false
+    ignore_public_acls      = false
+    restrict_public_buckets = false
+}
 
 # RDS configuration
 #   AWS free tier (as of 15-09-2022):
@@ -286,26 +286,16 @@ resource "aws_ecs_cluster" "ecs_cluster" {
     name  = "cti-cluster"
 }
 
+data "template_file" "task_definition_template" {
+    template = file("task_definition.json.tpl")
+    vars = {
+        REPOSITORY_URL = replace(aws_ecrpublic_repository.ecr_name.repository_uri, "https://", "")
+    }
+}
+
 resource "aws_ecs_task_definition" "task_definition" {
     family                = "cti-task"
-    container_definitions = <<EOF
-        [
-            {
-                "name": "cti-task",
-                "image": "${REPOSITORY_URL}:latest",
-                "cpu": 2,
-                "memory": 512,
-                "essential": true,
-                environment: [],
-                "portMappings": [
-                    {
-                        "containerPort": 80,
-                        "hostPort": 80
-                    }
-                ]
-            }
-        ]
-    EOF
+    container_definitions = data.template_file.task_definition_template.rendered
 }
 
 resource "aws_ecs_service" "cti-task" {
