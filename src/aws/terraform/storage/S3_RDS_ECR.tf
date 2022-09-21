@@ -1,22 +1,3 @@
-# store the state of the terraform project in AWS S3
-# comment out to store locally
-# terraform {
-#     backend "s3" {
-#         bucket = "cti-ukb-tf-state"
-#         key    = "state.tfstate"
-#     }
-# }
-
-# define platform (when running with aws CLI)
-provider "aws" {
-    profile = "default"
-    region  = "us-east-1"
-}
-
-data "aws_availability_zones" "available_zones" {
-    state = "available"
-}
-
 # S3 configuration
 #   AWS free tier (as of 15-09-2022):
 #   - 5GB standard storage
