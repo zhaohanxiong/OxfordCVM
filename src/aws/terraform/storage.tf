@@ -84,7 +84,6 @@ resource "aws_s3_bucket_public_access_block" "s3_access" {
     restrict_public_buckets = false
 }
 
-
 # ECR configuration
 #   AWS free tier (as of 15-09-2022):
 #   - 500 MB per month of storage for private repositories
