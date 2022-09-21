@@ -115,15 +115,16 @@ resource "aws_security_group" "ecs_sg" {
 #   - 750 hours of RDS Single-AZ db.t2.micro Instance usage running SQL Server 
 #     (running SQL Server Express Edition) per month
 
-# allow VPC to access DB instance
+# allow VPC to access DB instance in the defined subnets
 resource "aws_db_subnet_group" "db_subnet_group" {
     subnet_ids  = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id]
 }
 
+# define RDS instance
 resource "aws_db_instance" "rds_postgresql_name" {
     engine                              = "postgres"
     engine_version                      = "13.7"
-    instance_class                      = "db.t2.micro"
+    instance_class                      = "db.t3.micro"
     identifier                          = "ukb-db"
     db_name                             = "ukb_postgres_db"
     username                            = "zhaohanxiong_rds_username"
@@ -137,4 +138,19 @@ resource "aws_db_instance" "rds_postgresql_name" {
     db_subnet_group_name                = aws_db_subnet_group.db_subnet_group.id
     vpc_security_group_ids              = [aws_security_group.rds_sg.id, aws_security_group.ecs_sg.id]
     final_snapshot_identifier           = "ukb-db-final"
+}
+
+# output various parameters associated with the RDS instance
+output "postgresql_endpoint" {
+    value = aws_db_instance.rds_postgresql_name.endpoint
+}
+
+output "rds_hostname" {
+  description = "RDS instance hostname"
+  value       = aws_db_instance.rds_postgresql_name.address
+}
+
+output "rds_port" {
+  description = "RDS instance port"
+  value       = aws_db_instance.rds_postgresql_name.port
 }

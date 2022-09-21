@@ -3,6 +3,9 @@
 
 # terraform staging files
 /src/aws/terraform/terraform.exe
+/src/aws/terraform/.terraform
+/src/aws/terraform/.terraform.lock.hcl
+/src/aws/terraform/.terraform.tfstate.lock.info
 
 /src/aws/terraform/configure/.terraform
 /src/aws/terraform/configure/.terraform.lock.hcl
