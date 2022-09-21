@@ -58,7 +58,7 @@ resource "aws_s3_bucket" "s3_bucket_name" {
 # add sub direcotry to s3 bucket
 resource "aws_s3_object" "s3_object" {
     bucket = aws_s3_bucket.s3_bucket_name.id
-    key    = "dvc"
+    key    = "dvc/"
 }
 
 # configure access
