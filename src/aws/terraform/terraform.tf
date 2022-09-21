@@ -210,7 +210,7 @@ resource "aws_ecrpublic_repository" "ecr_name1" {
 
 # attach policy to public repo
 resource "aws_ecrpublic_repository_policy" "ecr_name1" {
-    repository_name = aws_ecrpublic_repository.ecr_name.repository_name
+    repository_name = aws_ecrpublic_repository.ecr_name1.repository_name
     policy = <<EOF
         {
             "Version": "2008-10-17",
@@ -255,7 +255,6 @@ output "ecr_repository_worker_endpoint" {
     value = aws_ecrpublic_repository.ecr_name1.repository_uri
 }
 
-output "ecr_repository_worker_endpoint" {
+output "repository_url" {
     value = aws_ecr_repository.ecr_name2.repository_url
 }
-
