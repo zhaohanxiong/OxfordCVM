@@ -36,6 +36,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 resource "aws_subnet" "pub_subnet" {
     vpc_id     = aws_vpc.vpc.id
     cidr_block = "10.0.0.16/28"
+    availability_zone = "us-east-1a"
 }
 
 # configure where network traffic from subnets are directed
@@ -95,4 +96,39 @@ resource "aws_security_group" "rds_sg" {
         protocol        = "tcp"
         cidr_blocks     = ["0.0.0.0/0"]
     }
+}
+
+# RDS configuration
+#   AWS free tier (as of 15-09-2022):
+#   - 20 GB of General Purpose (SSD) DB Storage
+#   - 20 GB of backup storage for your automated database backups and 
+#     any user-initiated DB snapshots
+#   - 750 hours of Single-AZ db.t2.micro/db.t3.micro/db.t4g.micro Instances 
+#     for MySQL/MariaDB/PostgreSQL per month
+#   - If running more than one instance, usage is aggregated across all instance
+#   - 750 hours of RDS Single-AZ db.t2.micro Instance usage running SQL Server 
+#     (running SQL Server Express Edition) per month
+
+# allow VPC to access DB instance
+resource "aws_db_subnet_group" "db_subnet_group" {
+    subnet_ids  = [aws_subnet.pub_subnet.id]
+}
+
+resource "aws_db_instance" "rds_postgresql_name" {
+    engine                              = "postgres"
+    engine_version                      = "13.7"
+    instance_class                      = "db.t2.micro"
+    identifier                          = "ukb-db"
+    db_name                             = "ukb_postgres_db"
+    username                            = "zhaohanxiong_rds_username"
+    password                            = "zhaohanxiong_rds_password"
+    publicly_accessible                 = false
+    skip_final_snapshot                 = true
+    multi_az                            = true
+    allocated_storage                   = 10
+    port                                = 5432
+    iam_database_authentication_enabled = false
+    db_subnet_group_name                = aws_db_subnet_group.db_subnet_group.id
+    vpc_security_group_ids              = [aws_security_group.rds_sg.id, aws_security_group.ecs_sg.id]
+    final_snapshot_identifier           = "ukb-db-final"
 }

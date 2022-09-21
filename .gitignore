@@ -6,12 +6,15 @@
 
 /src/aws/terraform/configure/.terraform
 /src/aws/terraform/configure/.terraform.lock.hcl
+/src/aws/terraform/configure/.terraform.tfstate.lock.info
 
 /src/aws/terraform/deploy_ml/.terraform
 /src/aws/terraform/deploy_ml/.terraform.lock.hcl
+/src/aws/terraform/configure/.terraform.tfstate.lock.info
 
 /src/aws/terraform/storage/.terraform
 /src/aws/terraform/storage/.terraform.lock.hcl
+/src/aws/terraform/configure/.terraform.tfstate.lock.info
 
 # machine learning files
 /src/ml_lifecycle/tf_serving/saved_models
