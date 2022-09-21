@@ -25,7 +25,7 @@ resource "aws_db_instance" "rds_postgresql_name" {
     password                            = "zhaohanxiong_rds_password"
     publicly_accessible                 = false
     skip_final_snapshot                 = true
-    multi_az                            = true
+    multi_az                            = false
     allocated_storage                   = 10
     port                                = 5432
     iam_database_authentication_enabled = false
