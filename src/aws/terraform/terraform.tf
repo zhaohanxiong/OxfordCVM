@@ -145,12 +145,3 @@ output "postgresql_endpoint" {
     value = aws_db_instance.rds_postgresql_name.endpoint
 }
 
-output "rds_hostname" {
-  description = "RDS instance hostname"
-  value       = aws_db_instance.rds_postgresql_name.address
-}
-
-output "rds_port" {
-  description = "RDS instance port"
-  value       = aws_db_instance.rds_postgresql_name.port
-}
