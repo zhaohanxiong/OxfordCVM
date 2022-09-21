@@ -1,10 +1,11 @@
 # store the state of the terraform project in AWS S3
-terraform {
-    backend "s3" {
-        bucket = "cti-ukb-tf-state"
-        key    = "state.tfstate"
-    }
-}
+# comment out to store locally
+# terraform {
+#     backend "s3" {
+#         bucket = "cti-ukb-tf-state"
+#         key    = "state.tfstate"
+#     }
+# }
 
 # define platform (when running with aws CLI)
 provider "aws" {
@@ -140,7 +141,7 @@ resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
     name                      = "asg"
     vpc_zone_identifier       = [aws_subnet.pub_subnet.id]
     launch_configuration      = aws_launch_configuration.ecs_launch_config.name
-    desired_capacity          = 2
+    desired_capacity          = 1
     min_size                  = 1
     max_size                  = 10
     health_check_grace_period = 300
@@ -219,9 +220,7 @@ resource "aws_db_instance" "rds_postgresql_name" {
     iam_database_authentication_enabled = false
     db_subnet_group_name                = aws_db_subnet_group.db_subnet_group.id
     vpc_security_group_ids              = [aws_security_group.rds_sg.id, aws_security_group.ecs_sg.id]
-    skip_final_snapshot                 = true
     final_snapshot_identifier           = "ukb-db-final"
-    publicly_accessible                 = true
 }
 
 # ECR configuration
@@ -238,7 +237,7 @@ resource "aws_db_instance" "rds_postgresql_name" {
 
 # create public elastic container repo
 resource "aws_ecrpublic_repository" "ecr_name" {
-  repository_name = "cti-pred"
+    repository_name = "cti-pred"
 }
 
 resource "aws_ecrpublic_repository_policy" "ecr_name" {
