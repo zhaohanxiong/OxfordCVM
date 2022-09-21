@@ -133,7 +133,7 @@ resource "aws_launch_configuration" "ecs_launch_config" {
     image_id             = "ami-05fa00d4c63e32376"
     iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
     security_groups      = [aws_security_group.ecs_sg.id]
-    user_data            = "#!/bin/bash\necho ECS_CLUSTER=cti-cluster >> /etc/ecs/ecs.config"
+    user_data            = "#!/bin/bash\necho ECS_CLUSTER=default >> /etc/ecs/ecs.config"
     instance_type        = "t2.micro"
 }
 
@@ -285,7 +285,7 @@ resource "aws_ecrpublic_repository_policy" "ecr_name" {
 
 # create a cluster
 resource "aws_ecs_cluster" "ecs_cluster" {
-    name  = "cti-cluster"
+    name  = "default"
 }
 
 # create a task definition
@@ -310,9 +310,9 @@ resource "aws_ecs_service" "cti-task" {
 }
 
 # Output parameter of provisioned component 
-# output "postgresql_endpoint" {
-#     value = aws_db_instance.rds_postgresql_name.endpoint
-# }
+output "postgresql_endpoint" {
+    value = aws_db_instance.rds_postgresql_name.endpoint
+}
 
 output "ecr_repository_worker_endpoint" {
     value = aws_ecrpublic_repository.ecr_name.repository_uri
