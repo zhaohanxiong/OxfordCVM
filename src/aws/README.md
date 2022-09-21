@@ -57,3 +57,10 @@ docker push 956279893231.dkr.ecr.us-east-1.amazonaws.com/cti_pred
 .\terraform.exe plan -destroy -out="destroy.plan"
 .\terraform.exe apply destroy.plan
 ```
+
+##### Terraform Config Files for each AWS Component
+```
+/configure/ sets up the AWS environment, VPCs, security groups
+/storage/ sets up AWS S3, RDS, and ECR
+/deploy_ml/ set up AWS ECS with either EC2 or Fargate
+```
