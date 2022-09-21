@@ -33,10 +33,16 @@ resource "aws_internet_gateway" "internet_gateway" {
 }
 
 # configure and create sub network
-resource "aws_subnet" "pub_subnet" {
+resource "aws_subnet" "pub_subnet1" {
     vpc_id     = aws_vpc.vpc.id
-    cidr_block = "10.0.0.16/28"
+    cidr_block = "10.0.0.0/25"
     availability_zone = "us-east-1a"
+}
+
+resource "aws_subnet" "pub_subnet2" {
+  vpc_id     = aws_vpc.vpc.id
+  cidr_block = "10.0.0.128/25"
+  availability_zone = "us-east-1b"
 }
 
 # configure where network traffic from subnets are directed
@@ -49,11 +55,30 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "route_table_association" {
-    subnet_id      = aws_subnet.pub_subnet.id
+    subnet_id      = aws_subnet.pub_subnet1.id
     route_table_id = aws_route_table.public.id
 }
 
 # configure security groups to restrict access
+resource "aws_security_group" "rds_sg" {
+    vpc_id = aws_vpc.vpc.id
+
+    ingress {
+        protocol        = "tcp"
+        from_port       = 5432
+        to_port         = 5432
+        cidr_blocks     = ["0.0.0.0/0"]
+        security_groups = [aws_security_group.ecs_sg.id]
+    }
+
+    egress {
+        from_port       = 0
+        to_port         = 65535
+        protocol        = "tcp"
+        cidr_blocks     = ["0.0.0.0/0"]
+    }
+}
+
 resource "aws_security_group" "ecs_sg" {
     vpc_id = aws_vpc.vpc.id
 
@@ -79,25 +104,6 @@ resource "aws_security_group" "ecs_sg" {
     }
 }
 
-resource "aws_security_group" "rds_sg" {
-    vpc_id = aws_vpc.vpc.id
-
-    ingress {
-        protocol        = "tcp"
-        from_port       = 5432
-        to_port         = 5432
-        cidr_blocks     = ["0.0.0.0/0"]
-        security_groups = [aws_security_group.ecs_sg.id]
-    }
-
-    egress {
-        from_port       = 0
-        to_port         = 65535
-        protocol        = "tcp"
-        cidr_blocks     = ["0.0.0.0/0"]
-    }
-}
-
 # RDS configuration
 #   AWS free tier (as of 15-09-2022):
 #   - 20 GB of General Purpose (SSD) DB Storage
@@ -111,7 +117,7 @@ resource "aws_security_group" "rds_sg" {
 
 # allow VPC to access DB instance
 resource "aws_db_subnet_group" "db_subnet_group" {
-    subnet_ids  = [aws_subnet.pub_subnet.id]
+    subnet_ids  = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id]
 }
 
 resource "aws_db_instance" "rds_postgresql_name" {
