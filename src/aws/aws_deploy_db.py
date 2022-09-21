@@ -3,12 +3,12 @@ import json
 import sqlalchemy
 import pandas as pd
 
-# source path of data and switch to this path
-path = "NeuroPM/io/" # "src/fmrib/NeuroPM/io/" (vscode debug)
-os.chdir(path)
+# load AWS RDS credentials
+aws_cred = json.load(open("../../../keys/aws/postgresql.json"))
 
-# AWS RDS credentials
-aws_cred = json.load(open("../../../../../keys/aws/postgresql.json"))
+# source path of data and switch to this path
+path = "../fmrib/NeuroPM/io/"
+os.chdir(path)
 
 # set up connection to AWS RDS postgresql
 url = 'postgresql+psycopg2://' + aws_cred['user'] + ':' + aws_cred['passw'] + \
@@ -23,14 +23,14 @@ ukb_num = pd.read_csv("ukb_num_reduced.csv", index_col = False)
 # deploy data frames to to AWS
 pseudotimes.to_sql(name = "psuedotimes", con = engine, if_exists = "replace")
 ukb_varnames.to_sql(name = "ukb_varnames", con = engine, if_exists = "replace")
-ukb_num.to_sql(name = "ukb_num", con = engine, if_exists = "replace")
+ukb_num.to_sql(name = "ukb_num_reduced", con = engine, if_exists = "replace")
 
 '''
 # for writing to s3 (when ukb_num was too big for RDS)
 import boto3
 
 # AWS S3 credentials
-aws_cred = pd.read_csv("../../../../../keys/aws/s3.csv")
+aws_cred = pd.read_csv("../../../keys/aws/s3.csv")
 
 # set up connection to AWS S3
 s3_client = boto3.client('s3', aws_access_key_id = aws_cred['Access key ID'][0], \
