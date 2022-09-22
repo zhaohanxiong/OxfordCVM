@@ -29,8 +29,8 @@ resource "aws_db_instance" "rds_postgresql_name" {
     allocated_storage                   = 10
     port                                = 5432
     iam_database_authentication_enabled = false
-    db_subnet_group_name                = aws_db_subnet_group.db_subnet_group.id
-    vpc_security_group_ids              = [aws_security_group.rds_sg.id]
+    #db_subnet_group_name                = aws_db_subnet_group.db_subnet_group.id
+    #vpc_security_group_ids              = [aws_security_group.rds_sg.id]
     final_snapshot_identifier           = "ukb-db-final"
 }
 

@@ -19,7 +19,7 @@ data "aws_availability_zones" "available_zones" {
 
 # configure virtual private cloud to create isolated virtual network 
 resource "aws_vpc" "vpc" {
-    cidr_block = "10.0.0.0/24"
+    cidr_block = "172.31.0.0/16"
     enable_dns_support   = true
     enable_dns_hostnames = true
     tags = {
@@ -35,13 +35,13 @@ resource "aws_internet_gateway" "internet_gateway" {
 # configure and create sub network
 resource "aws_subnet" "pub_subnet1" {
     vpc_id     = aws_vpc.vpc.id
-    cidr_block = "10.0.0.0/25"
+    cidr_block = "172.31.0.0/20"
     availability_zone = "us-east-1a"
 }
 
 resource "aws_subnet" "pub_subnet2" {
   vpc_id     = aws_vpc.vpc.id
-  cidr_block = "10.0.0.128/25"
+  cidr_block = "172.31.16.0/20"
   availability_zone = "us-east-1b"
 }
 
