@@ -37,12 +37,14 @@ resource "aws_subnet" "pub_subnet1" {
     vpc_id     = aws_vpc.vpc.id
     cidr_block = "172.31.0.0/20"
     availability_zone = "us-east-1a"
+    map_public_ip_on_launch = true
 }
 
 resource "aws_subnet" "pub_subnet2" {
-  vpc_id     = aws_vpc.vpc.id
-  cidr_block = "172.31.16.0/20"
-  availability_zone = "us-east-1b"
+    vpc_id     = aws_vpc.vpc.id
+    cidr_block = "172.31.16.0/20"
+    availability_zone = "us-east-1b"
+    map_public_ip_on_launch = true
 }
 
 # configure where network traffic from subnets are directed
