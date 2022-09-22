@@ -37,3 +37,4 @@ pytest
 
 # deploy db & models to AWS
 cd ../aws
+#python aws_deploy_db.py

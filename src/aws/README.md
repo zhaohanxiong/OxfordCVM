@@ -60,7 +60,7 @@ docker push 956279893231.dkr.ecr.us-east-1.amazonaws.com/cti_pred
 
 ##### Terraform Config Files for each AWS Component
 ```
-/configure/ sets up the AWS environment, VPCs, security groups
-/storage/ sets up AWS S3, RDS, and ECR
-/deploy_ml/ set up AWS ECS with either EC2 or Fargate
+configure.tf sets up the AWS environment, VPCs, security groups
+storage.tf sets up AWS S3, RDS, and ECR
+compute.tf set up AWS ECS with either EC2 or Fargate
 ```
