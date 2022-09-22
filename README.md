@@ -1,7 +1,7 @@
-## AI Framework Bluepoint/Tech Stack for Cardiovascular Disease Modelling
+### AI Framework Bluepoint/Tech Stack for Cardiovascular Disease Modelling
 ![image](https://user-images.githubusercontent.com/29684281/191043353-2919a758-d4c5-432d-873c-efdfe23a0715.png)
 
-## Projects Lead By Me
+### Projects Lead By Me
 •	Bayesian dimensionality reduction, cluster analysis, and network analysis of population-wide medical databases (UK Biobank) for isolating predictive biomarkers and constructing disease progression trajectories
 
 •	Scalable, interactive, and light weight visualization tools for sharing statistical outcomes from modelling
@@ -10,7 +10,7 @@
 
 ![Rshiny_Demo](https://user-images.githubusercontent.com/29684281/177753060-3b01057d-e711-4a42-9106-7d2cec58ea29.png)
 
-#### Data Version Control (DVC) - Used in Tandem with Git
+### Data Version Control (DVC) - Used in Tandem with Git
 ```
 - install dependencies
 pip install dvc dvc-s3
@@ -41,3 +41,5 @@ git push
 git pull origin
 dvc pull
 ```
+
+### MLflow for Full ML-OPs
