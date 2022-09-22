@@ -41,7 +41,7 @@ resource "aws_launch_configuration" "ecs_launch_config" {
 # configure autoscaling group containing a collection of EC2
 resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
     name                      = "asg"
-    vpc_zone_identifier       = [aws_subnet.pub_subnet.id]
+    vpc_zone_identifier       = [aws_subnet.pub_subnet1.id]
     launch_configuration      = aws_launch_configuration.ecs_launch_config.name
     desired_capacity          = 1
     min_size                  = 1
@@ -61,7 +61,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 data "template_file" "task_definition_template" {
     template = file("task_definition.json.tpl")
     vars = {
-        REPOSITORY_URL = replace(aws_ecrpublic_repository.ecr_name.repository_uri, "https://", "")
+        REPOSITORY_URL = replace(aws_ecrpublic_repository.ecr_name1.repository_uri, "https://", "")
     }
 }
 
