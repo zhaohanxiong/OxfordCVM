@@ -7,6 +7,7 @@
 #     }
 # }
 
+# AWS VPC configuration
 # define platform (when running with aws CLI)
 provider "aws" {
     profile = "default"
@@ -32,6 +33,7 @@ resource "aws_internet_gateway" "internet_gateway" {
     vpc_id = aws_vpc.vpc.id
 }
 
+# Subnet configuration
 # configure and create sub network
 resource "aws_subnet" "pub_subnet1" {
     vpc_id     = aws_vpc.vpc.id
@@ -61,7 +63,8 @@ resource "aws_route_table_association" "route_table_association" {
     route_table_id = aws_route_table.public.id
 }
 
-# configure security groups to restrict access
+# Security group configuration
+# configure security groups to restrict access for RDS
 resource "aws_security_group" "rds_sg" {
     name = "rds_sg"
     vpc_id = aws_vpc.vpc.id
@@ -77,4 +80,26 @@ resource "aws_security_group" "rds_sg" {
         protocol        = "-1"
         cidr_blocks     = ["0.0.0.0/0"]
     }
+}
+
+# configure security groups to restrict access for ECS
+resource "aws_security_group" "ecs_sg" {
+    name = "ecs_sg"
+    vpc_id = aws_vpc.vpc.id
+    ingress {
+        from_port       = 0
+        to_port         = 0
+        protocol        = "-1"
+    }
+    egress {
+        from_port        = 0
+        to_port          = 0
+        protocol         = "-1"
+        cidr_blocks      = ["0.0.0.0/0"]
+    }
+}
+
+# AWS Cloud Watch configuration
+resource "aws_cloudwatch_log_group" "log-group" {
+    name = "ukb-logs"
 }
