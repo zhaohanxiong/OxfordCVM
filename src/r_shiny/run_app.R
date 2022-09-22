@@ -5,7 +5,7 @@ library(ggplot2)
 
 # -------------------- Connect to Data Base --------------------
 # read from AWS or locally
-local = TRUE
+local = FALSE
 
 if (!local) { # connecting to AWS
   
@@ -38,8 +38,8 @@ if (!local) { # connecting to AWS
   
   # load and store tables
   varnames = dbFetch(dbSendQuery(con, "SELECT * FROM ukb_varnames"))
-  pseudotimes = dbFetch(dbSendQuery(con, "SELECT * FROM pseudotimes"))
-  ukb_df = dbFetch(dbSendQuery(con, "SELECT * FROM ukb_num"))
+  pseudotimes = dbFetch(dbSendQuery(con, "SELECT * FROM psuedotimes"))
+  ukb_df = dbFetch(dbSendQuery(con, "SELECT * FROM ukb_num_reduced"))
   
 } else { # read from local storage
   
@@ -83,7 +83,7 @@ varnames = varnames[varnames$colname %in% colnames(ukb_df), ]
 
 # -------------------- Run Shiny Application --------------------
 # set deploy option as true or false
-deploy = FALSE
+deploy = TRUE
 
 # deploy on shinyapp.io (hosted by R-Shiny)
 if (deploy) {
