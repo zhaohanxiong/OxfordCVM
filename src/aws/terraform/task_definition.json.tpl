@@ -1,6 +1,6 @@
 [
     {
-        "name": "cti-task",
+        "name": "cti_model",
         "image": "${REPOSITORY_URL}:latest",
         "cpu": 2,
         "memory": 512,

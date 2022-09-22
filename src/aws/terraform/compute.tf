@@ -68,7 +68,6 @@ data "template_file" "task_definition_template" {
 resource "aws_ecs_task_definition" "task_definition" {
     family                = "cti_model"
     container_definitions = data.template_file.task_definition_template.rendered
-    memory                   = 500
     network_mode             = "host"
     requires_compatibilities = ["EC2"]
 }
