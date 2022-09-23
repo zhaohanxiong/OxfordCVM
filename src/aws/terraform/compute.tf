@@ -75,6 +75,7 @@ resource "aws_ecs_task_definition" "task_definition" {
     container_definitions = data.template_file.task_definition_template.rendered
     network_mode             = "host"
     requires_compatibilities = ["EC2"]
+    #requires_compatibilities = ["FARGATE"] # for fargate
     #execution_role_arm       = aws_iam_role.ecs_agent.arn # for fargate
 }
 
@@ -84,6 +85,7 @@ resource "aws_ecs_service" "cti-task" {
     cluster         = aws_ecs_cluster.ecs_cluster.id
     task_definition = aws_ecs_task_definition.task_definition.arn
     desired_count   = 1
+    launch_type = "EC2"
     #launch_type = "FARGATE" # for fargate
     #network_configuration {
     #    subnets          = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id] # for fargate

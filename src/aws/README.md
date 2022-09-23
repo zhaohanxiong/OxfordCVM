@@ -16,7 +16,7 @@ aws configure
 - Check free tier usage at AWS Billing Dashboard > AWS Free Tier
 ```
 
-##### Deploy Container to AWS ECR/ECS with Fargate
+##### Deploy Container to AWS ECR/ECS with EC2/Fargate
 ```
 - Create a new repository in ECR and save the link (shown below) & access IAM token
 
