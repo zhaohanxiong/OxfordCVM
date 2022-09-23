@@ -10,6 +10,7 @@ data "aws_iam_policy_document" "ecs_agent" {
         principals {
             type        = "Service"
             identifiers = ["ec2.amazonaws.com"]
+            #identifiers = ["ecs-tasks.amazonaws.com"] # for fargate
         }
     }
 }
@@ -22,6 +23,7 @@ resource "aws_iam_role" "ecs_agent" {
 resource "aws_iam_role_policy_attachment" "ecs_agent" {
     role       = aws_iam_role.ecs_agent.name
     policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+    #policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy" # for fargate
 }
 
 resource "aws_iam_instance_profile" "ecs_agent" {
@@ -73,6 +75,7 @@ resource "aws_ecs_task_definition" "task_definition" {
     container_definitions = data.template_file.task_definition_template.rendered
     network_mode             = "host"
     requires_compatibilities = ["EC2"]
+    #execution_role_arm       = aws_iam_role.ecs_agent.arn # for fargate
 }
 
 # attach task to cluster
@@ -81,4 +84,9 @@ resource "aws_ecs_service" "cti-task" {
     cluster         = aws_ecs_cluster.ecs_cluster.id
     task_definition = aws_ecs_task_definition.task_definition.arn
     desired_count   = 1
+    #launch_type = "FARGATE" # for fargate
+    #network_configuration {
+    #    subnets          = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id] # for fargate
+    #    assign_public_ip = true # for fargate
+    #}
 }

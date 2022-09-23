@@ -23,9 +23,9 @@ docker tag cti_model 956279893231.dkr.ecr.us-east-1.amazonaws.com/cti_pred
 - Push docker image to ECR (using format/link below):
 docker push 956279893231.dkr.ecr.us-east-1.amazonaws.com/cti_pred
 
-- Create AWS ECS cluster with fargate for serverless compute (without managing EC2)
-- Create ECS task definition by linking with ECR URI and exposing port 8500
-- Create task in ECS cluster by linking with task definition from above, also expose port 8500
+- Cluster: Create AWS ECS cluster with fargate for serverless compute (without managing EC2)
+- Task: Create ECS task definition by linking with ECR URI and exposing port 8500
+- Service: Create service in ECS cluster by linking with task definition from above, also expose port 8500
 - Copy public IP address from newly running task and copy into python grpc channel handle
 ```
 
