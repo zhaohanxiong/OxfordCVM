@@ -66,7 +66,7 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 data "template_file" "task_definition_template" {
     template = file("task_definition.json.tpl")
     vars = {
-        REPOSITORY_URL = replace(aws_ecrpublic_repository.ecr_name1.repository_uri, "https://", "")
+        REPOSITORY_URL = aws_ecrpublic_repository.ecr_name1.repository_uri
     }
 }
 
@@ -87,8 +87,8 @@ resource "aws_ecs_service" "cti-task" {
     desired_count   = 1
     launch_type     = "EC2"
     #launch_type     = "FARGATE" # for fargate
-    #network_configuration {
-    #    subnets          = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id] 
-    #    assign_public_ip = false
-    #}
+    network_configuration {
+        subnets          = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id] 
+        assign_public_ip = false
+    }
 }
