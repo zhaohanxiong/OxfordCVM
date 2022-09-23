@@ -71,12 +71,12 @@ data "template_file" "task_definition_template" {
 }
 
 resource "aws_ecs_task_definition" "task_definition" {
-    family                = "cti_model"
-    container_definitions = data.template_file.task_definition_template.rendered
-    network_mode             = "host"
+    family                   = "cti_model"
+    container_definitions    = data.template_file.task_definition_template.rendered
+    #network_mode             = "awsvpc"
     requires_compatibilities = ["EC2"]
     #requires_compatibilities = ["FARGATE"] # for fargate
-    #execution_role_arm       = aws_iam_role.ecs_agent.arn # for fargate
+    execution_role_arn       = aws_iam_role.ecs_agent.arn
 }
 
 # attach task to cluster
@@ -85,10 +85,10 @@ resource "aws_ecs_service" "cti-task" {
     cluster         = aws_ecs_cluster.ecs_cluster.id
     task_definition = aws_ecs_task_definition.task_definition.arn
     desired_count   = 1
-    launch_type = "EC2"
-    #launch_type = "FARGATE" # for fargate
+    launch_type     = "EC2"
+    #launch_type     = "FARGATE" # for fargate
     #network_configuration {
-    #    subnets          = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id] # for fargate
-    #    assign_public_ip = true # for fargate
+    #    subnets          = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id] 
+    #    assign_public_ip = false
     #}
 }
