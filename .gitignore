@@ -11,5 +11,5 @@
 /src/ml_lifecycle/tf_serving/saved_models
 /src/ml_lifecycle/mlflow/mlruns
 
-# R shiny files
-/src/r_shiny/rsconnect/
+# visualization files
+/src/visualization_dashboards/r_shiny/rsconnect/

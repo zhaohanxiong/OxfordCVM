@@ -34,7 +34,7 @@ cd ../ml_lifecycle/mlflow
 python ./ml_build_model.py
 #python ./log_model.py --random_n=1000 --random_seed=1234
 
-# run test cases
+# run test cases (in root directory)
 cd ../../..
 pytest
 
