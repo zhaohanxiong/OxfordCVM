@@ -1,7 +1,7 @@
 import json
 import numpy as np
 
-def read_test_dict(filename = "test.json"):
+def read_test_dict(filename = "test/test.json"):
     
     '''
     This function loads the dictionary containing the flags for
@@ -14,7 +14,7 @@ def read_test_dict(filename = "test.json"):
 
     return(filedict)
 
-def write_test_dict(filecontents, filename = "test.json"):
+def write_test_dict(filecontents, filename = "test/test.json"):
 
     '''
     This function writes the given dictionary to the test
@@ -28,7 +28,7 @@ def write_test_dict(filecontents, filename = "test.json"):
     # encode files as a dict and write contents to it
     json.dump(filecontents, filedict, indent = 4, sort_keys = True)
 
-def update_test_dict(key_group, key, val, filename = "test.json"):
+def update_test_dict(key_group, key, val, filename = "test/test.json"):
 
     '''
     This function updates a given key-value pair in our test flags

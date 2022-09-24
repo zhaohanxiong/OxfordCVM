@@ -1,6 +1,6 @@
 {
     "ml": {
-        "is_model_accurate": false
+        "is_model_accurate": true
     },
     "neuropm": {
         "is_model_accurate": true
