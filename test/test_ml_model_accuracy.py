@@ -11,16 +11,6 @@ def compute_rmse(x, y):
     '''
     return(np.mean(np.sqrt((x - y)**2)))
 
-def test_neuro_pm_accuracy():
-
-    '''
-    This function tests for the accuracy/effectiveness of the NeuroPM
-    pseudotime score output. It checks if the output distribution
-    is acceptable and contains good seperation between groups
-    '''
-
-    assert True
-
 def test_ml_model_accuracy():
 
     # Arrange
