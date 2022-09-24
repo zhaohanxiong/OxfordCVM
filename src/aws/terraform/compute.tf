@@ -10,7 +10,6 @@ data "aws_iam_policy_document" "ecs_agent" {
         principals {
             type        = "Service"
             identifiers = ["ec2.amazonaws.com"]
-            #identifiers = ["ecs-tasks.amazonaws.com"] # for fargate
         }
     }
 }
@@ -23,35 +22,47 @@ resource "aws_iam_role" "ecs_agent" {
 resource "aws_iam_role_policy_attachment" "ecs_agent" {
     role       = aws_iam_role.ecs_agent.name
     policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
-    #policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy" # for fargate
 }
 
 resource "aws_iam_instance_profile" "ecs_agent" {
     name = "ecs-agent"
-    role = aws_iam_role.ecs_agent.name
+    role = aws_iam_role.ecs_agent.id
 }
 
-# create a launch configuration for the ecs service
-resource "aws_launch_configuration" "ecs_launch_config" {
-    image_id             = "ami-05fa00d4c63e32376"
-    iam_instance_profile = aws_iam_instance_profile.ecs_agent.name
-    security_groups      = [aws_security_group.ecs_sg.id]
-    user_data            = "#!/bin/bash\necho ECS_CLUSTER=cti-cluster >> /etc/ecs/ecs.config"
-    instance_type        = "t2.micro"
-    lifecycle {
-        create_before_destroy = true
+data "aws_iam_policy_document" "ecs-service-policy" {
+    statement {
+        actions = ["sts:AssumeRole"]
+        principals {
+            type        = "Service"
+            identifiers = ["ecs.amazonaws.com"]
+        }
     }
 }
 
-# configure autoscaling group containing a collection of EC2
-resource "aws_autoscaling_group" "failure_analysis_ecs_asg" {
-    name                      = "asg"
-    vpc_zone_identifier       = [aws_subnet.pub_subnet1.id]
-    launch_configuration      = aws_launch_configuration.ecs_launch_config.name
-    desired_capacity          = 1
-    min_size                  = 1
-    max_size                  = 1
-    health_check_type         = "EC2"
+resource "aws_iam_role" "ecs-service-role" {
+    name               = "ecs-service-role"
+    assume_role_policy = data.aws_iam_policy_document.ecs-service-policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "ecs-service-role-attachment" {
+    role       = aws_iam_role.ecs-service-role.name
+    policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
+}
+
+# define ec2 instance
+data "template_file" "user_data" {
+    template = file("user_data.tpl")
+}
+
+resource "aws_instance" "ec2_instance" {
+    ami                    = "ami-05fa00d4c63e32376"
+    subnet_id              = aws_subnet.pub_subnet1.id
+    instance_type          = "t2.micro"
+    iam_instance_profile   = aws_iam_instance_profile.ecs_agent.name
+    vpc_security_group_ids = [aws_security_group.ecs_sg.id]
+    ebs_optimized          = "false"
+    source_dest_check      = "false"
+    user_data              = data.template_file.user_data.rendered
 }
 
 # ECS configuration
@@ -73,10 +84,12 @@ data "template_file" "task_definition_template" {
 resource "aws_ecs_task_definition" "task_definition" {
     family                   = "cti_model"
     container_definitions    = data.template_file.task_definition_template.rendered
-    #network_mode             = "awsvpc"
+    network_mode             = "awsvpc"
     requires_compatibilities = ["EC2"]
-    #requires_compatibilities = ["FARGATE"] # for fargate
-    execution_role_arn       = aws_iam_role.ecs_agent.arn
+    memory                   = "2048"
+    cpu                      = "1024"
+    task_role_arn            = aws_iam_role.ecs-service-role.arn
+    execution_role_arn       = aws_iam_role.ecs-service-role.arn
 }
 
 # attach task to cluster
@@ -86,9 +99,49 @@ resource "aws_ecs_service" "cti-task" {
     task_definition = aws_ecs_task_definition.task_definition.arn
     desired_count   = 1
     launch_type     = "EC2"
-    #launch_type     = "FARGATE" # for fargate
+    depends_on      = [aws_lb_listener.lb_listener]
     network_configuration {
+        security_groups  = [aws_security_group.ecs_sg.id]
         subnets          = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id] 
         assign_public_ip = false
     }
+    load_balancer {
+        container_name   = "cti_model"
+        container_port   = "8500"
+        target_group_arn = aws_lb_target_group.lb_target_group.arn
+    }
+}
+
+# configure load balancing
+resource "aws_lb" "loadbalancer" {
+    name            = "alb-name"
+    internal        = false
+    subnets         = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id] 
+    security_groups = [aws_security_group.ecs_sg.id]
+}
+
+resource "aws_lb_target_group" "lb_target_group" {
+    name        = "target-alb-name"
+    port        = "80"
+    protocol    = "HTTP"
+    vpc_id      = aws_vpc.vpc.id
+    target_type = "ip"
+    health_check {
+        healthy_threshold   = "3"
+        interval            = "10"
+        port                = "8500"
+        path                = "/index.html"
+        protocol            = "HTTP"
+        unhealthy_threshold = "3"
+    }
+}
+
+resource "aws_lb_listener" "lb_listener" {
+    default_action {
+        target_group_arn = aws_lb_target_group.lb_target_group.id
+        type             = "forward"
+    }
+    load_balancer_arn = aws_lb.loadbalancer.arn
+    port              = "80"
+    protocol          = "HTTP"
 }
