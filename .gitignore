@@ -1,3 +1,12 @@
+# dvc files
+/dvc/config.local
+/dvc/tmp
+/dvc/cache
+
+# pytest files
+.pytest_cache
+/test/__pycache__
+
 # outputs from cTI
 /src/fmrib/NeuroPM/io
 
