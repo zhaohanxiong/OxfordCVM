@@ -127,19 +127,3 @@ resource "aws_lb_listener" "lb_listener" {
     load_balancer_arn = aws_lb.loadbalancer.arn
     port              = "80"
 }
-
-# # configure route53 to access internet
-# resource "aws_route53_zone" "r53_private_zone" {
-#     name = "zJl7Jv7M0HECtUzgWM93fuZradqoF8eGKPuazYmBygMuUNwAA9hFVIkYbQI6"
-# }
-
-# resource "aws_route53_record" "dns" {
-#     name    = "name_dns"
-#     zone_id = aws_route53_zone.r53_private_zone.zone_id
-#     type    = "A"
-#     alias {
-#         evaluate_target_health = false
-#         name                   = aws_lb.loadbalancer.dns_name
-#         zone_id                = aws_lb.loadbalancer.zone_id
-#     }
-# }
