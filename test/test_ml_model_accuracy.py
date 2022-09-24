@@ -3,10 +3,18 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
+def compute_rmse(x, y):
+
+    '''
+    This function computes the root mean squared error (RMSE) given ground 
+    truth (x) and prediction (y). Inputs must be numpy arrays.
+    '''
+    return(np.mean(np.sqrt((x - y)**2)))
+
 def test_cti_model():
 
     # Arrange
-    # model path
+    # define paths for i/o
     path_model     = "src/ml_lifecycle/tf_serving/saved_models/2/"
     path_data      = "src/fmrib/NeuroPM/io/"
     path_data_val  = os.path.join(path_data, "ukb_num_norm_ft_select.csv")
@@ -33,12 +41,19 @@ def test_cti_model():
 
     gt, pred = test_label["global_pseudotimes"].to_numpy(), np.array(pred)
     
-    # compute accuracy
-    rmse = np.mean(np.sqrt((gt - pred)**2))
+    # compute overall accuracy
+    rmse = compute_rmse(gt, pred)
+
+    # compute group-wise accuracy
+    group        = test_label["bp_group"].to_numpy()
+    rmse_healthy = compute_rmse(gt[group == 1], pred[group == 1])
+    rmse_disease = compute_rmse(gt[group == 2], pred[group == 2])
 
     # Assert
-    # if the overall error is under the acceptable value
+    # if the error is under the acceptable value
     assert rmse < 0.025
+    assert rmse_healthy < 0.01
+    assert rmse_disease < 0.05
 
     # write to output
     pandas_out_dict = {"score_pred": pred,
