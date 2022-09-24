@@ -1,8 +1,13 @@
 import os
 import numpy as np
 import pandas as pd
+from utils import update_test_dict
 
-def test_neuro_pm_accuracy():
+# define keys for tests in this pytest file
+test_type = "neuropm"
+test_flag = "is_model_accurate"
+
+def test_neuro_pm_accuracy_shouldpass():
 
     '''
     This function tests for the accuracy/effectiveness of the NeuroPM
@@ -10,10 +15,16 @@ def test_neuro_pm_accuracy():
     is acceptable and contains good seperation between groups
     '''
 
+    # set test flag to false before running test
+    update_test_dict(test_type, test_flag, False)
+
     # Arrange
 
     # Action
 
     # Assert
     assert True
+
+    # set test flag to true if passed
+    update_test_dict(test_type, test_flag, True)
     

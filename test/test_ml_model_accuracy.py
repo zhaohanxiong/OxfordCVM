@@ -2,16 +2,16 @@ import os
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+from utils import compute_rmse, update_test_dict
 
-def compute_rmse(x, y):
+# define keys for tests in this pytest file
+test_type = "ml"
+test_flag = "is_model_accurate"
 
-    '''
-    This function computes the root mean squared error (RMSE) given ground 
-    truth (x) and prediction (y). Inputs must be numpy arrays.
-    '''
-    return(np.mean(np.sqrt((x - y)**2)))
+def test_ml_model_accuracy_shouldpass():
 
-def test_ml_model_accuracy():
+    # set test flag to false before running test
+    update_test_dict(test_type, test_flag, False)
 
     # Arrange
     # define paths for i/o
@@ -60,3 +60,6 @@ def test_ml_model_accuracy():
                        "score_gt":   gt,
                        "bp_group":   test_label["bp_group"]}
     pd.DataFrame(pandas_out_dict).to_csv(path_data_pred, index = False)
+
+    # set test flag to true if passed
+    update_test_dict(test_type, test_flag, True)
