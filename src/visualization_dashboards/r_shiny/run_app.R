@@ -28,7 +28,7 @@ if (!local) { # connecting to AWS
   #ukb_df = data.frame(ukb_df)
   
   # retrieve rds credentials
-  aws_cred =  fromJSON(file = "../../../keys/aws/postgresql.json")
+  aws_cred =  fromJSON(file = "../../../../keys/aws/postgresql.json")
   
   # create connection to RDS
   con = dbConnect(RPostgres::Postgres(),
@@ -44,7 +44,7 @@ if (!local) { # connecting to AWS
 } else { # read from local storage
   
   # set data path
-  path = "../fmrib/NeuroPM/io/" # "C:/Users/zxiong/Desktop/io"
+  path = "../../fmrib/NeuroPM/io/" # "C:/Users/zxiong/Desktop/io"
   
   # load variables used in cTI
   varnames = read.csv(file.path(path, "ukb_varnames.csv"), header=TRUE)
@@ -92,8 +92,8 @@ if (deploy) {
   library(rsconnect)
   
   # read token and secret
-  shiny_io_token = readLines("../../../keys/shiny/account.token")
-  shiny_io_secret = readLines("../../../keys/shiny/account.secret")
+  shiny_io_token = readLines("../../../../keys/shiny/account.token")
+  shiny_io_secret = readLines("../../../../keys/shiny/account.secret")
   
   # connect to account hosted on shinyapps.io
   rsconnect::setAccountInfo(name = 'zhaohanxiong',
