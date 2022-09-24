@@ -37,6 +37,7 @@ docker push public.ecr.aws/v4u9u1t8/cti-pred:latest
 - Service: Create service in ECS cluster by linking with task definition from above, also expose port 8500
 - Copy public IP address from newly running task and copy into python grpc channel handle
 ```
+![image](https://user-images.githubusercontent.com/29684281/192108583-8c7fb02a-05df-4c79-b49a-d853c1a220e9.png)
 
 ##### Infrastructure as Code (IaC) with Terraform
 ```
