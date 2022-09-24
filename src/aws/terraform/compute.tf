@@ -111,12 +111,10 @@ resource "aws_lb_target_group" "lb_target_group" {
     vpc_id      = aws_vpc.vpc.id
     target_type = "ip"
     health_check {
-        healthy_threshold   = "3"
-        interval            = "10"
+        interval            = "300"
         port                = "8500"
-        path                = "/index.html"
-        protocol            = "HTTP"
-        unhealthy_threshold = "3"
+        healthy_threshold   = "2"
+        unhealthy_threshold = "2"
     }
 }
 
@@ -127,5 +125,4 @@ resource "aws_lb_listener" "lb_listener" {
     }
     load_balancer_arn = aws_lb.loadbalancer.arn
     port              = "80"
-    protocol          = "HTTP"
 }
