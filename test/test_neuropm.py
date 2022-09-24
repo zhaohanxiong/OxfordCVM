@@ -7,7 +7,7 @@ from utils import update_test_dict
 test_type = "neuropm"
 test_flag = "is_model_accurate"
 
-def test_neuro_pm_accuracy_shouldpass():
+def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
 
     '''
     This function tests for the accuracy/effectiveness of the NeuroPM
@@ -16,7 +16,9 @@ def test_neuro_pm_accuracy_shouldpass():
     '''
 
     # set test flag to false before running test
-    update_test_dict(test_type, test_flag, False)
+    update_test_dict(mock_test_neuro_pm_accuracy_shouldpass["key_group"],
+                     mock_test_neuro_pm_accuracy_shouldpass["key"],
+                     False)
 
     # Arrange
 
@@ -26,5 +28,7 @@ def test_neuro_pm_accuracy_shouldpass():
     assert True
 
     # set test flag to true if passed
-    update_test_dict(test_type, test_flag, True)
+    update_test_dict(mock_test_neuro_pm_accuracy_shouldpass["key_group"],
+                     mock_test_neuro_pm_accuracy_shouldpass["key"],
+                     True)
     

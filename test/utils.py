@@ -32,7 +32,8 @@ def update_test_dict(key_group, key, val, filename = "test.json"):
 
     '''
     This function updates a given key-value pair in our test flags
-    dictionary and writes it back out to file
+    dictionary and writes it back out to file. Note that the test.json
+    file must be nested by key-group then key-value pair.
     '''
 
     # read file in

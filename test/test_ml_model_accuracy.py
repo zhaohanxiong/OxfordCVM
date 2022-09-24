@@ -8,10 +8,12 @@ from utils import compute_rmse, update_test_dict
 test_type = "ml"
 test_flag = "is_model_accurate"
 
-def test_ml_model_accuracy_shouldpass():
+def test_ml_model_accuracy_shouldpass(mock_test_ml_model_accuracy_shouldpass):
 
     # set test flag to false before running test
-    update_test_dict(test_type, test_flag, False)
+    update_test_dict(mock_test_ml_model_accuracy_shouldpass["key_group"],
+                     mock_test_ml_model_accuracy_shouldpass["key"],
+                     False)
 
     # Arrange
     # define paths for i/o
@@ -62,4 +64,6 @@ def test_ml_model_accuracy_shouldpass():
     pd.DataFrame(pandas_out_dict).to_csv(path_data_pred, index = False)
 
     # set test flag to true if passed
-    update_test_dict(test_type, test_flag, True)
+    update_test_dict(mock_test_ml_model_accuracy_shouldpass["key_group"],
+                     mock_test_ml_model_accuracy_shouldpass["key"],
+                     True)
