@@ -35,9 +35,9 @@ python ./ml_build_model.py
 #python ./log_model.py --random_n=1000 --random_seed=1234
 
 # run test cases
-cd ../../../test
+cd ../../..
 pytest
 
 # deploy db & models to AWS
-cd ../src/aws
+cd src/aws
 #python aws_deploy_db.py
