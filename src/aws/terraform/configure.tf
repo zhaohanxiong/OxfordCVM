@@ -89,7 +89,8 @@ resource "aws_security_group" "ecs_sg" {
     ingress {
         from_port       = 0
         to_port         = 65535
-        protocol        = "TCP"
+        protocol        = "tcp"
+        cidr_blocks     = ["0.0.0.0/0"]
     }
     egress {
         from_port        = 0

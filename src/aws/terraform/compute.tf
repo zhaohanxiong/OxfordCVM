@@ -39,23 +39,13 @@ data "aws_iam_policy_document" "ecs-service-policy" {
     }
 }
 
-resource "aws_iam_role" "ecs-service-role" {
-    name               = "ecs-service-role"
-    assume_role_policy = data.aws_iam_policy_document.ecs-service-policy.json
-}
-
-resource "aws_iam_role_policy_attachment" "ecs-service-role-attachment" {
-    role       = aws_iam_role.ecs-service-role.name
-    policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole"
-}
-
 # define ec2 instance
 data "template_file" "user_data" {
     template = file("user_data.tpl")
 }
 
 resource "aws_instance" "ec2_instance" {
-    ami                    = "ami-05fa00d4c63e32376"
+    ami                    = "ami-03f8a7b55051ae0d4"
     subnet_id              = aws_subnet.pub_subnet1.id
     instance_type          = "t2.micro"
     iam_instance_profile   = aws_iam_instance_profile.ecs_agent.name
@@ -88,8 +78,6 @@ resource "aws_ecs_task_definition" "task_definition" {
     requires_compatibilities = ["EC2"]
     memory                   = "2048"
     cpu                      = "1024"
-    task_role_arn            = aws_iam_role.ecs-service-role.arn
-    execution_role_arn       = aws_iam_role.ecs-service-role.arn
 }
 
 # attach task to cluster
@@ -101,9 +89,7 @@ resource "aws_ecs_service" "cti-task" {
     launch_type     = "EC2"
     depends_on      = [aws_lb_listener.lb_listener]
     network_configuration {
-        security_groups  = [aws_security_group.ecs_sg.id]
-        subnets          = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id] 
-        assign_public_ip = false
+        subnets          = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id]
     }
     load_balancer {
         container_name   = "cti_model"
