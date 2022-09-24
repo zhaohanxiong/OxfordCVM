@@ -1,5 +1,5 @@
-### AI Framework Bluepoint/Tech Stack for Cardiovascular Disease Modelling
-![image](https://user-images.githubusercontent.com/29684281/191043353-2919a758-d4c5-432d-873c-efdfe23a0715.png)
+### AI Framework Tech Stack/Workflow for Cardiovascular Disease Modelling
+![image](https://user-images.githubusercontent.com/29684281/192006605-b8901209-a9d0-402e-ad13-7cde0a8d7713.png)
 
 ### Data Visualization Tools (R-Shiny, Plotly)
 ![Plotly_Demo](https://user-images.githubusercontent.com/29684281/177753046-d20de5fe-b60b-4b54-928b-d15dc5917caa.png)

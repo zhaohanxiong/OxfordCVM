@@ -10,24 +10,34 @@ aws configure
 - Now you can use the command line in windows (powershell or cmd) to execute commands to AWS
 ```
 
-##### Deploy Container to AWS ECR/ECS with Fargate
+##### AWS Free Tier
+```
+- Free tier allocations has been documented in the terraform files
+- Check free tier usage at AWS Billing Dashboard > AWS Free Tier
+```
+
+##### Deploy Container to AWS ECR/ECS with EC2/Fargate
 ```
 - Create a new repository in ECR and save the link (shown below) & access IAM token
 
-- Configure AWS CLI to have access to new ECR (account ID = 956279893231):
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 956279893231.dkr.ecr.us-east-1.amazonaws.com
+- Configure AWS CLI to have access to new ECR (these push commands can be found in the AWS ECR web console):
+aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/v4u9u1t8
+
+- build image
+docker build -t cti-pred .
 
 - Tag docker image on ur own computer (located in ..\ml_lifecycle\tf_serving):
-docker tag cti_model 956279893231.dkr.ecr.us-east-1.amazonaws.com/cti_pred
+docker tag cti-pred:latest public.ecr.aws/v4u9u1t8/cti-pred:latest
 
 - Push docker image to ECR (using format/link below):
-docker push 956279893231.dkr.ecr.us-east-1.amazonaws.com/cti_pred
+docker push public.ecr.aws/v4u9u1t8/cti-pred:latest
 
 - Cluster: Create AWS ECS cluster with fargate for serverless compute (without managing EC2)
 - Task: Create ECS task definition by linking with ECR URI and exposing port 8500
 - Service: Create service in ECS cluster by linking with task definition from above, also expose port 8500
 - Copy public IP address from newly running task and copy into python grpc channel handle
 ```
+![image](https://user-images.githubusercontent.com/29684281/192108583-8c7fb02a-05df-4c79-b49a-d853c1a220e9.png)
 
 ##### Infrastructure as Code (IaC) with Terraform
 ```
