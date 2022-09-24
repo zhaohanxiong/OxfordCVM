@@ -2,7 +2,7 @@
 # tests for NeuroPM model
 #########################################################
 neuropm_model_test_1 = {
-    "key_group": "ml",
+    "key_group": "neuropm",
     "key":       "is_model_accurate"
 }
 
