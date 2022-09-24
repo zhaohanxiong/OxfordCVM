@@ -3,9 +3,6 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
-# change directory to root
-os.chdir("..")
-
 def test_cti_model():
 
     # Arrange
@@ -35,7 +32,7 @@ def test_cti_model():
         pred.append(cTI_model.predict(test_sample[None, i, :], verbose = 0)[0])
 
     gt, pred = test_label["global_pseudotimes"].to_numpy(), np.array(pred)
-
+    
     # compute accuracy
     rmse = np.mean(np.sqrt((gt - pred)**2))
 
@@ -44,7 +41,8 @@ def test_cti_model():
     assert rmse < 0.025
 
     # write to output
-    pandas_out_dict = {"score": pred,
-                       "bp_group": test_label["bp_group"]}
+    pandas_out_dict = {"score_pred": pred,
+                       "score_gt":   gt,
+                       "bp_group":   test_label["bp_group"]}
     pd.DataFrame(pandas_out_dict).to_csv(path_data_pred, index = False)
     
