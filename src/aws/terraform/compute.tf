@@ -76,8 +76,6 @@ resource "aws_ecs_task_definition" "task_definition" {
     container_definitions    = data.template_file.task_definition_template.rendered
     network_mode             = "awsvpc"
     requires_compatibilities = ["EC2"]
-    memory                   = "2048"
-    cpu                      = "1024"
 }
 
 # attach task to cluster
