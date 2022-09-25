@@ -33,7 +33,23 @@ def mock_test_neuro_pm_accuracy_shouldpass(request):
     return request.param
 
 #########################################################
-# tests for ML model
+# tests for ML model files
+#########################################################
+ml_model_file_test_1 = {
+    "key_group": "ml",
+    "key":       "does_model_exist"
+}
+
+# define test data list for parametrization
+ml_model_file_test = [ml_model_file_test_1]
+
+# fixture for parametrization
+@pytest.fixture(params = ml_model_file_test)
+def mock_test_ml_model_exist_shouldpass(request):
+    return request.param
+
+#########################################################
+# tests for ML model accuracy
 #########################################################
 ml_model_test_1 = {
     "key_group": "ml",

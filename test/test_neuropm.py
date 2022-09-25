@@ -2,31 +2,6 @@ import os
 import pandas as pd
 from utils import update_test_dict
 
-def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
-
-    '''
-    This function tests for the accuracy/effectiveness of the NeuroPM
-    pseudotime score output. It checks if the output distribution
-    is acceptable and contains good seperation between groups
-    '''
-
-    # set test flag to false before running test
-    update_test_dict(mock_test_neuro_pm_accuracy_shouldpass["key_group"],
-                     mock_test_neuro_pm_accuracy_shouldpass["key"],
-                     False)
-
-    # Arrange
-
-    # Action
-
-    # Assert
-    assert True
-
-    # set test flag to true if passed
-    update_test_dict(mock_test_neuro_pm_accuracy_shouldpass["key_group"],
-                     mock_test_neuro_pm_accuracy_shouldpass["key"],
-                     True)
-
 def test_neuro_pm_output_exist_shouldpass(mock_test_neuro_pm_output_exist_shouldpass):
 
     '''
@@ -80,3 +55,27 @@ def test_neuro_pm_output_exist_shouldpass(mock_test_neuro_pm_output_exist_should
                      mock_test_neuro_pm_output_exist_shouldpass["key"],
                      True)
     
+def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
+
+    '''
+    This function tests for the accuracy/effectiveness of the NeuroPM
+    pseudotime score output. It checks if the output distribution
+    is acceptable and contains good seperation between groups
+    '''
+
+    # set test flag to false before running test
+    update_test_dict(mock_test_neuro_pm_accuracy_shouldpass["key_group"],
+                     mock_test_neuro_pm_accuracy_shouldpass["key"],
+                     False)
+
+    # Arrange
+
+    # Action
+
+    # Assert
+    assert True
+
+    # set test flag to true if passed
+    update_test_dict(mock_test_neuro_pm_accuracy_shouldpass["key_group"],
+                     mock_test_neuro_pm_accuracy_shouldpass["key"],
+                     True)
