@@ -55,6 +55,31 @@ resource "aws_instance" "ec2_instance" {
     user_data              = data.template_file.user_data.rendered
 }
 
+# configure load balancing
+resource "aws_lb" "loadbalancer" {
+    name            = "alb-name"
+    internal        = false
+    subnets         = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id] 
+    security_groups = [aws_security_group.ecs_sg.id]
+}
+
+resource "aws_lb_target_group" "lb_target_group" {
+    name        = "target-alb-name"
+    port        = "80"
+    protocol    = "HTTP"
+    vpc_id      = aws_vpc.vpc.id
+    target_type = "ip"
+}
+
+resource "aws_lb_listener" "lb_listener" {
+    default_action {
+        target_group_arn = aws_lb_target_group.lb_target_group.id
+        type             = "forward"
+    }
+    load_balancer_arn = aws_lb.loadbalancer.arn
+    port              = "80"
+}
+
 # ECS configuration
 #   - always free and cost depends on usage of AWS compute resources
 
@@ -95,35 +120,4 @@ resource "aws_ecs_service" "cti-task" {
         container_port   = "8500"
         target_group_arn = aws_lb_target_group.lb_target_group.arn
     }
-}
-
-# configure load balancing
-resource "aws_lb" "loadbalancer" {
-    name            = "alb-name"
-    internal        = false
-    subnets         = [aws_subnet.pub_subnet1.id, aws_subnet.pub_subnet2.id] 
-    security_groups = [aws_security_group.ecs_sg.id]
-}
-
-resource "aws_lb_target_group" "lb_target_group" {
-    name        = "target-alb-name"
-    port        = "80"
-    protocol    = "HTTP"
-    vpc_id      = aws_vpc.vpc.id
-    target_type = "ip"
-    health_check {
-        interval            = "300"
-        port                = "80"
-        healthy_threshold   = "2"
-        unhealthy_threshold = "2"
-    }
-}
-
-resource "aws_lb_listener" "lb_listener" {
-    default_action {
-        target_group_arn = aws_lb_target_group.lb_target_group.id
-        type             = "forward"
-    }
-    load_balancer_arn = aws_lb.loadbalancer.arn
-    port              = "80"
 }

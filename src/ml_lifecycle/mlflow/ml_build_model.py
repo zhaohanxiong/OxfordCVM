@@ -78,6 +78,6 @@ model = tf.keras.Model(k_input, k_cTI_layer)
 
 # save model (get two versions ready for testing multi-config)
 # must be in the format of /model/n/ for serving
-model.save("../tf_serving/saved_models/2/")
+model.save("../../aws/tf_serving/saved_models/2/")
 
 print("Python -- Successfully Built and Packaged Model")

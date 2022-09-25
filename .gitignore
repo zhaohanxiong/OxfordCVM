@@ -1,3 +1,12 @@
+# dvc files
+/.dvc/config.local
+/.dvc/tmp
+/.dvc/cache
+
+# pytest files
+.pytest_cache
+/test/__pycache__
+
 # outputs from cTI
 /src/fmrib/NeuroPM/io
 
@@ -11,5 +20,5 @@
 /src/ml_lifecycle/tf_serving/saved_models
 /src/ml_lifecycle/mlflow/mlruns
 
-# R shiny files
-/src/r_shiny/rsconnect/
+# visualization files
+/src/visualization_dashboards/r_shiny/rsconnect/

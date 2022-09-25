@@ -3,7 +3,7 @@
 # activate conda environment (need conda for fmrib) for Python/R Libraries
 source activate env_conda
 
-# preprocess entire UKB data set to subset into smaller data frame
+# preprocess entire UKB data set to subset into smaller data frame (very long runtime)
 cd ./fmrib
 #Rscript ukb_whole_data_subset.R
 
@@ -26,15 +26,18 @@ Rscript postprocess_eval_model.R
 # run python trajectory visualization/computation
 python postprocess_traj.py
 
+# run cross validation (very long runtime)
+#bash ./run_x_validate.sh
+
 # ml lifecycle (train, test, save, log, deploy, monitor)
 cd ../ml_lifecycle/mlflow
 python ./ml_build_model.py
 #python ./log_model.py --random_n=1000 --random_seed=1234
 
-# run test cases
-cd ..
+# run test cases (in root directory)
+cd ../../..
 pytest
 
 # deploy db & models to AWS
-cd ../aws
+cd src/aws
 #python aws_deploy_db.py

@@ -7,12 +7,16 @@ import pandas as pd
 import seaborn as sns
 import tensorflow as tf
 
+'''
+THIS FILE IS DEPRECIATED, IT WILL BE CHANGED IN THE FUTURE!!!!
+'''
+
 # current latest version
 experiment_id = "1"
 ver = len(os.listdir("./mlruns/" + experiment_id))
 
 # load model new model
-cTI_model = tf.keras.models.load_model("../tf_serving/saved_models/2/")
+cTI_model = tf.keras.models.load_model("../../aws/tf_serving/saved_models/2/")
 
 # set random seed
 parser = argparse.ArgumentParser()
