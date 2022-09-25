@@ -38,7 +38,7 @@ jobs:
         pytest ./test/test_all.py -k "test_check_all_flags_shouldpass"
 
   # integrate docker with build testing
-  test_docker:
+  build_docker:
 
     needs: [build_python]
 
@@ -50,9 +50,10 @@ jobs:
       working-directory: ./src/aws/tf_serving
       run: |
         docker build -t cti-pred . --file Dockerfile
-# INCOMPLETE
+
   # deploy docker
-  deploy_ecr:
+# INCOMPLETE
+  push_docker:
 
     needs: [test_docker]
 
