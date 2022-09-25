@@ -53,7 +53,7 @@ jobs:
 
   # deploy docker
 # INCOMPLETE
-  push_docker:
+  deploy_docker_ecs:
 
     needs: [test_docker]
 
