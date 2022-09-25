@@ -1,5 +1,5 @@
 ### AI Framework Tech Stack/Workflow for Cardiovascular Disease Modelling
-![image](https://user-images.githubusercontent.com/29684281/192006605-b8901209-a9d0-402e-ad13-7cde0a8d7713.png)
+![image](https://user-images.githubusercontent.com/29684281/192150943-08ed2784-1919-4f91-9ebb-4ab6055a780a.png)
 
 ### Visualization Dashboard
 https://github.com/zhaohanxiong/OxfordCVM/tree/dev/src/visualization_dashboards
