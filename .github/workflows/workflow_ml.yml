@@ -13,7 +13,7 @@ permissions:
 jobs:
 
   # integrate python code with basic testing
-  build_python:
+  test_model_data_files:
 
     runs-on: ubuntu-latest
 
@@ -40,7 +40,7 @@ jobs:
   # integrate docker with build testing
   build_docker:
 
-    needs: [build_python]
+    needs: [test_model_data_files]
 
     runs-on: ubuntu-latest
 
@@ -53,9 +53,9 @@ jobs:
 
   # deploy docker
 # INCOMPLETE
-  deploy_docker_ecs:
+  deploy_docker_ecr:
 
-    needs: [test_docker]
+    needs: [build_docker]
 
     runs-on: ubuntu-latest
 
@@ -72,7 +72,7 @@ jobs:
 # INCOMPLETE
   deploy_rds:
 
-    needs: [build_python]
+    needs: [test_model_data_files]
 
     runs-on: ubuntu-latest
 
