@@ -1,4 +1,4 @@
-from utils import read_test_dict
+import json
 
 def test_check_all_flags_shouldpass():
 
@@ -10,7 +10,7 @@ def test_check_all_flags_shouldpass():
     
     # Arrange
     # load test flag dictionary
-    test_dict = read_test_dict()
+    test_dict = json.load(open("test/test.json"))
 
     # Action
     # loop through all keys
