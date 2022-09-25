@@ -47,6 +47,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       working-directory: ./src/aws/tf_serving
-      run: docker build -t cti-pred . --file Dockerfile
-      run: docker tag cti-pred:latest public.ecr.aws/v4u9u1t8/cti-pred:latest
-      run: docker push public.ecr.aws/v4u9u1t8/cti-pred:latest
+      run: |
+        docker build -t cti-pred . --file Dockerfile
+        docker tag cti-pred:latest public.ecr.aws/v4u9u1t8/cti-pred:latest
+        docker push public.ecr.aws/v4u9u1t8/cti-pred:latest
