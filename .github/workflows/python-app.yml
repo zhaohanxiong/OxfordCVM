@@ -6,8 +6,6 @@ name: UKB cTI CI/CD pipeline
 on:
   push:
     branches: [ "prod" ]
-  pull_request:
-    branches: [ "prod" ]
 
 permissions:
   contents: read
