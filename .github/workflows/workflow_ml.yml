@@ -50,7 +50,7 @@ jobs:
       working-directory: ./src/aws/tf_serving
       run: |
         docker build -t cti-pred . --file Dockerfile
-
+# INCOMPLETE
   # deploy docker
   deploy_ecr:
 
@@ -68,6 +68,7 @@ jobs:
         docker push public.ecr.aws/v4u9u1t8/cti-pred:latest
 
   # deploy to aws rds
+# INCOMPLETE
   deploy_rds:
 
     needs: [build_python]
