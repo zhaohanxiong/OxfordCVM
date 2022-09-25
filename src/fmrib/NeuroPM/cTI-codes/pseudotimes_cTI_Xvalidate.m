@@ -1,4 +1,4 @@
-function [global_pseudotimes] = pseudotimes_cTI_Xvalidate(data,starting_point,final_subjects,max_cPCs)
+function [global_pseudotimes, Node_Weights] = pseudotimes_cTI_Xvalidate(data,starting_point,final_subjects,max_cPCs)
 
 % Reducing dimensionality
 % define disease/background and number of patients in the dataset
@@ -30,12 +30,13 @@ mid_point = min([mid_point, 95]);
 alphas_iter = alphas_all((mid_point - 5):(mid_point + 5));
 
 % perform contrastive PCA (using background and disease as priors into PCA)
-[cPCs,gap_values,alphas,no_dims,~,~,~] = ... 
+[cPCs,gap_values,alphas,no_dims,~,Vmedoid,~] = ... 
         cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_iter);
 
 % store the output values
-[~,j]   = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
-mappedX = cPCs(:,1:no_dims(j),j);
+[~,j]        = max(gap_values);
+mappedX      = cPCs(:,1:no_dims(j),j);
+Node_Weights = Vmedoid(:,1:no_dims(j),j);
 
 % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
 disp(['Iteration ' num2str(iter) ' Number of cPCs: ' num2str(no_dims(j))]);
