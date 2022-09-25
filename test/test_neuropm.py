@@ -50,7 +50,6 @@ def test_neuro_pm_output_exist_shouldpass(mock_test_neuro_pm_output_exist_should
 
     # Action
     # try read the files, do they exist? set flag for success or not
-    
     try:
         # read dataframes in
         df_ukb   = pd.read_csv(path_data_frame)
@@ -60,21 +59,21 @@ def test_neuro_pm_output_exist_shouldpass(mock_test_neuro_pm_output_exist_should
         # set flags for passing read test
         read_successful = True
 
-        # set flag for size test
-        correct_size = df_ukb.shape[0] == df_score.shape[0] and \
-                       df_ukb.shape[0] == df_names.shape[0]
-
     except:
         # set flags for failing test
         read_successful = False
-        correct_size = False
     
     # Assert
     # check if the files were read in with pandas successfully
     assert read_successful
 
     # check if the size of dataframes were correct
-    assert correct_size
+    assert df_ukb.shape[0] == df_score.shape[0]
+
+    # check if there are any missing values in score
+    assert df_score["global_pseudotimes"].isna().sum() == 0
+
+    # check if variable names match
 
     # set test flag to true if passed
     update_test_dict(mock_test_neuro_pm_output_exist_shouldpass["key_group"],

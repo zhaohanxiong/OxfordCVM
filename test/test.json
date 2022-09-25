@@ -1,10 +1,10 @@
 {
     "ml": {
-        "is_model_accurate": true,
-        "does_model_exist": true
+        "does_model_exist": true,
+        "is_model_accurate": true
     },
     "neuropm": {
-        "is_model_accurate": true,
-        "does_output_df_exist": true
+        "does_output_df_exist": true,
+        "is_model_accurate": true
     }
 }
