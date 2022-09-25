@@ -6,7 +6,7 @@ pseudotimes_full = read.csv(file.path(path,"pseudotimes.csv"), header=TRUE)
 
 # list X validation files
 X_val_files = list.files(path)
-X_val_files = X_val_files[grepl("pseudotimes_fold", X_val_files)]
+X_val_files = X_val_files[grepl("pseudotimes_fold_", X_val_files)]
 
 # define number of fold used
 n_folds = length(X_val_files)
@@ -21,7 +21,7 @@ ind = floor(seq(from = 1, to = nrow(pseudotimes_full), length = n_folds + 1))
 for (i in 1:n_folds) {
   
   # load file from i'th fold
-  pseudotimes = read.csv(file.path(path, paste0("pseudotimes_fold",i,".csv")), header=TRUE)
+  pseudotimes = read.csv(file.path(path, paste0("pseudotimes_fold_",i,".csv")), header=TRUE)
   
   # create indices for indexing
   ind_i = ind[i]:(ind[i + 1] - (i != n_folds))

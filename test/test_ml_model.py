@@ -78,7 +78,7 @@ def test_ml_model_accuracy_shouldpass(mock_test_ml_model_accuracy_shouldpass):
     path_data      = "src/fmrib/NeuroPM/io/"
     path_data_val  = os.path.join(path_data, "ukb_num_norm_ft_select.csv")
     path_data_lab  = os.path.join(path_data, "pseudotimes.csv")
-    path_data_pred = os.path.join(path_data, "cTI_inference_all_data.csv")
+    path_data_pred = os.path.join(path_data, "inference_cTI_ml_pred.csv")
 
     # load model
     cTI_model = tf.keras.models.load_model(path_model)
