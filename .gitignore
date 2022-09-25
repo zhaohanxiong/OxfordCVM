@@ -1,7 +1,7 @@
 # dvc files
-/dvc/config.local
-/dvc/tmp
-/dvc/cache
+/.dvc/config.local
+/.dvc/tmp
+/.dvc/cache
 
 # pytest files
 .pytest_cache
