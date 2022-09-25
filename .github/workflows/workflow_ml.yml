@@ -38,7 +38,7 @@ jobs:
         pytest ./test/test_all.py -k "test_check_all_flags_shouldpass"
 
   # integrate docker with build testing
-  build_docker:
+  build_model_docker:
 
     needs: [test_model_data_files]
 
@@ -55,7 +55,7 @@ jobs:
 # INCOMPLETE
   deploy_docker_ecr:
 
-    needs: [build_docker]
+    needs: [build_model_docker]
 
     runs-on: ubuntu-latest
 
@@ -70,7 +70,7 @@ jobs:
 
   # deploy to aws rds
 # INCOMPLETE
-  deploy_rds:
+  deploy_data_rds:
 
     needs: [test_model_data_files]
 
