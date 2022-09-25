@@ -12,7 +12,7 @@ permissions:
 
 jobs:
 
-  # run python code through basic testing
+  # integrate python code with basic testing
   build_python:
 
     runs-on: ubuntu-latest
@@ -37,7 +37,8 @@ jobs:
       run: |
         pytest ./test/test_all.py -k "test_check_all_flags_shouldpass"
 
-  build_docker:
+  # integrate docker with build testing
+  test_docker:
 
     needs: [build_python]
 
@@ -49,5 +50,34 @@ jobs:
       working-directory: ./src/aws/tf_serving
       run: |
         docker build -t cti-pred . --file Dockerfile
+# INCOMPLETE
+  # deploy docker
+  deploy_ecr:
+
+    needs: [test_docker]
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      working-directory: ./src/aws/tf_serving
+      run: |
+        docker build -t cti-pred . --file Dockerfile
         docker tag cti-pred:latest public.ecr.aws/v4u9u1t8/cti-pred:latest
         docker push public.ecr.aws/v4u9u1t8/cti-pred:latest
+
+  # deploy to aws rds
+# INCOMPLETE
+  deploy_rds:
+
+    needs: [build_python]
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v3
+      with:
+        python-version: "3.10"
