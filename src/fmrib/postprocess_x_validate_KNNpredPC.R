@@ -172,3 +172,9 @@ if (FALSE) {
           ylim = c(0, 1))
   
 }
+
+# write output to file
+out_df = data.frame(score_gt   = pseudotimes_full$global_pseudotimes,
+                    score_pred = pseudotimes_full$pred_score,
+                    bp_group   = pseudotimes_full$bp_group)
+write.csv(out_df, file.path(path, "inference_x_val_pred.csv"), row.names = FALSE)
