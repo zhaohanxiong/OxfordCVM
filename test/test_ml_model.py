@@ -62,6 +62,11 @@ def test_ml_model_exist_shouldpass(mock_test_ml_model_exist_shouldpass):
 
 def test_ml_model_accuracy_shouldpass(mock_test_ml_model_accuracy_shouldpass):
 
+    '''
+    This function tests if the ML models passes the accuracy threshold
+    requirements for predicting the disease score
+    '''
+
     # set test flag to false before running test
     update_test_dict(mock_test_ml_model_accuracy_shouldpass["key_group"],
                      mock_test_ml_model_accuracy_shouldpass["key"],
