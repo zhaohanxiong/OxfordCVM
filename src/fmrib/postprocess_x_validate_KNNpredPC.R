@@ -20,14 +20,12 @@ pseudotimes_full$bp_group = ordered(pseudotimes_full$bp_group,
                                     levels = c(1, 0, 2))
 
 # load ukb raw variables
-ukb_df = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"), header=TRUE))
-
-# load transformation matrix into PC space
-PC_transform = readMat(file.path(path, "PC_Transform.mat"))$Node.Weights
+ukb_df = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"),
+                    header=TRUE))
 
 # list X validation files
 X_val_files = list.files(path)
-X_val_files = X_val_files[grepl("pseudotimes_fold", X_val_files)]
+X_val_files = X_val_files[grepl("pseudotimes_fold_", X_val_files)]
 
 # define number of folds used and number of classes
 n_folds = length(X_val_files)
@@ -40,8 +38,12 @@ ind = floor(seq(from = 1, to = nrow(pseudotimes_full), length = n_folds + 1))
 for (i in 1:n_folds) {
   
   # load file from i'th fold
-  pseudotimes = read.csv(file.path(path, paste0("pseudotimes_fold", i, 
+  pseudotimes = read.csv(file.path(path, paste0("pseudotimes_fold_", i, 
                                                 ".csv")), header=TRUE)
+  
+  # load transformation matrix into PC space
+  PC_transform = readMat(file.path(path, 
+                                   paste0("PC_Transform_", i,".mat"))$Node.Weights
   
   # define pred/ground truths in a labelled structure
   y_pred = pseudotimes$global_pseudotimes[pseudotimes$bp_group != 0]
