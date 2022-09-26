@@ -16,7 +16,7 @@ psuedotimes$bp_group = ordered(psuedotimes$bp_group,
 # Plot 1 - Distribution of Disease Scores Separated by Group
 # ------------------------------------------------------------------------------
 # produce the plot
-pdf(file.path(path, "plot1_barplot.pdf"), width = 10, height = 5)
+pdf(file.path(path, "plot1_Score_Distribution.pdf"), width = 10, height = 5)
 p1 = ggplot(psuedotimes, aes(y = global_pseudotimes, x = as.factor(bp_group), 
                         fill = as.factor(bp_group))) +
           geom_boxplot(alpha = 0.8) +
@@ -34,7 +34,7 @@ p2 = ggplot(psuedotimes, aes(x = global_pseudotimes, fill = as.factor(bp_group))
           ylab("Disease Score") +
           theme(legend.title = element_blank())
   
-grid.arrange(p1, p2, ncol = 2)
+grid.arrange(p1, p2, ncol = 2, widths = c(1, 1.5))
 dev.off()
 
 # ------------------------------------------------------------------------------
@@ -84,14 +84,43 @@ p2 = ggplot(metrics_plot, aes(x = fpr, y = tpr)) +
           ylab("True Positive Rate (Sensitivity)") +
           geom_abline(col = "red")
 
-grid.arrange(p1, p2, ncol = 2)
+grid.arrange(p1, p2, ncol = 2, widths = c(1, 1.5))
 dev.off()
 
 # ------------------------------------------------------------------------------
 # Plot 3 - Disease Score vs Blood Pressure Measurements
 # ------------------------------------------------------------------------------
-#  
+# compute loess smoothing line of best fit
+fit1 = lowess(psuedotimes[, "global_pseudotimes"], psuedotimes[, "BPSys.2.0"])
+fit1$upper = fit1$y + qt(0.75, fit1$y) * sd(fit1$y)
+fit1$lower = fit1$y - qt(0.75, fit1$y) * sd(fit1$y)
 
+fit2 = lowess(psuedotimes[, "global_pseudotimes"], psuedotimes[, "BPDia.2.0"])
+fit2$upper = fit2$y + qt(0.75, fit2$y) * sd(fit2$y)
+fit2$lower = fit2$y - qt(0.75, fit2$y) * sd(fit2$y)
+
+# produce the plot
+pdf(file.path(path, "plot3_BP_vs_Score.pdf"), width = 10, height = 6)
+p1 = ggplot(psuedotimes, aes_string(x = "global_pseudotimes", y = "BPSys.2.0")) +
+          geom_point(aes_string(color = "bp_group"), shape = 19, alpha = 0.25, size = 2) +
+          geom_line(aes(x = fit1$x, y = fit1$y), size = 1, color = "deepskyblue4", alpha = 0.5) +
+          geom_ribbon(aes(fit1$x, ymin = fit1$lower, ymax = fit1$upper), fill = "skyblue", alpha = 0.25) +
+          ggtitle("Disease Scores vs Systolic BP") +
+          xlab("Pseudotime (Disease Progression) Scores (0-1)") + 
+          ylab("Systolic Blood Pressure (mmHg)") +
+          scale_colour_brewer(palette = "Dark2")
+
+p2 = ggplot(psuedotimes, aes_string(x = "global_pseudotimes", y = "BPDia.2.0")) +
+          geom_point(aes_string(color = "bp_group"), shape = 19, alpha = 0.25, size = 2) +
+          geom_line(aes(x = fit2$x, y = fit2$y), size = 1, color = "deepskyblue4", alpha = 0.5) +
+          geom_ribbon(aes(fit2$x, ymin = fit2$lower, ymax = fit2$upper), fill = "skyblue", alpha = 0.25) +
+          ggtitle("Disease Scores vs Diastolic BP") +
+          xlab("Pseudotime (Disease Progression) Scores (0-1)") + 
+          ylab("Diastolic Blood Pressure (mmHg)") +
+          scale_colour_brewer(palette = "Dark2")
+
+grid.arrange(p1, p2, ncol = 2)
+dev.off()
 
 # ------------------------------------------------------------------------------
 # Plot 4 - Individual Trajectory Scores
