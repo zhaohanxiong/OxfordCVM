@@ -1,4 +1,6 @@
 import os
+import sys
+import argparse
 import numpy as np
 import pandas as pd
 import tensorflow as tf
@@ -16,13 +18,20 @@ cTI_model = tf.keras.models.load_model(path_model)
 # load test data
 test_sample = pd.read_csv(path_data_val)
 test_sample = test_sample.fillna(0)
-test_sample = test_sample.sample(n = 10, random_state = 1).to_numpy()
 
 # load labels
 test_label = pd.read_csv(path_data_lab)
-test_label = test_label.sample(n = 10, random_state = 1)
 
-# Action
+# set sampling (if job takes too long to run, default is full run)
+parser = argparse.ArgumentParser()
+parser.add_argument("--random_n", default = test_sample.shape[0], type = int, help = "random N")
+parser.add_argument("--random_seed", default = 1234, type = int, help = "random seed")
+args = parser.parse_args(sys.argv[1:])
+
+# perform sampling
+test_sample = test_sample.sample(n = args.random_n, random_state = args.random_seed).to_numpy()
+test_label = test_label.sample(n =  args.random_n, random_state = args.random_seed)
+
 # make inference for each row of data
 pred = []
 for i in range(test_sample.shape[0]):
