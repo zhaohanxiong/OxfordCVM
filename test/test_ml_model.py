@@ -96,7 +96,7 @@ def test_ml_model_accuracy_shouldpass(mock_test_ml_model_accuracy_shouldpass):
 
     # Assert
     # if the error is under the acceptable value
-    assert rmse < 0.025
+    assert rmse < 0.05
     assert rmse_healthy < 0.01
     assert rmse_disease < 0.05
 
