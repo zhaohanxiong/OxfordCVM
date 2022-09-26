@@ -9,7 +9,7 @@ import tensorflow as tf
 
 # set experiment ID
 parser = argparse.ArgumentParser()
-parser.add_argument("--experiment_id", default = "1", type = int, help = "experiment ID")
+parser.add_argument("--experiment_id", default = "1", type = str, help = "experiment ID")
 args = parser.parse_args(sys.argv[1:])
 
 # current latest version
@@ -78,8 +78,8 @@ with mlflow.start_run(run_name = "test run") as run:
 
     # update model stage: Staging, Production, Archived
 # TO DO, THIS IS WRONG AND INCOMPLETE
+    client = mlflow.MlflowClient()
     if ver > 0:
-        client = mlflow.MlflowClient()
         client.transition_model_version_stage(name = "keras_cTI", version = ver, 
                                             stage = "Archived")
 
@@ -109,3 +109,5 @@ with mlflow.start_run(run_name = "test run") as run:
     plt = sns.boxplot(x = 'bp_group', y = 'score_gt', data = ml_inf)
     fig = plt.get_figure()
     fig.savefig(plot_path + "/disease score distribution.png")
+
+print("Python -- Tracked Most Recent ML Model")
