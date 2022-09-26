@@ -43,7 +43,7 @@ for (i in 1:n_folds) {
   
   # load transformation matrix into PC space
   PC_transform = readMat(file.path(path, 
-                                   paste0("PC_Transform_", i,".mat"))$Node.Weights
+                                   paste0("PC_Transform_", i, ".mat")))$eig.mat
   
   # define pred/ground truths in a labelled structure
   y_pred = pseudotimes$global_pseudotimes[pseudotimes$bp_group != 0]
@@ -74,9 +74,12 @@ for (i in 1:n_folds) {
                                             pseudotimes$bp_group == 1])
   min_disease = min(pseudotimes$global_pseudotimes[
                                             pseudotimes$bp_group == 2])
+
+  # filter out ill-defined scores tune these two numbers below depending 
+  # on distribution to improve results
   new_ind_i = (ref_label < (min_disease * 1) | 
-                       ref_label > (max_background * 0.5)) & (ref_group != 0)
-  
+               ref_label > (max_background * 2.5)) & (ref_group != 0)
+
   # subset rows based on new row index filter
   ref_label = ref_label[new_ind_i]
   ref_group = ref_group[new_ind_i]
