@@ -36,9 +36,10 @@ Rscript postprocess_ggplots.R
 cd ../ml_lifecycle
 python ./ml_model_build.py
 python ./ml_model_test_pred.py --random_seed=4321
+
 cd ./mlflow
 #mlflow server --backend-store-uri sqlite:///mlruns.db --default-artifact-root ./mlruns
-#python ./mlflow_tracking.py
+python ./mlflow_tracking.py
 
 # run test cases (in root directory)
 cd ../../..

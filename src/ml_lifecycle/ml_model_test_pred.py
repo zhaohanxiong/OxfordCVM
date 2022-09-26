@@ -44,3 +44,5 @@ pandas_out_dict = {"score_pred": pred,
                    "score_gt":   gt,
                    "bp_group":   test_label["bp_group"]}
 pd.DataFrame(pandas_out_dict).to_csv(path_data_pred, index = False)
+
+print("Python -- Ran Model on Entire Dataset, Predictions Written to File")
