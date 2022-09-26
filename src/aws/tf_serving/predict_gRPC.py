@@ -20,7 +20,7 @@ stub = prediction_service_pb2_grpc.PredictionServiceStub(channel)
 
 # build request
 req = predict_pb2.PredictRequest()
-req.model_spec.name = "cti_model"
+req.model_spec.name = "cti_model-stable"
 req.model_spec.signature_name = "serving_default"
 req.inputs["cTI_input"].CopyFrom(input_tensor)
 
