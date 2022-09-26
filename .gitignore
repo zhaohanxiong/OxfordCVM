@@ -17,7 +17,7 @@
 /src/aws/terraform/.terraform.tfstate.lock.info
 
 # machine learning files
-/src/ml_lifecycle/tf_serving/saved_models
+/src/aws/tf_serving/saved_models
 /src/ml_lifecycle/mlflow/mlruns
 
 # visualization files
