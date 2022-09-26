@@ -26,6 +26,9 @@ Rscript postprocess_eval_model.R
 # run python trajectory visualization/computation
 python postprocess_traj.py
 
+# generate ggplots for key results
+Rscript postprocess_ggplots.R
+
 # run cross validation (very long runtime)
 #bash ./run_x_validate.sh
 
