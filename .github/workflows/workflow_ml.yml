@@ -57,7 +57,7 @@ jobs:
         pip install pytest
     - name: Test with pytest
       run: |
-        pytest ./test/test_all.py -k "test_check_all_flags_shouldpass"
+        pytest ./test/test_all_model_output.py -k "test_check_all_flags_shouldpass"
 
   # CI docker with test build
   test_build_docker_model:
