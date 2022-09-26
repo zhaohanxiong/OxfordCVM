@@ -67,7 +67,8 @@ with mlflow.start_run(run_name = "test run") as run:
                            signature = signature)
 
     # log metric to mlflow server manually
-    # automatic logging can also be performed: https://www.mlflow.org/docs/latest/tracking.html#tensorflow-and-keras
+    # automatic logging can also be performed:
+    # https://www.mlflow.org/docs/latest/tracking.html#tensorflow-and-keras
     mlflow.set_tags({"experiment version": "0.0", "model flavour": "keras"})
     mlflow.log_metrics({"RMSE": rmse,
                         "RMSE_background": rmse_0, 
@@ -102,7 +103,8 @@ with mlflow.start_run(run_name = "test run") as run:
     #client.delete_registered_model(name = "registered_model_name")
 
     # store output visualization for results
-    plot_path = "./mlruns/" + experiment_id + "/" + run.info.run_id + "/artifacts/keras_models"
+    plot_path = "./mlruns/" + args.experiment_id + "/" + \
+                                        run.info.run_id + "/artifacts/keras_models"
     
     plt = sns.boxplot(x = 'bp_group', y = 'score_gt', data = ml_inf)
     fig = plt.get_figure()
