@@ -34,8 +34,8 @@ cd ../ml_lifecycle
 python ./ml_model_build.py
 python ./ml_model_test_pred.py --random_seed=4321
 cd ./mlflow
-#python ./log_model.py --random_n=1000 --random_seed=1234
 #mlflow server --backend-store-uri sqlite:///mlruns.db --default-artifact-root ./mlruns
+#python ./mlflow_tracking.py
 
 # run test cases (in root directory)
 cd ../../..
