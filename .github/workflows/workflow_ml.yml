@@ -36,7 +36,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest ./test/test_CI.py
+        pytest ./test/test_build.py
     
   # CI model output correctness
   test_model_output:
