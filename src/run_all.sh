@@ -30,14 +30,10 @@ python postprocess_traj.py
 #bash ./run_x_validate.sh
 
 # ml lifecycle (train, test, save, log, deploy, monitor)
-cd ../ml_lifecycle/mlflow
+cd ../ml_lifecycle
 python ./ml_build_model.py
 #python ./log_model.py --random_n=1000 --random_seed=1234
 
 # run test cases (in root directory)
 cd ../../..
 pytest
-
-# deploy db & models to AWS
-cd src/aws
-#python aws_deploy_db.py
