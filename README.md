@@ -5,6 +5,7 @@
 https://github.com/zhaohanxiong/OxfordCVM/tree/dev/src/visualization_dashboards
 
 ### ML-OPs
+![image](https://user-images.githubusercontent.com/29684281/192301904-43f6b0ec-152a-479d-83ae-036a728c72cd.png)
 
 ### CI/CD
 ![image](https://user-images.githubusercontent.com/29684281/192254976-3b485f1b-64ab-4ca4-9295-3a38f8e95119.png)
