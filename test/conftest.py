@@ -1,7 +1,12 @@
 import pytest
 
 #########################################################
-# tests for NeuroPM output
+# tests for code changes (continuous integration)
+#########################################################
+
+
+#########################################################
+# tests for NeuroPM output files
 #########################################################
 neuropm_data_test_1 = {
     "key_group": "neuropm",
@@ -17,7 +22,7 @@ def mock_test_neuro_pm_output_exist_shouldpass(request):
     return request.param
 
 #########################################################
-# tests for NeuroPM model
+# tests for NeuroPM model accuracy
 #########################################################
 neuropm_model_test_1 = {
     "key_group": "neuropm",
