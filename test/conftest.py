@@ -4,8 +4,8 @@ import pytest
 # tests for code changes (continuous integration)
 #########################################################
 path_aws_test1 = {
-    "incoming": True,
-    "outgoing": True
+    "incoming": "file_previous_code_wrote_to",
+    "outgoing": "file_current_code_to_load"
 }
 
 # define test data list for parametrization
@@ -15,7 +15,6 @@ path_aws_test = [path_aws_test1]
 @pytest.fixture(params = path_aws_test)
 def mock_test_aws_fileio_paths_shouldpass(request):
     return request.param
-
 
 #########################################################
 # tests for NeuroPM output files
