@@ -59,7 +59,7 @@ jobs:
         pytest ./test/test_all.py -k "test_check_all_flags_shouldpass"
 
   # CI docker with test build
-  test_build_docker:
+  test_build_docker_model:
 
     needs: [test_model_output]
 
@@ -74,9 +74,9 @@ jobs:
 
   # CD docker deploy as a container to AWS ECR
 # INCOMPLETE
-  deploy_docker_ecr:
+  deploy_docker_model:
 
-    needs: [test_build_docker]
+    needs: [test_build_docker_model]
 
     runs-on: ubuntu-latest
 
@@ -91,9 +91,9 @@ jobs:
 
   # CD deploy data outputted to AWS RDS
 # INCOMPLETE
-  deploy_data_rds:
+  deploy_model_output:
 
-    needs: [test_model_data_files]
+    needs: [test_model_output]
 
     runs-on: ubuntu-latest
 
