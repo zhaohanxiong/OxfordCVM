@@ -3,6 +3,18 @@ import pytest
 #########################################################
 # tests for code changes (continuous integration)
 #########################################################
+path_aws_test1 = {
+    "incoming": True,
+    "outgoing": True
+}
+
+# define test data list for parametrization
+path_aws_test = [path_aws_test1]
+
+# fixture for parametrization
+@pytest.fixture(params = path_aws_test)
+def mock_test_aws_fileio_paths_shouldpass(request):
+    return request.param
 
 
 #########################################################
