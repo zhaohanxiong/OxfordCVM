@@ -5,6 +5,11 @@ library(data.table)
 ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
 
+# shuffle dataset
+ind_rand = sample(1:nrow(labels), nrow(labels))
+ft_norm = ft_norm[ind_rand, ]
+labels = labels[ind_rand, ]
+
 # compute covariance and preprocess
 #cov_all = cov(ft_norm)
 #cov_all[upper.tri(cov_all)] = 0
@@ -21,11 +26,6 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 #                ft_norm[labels$bp_group != 1, ])
 #labels = rbind(labels[labels$bp_group == 1, ][1:1000, ],
 #               labels[labels$bp_group != 1, ])
-
-# shuffle before writing to output
-ind_rand = sample(1:nrow(labels), nrow(labels))
-ft_norm = ft_norm[ind_rand, ]
-labels = labels[ind_rand, ]
 
 # display messages to see in terminal
 print(sprintf("Further Filtering Complete"))

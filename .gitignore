@@ -19,6 +19,7 @@
 # machine learning files
 /src/aws/tf_serving/saved_models
 /src/ml_lifecycle/mlflow/mlruns
+/src/ml_lifecycle/mlflow/mlruns_staging
 
 # visualization files
 /src/visualization_dashboards/r_shiny/rsconnect/

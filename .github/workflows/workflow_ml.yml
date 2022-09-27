@@ -35,7 +35,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        # pytest 
+        pytest ./test/test_all_build.py -k "test_check_all_flags_shouldpass"
     
   # CI model output correctness
   test_model_output:
@@ -56,7 +56,7 @@ jobs:
         pip install pytest
     - name: Test with pytest
       run: |
-        pytest ./test/test_all.py -k "test_check_all_flags_shouldpass"
+        pytest ./test/test_all_model_output.py -k "test_check_all_flags_shouldpass"
 
   # CI docker with test build
   test_build_docker_model:

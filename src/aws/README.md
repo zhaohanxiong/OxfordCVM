@@ -74,3 +74,8 @@ configure.tf sets up the AWS environment, VPCs, security groups
 storage.tf sets up AWS S3, RDS, and ECR
 compute.tf set up AWS ECS with either EC2 or Fargate
 ```
+
+##### Continuous Deployment (CD) to AWS
+```
+.github\workflows\workflows_ml.yml configures the full CI/CD of this pipeline to test, build, and deploy our dockerized model to AWS ECR/ECS and model output to AWS RDS
+```

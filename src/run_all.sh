@@ -26,18 +26,21 @@ Rscript postprocess_eval_model.R
 # run python trajectory visualization/computation
 python postprocess_traj.py
 
+# generate ggplots for key results
+Rscript postprocess_ggplots.R
+
 # run cross validation (very long runtime)
 #bash ./run_x_validate.sh
 
 # ml lifecycle (train, test, save, log, deploy, monitor)
-cd ../ml_lifecycle/mlflow
-python ./ml_build_model.py
-#python ./log_model.py --random_n=1000 --random_seed=1234
+cd ../ml_lifecycle
+python ./ml_model_build.py
+python ./ml_model_test_pred.py --random_seed=4321
+
+cd ./mlflow
+#mlflow server --backend-store-uri sqlite:///mlruns.db --default-artifact-root ./mlruns
+python ./mlflow_tracking.py
 
 # run test cases (in root directory)
 cd ../../..
 pytest
-
-# deploy db & models to AWS
-cd src/aws
-#python aws_deploy_db.py

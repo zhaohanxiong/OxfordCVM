@@ -1,13 +1,14 @@
 ### AI Framework Tech Stack/Workflow for Cardiovascular Disease Modelling
 ![image](https://user-images.githubusercontent.com/29684281/192150943-08ed2784-1919-4f91-9ebb-4ab6055a780a.png)
 
-### Visualization Dashboard
+### Visualization Dashboard (R-Shiny, Ploty, Databricks)
 https://github.com/zhaohanxiong/OxfordCVM/tree/dev/src/visualization_dashboards
 
-### ML-OPs
+### ML-OPs (MLflow)
+![image](https://user-images.githubusercontent.com/29684281/192304951-b3333df2-0f51-4758-a639-184fb81c38ef.png)
 
-### CI/CD
-![image](https://user-images.githubusercontent.com/29684281/192254891-33db044c-37bd-498b-8654-72ce8c5b169b.png)
+### CI/CD (Github Actions Workflow)
+![image](https://user-images.githubusercontent.com/29684281/192305485-6b7338bb-af2a-4ab3-8553-87fdd3487f95.png)
 
 ### Projects Lead By Me
 •	Bayesian dimensionality reduction, cluster analysis, and network analysis of population-wide medical databases (UK Biobank) for isolating predictive biomarkers and constructing disease progression trajectories
