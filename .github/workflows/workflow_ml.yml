@@ -13,7 +13,6 @@ permissions:
 jobs:
 
   # CI python code with basic test build
-# INCOMPLETE
   test_build_python:
 
     runs-on: ubuntu-latest
@@ -36,7 +35,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pytest ./test/test_build.py
+        pytest ./test/test_all_build.py -k "test_check_all_flags_shouldpass"
     
   # CI model output correctness
   test_model_output:
