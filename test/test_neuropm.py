@@ -80,7 +80,7 @@ def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
                      mock_test_neuro_pm_accuracy_shouldpass["key"],
                      True)
 
-def test_neuro_pm_cti_pred_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
+def test_neuro_pm_cti_pred_shouldpass(mock_test_neuro_pm_cti_pred_shouldpass):
 
     '''
     This function tests for the accuracy/effectiveness of the NeuroPM
@@ -89,8 +89,8 @@ def test_neuro_pm_cti_pred_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
     '''
 
     # set test flag to false before running test
-    update_test_dict(mock_test_neuro_pm_accuracy_shouldpass["key_group"],
-                     mock_test_neuro_pm_accuracy_shouldpass["key"],
+    update_test_dict(mock_test_neuro_pm_cti_pred_shouldpass["key_group"],
+                     mock_test_neuro_pm_cti_pred_shouldpass["key"],
                      False)
 
     # Arrange
@@ -121,6 +121,6 @@ def test_neuro_pm_cti_pred_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
     assert rmse_disease < 0.05
 
     # set test flag to true if passed
-    update_test_dict(mock_test_neuro_pm_accuracy_shouldpass["key_group"],
-                     mock_test_neuro_pm_accuracy_shouldpass["key"],
+    update_test_dict(mock_test_neuro_pm_cti_pred_shouldpass["key_group"],
+                     mock_test_neuro_pm_cti_pred_shouldpass["key"],
                      True)
