@@ -37,7 +37,7 @@ def mock_test_neuro_pm_output_exist_shouldpass(request):
 #########################################################
 neuropm_model_test_1 = {
     "key_group": "neuropm",
-    "key":       "is_model_accurate"
+    "key":       "is_cti_accurate"
 }
 
 # define test data list for parametrization
@@ -46,6 +46,22 @@ neuropm_model_test = [neuropm_model_test_1]
 # fixture for parametrization
 @pytest.fixture(params = neuropm_model_test)
 def mock_test_neuro_pm_accuracy_shouldpass(request):
+    return request.param
+
+#########################################################
+# tests for NeuroPM cTI prediction accuracy
+#########################################################
+neuropm_cti_pred_test_1 = {
+    "key_group": "neuropm",
+    "key":       "is_model_accurate"
+}
+
+# define test data list for parametrization
+neuropm_cti_pred_test = [neuropm_cti_pred_test_1]
+
+# fixture for parametrization
+@pytest.fixture(params = neuropm_cti_pred_test)
+def mock_test_neuro_pm_cti_pred_shouldpass(request):
     return request.param
 
 #########################################################
