@@ -28,13 +28,12 @@ df = df.loc[df["experiment_id"] == args.experiment_id]
 
 # obtain best model and its respective directory
 best_ver       = int(df['metrics.RMSE'].idxmin() + 1)
-run_id         = df.loc[best_ver - 1]['run_id']
+best_run_id    = df.loc[best_ver - 1]['run_id']
 best_model_dir = "./mlruns/" + args.experiment_id + "/" + \
-                        run_id + "/artifacts/keras_models/data/model/"
+                        best_run_id + "/artifacts/keras_models/data/model/"
 
-# connect to mlflow model registry
+# connect to mlflow model registry and track all models
 client = mlflow.MlflowClient()
-model_info = client.search_model_versions("name='keras_cTI'")
 
 # update model version: Archived -> Staging -> Production
 # set all models to archived
@@ -43,9 +42,14 @@ for i in range(1, ver + 1):
                                           version = i, 
                                           stage   = "Archived")
 
+# use model registry to retrive best model infomation
+model_info = client.search_model_versions("name='keras_cTI'")
+best_model_info = [dict(m) for m in model_info 
+                                    if dict(m)["run_id"] == best_run_id][0]
+
 # set best model to staging
 client.transition_model_version_stage(name    = "keras_cTI",
-                                      version = ver - best_ver + 1, 
+                                      version = best_model_info["version"], 
                                       stage   = "Staging")
 
 # clean up tf-serving v2 directory
