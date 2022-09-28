@@ -3,29 +3,38 @@ import pytest
 #########################################################
 # tests for cTI/ML output files (CI)
 #########################################################
-neuropm_data_test_1 = {
+io_data_test_1 = {
     "key_group": "neuropm",
-    "key":       "does_output_df_exist"
+    "key":       "does_R_preprocess_output_exist"
 }
 
-# define test data list for parametrization
-neuropm_data_test = [neuropm_data_test_1]
-
 # fixture for parametrization
-@pytest.fixture(params = neuropm_data_test)
-def mock_test_neuro_pm_output_exist_shouldpass(request):
+@pytest.fixture(params = [io_data_test_1])
+def mock_test_io_R_preprocess_output_exist_shouldpass(request):
     return request.param
+@pytest.fixture(params = [io_data_test_1])
+def mock_test_io_R_ft_select_output_exist_shouldpass(request):
+    return request.param
+
+
+
+
+
+
+
+
+
+
+
+
 
 ml_model_file_test_1 = {
     "key_group": "ml",
     "key":       "does_model_exist"
 }
 
-# define test data list for parametrization
-ml_model_file_test = [ml_model_file_test_1]
-
 # fixture for parametrization
-@pytest.fixture(params = ml_model_file_test)
+@pytest.fixture(params = [ml_model_file_test_1])
 def mock_test_ml_model_exist_shouldpass(request):
     return request.param
 
@@ -37,11 +46,8 @@ neuropm_model_test_1 = {
     "key":       "is_cti_accurate"
 }
 
-# define test data list for parametrization
-neuropm_model_test = [neuropm_model_test_1]
-
 # fixture for parametrization
-@pytest.fixture(params = neuropm_model_test)
+@pytest.fixture(params = [neuropm_model_test_1])
 def mock_test_neuro_pm_accuracy_shouldpass(request):
     return request.param
 
@@ -50,11 +56,8 @@ neuropm_cti_pred_test_1 = {
     "key":       "is_cti_pred_accurate"
 }
 
-# define test data list for parametrization
-neuropm_cti_pred_test = [neuropm_cti_pred_test_1]
-
 # fixture for parametrization
-@pytest.fixture(params = neuropm_cti_pred_test)
+@pytest.fixture(params = [neuropm_cti_pred_test_1])
 def mock_test_neuro_pm_cti_pred_shouldpass(request):
     return request.param
 
@@ -63,10 +66,7 @@ ml_model_test_1 = {
     "key":       "is_model_accurate"
 }
 
-# define test data list for parametrization
-ml_model_test = [ml_model_test_1]
-
 # fixture for parametrization
-@pytest.fixture(params = ml_model_test)
+@pytest.fixture(params = [ml_model_test_1])
 def mock_test_ml_model_accuracy_shouldpass(request):
     return request.param

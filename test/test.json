@@ -4,7 +4,7 @@
         "is_model_accurate": true
     },
     "neuropm": {
-        "does_output_df_exist": true,
+        "does_R_preprocess_output_exist": true,
         "is_cti_accurate": true,
         "is_cti_pred_accurate": true
     }
