@@ -16,7 +16,7 @@ cov_all[upper.tri(cov_all)] = 0
 diag(cov_all) = 0
 
 # remove high correlation variables
-ind_filter = !unname(apply(cov_all, 1, function(x) any(abs(x) > 0.95)))
+ind_filter = !unname(apply(cov_all, 1, function(x) any(abs(x) > 1.0)))
 
 # filter columns
 ft_norm = ft_norm[, ind_filter]
