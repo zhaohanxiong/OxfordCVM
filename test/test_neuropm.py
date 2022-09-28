@@ -94,7 +94,7 @@ def test_io_R_ft_select_output_exist_shouldpass(mock_test_io_R_ft_select_output_
 def test_io_neuropm_output_exist_shouldpass(mock_test_io_neuropm_output_exist_shouldpass):
 
     '''
-    This function tests if the output from preprocess_feature_selection.R is correct
+    This function tests if the output from NeuroPM matlab code is correct
     '''
 
     # set test flag to false before running test
@@ -142,7 +142,7 @@ def test_io_neuropm_output_exist_shouldpass(mock_test_io_neuropm_output_exist_sh
 def test_io_neuropm_interm_output_exist_shouldpass(mock_test_io_neuropm_interm_output_exist_shouldpass):
 
     '''
-    This function tests if the output from preprocess_feature_selection.R is correct
+    This function tests if the intermediate values from NeuroPM matlab code is correct
     '''
 
     # set test flag to false before running test
@@ -177,7 +177,7 @@ def test_io_neuropm_interm_output_exist_shouldpass(mock_test_io_neuropm_interm_o
 def test_io_R_postprocess_output_exist_shouldpas(mock_test_io_R_postprocess_output_exist_shouldpass):
 
     '''
-    This function tests if the output from preprocess_feature_selection.R is correct
+    This function tests if the output from postprocess_files.R is correct
     '''
 
     # set test flag to false before running test

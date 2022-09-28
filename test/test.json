@@ -1,4 +1,8 @@
 {
+    "aws": {
+        "is_rds_data_correct": true,
+        "is_ecr_files_correct": true
+    },
     "data_processing": {
         "does_R_postproces_output_exist": true,
         "does_R_preprocess_output_exist": true

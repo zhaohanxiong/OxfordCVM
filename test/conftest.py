@@ -51,6 +51,27 @@ def mock_test_ml_model_exist_shouldpass(request):
     return request.param
 
 #########################################################
+# tests files for deployment to AWS (CD)
+#########################################################
+aws_files_deploy_test1 = {
+    "key_group": "aws",
+    "key":       "is_rds_data_correct"
+}
+
+aws_files_deploy_test2 = {
+    "key_group": "aws",
+    "key":       "is_ecr_files_correct"
+}
+
+# fixture for parametrization
+@pytest.fixture(params = [aws_files_deploy_test1])
+def mock_test_deploy_aws_rds_data_shouldpass(request):
+    return request.param
+@pytest.fixture(params = [aws_files_deploy_test2])
+def mock_test_deploy_aws_container_data_shouldpass(request):
+    return request.param
+
+#########################################################
 # tests for cTI/ML model accuracy (CD)
 #########################################################
 neuropm_model_test_1 = {
