@@ -36,9 +36,9 @@ def mock_test_io_neuropm_output_exist_shouldpass(request):
 @pytest.fixture(params = [io_data_test_3])
 def mock_test_io_neuropm_interm_output_exist_shouldpass(request):
     return request.param
-#@pytest.fixture(params = [io_data_test_4])
-#def mock_test_io_R_postprocess_output_exist_shouldpass(request):
-#    return request.param
+@pytest.fixture(params = [io_data_test_4])
+def mock_test_io_R_postprocess_output_exist_shouldpass(request):
+    return request.param
 
 
 
@@ -69,18 +69,16 @@ neuropm_model_test_1 = {
     "key":       "is_cti_accurate"
 }
 
-# fixture for parametrization
-@pytest.fixture(params = [neuropm_model_test_1])
-def mock_test_neuro_pm_accuracy_shouldpass(request):
-    return request.param
-
-neuropm_cti_pred_test_1 = {
+neuropm_model_test_2 = {
     "key_group": "neuropm",
     "key":       "is_cti_pred_accurate"
 }
 
 # fixture for parametrization
-@pytest.fixture(params = [neuropm_cti_pred_test_1])
+@pytest.fixture(params = [neuropm_model_test_1])
+def mock_test_neuro_pm_accuracy_shouldpass(request):
+    return request.param
+@pytest.fixture(params = [neuropm_model_test_2])
 def mock_test_neuro_pm_cti_pred_shouldpass(request):
     return request.param
 

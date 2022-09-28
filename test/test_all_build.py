@@ -20,6 +20,9 @@ def test_check_all_flags_shouldpass():
     # none
 
     # Assert
-    # check criteria 
+    # check criteria
+    assert test_dict["data_processing"]["does_R_postproces_output_exist"]
+    assert test_dict["data_processing"]["does_R_postproces_output_exist"]
     assert test_dict["ml"]["does_model_exist"]
-    assert test_dict["neuropm"]["does_output_df_exist"]
+    assert test_dict["neuropm"]["does_neuropm_output_exist"]
+    assert test_dict["neuropm"]["does_neuropm_interm_output_exist"]
