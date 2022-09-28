@@ -70,10 +70,10 @@ with mlflow.start_run(run_name = "test run") as run:
     # automatic logging can also be performed:
     # https://www.mlflow.org/docs/latest/tracking.html#tensorflow-and-keras
     mlflow.set_tags({"experiment version": "0.0", "model flavour": "keras"})
-    mlflow.log_metrics({"RMSE": rmse,
+    mlflow.log_metrics({"RMSE":            rmse,
                         "RMSE_background": rmse_0, 
-                        "RMSE_between": rmse_1,
-                        "RMSE_disease": rmse_2})
+                        "RMSE_between":    rmse_1,
+                        "RMSE_disease":    rmse_2})
     mlflow.log_params({"n_rows": ml_inf.shape[0]})
 
     # store output visualization for results
