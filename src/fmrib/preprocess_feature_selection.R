@@ -11,15 +11,15 @@ ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
 
 # compute covariance and preprocess
-#cov_all = cov(ft_norm)
-#cov_all[upper.tri(cov_all)] = 0
-#diag(cov_all) = 0
+cov_all = cov(ft_norm)
+cov_all[upper.tri(cov_all)] = 0
+diag(cov_all) = 0
 
 # remove high correlation variables
-#ind_filter = !unname(apply(cov_all, 1, function(x) any(abs(x) > 0.75)))
+ind_filter = !unname(apply(cov_all, 1, function(x) any(abs(x) > 1.0)))
 
 # filter columns
-#ft_norm = ft_norm[, ind_filter]
+ft_norm = ft_norm[, ind_filter]
 
 # only keep subset of background/disease
 #ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:1000, ],
@@ -31,6 +31,9 @@ labels = labels[ind_rand, ]
 print(sprintf("Further Filtering Complete"))
 print(sprintf("Distribution of Classes is"))
 print(table(labels$bp_group))
+
+print(sprintf("The Filtered Data Frame is of Size %0.0f by %0.0f",
+              nrow(ft_norm), ncol(ft_norm)))
 
 # write to output
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")

@@ -265,19 +265,20 @@ get_ukb_subset_column_names = function(df, df_vars,
   } else if (subset_option == "cardiac") {
     
     # cardiac
-    vars_subset_cols = vars_2[vars_2 %in% c(bp_var,med_bp,
-                                    bb_CMR_vars, bb_art_vars, bb_car_vars)]
+    vars_subset_cols = vars_2[vars_2 %in% c(bp_var,med_bp,Sex,Age,Event,
+                                    bb_CMR_vars,bb_art_vars,bb_car_vars)]
     
   } else if (subset_option == "brain") {
     
     # brain
-    vars_subset_cols = vars_2[vars_2 %in% bb_BMR_vars]
+    vars_subset_cols = vars_2[vars_2 %in% c(bb_BMR_vars,
+                                            bp_var,med_bp,Sex,Age,Event)]
     
   } else if (subset_option == "cardiac + brain + carotid ultrasound") {
     
     # cardiac + brain + carotid ultrasound
     vars_subset_cols = vars_2[vars_2 %in% c(bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,
-                                            bb_art_vars,bb_car_vars,Sex,Age)]
+                                            bb_art_vars,bb_car_vars,Sex,Age,Event)]
     
   } else {
     warning("Wrong Subset Option Error")

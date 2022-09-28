@@ -23,3 +23,5 @@ def test_check_all_flags_shouldpass():
     assert test_dict["ml"]["is_model_accurate"]
     assert test_dict["neuropm"]["is_cti_accurate"]
     assert test_dict["neuropm"]["is_cti_pred_accurate"]
+    assert test_dict["aws"]["is_rds_data_correct"]
+    assert test_dict["aws"]["is_ecr_files_correct"]
