@@ -76,32 +76,6 @@ with mlflow.start_run(run_name = "test run") as run:
                         "RMSE_disease": rmse_2})
     mlflow.log_params({"n_rows": ml_inf.shape[0]})
 
-    # update model stage: Staging, Production, Archived
-# TO DO, THIS IS WRONG AND INCOMPLETE
-    client = mlflow.MlflowClient()
-    if ver > 0:
-        client.transition_model_version_stage(name = "keras_cTI", version = ver, 
-                                            stage = "Archived")
-
-    client.transition_model_version_stage(name = "keras_cTI", version = ver + 1, 
-                                        stage = "Staging")
-
-    # store current best model into tf-serving directory for deployment
-    #df = mlflow.search_runs(experiment_names = ["cti_predict"])
-    #run_id = df.loc[df['metrics.RMSE'].idxmin()]['run_id']
-    #best_model_dir = "./mlruns/" + experiment_id + "/" + run_id + "/data/model/"
-
-    # rename model name
-    #client.rename_registered_model(name = "keras_cTI", new_name = "keras_cTI")
-
-    # update model version
-    #client.update_model_version(name = "keras_cTI", version = ver + 1,
-    #                            description = "nereast neighbor cTI prediction")
-
-    # delete model all versions & single version of model
-    #client.delete_model_version(name = "registered_model_name", version = n)
-    #client.delete_registered_model(name = "registered_model_name")
-
     # store output visualization for results
     plot_path = "./mlruns/" + args.experiment_id + "/" + \
                                         run.info.run_id + "/artifacts/keras_models"
