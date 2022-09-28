@@ -1,11 +1,17 @@
 import os
 import sys
 import mlflow
+import shutil
 import argparse
+
+# set output directory
+tf_serving_dir1 = "../../aws/tf_serving/saved_models/1/"
+tf_serving_dir2 = "../../aws/tf_serving/saved_models/2/"
 
 # set experiment ID
 parser = argparse.ArgumentParser()
-parser.add_argument("--experiment_id", default = "1", type = str, help = "experiment ID")
+parser.add_argument("--experiment_id", default = "1", type = str, 
+                                       help = "experiment ID")
 args = parser.parse_args(sys.argv[1:])
 
 # current latest version
@@ -19,30 +25,39 @@ mlflow.set_experiment("cti_predict")
 # start mlflow session for tracking
 with mlflow.start_run(run_name = "test run") as run:
 
-    # update model stage: Staging, Production, Archived
-# TO DO, THIS IS WRONG AND INCOMPLETE
-    client = mlflow.MlflowClient()
-    if ver > 0:
-        client.transition_model_version_stage(name = "keras_cTI", version = ver, 
-                                              stage = "Archived")
-
-    client.transition_model_version_stage(name = "keras_cTI", version = ver + 1, 
-                                        stage = "Staging")
-
-    # store current best model into tf-serving directory for deployment
+    # retrieve table of logging info
     df = mlflow.search_runs(experiment_names = ["cti_predict"])
-    run_id = df.loc[df['metrics.RMSE'].idxmin()]['run_id']
-    best_model_dir = "./mlruns/" + args.experiment_id + "/" + run_id + "/data/model/"
+    df = df.loc[df["experiment_id"] == args.experiment_id]
 
-    # rename model name
-    client.rename_registered_model(name = "keras_cTI", new_name = "keras_cTI")
+    # obtain best model and its respective directory
+    best_ver       = df['metrics.RMSE'].idxmin() + 3
+    run_id         = df.loc[best_ver - 1]['run_id']
+    best_model_dir = "./mlruns/" + args.experiment_id + "/" + \
+                            run_id + "/artifacts/keras_models/data/model/"
 
-    # update model version
-    client.update_model_version(name = "keras_cTI", version = ver + 1,
-                                description = "nereast neighbor cTI prediction")
+    # connect to mlflow model registry
+    client = mlflow.MlflowClient()
+    model_info = client.search_model_versions("name='keras_cTI'")
 
-    # delete model all versions & single version of model
-    client.delete_model_version(name = "registered_model_name", version = n)
-    client.delete_registered_model(name = "registered_model_name")
+    # update model version: Archived -> Staging -> Production
+    # set all models to archived
+    for i in range(ver):
+        client.transition_model_version_stage(name    = "keras_cTI",
+                                              version = i, 
+                                              stage   = "Archived")
+    
+    # set best model to staging
+    best_ver = ver - best_ver + 1
+    client.transition_model_version_stage(name    = "keras_cTI",
+                                          version = best_ver, 
+                                          stage   = "Staging")
+
+    # clean up tf-serving v2 directory
+    shutil.rmtree(tf_serving_dir1)
+    shutil.rmtree(tf_serving_dir2)
+    
+    # copy best model from mlflow/runs to tf-serving v2
+    shutil.copytree(best_model_dir, tf_serving_dir1)
+    shutil.copytree(best_model_dir, tf_serving_dir2)
 
 print("Python -- Updated Latest Best Model for Deployment")
