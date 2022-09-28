@@ -41,7 +41,6 @@ def test_io_R_preprocess_output_exist_shouldpass(mock_test_io_R_preprocess_outpu
 
     # check if the size of dataframes were correct
     assert df_ukb.shape[0] == df_ukb_raw.shape[0]
-    assert df_ukb.shape[1] == df_ukb_raw.shape[1]
     assert df_ukb.shape[0] == df_score.shape[0]
 
     # check if there are any missing values in score
@@ -89,9 +88,6 @@ def test_io_R_ft_select_output_exist_shouldpass(mock_test_io_R_ft_select_output_
 
     # check if the size of dataframes were correct
     assert df_ukb.shape[0] == df_score.shape[0]
-
-    # check if there are any missing values in score
-    assert df_score["global_pseudotimes"].isna().sum() == 0
 
     # set test flag to true if passed
     update_test_dict(mock_test_io_R_ft_select_output_exist_shouldpass["key_group"],
