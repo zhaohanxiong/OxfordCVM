@@ -225,24 +225,6 @@ def test_io_R_postprocess_output_exist_shouldpas(mock_test_io_R_postprocess_outp
                      mock_test_io_R_postprocess_output_exist_shouldpass["key"],
                      True)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
 
     '''
