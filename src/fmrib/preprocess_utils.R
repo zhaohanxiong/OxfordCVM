@@ -98,7 +98,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   
   # history of heart attack, angina, stroke
   Event = grep("6150", names(df), value=TRUE)
-  Event = Event[!grepl("-3.|-4.", Event)]
+  Event = Event[!grepl("-0.|-1.|-3.|-4.", Event)]
   
   # other, date of imaging visit 
   StudyDate = grep("^53-", names(df), value=TRUE)
@@ -526,7 +526,7 @@ return_ukb_target_background_labels = function(df_subset,
   background_rows = which(df_subset$bp_sys_upper < 120 &
                           df_subset$bp_dia_upper < 80 &
                           df_subset$events == -7 &
-                          df_subset$bp_medication != -2)
+                          df_subset$bp_medication != 2)
   
   # clean missing value
   background_rows = background_rows[!is.na(background_rows)]
