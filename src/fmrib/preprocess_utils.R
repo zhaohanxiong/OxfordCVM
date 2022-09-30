@@ -98,7 +98,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   
   # history of heart attack, angina, stroke
   Event = grep("6150", names(df), value=TRUE)
-  Event = Event[!grepl("-0.|-1.|-3.|-4.", Event)]
+  Event = Event[!grepl("-3.|-4.", Event)]
   
   # other, date of imaging visit 
   StudyDate = grep("^53-", names(df), value=TRUE)
