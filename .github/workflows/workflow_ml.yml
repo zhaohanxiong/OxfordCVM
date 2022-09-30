@@ -108,7 +108,7 @@ jobs:
       run: |
         docker build -t cti-pred . --file Dockerfile
         docker tag cti-pred:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"        
 
   # INCOMPLETE # CD deploy data outputted to AWS RDS
