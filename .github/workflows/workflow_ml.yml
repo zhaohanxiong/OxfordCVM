@@ -16,7 +16,7 @@ permissions:
 # define AWS configurations
 env:
   AWS_REGION: us-east-1                            # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: public.ecr.aws/v4u9u1t8/cti-pred # set this to your Amazon ECR repository name
+  ECR_REPOSITORY: public.ecr.aws/v4u9u1t8/github-action-test # set this to your Amazon ECR repository name
 
 # define workflow for different jobs to run
 jobs:
