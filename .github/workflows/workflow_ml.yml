@@ -1,15 +1,24 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
+# set name of action
 name: UKB cTI CI/CD pipeline
 
+# when to run this action
 on:
   push:
-    branches: [ "prod" ]
+    branches: ["prod"]
 
+# read only permission for files
 permissions:
   contents: read
 
+# define AWS configurations
+env:
+  AWS_REGION: us-east-1                            # set this to your preferred AWS region, e.g. us-west-1
+  ECR_REPOSITORY: public.ecr.aws/v4u9u1t8/github-action-test # set this to your Amazon ECR repository name
+
+# define workflow for different jobs to run
 jobs:
 
   # CI python code with basic test build
@@ -41,7 +50,6 @@ jobs:
   test_model_output:
 
     needs: [test_build_python]
-
     runs-on: ubuntu-latest
 
     steps:
@@ -62,7 +70,6 @@ jobs:
   test_build_docker_model:
 
     needs: [test_model_output]
-
     runs-on: ubuntu-latest
 
     steps:
@@ -73,28 +80,39 @@ jobs:
         docker build -t cti-pred . --file Dockerfile
 
   # CD docker deploy as a container to AWS ECR
-# INCOMPLETE
-  deploy_docker_model:
+  deploy_model_ECR:
 
     needs: [test_build_docker_model]
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ github.sha }}
       working-directory: ./src/aws/tf_serving
       run: |
         docker build -t cti-pred . --file Dockerfile
         docker tag cti-pred:latest public.ecr.aws/v4u9u1t8/cti-pred:latest
         docker push public.ecr.aws/v4u9u1t8/cti-pred:latest
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
-  # CD deploy data outputted to AWS RDS
-# INCOMPLETE
-  deploy_model_output:
+  # INCOMPLETE # CD deploy data outputted to AWS RDS
+  deploy_data_RDS:
 
     needs: [test_model_output]
-
     runs-on: ubuntu-latest
 
     steps:

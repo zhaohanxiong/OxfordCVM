@@ -21,6 +21,9 @@ ind_filter = !unname(apply(cov_all, 1, function(x) any(abs(x) > 1.0)))
 # filter columns
 ft_norm = ft_norm[, ind_filter]
 
+# shuffle labels for experimentation
+#labels$bp_group = sample(labels$bp_group, nrow(labels))
+
 # only keep subset of background/disease
 #ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:1000, ],
 #                ft_norm[labels$bp_group != 1, ])

@@ -5,7 +5,7 @@ library(ggplot2)
 
 # -------------------- Connect to Data Base --------------------
 # read from AWS or locally
-local = FALSE
+local = TRUE
 
 if (!local) { # connecting to AWS
   
@@ -83,7 +83,7 @@ varnames = varnames[varnames$colname %in% colnames(ukb_df), ]
 
 # -------------------- Run Shiny Application --------------------
 # set deploy option as true or false
-deploy = TRUE
+deploy = FALSE
 
 # deploy on shinyapp.io (hosted by R-Shiny)
 if (deploy) {

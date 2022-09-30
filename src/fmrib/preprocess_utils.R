@@ -526,7 +526,7 @@ return_ukb_target_background_labels = function(df_subset,
   background_rows = which(df_subset$bp_sys_upper < 120 &
                           df_subset$bp_dia_upper < 80 &
                           df_subset$events == -7 &
-                          df_subset$bp_medication != -2)
+                          df_subset$bp_medication != 2)
   
   # clean missing value
   background_rows = background_rows[!is.na(background_rows)]
