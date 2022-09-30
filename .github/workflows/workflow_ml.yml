@@ -101,9 +101,6 @@ jobs:
         registry-type: public
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
-        IMAGE_TAG: ${{ github.event.release.tag_name }}
       working-directory: ./src/aws/tf_serving
       run: |
         docker build -t cti-pred . --file Dockerfile
