@@ -16,7 +16,7 @@ permissions:
 # define AWS configurations
 env:
   AWS_REGION: us-east-1                            # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: github-action-test # set this to your Amazon ECR repository name
+  ECR_REPOSITORY: public.ecr.aws/v4u9u1t8/github-action-test # set this to your Amazon ECR repository name
 
 # define workflow for different jobs to run
 jobs:
@@ -106,10 +106,11 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       working-directory: ./src/aws/tf_serving
       run: |
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
         docker build -t cti-pred . --file Dockerfile
         docker tag cti-pred:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        
 
   # INCOMPLETE # CD deploy data outputted to AWS RDS
   deploy_data_RDS:
