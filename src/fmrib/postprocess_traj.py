@@ -91,8 +91,8 @@ for i in range(overlap.shape[0]):
     if len(list_similar) == 0:
         trajectory_groups.append(set_i)
 
-# given unique set of trajectories
-
+# given unique set of trajectories, reduce down to at most 5 major trajectory paths
+# TO DO
 
 # create sets of unique merged trajectory paths using the indices derived above
 traj_list = [[] for _ in range(MST_label.shape[0])]
@@ -136,7 +136,7 @@ for i in np.where(labels["bp_group"] == 0)[0]:
 # compute spectral layout using lapacian and eigen decomp (1 minute run time)
 L = laplacian((MST_mat>0).astype(int))
 vals, vecs = np.linalg.eigh(L)
-x, y = vecs[:,1], vecs[:,3]
+x, y = vecs[:,0], vecs[:,1]
 graph_coordinates = {i: (x[i], y[i]) for i in range(MST_mat.shape[0])}
 
 # build list of edges and nodes
@@ -164,7 +164,8 @@ if True:
     score_col = np.copy(MST_label["pseudotime"].to_numpy())
 
     # re-scale colors in disease group to make them more pronouced
-    score_col[MST_label["bp_group"]==2] *= 3
+    disease_UQ = np.quantile(score_col[MST_label["bp_group"]==2], 0.75)
+    score_col[MST_label["bp_group"]==2] *= 1.0 / disease_UQ
     score_col[score_col>1] = 1
 
 # define colors grouped by trajectories/bp_group
@@ -179,9 +180,9 @@ if False:
 
     # assign discrete color
     plotly_cols = np.array(['#FD3216', '#00FE35', '#6A76FC', '#FED4C4', '#FE00CE', '#0DF9FF',
-                         '#F6F926', '#FF9616', '#479B55', '#EEA6FB', '#DC587D', '#D626FF',
-                         '#6E899C', '#00B5F7', '#B68E00', '#C9FBE5', '#FF0092', '#22FFA7',
-                         '#E3EE9E', '#86CE00', '#BC7196', '#7E7DCD', '#FC6955', '#E48F72'])
+                            '#F6F926', '#FF9616', '#479B55', '#EEA6FB', '#DC587D', '#D626FF',
+                            '#6E899C', '#00B5F7', '#B68E00', '#C9FBE5', '#FF0092', '#22FFA7',
+                            '#E3EE9E', '#86CE00', '#BC7196', '#7E7DCD', '#FC6955', '#E48F72'])
     score_col = np.array(plotly_cols)[score_col] # Alphabet Dark24 Light24
 
 # define node plots using GPU rendering

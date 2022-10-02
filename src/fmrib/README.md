@@ -1,52 +1,33 @@
 
-### FMRIB Server Connection and Setup
-##### VPN Connection using Cisco
+##### Dependencies for R
 ```
-vpn.ox.ac.uk (then type ur user ID and password)
-```
-
-##### SSH Tunnel
-```
-ssh winokl@jalapeno.fmrib.ox.ac.uk
-ssh -C -L 5931:localhost:5931 winokl@jalapeno.fmrib.ox.ac.uk
-<password in keyfile>
+install.packages("data.table")
+install.packages("R.matlab")
+install.packages("ggplot2")
+install.packages("gridExtra")
+install.packages("shiny")
 ```
 
-##### Navigating to My Directory
+##### Dependencies for Python
 ```
-cd /home/fs0/winokl/zxiong/OxfordCVM
+- python version
+python 3.10
+
+- libraries for analysis
+pip install numpy scipy pandas networkx plotly seaborn
+
+- libraries for rest of workflow
+pip install tensorflow mlflow pytest
 ```
 
-##### Python Activating Virtual Environment/Conda Environment
+##### Dependencies for Matlab
 ```
-source /home/fs0/winokl/zxiong/env/bin/activate
-source activate env_conda
-```
+- Matlab version
+Matlab R2020a or earlier version
 
-##### Copying Data Files to/from Server to/from Local Windows (Example)
-```
-scp temp.txt winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong
-scp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/fmrib/NeuroPM/io .
-```
-
-##### FMRIB Cluster Run Commands
-```
-- link to resource
-https://sharepoint.nexus.ox.ac.uk/sites/NDCN/FMRIB/IT/User%20Guides/GridEngine.aspx
-
-- to run preprocessing + neuroPM in one script (Unlimited RAM and Hours, needed for full UKB, but slow)
-fsl_sub -q bigmem.q bash ./run_all.sh
-fsl_sub -q bigmem.q bash ./run_x_validate.sh
-
-- manage active jobs
-qstat (check status)
-qdel job_id (delete jobs)
-```
-
-##### Dependencies for NeuroPM (MATLAB Toolboxes):
-```
-- statistics and machine learning toolbox
-- financial toolbox
-- optimization toolbox
-- bioinformatics toolbox
+- Matlab Toolboxes
+statistics and machine learning toolbox
+optimization toolbox
+financial toolbox
+bioinformatics toolbox
 ```

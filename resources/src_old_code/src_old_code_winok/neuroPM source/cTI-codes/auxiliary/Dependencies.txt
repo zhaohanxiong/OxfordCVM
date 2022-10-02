@@ -1,6 +1,0 @@
-- functions find_nn.m and L2_distance.m from the Matlab Toolbox for Dimensionality Reduction v0.7.1b. The toolbox can be obtained from http://homepage.tudelft.nl/19j49
-- A subset of functions from a previous version of Gabriel Peyre's Toolbox Graph available at: https://github.com/gpeyre/matlab-toolboxes/tree/master/toolbox_graph
-Selected function are available with our code.
-- Principal Angles between Subspaces MATLAB implementation by Andrew Knyazev and Rico Argentati, downloaded from https://www.mathworks.com/matlabcentral/fileexchange/55-subspacea-m
-- function GCSpectralClust1.m from the Community Detection Toolbox, available at http://users.auth.gr/~kehagiat/Software/
-- If would like to test the cPCA-based results vs UMAP, download the UMAP MATLAB implementation provided by Connor Meehan, Stephen Meehan, and Wayne Moore (2019). Uniform Manifold Approximation and Projection (UMAP) (https://www.mathworks.com/matlabcentral/fileexchange/71902), MATLAB Central File Exchange. You may use this specific version:  http://cgworkspace.cytogenie.org/GetDown2/demo/umapDistribution.zip
