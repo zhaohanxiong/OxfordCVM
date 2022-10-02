@@ -1,29 +1,27 @@
 
 ### FMRIB Server Connection and Setup
-##### VPN Connection using Cisco
+##### Connect
 ```
+- VPN Connection using Cisco
 vpn.ox.ac.uk (then type ur user ID and password)
-```
 
-##### SSH Tunnel
-```
+- SSH Tunnel
 ssh winokl@jalapeno.fmrib.ox.ac.uk
 <password in keyfile>
 ```
 
-##### Navigating to My Directory
+##### Navigate Directories
 ```
+- location of this codebase
 cd /home/fs0/winokl/zxiong/OxfordCVM
-```
 
-##### Python Activating Virtual Environment/Conda Environment
-```
-source /home/fs0/winokl/zxiong/env/bin/activate
+- Activating Conda Environment (prefered)
 source activate env_conda
-```
 
-##### Copying Data Files to/from Server to/from Local Windows (Example)
-```
+- Activating Virtual Environment
+source /home/fs0/winokl/zxiong/env/bin/activate
+
+- Copying Data Files to/from Server to/from Local Windows (Example)
 scp temp.txt winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong
 scp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/fmrib/NeuroPM/io .
 ```
