@@ -9,8 +9,3 @@ https://github.com/zhaohanxiong/OxfordCVM/tree/dev/src/visualization_dashboards
 
 ### CI/CD (Github Actions Workflow)
 ![image](https://user-images.githubusercontent.com/29684281/192305485-6b7338bb-af2a-4ab3-8553-87fdd3487f95.png)
-
-### Projects Lead By Me
-•	Bayesian dimensionality reduction, cluster analysis, and network analysis of population-wide medical databases (UK Biobank) for isolating predictive biomarkers and constructing disease progression trajectories
-
-•	Scalable, interactive, and light weight visualization tools for sharing statistical outcomes from modelling
