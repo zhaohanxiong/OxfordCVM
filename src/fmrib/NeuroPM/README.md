@@ -2,8 +2,10 @@
 ##### Step 1) Required installs:
 ```
 - Matlab R2020a or earlier version.
-- "Bioinformatics Toolbox"
-- "Statistics and Machine Learning Toolbox"
+- statistics and machine learning toolbox
+- financial toolbox
+- optimization toolbox
+- bioinformatics toolbox
 ```
 
 ##### Step 2) Put 3 model input files into the "/io" folder;
