@@ -13,6 +13,6 @@ install.packages("shiny")
 - libraries for analysis
 pip install numpy scipy pandas networkx plotly seaborn
 
-- libraries for machine learning
-pip install tensorflow mlflow sqlalchemy
+- libraries for rest of workflow
+pip install tensorflow mlflow pytest
 ```
