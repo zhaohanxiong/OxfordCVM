@@ -13,11 +13,11 @@ install.packages("shiny")
 - python version
 python 3.10
 
-- libraries for analysis
-pip install numpy scipy pandas networkx plotly seaborn
+- libraries for data analysis
+pip install numpy scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
 
-- libraries for rest of workflow
-pip install tensorflow mlflow pytest
+- libraries for machine learning
+pip install tensorflow tensorflow-serving-api keras mlflow pytest sklearn
 ```
 
 ##### Dependencies for Matlab
