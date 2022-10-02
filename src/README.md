@@ -32,8 +32,8 @@ scp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/fmri
 ```
 - link to documentation: https://sharepoint.nexus.ox.ac.uk/sites/NDCN/FMRIB/IT/User%20Guides/GridEngine.aspx
 
-- to run preprocessing + neuroPM in one script
-fsl_sub -q bigmem.q bash ./run_all.sh
+- to run preprocessing + neuroPM in one script (UKB cTI)
+fsl_sub -q bigmem.q bash ./run_UKB_cTI.sh
 
 - check job status
 qstat
