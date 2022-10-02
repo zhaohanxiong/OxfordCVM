@@ -17,7 +17,7 @@ python 3.10
 pip install numpy scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
 
 - libraries for machine learning
-pip install tensorflow tensorflow-serving-api keras mlflow pytest sklearn
+pip install tensorflow tensorflow-serving-api keras mlflow pytest sklearn grpc
 ```
 
 ##### Dependencies for Matlab
