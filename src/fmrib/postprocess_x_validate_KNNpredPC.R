@@ -176,6 +176,20 @@ if (FALSE) {
   
 }
 
+# plot cPCs
+if (FALSE) {
+  
+  # load the eigen matrix for the full model
+  PC_transform = readMat(file.path(path, paste0("PC_Transform.mat")))$Node.Weights
+  cPC_plot = data.frame(PC_transform[, 1:10])
+  
+  # plot pairwise
+  pdf("cPC_All_Pairs.pdf", width = 25, height = 25)
+  plot(cPC_plot)
+  dev.off()
+  
+}
+
 # write output to file
 out_df = data.frame(score_gt   = pseudotimes_full$global_pseudotimes,
                     score_pred = pseudotimes_full$pred_score,
