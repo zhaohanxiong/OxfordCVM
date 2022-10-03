@@ -18,15 +18,15 @@ write.csv(psuedotimes, file.path(path,"pseudotimes.csv"), row.names = FALSE)
 # --------------------------------------------------------------------------------------------
 # prepare data frame of variable names and their descriptors
 varnames = read.csv(file.path(path, "var_weighting.csv"), 
-                    header=TRUE, stringsAsFactor=FALSE)$Var1
+                                        header=TRUE, stringsAsFactor=FALSE)$Var1
 
 # load variables grouped by names
 var_group =  read.csv(file.path(path, "var_grouped.csv"), 
-                      header=TRUE, stringsAsFactor=FALSE)
+                                             header=TRUE, stringsAsFactor=FALSE)
 
 # load all UKB variable list to compare
 ukb_varnames = read.csv("../../../bb_variablelist.csv", 
-                        header=TRUE, stringsAsFactor=FALSE)
+                                             header=TRUE, stringsAsFactor=FALSE)
 
 # match field codes with field descriptors
 varnames = c(names(psuedotimes)[2:3], varnames)

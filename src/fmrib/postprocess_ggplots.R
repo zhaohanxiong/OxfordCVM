@@ -12,6 +12,14 @@ psuedotimes$bp_group[psuedotimes$bp_group == 2] = "Disease"
 psuedotimes$bp_group = ordered(psuedotimes$bp_group,
                                levels = c("Background", "Between", "Disease"))
 
+# load variable weighting outputs
+var_weights = read.csv(file.path(path, "var_weighting_reduced.csv"),
+                                             header=TRUE, stringsAsFactor=FALSE)
+
+# load variable names
+ukb_varnames =  read.csv(file.path(path, "ukb_varnames.csv"), 
+                                             header=TRUE, stringsAsFactor=FALSE)
+
 # ------------------------------------------------------------------------------
 # Plot 1 - Distribution of Disease Scores Separated by Group
 # ------------------------------------------------------------------------------
@@ -125,6 +133,35 @@ dev.off()
 # ------------------------------------------------------------------------------
 # Plot 4 - Individual Trajectory Scores
 # ------------------------------------------------------------------------------
+
+# retrieve what groups each significant variable contribute to
+var_weights$group = ukb_varnames$Field_Group[unname(sapply(var_weights$Var1, 
+                                  function(v) which(ukb_varnames$colname == v)))]
+
+# compute summary of weighting by group, and arrange so it sums to 100%
+weight_plot = aggregate(var_weights$Node_contributions,
+                        by = list(var_weights$group),
+                        FUN = "sum")
+names(weight_plot) = c("Var_Group", "Total_Weighting")
+significant_total = sum(weight_plot$Total_Weighting)
+weight_plot = rbind(weight_plot,
+                          c("Non_Significant_Variables", 1 - significant_total))
+weight_plot$Total_Weighting = as.numeric(weight_plot$Total_Weighting)
+weight_plot$Total_Weighting = round(weight_plot$Total_Weighting * 100, 2)
+
+# produce the plot
+pdf(file.path(path, "plot4_Variable_Contribution.pdf"), width = 10, height = 10)
+p1 = ggplot(weight_plot, aes(x = "", y = Total_Weighting, fill = Var_Group)) + 
+        geom_bar(width = 1, stat = "identity") + 
+        coord_polar("y", start = 0) + 
+        scale_fill_brewer(palette="Dark2")
+
+grid.arrange(p1, ncol = 1)
+dev.off()
+
+# ------------------------------------------------------------------------------
+# Plot 5 - Individual Trajectory Scores
+# ------------------------------------------------------------------------------
 # psuedotimes$trajectory = as.factor(as.numeric(sapply(strsplit(psuedotimes$trajectory, ","), 
 #                                                     function(x) x[1])))
 # major_traj = names(which(table(psuedotimes$trajectory) > nrow(psuedotimes) * 0.01))
@@ -136,8 +173,3 @@ dev.off()
 #           ggtitle("Disease Score in Each Trajectory") + 
 #           ylab("Disease Score") + 
 #           xlab("Trajectory")
-
-# ------------------------------------------------------------------------------
-# Plot 5 - 
-# ------------------------------------------------------------------------------
-#  
