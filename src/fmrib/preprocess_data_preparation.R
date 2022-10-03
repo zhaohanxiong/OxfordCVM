@@ -11,9 +11,15 @@ print(sprintf("Initial Data Frame is of Size %0.0f by %0.0f",
                                         nrow(ukb$ukb_data), ncol(ukb$ukb_data)))
 
 # extract UKB columns (variables) we want to keep
-ukb_filtered_cols = get_ukb_subset_column_names(df = ukb$ukb_data,
+ukb_column_output = get_ukb_subset_column_names(df = ukb$ukb_data,
                                                 df_vars = ukb$ukb_vars,
                                                 subset_option = "all")
+
+ukb_filtered_cols = ukb_column_output$vars
+ukb_grouped_cols = ukb_column_output$var_df
+
+# write grouped variable headings extracted to output
+write.csv(ukb_grouped_cols, "NeuroPM/io/var_grouped.csv", row.names = FALSE)
 
 # extract UKB dataset rows (patients) we want to keep
 ukb_filtered_rows = get_ukb_subset_rows(df = ukb$ukb_data,

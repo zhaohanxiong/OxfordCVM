@@ -20,7 +20,11 @@ write.csv(psuedotimes, file.path(path,"pseudotimes.csv"), row.names = FALSE)
 varnames = read.csv(file.path(path, "var_weighting.csv"), 
                     header=TRUE, stringsAsFactor=FALSE)$Var1
 
-# load bb variable list to compare
+# load variables grouped by names
+var_group =  read.csv(file.path(path, "var_grouped.csv"), 
+                      header=TRUE, stringsAsFactor=FALSE)
+
+# load all UKB variable list to compare
 ukb_varnames = read.csv("../../../bb_variablelist.csv", 
                         header=TRUE, stringsAsFactor=FALSE)
 
@@ -28,20 +32,32 @@ ukb_varnames = read.csv("../../../bb_variablelist.csv",
 varnames = c(names(psuedotimes)[2:3], varnames)
 varnames = gsub("_", ".", gsub("x", "X", varnames))
 
-var_regexpr = regexpr("\\.", varnames) + 1
-varnames_instance = substring(varnames, var_regexpr, var_regexpr)
+var_regexpr1 = regexpr("\\.", varnames) + 1
+var_regexpr2 = regexpr("\\.", varnames) + 3
+varnames_instance = substring(varnames, var_regexpr1, var_regexpr1)
+varnames_instance_ver = substring(varnames, var_regexpr2, var_regexpr2)
 varnames = data.frame(colname = varnames,
                       FieldID = substring(varnames, 
                                           regexpr("X", varnames) + 1, 
                                           regexpr("\\.", varnames) - 1))
+
 varnames$colname = as.character(varnames$colname)
 varnames$FieldID = as.character(varnames$FieldID)
-varnames$Field = ukb_varnames$Field[sapply(varnames$FieldID, function(v) 
-                                             which(ukb_varnames$FieldID == v))]
+varnames$Field = ukb_varnames$Field[sapply(varnames$FieldID, function(v)
+                                               which(ukb_varnames$FieldID == v))]
+Field_group = unname(unlist(sapply(varnames$colname, function(v) {
+                                        ind = which(var_group$ukb_var == v)
+                                        ind = ifelse(length(ind) == 0, NA, ind)
+                                        return(ind)
+                                      }
+                                   )))
+varnames$Field_Group = var_group$var_group[Field_group]
+
 varnames$instance = varnames_instance
-varnames$display = paste0(varnames$Field, ifelse(varnames$instance == "0",
-                                                 "",
-                                                 paste0(" (", varnames$instance, ")")))
+varnames$instance_ver = varnames_instance_ver
+varnames$display = paste0(varnames$Field,
+                          ifelse(varnames$instance == "0",
+                                 "",paste0(" (", varnames$instance, ")")))
 
 # write this to file for dataframe of variable codes and original names
 write.csv(varnames, file.path(path, "ukb_varnames.csv"), row.names = FALSE)
@@ -57,6 +73,7 @@ var_weights = read.csv(file.path(path, "var_weighting.csv"),
 var_thresh = read.csv(file.path(path, "threshold_weighting.csv"),
                       header=TRUE, stringsAsFactor=FALSE)$Expected_contribution
 ukb_df = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"),header=TRUE))
+ukb_df_raw = data.frame(fread(file.path(path, "ukb_num.csv"),header=TRUE))
 
 # rename variable weightings
 var_weights$Var1 = gsub("_", ".", var_weights$Var1)
@@ -128,6 +145,8 @@ print(sprintf(paste0("Number of Variables with Statistically Significant ",
 
 # subset ukb_num dataframe to obtain only highest correlated variables
 ukb_df = ukb_df[, var_weights$Var1]
+ukb_df_raw = ukb_df_raw[, var_weights$Var1]
 
 # write the reduced variable data frame to output
-fwrite(ukb_df, file.path(path, "ukb_num_reduced.csv"))
+fwrite(ukb_df, file.path(path, "ukb_num_norm_reduced.csv"))
+fwrite(ukb_df_raw, file.path(path, "ukb_num_reduced.csv"))

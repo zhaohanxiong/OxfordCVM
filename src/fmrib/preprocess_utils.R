@@ -284,10 +284,33 @@ get_ukb_subset_column_names = function(df, df_vars,
     warning("Wrong Subset Option Error")
   }
   
+  # write variable groups to output by arranging by group and writing to csv
+  vars = c(bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,bb_art_vars,
+           bb_car_vars,bb_blood_vars,bb_spir_vars,bb_ecgrest_vars,
+           bp_var,med_bp,Sex,Age,Event)
+  vars = paste0("X", gsub("-", "\\.", vars))
+  var_groups = c(rep("Cardiac_MR",         length(bb_CMR_vars)),
+                 rep("Brain_MR",           length(bb_BMR_vars)),
+                 rep("Abdominal_MR",       length(bb_AMR_vars)),
+                 rep("Body_Composition",   length(bb_bodycomp_vars)),
+                 rep("Arterial_Stiffness", length(bb_art_vars)),
+                 rep("Carotid_Ultrasound", length(bb_car_vars)),
+                 rep("Blood",              length(bb_blood_vars)),
+                 rep("Spirometry",         length(bb_spir_vars)),
+                 rep("ECG",                length(bb_ecgrest_vars)),
+                 rep("Blood_Pressure",     length(bp_var)),
+                 rep("Medication",         length(med_bp)),
+                 rep("Sex",                length(Sex)),
+                 rep("Age",                length(Age)),
+                 rep("Event",              length(Event))
+                 )
+  
+  var_output = data.frame(ukb_var = vars, var_group = var_groups)
+  
   # add back useful columns involving blood pressure
   vars_subset_cols = c("Record.Id","BPSys-2.0","BPDia-2.0",vars_subset_cols)
                          
-  return(vars_subset_cols)
+  return(list(vars = vars_subset_cols, var_df = var_output))
   
 }
 
