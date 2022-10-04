@@ -17,7 +17,7 @@ print(sprintf("Initial Data Frame is of Size %0.0f by %0.0f",
                                         nrow(ukb$ukb_data), ncol(ukb$ukb_data)))
 
 # extract UKB columns (variables) we want to keep
-ukb_filtered_cols = get_ukb_subset_column_names(df = ukb$ukb_data,
+ukb_column_output = get_ukb_subset_column_names(df = ukb$ukb_data,
                                                 df_vars = ukb$ukb_vars,
                                                 subset_option = "all")
 
@@ -27,7 +27,7 @@ ukb_filtered_rows = get_ukb_subset_rows(df = ukb$ukb_data,
 
 # subset UKB dataframe based on row/column filters, and remove missing
 ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
-                                    cols = ukb_filtered_cols,
+                                    cols = ukb_column_output$vars,
                                     rows = ukb_filtered_rows)
 
 # free up memory
