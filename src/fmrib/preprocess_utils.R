@@ -572,8 +572,37 @@ return_ukb_target_background_labels = function(df_subset,
   
 }
 
+# TO DO return_low_variance_columns = function(data, ignore_cols = c()) {
+  
+  # this function removes columns which have only 1 value
+  
+  # only perform cleaning on numeric columns
+  if (length(ignore_cols) > 0) {
+    
+    # assign numeric columns only to new temp dataframe
+    temp = data[, -ignore_cols]
+    
+    # find which columns have all uniue values
+    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.1)
+    
+    # reassign via column concatenation, moving character columns to the front
+    data = cbind(data[, ignore_cols], temp[, which(!unname(low_var_cols))])
+    
+  } else {
+    
+    # find which columns have all uniue values
+    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.1)
+    
+    # remove low variance columns
+    data = data[, which(!unname(low_var_cols))]
+    
+  }
+  
+  return(data)
+  
+}
 
-data_harmonization = function(data, data_group) {
+# TO DO data_harmonization = function(data, data_group) {
   
   # given a dataframe and group, perform data harmonization using the ComBat
   # package to harmonize the different groups
@@ -581,12 +610,21 @@ data_harmonization = function(data, data_group) {
   # extract the columns in the data belong to the group
   group = data[, data_group[data_group %in% colnames(data)]]
   
+  # take the right most column (for now)
+  group = group[, ncol(group)]
+  
   # convert to categorical
   group = as.factor(group)
   
+  # remove the group from data if not already
+  data = data[, !(colnames(data) %in% data_group)]
+  
+  # remove variables which are constant across samples
+  
+  
   # use ComBat data harmonization
   # https://cran.r-project.org/web/packages/ez.combat/ez.combat.pdf
-  data = ez.combat(df = data[1:100,], batch.var = group[1:100], use.eb = FALSE)
+  data = ez.combat(df = data, batch.var = group, use.eb = TRUE)
   
   return(data)
   
@@ -608,36 +646,6 @@ return_normalize_zscore = function(data) {
 
   return(data)
   
-}
-
-return_low_variance_columns = function(data, ignore_cols = c()) {
-
-  # this function removes columns which have only 1 value
-
-  # only perform cleaning on numeric columns
-  if (length(ignore_cols) > 0) {
-    
-    # assign numeric columns only to new temp dataframe
-    temp = data[, -ignore_cols]
-
-    # find which columns have all uniue values
-    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.1)
-
-    # reassign via column concatenation, moving character columns to the front
-    data = cbind(data[, ignore_cols], temp[, which(!unname(low_var_cols))])
-
-  } else {
-
-    # find which columns have all uniue values
-    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.1)
-
-    # remove low variance columns
-    data = data[, which(!unname(low_var_cols))]
-
-  }
-
-  return(data)
-
 }
 
 return_remove_large_zscores = function(data, sd_threshold) {
