@@ -138,25 +138,47 @@ dev.off()
 var_weights$group = ukb_varnames$Field_Group[unname(sapply(var_weights$Var1, 
                                   function(v) which(ukb_varnames$colname == v)))]
 
-# compute summary of weighting by group, and arrange so it sums to 100%
+# compute summary of weighting by group
 weight_plot = aggregate(var_weights$Node_contributions,
                         by = list(var_weights$group),
                         FUN = "sum")
 names(weight_plot) = c("Var_Group", "Total_Weighting")
 significant_total = sum(weight_plot$Total_Weighting)
-weight_plot = rbind(weight_plot,
-                          c("Non_Significant_Variables", 1 - significant_total))
 weight_plot$Total_Weighting = as.numeric(weight_plot$Total_Weighting)
 weight_plot$Total_Weighting = round(weight_plot$Total_Weighting * 100, 2)
 
+# compute summary of weighting by group for only the significant variables
+var_weight_sig = var_weights[var_weights$significant, ]
+weight_plot_sig = aggregate(var_weight_sig$Node_contributions,
+                            by = list(var_weight_sig$group),
+                            FUN = "sum")
+names(weight_plot_sig) = c("Var_Group", "Total_Weighting")
+significant_total = sum(weight_plot_sig$Total_Weighting)
+weight_plot_sig = rbind(weight_plot_sig,
+                        c("Non_Significant_Variables", 1 - significant_total))
+weight_plot_sig$Total_Weighting = as.numeric(weight_plot_sig$Total_Weighting)
+weight_plot_sig$Total_Weighting = round(weight_plot_sig$Total_Weighting * 100, 2)
+
 # produce the plot
-pdf(file.path(path, "plot4_Variable_Contribution.pdf"), width = 10, height = 10)
+pdf(file.path(path, "plot4_Variable_Contribution.pdf"), width = 10, height = 5)
+
 p1 = ggplot(weight_plot, aes(x = "", y = Total_Weighting, fill = Var_Group)) + 
         geom_bar(width = 1, stat = "identity") + 
         coord_polar("y", start = 0) + 
-        scale_fill_brewer(palette="Dark2")
+        scale_y_continuous(breaks = seq(0, 100, 5)) +
+        scale_fill_brewer(palette = "Dark2") + 
+        ggtitle("All Variable Weighting Contribution") +
+        xlab("") + ylab("")
 
-grid.arrange(p1, ncol = 1)
+p2 = ggplot(weight_plot_sig, aes(x = "", y = Total_Weighting, fill = Var_Group)) + 
+        geom_bar(width = 1, stat = "identity") + 
+        coord_polar("y", start = 0) + 
+        scale_y_continuous(breaks = seq(0, 100, 5)) +
+        scale_fill_brewer(palette = "Dark2") + 
+        ggtitle("cTI Significant Variable Weighting Contribution") +
+        xlab("") + ylab("")
+
+grid.arrange(p1, p2, ncol = 2)
 dev.off()
 
 # ------------------------------------------------------------------------------

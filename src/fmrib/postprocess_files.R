@@ -110,7 +110,7 @@ var_weights$significant[var_weights$Var1 == "X31.0.0"] = TRUE
 
 # keep variables which are significant (by cTI) and strongly correlated
 #var_weights = var_weights[var_weights$significant | var_weights$significant_cor, ]
-var_weights = var_weights[var_weights$significant, ]
+#var_weights = var_weights[var_weights$significant, ]
 
 # retrieve original names
 var_weights$name = sapply(1:nrow(var_weights), function(i) varnames$Field[
