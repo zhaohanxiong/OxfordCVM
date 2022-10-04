@@ -572,40 +572,26 @@ return_ukb_target_background_labels = function(df_subset,
   
 }
 
-# TO DO return_low_variance_columns = function(data, ignore_cols = c()) {
+return_remove_single_value_columns = function(data) {
   
-  # this function removes columns which have only 1 value
+  # this function removes columns which have only 1 value (no variation)
+
+  # find which columns have all singular (non-unique) values for all samples
+  keep_cols = apply(data, 2, function(c)
+                                  length(unname(table(c[!is.na(c)]))) > 1)
   
-  # only perform cleaning on numeric columns
-  if (length(ignore_cols) > 0) {
-    
-    # assign numeric columns only to new temp dataframe
-    temp = data[, -ignore_cols]
-    
-    # find which columns have all uniue values
-    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.1)
-    
-    # reassign via column concatenation, moving character columns to the front
-    data = cbind(data[, ignore_cols], temp[, which(!unname(low_var_cols))])
-    
-  } else {
-    
-    # find which columns have all uniue values
-    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.1)
-    
-    # remove low variance columns
-    data = data[, which(!unname(low_var_cols))]
-    
-  }
+  # subset data with columns that do indeed have different values for samples
+  keep_cols = which(unname(keep_cols))
+  data = data[, keep_cols]
   
   return(data)
   
 }
 
-# TO DO data_harmonization = function(data, data_group) {
+return_data_harmonized = function(data, data_group) {
   
   # given a dataframe and group, perform data harmonization using the ComBat
-  # package to harmonize the different groups
+  # method to harmonize and standardize the different groups
   
   # extract the columns in the data belong to the group
   group = data[, data_group[data_group %in% colnames(data)]]
@@ -618,10 +604,7 @@ return_ukb_target_background_labels = function(df_subset,
   
   # remove the group from data if not already
   data = data[, !(colnames(data) %in% data_group)]
-  
-  # remove variables which are constant across samples
-  
-  
+
   # use ComBat data harmonization
   # https://cran.r-project.org/web/packages/ez.combat/ez.combat.pdf
   data = ez.combat(df = data, batch.var = group, use.eb = TRUE)

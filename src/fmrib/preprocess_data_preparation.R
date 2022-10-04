@@ -69,11 +69,11 @@ print("Distribution of Patients Per Group")
 print(table(ukb_df$bp_group))
 
 # remove columns which contain the same value (extremely low variance)
-ukb_df = return_low_variance_columns(ukb_df, ignore_cols = c(1))
+ukb_df = return_remove_single_value_columns(data = ukb_df)
 
 # data harmonization across different sites
-ukb_df[, 5:ncol(ukb_df)] = data_harmonization(data = ukb_df[, 5:ncol(ukb_df)],
-                                              data_group = c("54-0.0","54-2.0"))
+ukb_df[, 5:ncol(ukb_df)] = return_data_harmonized(data = ukb_df[, 5:ncol(ukb_df)],
+                                                  data_group = c("54-0.0","54-2.0"))
 
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
