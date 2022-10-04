@@ -244,7 +244,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   vars = vars[!vars %in% c(bulkvars, stratavars)]
   
   vars_2 = c(grep("\\-2.0",
-                      c(Age, StudyDate,Event,bp_var,med_bp,loc_var,
+                      c(Age, Sex, StudyDate,Event,bp_var,med_bp,loc_var,
                         bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
                         bb_art_vars,bb_blood_vars,bb_car_vars,
                         bb_ecgrest_vars), # bb_antro_vars
@@ -259,11 +259,11 @@ get_ukb_subset_column_names = function(df, df_vars,
     
     # all
     vars_subset_cols = vars_2[vars_2 %in% c(
-                                  bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,
+                                  bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,loc_var,
                                   bb_AMR_vars,
                                   bb_bodycomp_vars,bb_art_vars,
                                   bb_car_vars,bb_blood_vars,bb_spir_vars,
-                                  bb_ecgrest_vars,Sex,Age,Event,loc_var)]
+                                  bb_ecgrest_vars,Sex,Age,Event)]
     
   } else if (subset_option == "cardiac") {
     
