@@ -70,6 +70,8 @@ get_ukb_subset_column_names = function(df, df_vars,
                   paste0("^", paste0(stratavars, collapse="-|^"), "-"), 
                   names(df), 
                   value=TRUE)
+  # Centre location
+  loc_var = c("54-0.0", "54-0.1", "54-0.2", "54-0.3")
   
   # Demographic
   Sex = "31-0.0"
@@ -260,7 +262,7 @@ get_ukb_subset_column_names = function(df, df_vars,
                                   bb_AMR_vars,
                                   bb_bodycomp_vars,bb_art_vars,
                                   bb_car_vars,bb_blood_vars,bb_spir_vars,
-                                  bb_ecgrest_vars,Sex,Age,Event)]
+                                  bb_ecgrest_vars,Sex,Age,Event,loc_var)]
     
   } else if (subset_option == "cardiac") {
     

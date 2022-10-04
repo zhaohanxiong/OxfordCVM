@@ -85,15 +85,16 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
 
 # remove columns which we dont want influence the model
 ukb_df = edit_ukb_columns(ukb_df, 
-#             keep_cols = c("31-0.0", "21003-2.0",
-#                           fread("../../../var_list.csv")$x),
-              remove_cols = c("bp_sys_", "bp_dia_", # blood pressure (all)
-                              "bp_medication", "6153", "6177", # medication (all)
-                              "6150", "events", # events (all)
-                              "23098-0.0", "23098-1.0", "23098-3.0", # weight
-                              "12675", "12698", "^93-", "4079", # dia BP
-                              "12674", "12677", "12697", "^94-", "4080" # sys BP
-                              )
+            #keep_cols = c("31-0.0", "21003-2.0",
+            #              fread("../../../var_list.csv")$x),
+            remove_cols = c("bp_sys_", "bp_dia_",                      # blood pressure (all)
+                            "bp_medication", "6153", "6177",           # medication (all)
+                            "6150", "events",                          # events (all)
+                            "23098-0.0", "23098-1.0", "23098-3.0",     # weight
+                            "12675", "12698", "^93-", "4079",          # dia BP
+                            "12674", "12677", "12697", "^94-", "4080", # sys BP
+                            "54-0.0", "54-0.1", "54-0.2", "54-0.3"     # centre location
+                            )
           )
 
 # display final dataframe size
