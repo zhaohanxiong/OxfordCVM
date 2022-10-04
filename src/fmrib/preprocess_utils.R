@@ -70,8 +70,9 @@ get_ukb_subset_column_names = function(df, df_vars,
                   paste0("^", paste0(stratavars, collapse="-|^"), "-"), 
                   names(df), 
                   value=TRUE)
+
   # Centre location
-  loc_var = c("54-0.0", "54-0.1", "54-0.2", "54-0.3")
+  loc_var = c("54-0.0", "54-1.0", "54-2.0", "54-3.0")
   
   # Demographic
   Sex = "31-0.0"
