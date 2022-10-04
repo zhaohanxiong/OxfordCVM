@@ -36,7 +36,7 @@ classes_for_colours(ind_target)     = 3;
 
 %% call function
 [global_ordering, global_pseudotimes, mappedX, contrasted_data, Node_contributions, Expected_contribution] = ...
-                        pseudotimes_cTI_v4(data, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
+                        pseudotimes_cTI_v4(data, ind_background, classes_for_colours, ind_target, 'cPCA', 50);
 
 %% convert outputs to dataframes
 % store cTI outputs
