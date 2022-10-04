@@ -68,6 +68,10 @@ ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
 print("Distribution of Patients Per Group")
 print(table(ukb_df$bp_group))
 
+# data harmonization across different sites
+#ukb_df[, 5:ncol(ukb_df)] = data_harmonization(data = ukb_df[, 5:ncol(ukb_df)],
+#                                              data_group = c("54-2.0"))
+
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
                                                      ukb_df[, 5:ncol(ukb_df)])
@@ -93,7 +97,7 @@ ukb_df = edit_ukb_columns(ukb_df,
                             "23098-0.0", "23098-1.0", "23098-3.0",     # weight
                             "12675", "12698", "^93-", "4079",          # dia BP
                             "12674", "12677", "12697", "^94-", "4080", # sys BP
-                            "54-0.0", "54-0.1", "54-0.2", "54-0.3"     # centre location
+                            "54-0.0", "54-1.0", "54-2.0", "54-3.0"     # centre location
                             )
           )
 

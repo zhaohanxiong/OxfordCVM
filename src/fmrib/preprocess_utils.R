@@ -1,5 +1,6 @@
 # load dependencies
 library(data.table)
+library(ez.combat)
 
 load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   
@@ -568,6 +569,26 @@ return_ukb_target_background_labels = function(df_subset,
                     df_subset[4:ncol(df_subset)])
   
   return(df_subset)
+  
+}
+
+
+data_harmonization = function(data, data_group) {
+  
+  # given a dataframe and group, perform data harmonization using the ComBat
+  # package to harmonize the different groups
+  
+  # extract the columns in the data belong to the group
+  group = data[, data_group[data_group %in% colnames(data)]]
+  
+  # convert to categorical
+  group = as.factor(group)
+  
+  # use ComBat data harmonization
+  # https://cran.r-project.org/web/packages/ez.combat/ez.combat.pdf
+  data = ez.combat(df = data[1:100,], batch.var = group[1:100], use.eb = FALSE)
+  
+  return(data)
   
 }
 

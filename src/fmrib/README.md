@@ -5,6 +5,7 @@ install.packages("data.table")
 install.packages("R.matlab")
 install.packages("ggplot2")
 install.packages("gridExtra")
+install.packages("ez.combat")
 install.packages("shiny")
 ```
 
