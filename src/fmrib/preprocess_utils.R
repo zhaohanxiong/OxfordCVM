@@ -237,14 +237,14 @@ get_ukb_subset_column_names = function(df, df_vars,
   bb_blood_vars = bb_blood_vars[!bb_blood_vars %in% excl]
   
   # Combine variables together
-  vars = c("eid", "12187-2.0", Age, Sex, StudyDate, Event,bp_var,med_bp,
+  vars = c("eid", "12187-2.0", Age, Sex, StudyDate, Event,bp_var,med_bp,loc_var,
            bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
            bb_art_vars,bb_blood_vars,bb_car_vars, bb_spir_vars,
            bb_ecgrest_vars,bb_dis_vars,bb_med_vars) # bb_antro_vars
   vars = vars[!vars %in% c(bulkvars, stratavars)]
   
   vars_2 = c(grep("\\-2.0",
-                      c(Age, StudyDate,Event,bp_var,med_bp,
+                      c(Age, StudyDate,Event,bp_var,med_bp,loc_var,
                         bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
                         bb_art_vars,bb_blood_vars,bb_car_vars,
                         bb_ecgrest_vars), # bb_antro_vars
