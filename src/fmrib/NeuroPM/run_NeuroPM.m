@@ -32,7 +32,8 @@ classes_for_colours(ind_target)     = 3;
 
 %% data harmonization
 loc = table2array(loc(:, 'loc_var'));
-data = combat(data, loc, [], 1);
+data = combat(data', loc, [], 1);
+data = data';
 
 %% feature selection
 %[selected_features, ratio_sigma2_s2, sigma2_g, S2_g] = select_features(data, 1, 0.5);
