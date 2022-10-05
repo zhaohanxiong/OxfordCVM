@@ -50,7 +50,7 @@ alphas_all = alphas_all((mid_point - n_points):(mid_point + n_points));
 
 % perform contrastive PCA (using background and disease as priors into PCA)
 [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = ... 
-              cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_all);
+              contrastiveKernelPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_all);
 
 % store the output values
 [~,j]           = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
