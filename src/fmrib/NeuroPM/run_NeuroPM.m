@@ -5,6 +5,7 @@
 % loads data (main feature matrix) and labels (bp_group)
 ukb_data = readtable('io/ukb_num_norm_ft_select.csv');
 labels   = readtable('io/labels_select.csv');
+loc      = readtable('io/loc.csv');
 
 % extract parts of dataframe to array
 data     = table2array(ukb_data);
@@ -28,6 +29,10 @@ classes_for_colours(ind_target)     = 3;
 %% adjust for covariates
 %cov = table2array(readtable('io/cov.csv'));
 %data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
+
+%% data harmonization
+loc = table2array(loc(:, 'loc_var'));
+data = combat(data, loc, [], 1);
 
 %% feature selection
 %[selected_features, ratio_sigma2_s2, sigma2_g, S2_g] = select_features(data, 1, 0.5);

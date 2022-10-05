@@ -69,10 +69,12 @@ print("Distribution of Patients Per Group")
 print(table(ukb_df$bp_group))
 
 # remove columns which contain the same value (extremely low variance)
-# data harmonization across different sites
 ukb_df = return_remove_single_value_columns(data = ukb_df)
-#ukb_df[, 5:ncol(ukb_df)] = return_data_harmonized(data = ukb_df[, 5:ncol(ukb_df)],
-#                                                  data_group = c("54-0.0","54-2.0"))
+
+# write to output (imaging centres)
+loc_var = "54-2.0"
+loc = data.frame(loc_var = ukb_df[, loc_var])
+fwrite(loc, "NeuroPM/io/loc.csv")
 
 # mean and standard deviation normalization for all feature columns (from 5th)
 ukb_df[, 5:ncol(ukb_df)] = return_normalize_zscore(data = 
@@ -85,6 +87,10 @@ ukb_df[, 5:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 5:ncol(ukb_df)],
 # impute data
 ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)], 
                                                method = "median")
+
+# write to output (covariates)
+#cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
+#fwrite(cov, "NeuroPM/io/cov.csv")
 
 # remove columns which we dont want influence the model
 ukb_df = edit_ukb_columns(ukb_df, 
@@ -117,6 +123,3 @@ print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
 write.csv(ukb_df[, 1:4], "NeuroPM/io/labels.csv", row.names = FALSE)
 fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
 
-# write to output (covariates)
-#cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
-#fwrite(cov, "NeuroPM/io/cov.csv")

@@ -1,6 +1,5 @@
 # load dependencies
 library(data.table)
-library(ez.combat)
 
 load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   
