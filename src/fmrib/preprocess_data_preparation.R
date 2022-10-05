@@ -70,7 +70,7 @@ print(table(ukb_df$bp_group))
 
 # remove columns which contain the same value (extremely low variance)
 # data harmonization across different sites
-#ukb_df = return_remove_single_value_columns(data = ukb_df)
+ukb_df = return_remove_single_value_columns(data = ukb_df)
 #ukb_df[, 5:ncol(ukb_df)] = return_data_harmonized(data = ukb_df[, 5:ncol(ukb_df)],
 #                                                  data_group = c("54-0.0","54-2.0"))
 
