@@ -607,7 +607,7 @@ return_data_harmonized = function(data, data_group) {
 
   # use ComBat data harmonization
   # https://cran.r-project.org/web/packages/ez.combat/ez.combat.pdf
-  data = ez.combat(df = data, batch.var = group, use.eb = TRUE)
+  data = ez.combat(df = data, batch.var = group, use.eb = FALSE)
   
   return(data)
   
