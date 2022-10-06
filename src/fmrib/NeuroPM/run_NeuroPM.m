@@ -27,8 +27,8 @@ classes_for_colours(ind_target)     = 3;
 %data = TSR(data);
 
 %% adjust for covariates
-%cov = table2array(readtable('io/cov.csv'));
-%data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
+cov = table2array(readtable('io/cov.csv'));
+data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
 
 %% data harmonization
 loc = table2array(loc(:, 'loc_var'));
