@@ -135,13 +135,13 @@ print(sprintf(paste0("%.0f Significant Columns (cTI + Cor Test) Contributed to "
               sum(var_weights$Node_contributions) * 100))
 print(sprintf(paste0("Number of Variables with Statistically Significant ",
                      "Correlations (p < 0.05) is %0.f"),
-              sum(var_weights$pvals < 0.05)))
+              sum(var_weights$pvals < 0.05, na.rm = TRUE)))
 print(sprintf(paste0("Number of Variables with Statistically Significant ",
                      "Correlations (p < 0.001) is %0.f"),
-              sum(var_weights$pvals < 0.001)))
+              sum(var_weights$pvals < 0.001, na.rm = TRUE)))
 print(sprintf(paste0("Number of Variables with Statistically Significant ",
                      "Correlations (p < 0.0001) is %0.f"),
-              sum(var_weights$pvals < 0.0001)))
+              sum(var_weights$pvals < 0.0001, na.rm = TRUE)))
 
 # subset ukb_num dataframe to obtain only highest correlated variables
 ukb_df = ukb_df[, var_weights$Var1]
