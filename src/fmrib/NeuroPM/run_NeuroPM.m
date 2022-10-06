@@ -1,10 +1,11 @@
 %% add paths (not for compile version)
-%addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\");
+%addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\","cTI-codes\data_harmonization\");
 
 %% read data
 % loads data (main feature matrix) and labels (bp_group)
 ukb_data = readtable('io/ukb_num_norm_ft_select.csv');
 labels   = readtable('io/labels_select.csv');
+loc      = readtable('io/loc.csv');
 
 % extract parts of dataframe to array
 data     = table2array(ukb_data);
@@ -26,8 +27,13 @@ classes_for_colours(ind_target)     = 3;
 %data = TSR(data);
 
 %% adjust for covariates
-%cov = table2array(readtable('io/cov.csv'));
-%data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
+cov = table2array(readtable('io/cov.csv'));
+data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
+
+%% data harmonization
+loc = table2array(loc(:, 'loc_var'));
+data = combat(data', loc, [], 1);
+data = data';
 
 %% feature selection
 %[selected_features, ratio_sigma2_s2, sigma2_g, S2_g] = select_features(data, 1, 0.5);
@@ -36,7 +42,7 @@ classes_for_colours(ind_target)     = 3;
 
 %% call function
 [global_ordering, global_pseudotimes, mappedX, contrasted_data, Node_contributions, Expected_contribution] = ...
-                        pseudotimes_cTI_v4(data, ind_background, classes_for_colours, ind_target, 'cPCA', 25);
+                        pseudotimes_cTI_v4(data, ind_background, classes_for_colours, ind_target, 'cPCA', 50);
 
 %% convert outputs to dataframes
 % store cTI outputs

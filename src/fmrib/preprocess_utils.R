@@ -70,6 +70,9 @@ get_ukb_subset_column_names = function(df, df_vars,
                   paste0("^", paste0(stratavars, collapse="-|^"), "-"), 
                   names(df), 
                   value=TRUE)
+
+  # Centre location
+  loc_var = c("54-0.0", "54-1.0", "54-2.0", "54-3.0")
   
   # Demographic
   Sex = "31-0.0"
@@ -234,14 +237,14 @@ get_ukb_subset_column_names = function(df, df_vars,
   bb_blood_vars = bb_blood_vars[!bb_blood_vars %in% excl]
   
   # Combine variables together
-  vars = c("eid", "12187-2.0", Age, Sex, StudyDate, Event,bp_var,med_bp,
+  vars = c("eid", "12187-2.0", Age, Sex, StudyDate, Event,bp_var,med_bp,loc_var,
            bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
            bb_art_vars,bb_blood_vars,bb_car_vars, bb_spir_vars,
            bb_ecgrest_vars,bb_dis_vars,bb_med_vars) # bb_antro_vars
   vars = vars[!vars %in% c(bulkvars, stratavars)]
   
   vars_2 = c(grep("\\-2.0",
-                      c(Age, StudyDate,Event,bp_var,med_bp,
+                      c(Age, Sex, StudyDate,Event,bp_var,med_bp,loc_var,
                         bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
                         bb_art_vars,bb_blood_vars,bb_car_vars,
                         bb_ecgrest_vars), # bb_antro_vars
@@ -256,7 +259,7 @@ get_ukb_subset_column_names = function(df, df_vars,
     
     # all
     vars_subset_cols = vars_2[vars_2 %in% c(
-                                  bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,
+                                  bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,loc_var,
                                   bb_AMR_vars,
                                   bb_bodycomp_vars,bb_art_vars,
                                   bb_car_vars,bb_blood_vars,bb_spir_vars,
@@ -284,10 +287,33 @@ get_ukb_subset_column_names = function(df, df_vars,
     warning("Wrong Subset Option Error")
   }
   
+  # write variable groups to output by arranging by group and writing to csv
+  vars = c(bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,bb_art_vars,
+           bb_car_vars,bb_blood_vars,bb_spir_vars,bb_ecgrest_vars,
+           bp_var,med_bp,Sex,Age,Event)
+  vars = paste0("X", gsub("-", "\\.", vars))
+  var_groups = c(rep("Cardiac_MR",         length(bb_CMR_vars)),
+                 rep("Brain_MR",           length(bb_BMR_vars)),
+                 rep("Abdominal_MR",       length(bb_AMR_vars)),
+                 rep("Body_Composition",   length(bb_bodycomp_vars)),
+                 rep("Arterial_Stiffness", length(bb_art_vars)),
+                 rep("Carotid_Ultrasound", length(bb_car_vars)),
+                 rep("Blood",              length(bb_blood_vars)),
+                 rep("Spirometry",         length(bb_spir_vars)),
+                 rep("ECG",                length(bb_ecgrest_vars)),
+                 rep("Blood_Pressure",     length(bp_var)),
+                 rep("Medication",         length(med_bp)),
+                 rep("Sex",                length(Sex)),
+                 rep("Age",                length(Age)),
+                 rep("Event",              length(Event))
+                 )
+  
+  var_output = data.frame(ukb_var = vars, var_group = var_groups)
+  
   # add back useful columns involving blood pressure
   vars_subset_cols = c("Record.Id","BPSys-2.0","BPDia-2.0",vars_subset_cols)
                          
-  return(vars_subset_cols)
+  return(list(vars = vars_subset_cols, var_df = var_output))
   
 }
 
@@ -545,6 +571,47 @@ return_ukb_target_background_labels = function(df_subset,
   
 }
 
+return_remove_single_value_columns = function(data) {
+  
+  # this function removes columns which have only 1 value (no variation)
+
+  # find which columns have all singular (non-unique) values for all samples
+  keep_cols = apply(data, 2, function(c)
+                                  length(unname(table(c[!is.na(c)]))) > 1)
+  
+  # subset data with columns that do indeed have different values for samples
+  keep_cols = which(unname(keep_cols))
+  data = data[, keep_cols]
+  
+  return(data)
+  
+}
+
+return_data_harmonized = function(data, data_group) {
+  
+  # given a dataframe and group, perform data harmonization using the ComBat
+  # method to harmonize and standardize the different groups
+  
+  # extract the columns in the data belong to the group
+  group = data[, data_group[data_group %in% colnames(data)]]
+  
+  # take the right most column (for now)
+  group = group[, ncol(group)]
+  
+  # convert to categorical
+  group = as.factor(group)
+  
+  # remove the group from data if not already
+  data = data[, !(colnames(data) %in% data_group)]
+
+  # use ComBat data harmonization
+  # https://cran.r-project.org/web/packages/ez.combat/ez.combat.pdf
+  data = ez.combat(df = data, batch.var = group, use.eb = FALSE)
+  
+  return(data)
+  
+}
+
 return_normalize_zscore = function(data) {
   
   # given a matrix of numbers perform mean and standard deviation normalization
@@ -561,36 +628,6 @@ return_normalize_zscore = function(data) {
 
   return(data)
   
-}
-
-return_low_variance_columns = function(data, ignore_cols = c()) {
-
-  # this function removes columns which have only 1 value
-
-  # only perform cleaning on numeric columns
-  if (length(ignore_cols) > 0) {
-    
-    # assign numeric columns only to new temp dataframe
-    temp = data[, -ignore_cols]
-
-    # find which columns have all uniue values
-    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.1)
-
-    # reassign via column concatenation, moving character columns to the front
-    data = cbind(data[, ignore_cols], temp[, which(!unname(low_var_cols))])
-
-  } else {
-
-    # find which columns have all uniue values
-    low_var_cols = apply(temp, 2, function(x) var(x, na.rm=TRUE) < 0.1)
-
-    # remove low variance columns
-    data = data[, which(!unname(low_var_cols))]
-
-  }
-
-  return(data)
-
 }
 
 return_remove_large_zscores = function(data, sd_threshold) {

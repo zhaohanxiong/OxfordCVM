@@ -3,11 +3,8 @@
 # activate conda environment (need conda for fmrib) for Python/R Libraries
 source activate env_conda
 
-# preprocess entire UKB data set to subset into smaller data frame (very long runtime)
-cd ./fmrib
-#Rscript ukb_whole_data_subset.R
-
 # run R preprocessing script, writes to NeuroPM/io directory
+cd ./fmrib
 Rscript preprocess_data_preparation.R
 Rscript preprocess_feature_selection.R
 
