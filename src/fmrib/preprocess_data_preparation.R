@@ -89,8 +89,8 @@ ukb_df[, 5:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 5:ncol(ukb_df)],
                                                method = "median")
 
 # write to output (covariates)
-#cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
-#fwrite(cov, "NeuroPM/io/cov.csv")
+cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
+fwrite(cov, "NeuroPM/io/cov.csv")
 
 # remove columns which we dont want influence the model
 ukb_df = edit_ukb_columns(ukb_df, 
