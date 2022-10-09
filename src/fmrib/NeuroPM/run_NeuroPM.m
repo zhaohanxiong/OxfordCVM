@@ -26,19 +26,27 @@ classes_for_colours(ind_target)     = 3;
 %data(ismissing(data)) = nan;
 %data = TSR(data);
 
-%% adjust for covariates
-cov = table2array(readtable('io/cov.csv'));
-data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
-
-%% data harmonization
-loc = table2array(loc(:, 'loc_var'));
-data = combat(data', loc, [], 1);
-data = data';
-
 %% feature selection
 %[selected_features, ratio_sigma2_s2, sigma2_g, S2_g] = select_features(data, 1, 0.5);
 %data = data(:, selected_features);
 %disp(['Reduced Data To ' num2str(size(data,2)) ' Features'])
+
+%% adjust for covariates
+try
+    cov = table2array(readtable('io/cov.csv'));
+    data = removing_covariable_effects(data, cov, ind_background, 1:size(cov,2));
+catch
+    warning("No Covariate Adjustment Performed");
+end
+
+%% data harmonization
+try
+    loc = table2array(loc(:, 'loc_var'));
+    data = combat(data', loc, [], 1);
+    data = data';
+catch
+    warning("No Data Harmonization Performed");
+end
 
 %% call function
 [global_ordering, global_pseudotimes, mappedX, contrasted_data, Node_contributions, Expected_contribution] = ...
