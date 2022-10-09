@@ -19,9 +19,3 @@ nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 cd ..
 Rscript postprocess_files.R
 Rscript postprocess_eval_model.R
-
-# run python trajectory visualization/computation
-python postprocess_traj.py
-
-# generate ggplots for key results
-Rscript postprocess_ggplots.R
