@@ -10,7 +10,7 @@ Rscript preprocess_feature_selection.R
 
 # compile matlab script (only if there were code changes)
 cd ./NeuroPM
-./compile_NeuroPM.sh
+#./compile_NeuroPM.sh
 
 # execute the compiled matlab program
 nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
