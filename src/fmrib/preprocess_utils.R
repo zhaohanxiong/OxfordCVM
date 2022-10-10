@@ -724,7 +724,7 @@ return_covariates = function(data, covariates) {
   # this function returns the covariate columns of the dataset provided
   
   # extract columns defined as covariates
-  data = data[, covariates]
+  data = data[, covariates[covariates %in% colnames(data)]]
   
   return(data)
   
