@@ -258,12 +258,11 @@ get_ukb_subset_column_names = function(df, df_vars,
   if (subset_option == "all") {
     
     # all
-    vars_subset_cols = vars_2[vars_2 %in% c(
-                                  bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,loc_var,
-                                  bb_AMR_vars,
-                                  bb_bodycomp_vars,bb_art_vars,
-                                  bb_car_vars,bb_blood_vars,bb_spir_vars,
-                                  bb_ecgrest_vars,Sex,Age,Event)]
+    vars_subset_cols = c(bp_var,med_bp,loc_var,Sex,Age,Event,
+                         bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_car_vars,
+                         bb_bodycomp_vars,bb_art_vars,bb_blood_vars,
+                         bb_spir_vars,bb_ecgrest_vars,
+                         bb_dis_vars)
     
   } else if (subset_option == "cardiac") {
     
