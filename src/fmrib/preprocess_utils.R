@@ -234,25 +234,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   excl = grep("^30505-|^30515-|^30525-|^30535-", bb_blood_vars, value=TRUE)
   bb_blood_vars = bb_blood_vars[!bb_blood_vars %in% excl]
   
-  # Combine variables together
-  vars = c("eid", "12187-2.0", Age, Sex, StudyDate, Event,bp_var,med_bp,loc_var,
-           bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
-           bb_art_vars,bb_blood_vars,bb_car_vars, bb_spir_vars,
-           bb_ecgrest_vars,bb_dis_vars,bb_med_vars) # bb_antro_vars
-  vars = vars[!vars %in% c(bulkvars, stratavars)]
-  
-  vars_2 = c(grep("\\-2.0",
-                      c(Age, Sex, StudyDate,Event,bp_var,med_bp,loc_var,
-                        bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
-                        bb_art_vars,bb_blood_vars,bb_car_vars,
-                        bb_ecgrest_vars), # bb_antro_vars
-                  value=TRUE),
-             grep("\\-2.", bb_CMR_vars, value=TRUE),
-             bb_spir_vars, bb_dis_vars, bb_med_vars)
-  vars_2 = vars[!vars_2 %in% c(bulkvars, stratavars)]
-  
-  # takes column names from the ukb and further subset depending 
-  # on input option
+  # Combine variables together based on input option
   if (subset_option == "all") {
     
     # all
@@ -264,20 +246,19 @@ get_ukb_subset_column_names = function(df, df_vars,
   } else if (subset_option == "cardiac") {
     
     # cardiac
-    vars_subset_cols = vars_2[vars_2 %in% c(bp_var,med_bp,Sex,Age,Event,
-                                    bb_CMR_vars,bb_art_vars,bb_car_vars)]
+    vars_subset_cols = c(bp_var,med_bp,Sex,Age,Event,
+                         bb_CMR_vars,bb_art_vars,bb_car_vars)
     
   } else if (subset_option == "brain") {
     
     # brain
-    vars_subset_cols = vars_2[vars_2 %in% c(bb_BMR_vars,
-                                            bp_var,med_bp,Sex,Age,Event)]
+    vars_subset_cols = c(bb_BMR_vars,bp_var,med_bp,Sex,Age,Event)
     
   } else if (subset_option == "cardiac + brain + carotid ultrasound") {
     
     # cardiac + brain + carotid ultrasound
-    vars_subset_cols = vars_2[vars_2 %in% c(bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,
-                                            bb_art_vars,bb_car_vars,Sex,Age,Event)]
+    vars_subset_cols = c(bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,
+                         bb_art_vars,bb_car_vars,Sex,Age,Event)
     
   } else {
     warning("Wrong Subset Option Error")
