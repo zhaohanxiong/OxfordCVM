@@ -191,8 +191,6 @@ get_ukb_subset_column_names = function(df, df_vars,
   excl = grep("^4186-|^2404-|^2405-", bb_art_vars, value=TRUE)
   bb_art_vars = bb_art_vars[!bb_art_vars %in% excl]
   bb_art_vars = bb_art_vars[!bb_art_vars %in% bulkvars]
-  bb_art_vars = c() # set to empty as current ukb data does not have 
-                    # these columns
   
   # carotid ultrasound variables
   bb_car_vars = df_vars$FieldID[df_vars$Category==101]
