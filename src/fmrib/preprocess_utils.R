@@ -76,7 +76,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   
   # Demographic
   Sex = "31-0.0"
-  Age = grep("^21003-", names(df), value=TRUE)
+  Age = grep("21003-2", names(df), value=TRUE)
   
   # blood pressure variables (in addition)
   #bp_var1 = grep("12674", names(df), value=TRUE) # systolic brachial PWA
@@ -411,6 +411,10 @@ return_collate_variables = function(df) {
 
   df$events = apply(df_6150, 1, function(x) get_latest_val(x))
   
+  # remove columns which were used for collation
+  df = df[, !grepl(paste0("12674|12677|12697|^93-|4080|",
+                          "12675|12698|^94-|4079|6153|6177|6150"), colnames(df))]
+
   return(df)
   
 }
