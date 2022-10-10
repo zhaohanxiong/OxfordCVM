@@ -5,7 +5,6 @@
 % loads data (main feature matrix) and labels (bp_group)
 ukb_data = readtable('io/ukb_num_norm_ft_select.csv');
 labels   = readtable('io/labels_select.csv');
-loc      = readtable('io/loc.csv');
 
 % extract parts of dataframe to array
 data     = table2array(ukb_data);
@@ -41,6 +40,7 @@ end
 
 %% data harmonization
 try
+    loc = readtable('io/loc.csv');
     loc = table2array(loc(:, 'loc_var'));
     data = combat(data', loc, [], 1);
     data = data';
