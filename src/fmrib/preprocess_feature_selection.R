@@ -25,10 +25,10 @@ cov_all = cov(ft_norm)
 # identify which features contribute to high covariance
 
 # identify which features to keep
-keep_ft = rep(TRUE, ncol(ft_norm))
+keep_cols = rep(TRUE, ncol(ft_norm))
 
 # keep low covariance ones in the patient feature set
-ft_norm = ft_norm[, keep_ft]
+ft_norm = ft_norm[, keep_cols]
 # *** TO DO ***
 
 # shuffle labels for experimentation
@@ -36,9 +36,10 @@ ft_norm = ft_norm[, keep_ft]
 
 # only keep subset of background/disease for experimentation
 if (FALSE) {
-    ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:1000, ],
+    n_sample = 1000
+    ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:n_sample, ],
                     ft_norm[labels$bp_group != 1, ])
-    labels = rbind(labels[labels$bp_group == 1, ][1:1000, ],
+    labels = rbind(labels[labels$bp_group == 1, ][1:n_sample, ],
                 labels[labels$bp_group != 1, ])
 }
 
