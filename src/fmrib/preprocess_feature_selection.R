@@ -10,19 +10,20 @@ ind_rand = sample(1:nrow(labels), nrow(labels))
 ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
 
-# compute covariance and preprocess
-cov_all = cov(ft_norm)
-
-# remove high correlation variables
+# remove high co-correlation variables
+#cov_all = cov(ft_norm)
 #cov_all[upper.tri(cov_all)] = 0
 #diag(cov_all) = 0
 #ind_filter = !unname(apply(cov_all, 1, function(x) any(abs(x) > 1.0)))
 #ft_norm = ft_norm[, ind_filter]
 
-# *** TO DO ***
-# compute covariance of background population only (bp_group = 1)
+# compute covariance of background/disease population only
+cov_background = cov(ft_norm[labels$bp_group == 1, ])
+cov_disease = cov(ft_norm[labels$bp_group == 2, ])
 
+# *** TO DO ***
 # identify which features contribute to high covariance
+# note that cPCA: cov = cov_d - a * cov_b
 
 # identify which features to keep
 keep_cols = rep(TRUE, ncol(ft_norm))
@@ -36,7 +37,7 @@ ft_norm = ft_norm[, keep_cols]
 
 # only keep subset of background/disease for experimentation
 if (FALSE) {
-    n_sample = 1000
+    n_sample = 750
     ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:n_sample, ],
                     ft_norm[labels$bp_group != 1, ])
     labels = rbind(labels[labels$bp_group == 1, ][1:n_sample, ],
