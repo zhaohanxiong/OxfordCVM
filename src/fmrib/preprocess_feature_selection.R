@@ -21,9 +21,15 @@ labels = labels[ind_rand, ]
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
 cov_disease = cov(ft_norm[labels$bp_group == 2, ])
 
+# covariance of a subset of background patients (75)
+cov_background_subset = cov(ft_norm[sample(which(labels$bp_group == 1), 750), ])
+
 # *** TO DO ***
 # identify which features contribute to high covariance
 # note that cPCA: cov = cov_d - a * cov_b
+
+# what is the difference between cov_background and cov_background_subset
+# which makes the cPCA worse when we add more background patients
 
 # identify which features to keep
 keep_cols = rep(TRUE, ncol(ft_norm))
