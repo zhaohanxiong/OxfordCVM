@@ -235,7 +235,13 @@ get_ukb_subset_column_names = function(df, df_vars,
   bb_blood_vars = bb_blood_vars[!bb_blood_vars %in% excl]
   
   # Combine variables together based on input option
-  if (subset_option == "all") {
+  if (subset_option == "custom") {
+
+    vars_subset_cols = c(bp_var,med_bp,loc_var,Sex,Age,Event,
+                         bb_CMR_vars,bb_BMR_vars,
+                         bb_bodycomp_vars,bb_blood_vars)
+
+  } else if (subset_option == "all") {
     
     # all
     vars_subset_cols = c(bp_var,med_bp,loc_var,Sex,Age,Event,
