@@ -17,5 +17,4 @@ nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
 
 # run post-processing file organization/evaluation
 cd ..
-Rscript postprocess_files.R
 Rscript postprocess_eval_model.R
