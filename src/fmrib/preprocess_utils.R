@@ -128,7 +128,7 @@ get_ukb_subset_column_names = function(df, df_vars,
                     value=TRUE)
   
   # brain MR variables
-  bb_BMR_vars = df_vars$FieldID[df_vars$Category==110 |
+  bb_BMR_vars = df_vars$FieldID[#df_vars$Category==110 |
                                   df_vars$Category==112 |
                                   df_vars$Category==1102 |
                                   df_vars$Category==109 |
