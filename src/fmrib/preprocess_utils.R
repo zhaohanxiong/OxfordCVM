@@ -226,8 +226,8 @@ get_ukb_subset_column_names = function(df, df_vars,
   
   # percentages of blood are coded with tens, the other variables
   # refer to the methods of sample analysis
-  bb_blood_vars = df_vars$FieldID[df_vars$Category==100081 | # 30
-                                    df_vars$Category==17518 #| # 28
+  bb_blood_vars = df_vars$FieldID[df_vars$Category==100081 | # 30 features
+                                    df_vars$Category==17518 #| # 28 features
                                     #df_vars$Category==100083]
                                  ]
   bb_blood_vars = grep(
