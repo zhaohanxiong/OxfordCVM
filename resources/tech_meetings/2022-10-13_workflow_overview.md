@@ -1,21 +1,21 @@
 ### Current workflow overview
-- Located in src/run_UKB_cTI_subset.sh (subset of complete workflow)
+- Located in ```src/run_UKB_cTI_subset.sh``` (subset of complete workflow)
 - Basic commands:
-	- Rscript my_r_code.R (run R code)
-	- matlab my_matlab_code.m (run matlab code)
-	- python my_python_code.py (run python code)
-	- "cd" command for directory navigation
+	- ```Rscript my_r_code.R``` (run R code)
+	- ```matlab my_matlab_code.m``` (run matlab code)
+	- ```python my_python_code.py``` (run python code)
+	- ```cd``` command for directory navigation
 - How to navigate/find the code themselves
-	- all files ran by current workflow is located in /src/fmrib
+	- all files ran by current workflow is located in ```/src/fmrib```
 - The workflow should work automatically
 	- runs all scripts continuously one after the other
 	- each file produces an output which is read in by the next file
 	- the idea is that the workflow is set up to run automatically from start to finish
 - Matlab code is currently compiled then ran, so extra commands are used
-	- the file compile.sh shows how the compilation is performed
+	- the file ```compile.sh``` shows how the compilation is performed
 	- an executable is then generated representing the "compiled version"
 	- a command is then used to run this compiled matlab code
-	- this command can be seen in the .sh file
+	- this command can be seen in the ```.sh``` file
 
 ### Libraries and dependencies (readme located in /src/fmrib)
 - R version and libraries
@@ -32,10 +32,10 @@
 	- we use conda for installing python and R packages used in our workflow
 
 ### Best Coding Practices (using R as example)
-- commenting
-- function headers
-- readability (limit commands per line of code)
-- "column" code structure, not too many characters per line
+- commenting every line or every few lines
+- function headers should have clear descript of function inputs/outputs
+- readability (limit commands per line of code), dont nest functions too much
+- "column" code structure, not too many characters per line, allows viewing of multiple files easier
 - arranging logic of code
 	- each file should have a level of detail
 	- the main file should have an overview of main steps
@@ -64,17 +64,20 @@
 - any new code should be written in open source languages
 
 ### Workflow details for matlab component which is the NeuroPM cTI implementation
+- preprocessing:
+	- ```preprocess_data_preparation.R``` and ```preprocess_feature_selection.R``` using functions is ```preproces_utils.R```
+	- this code is very customized so your code will most likely be different
 - cTI - matlab code inputs:
-	- run_NeuroPM.m (/src/fmrib/NeuroPM)
-	- csv file for patients and features (N by M matrix, N = number of patients, M = number of features)
-	- csv file for labels (N by 1, N = number of patients, 1 = single column representing group of patient)
-	- current label file uses the column name "bp_group" for the grouping of patients
+	- ```run_NeuroPM.m``` (/src/fmrib/NeuroPM)
+	- ```csv``` file for patients and features (N by M matrix, N = number of patients, M = number of features)
+	- ```csv``` file for labels (N by 1, N = number of patients, 1 = single column representing group of patient)
+	- current label file uses the column name ```bp_group``` for the grouping of patients
 	- optional inputs for covariate adjustment and data harmonization
 - hypertension modelling - matlab code outputs
-	- csv file of labels + additional column containing pseudotime score for each patient
-	- weightings of each variable (M features) outputted
-	- threshold value for the variable weightings
+	- ```csv``` file of labels + additional column containing pseudotime score for each patient
+	- ```csv``` file of weightings of each variable (M features) outputted
+	- ```csv``` file for threshold value for the variable weightings
 - postprocessing evaluation code
-	- postproces_evaluation.R (/src/fmrib)
+	- ```postproces_evaluation.R``` (/src/fmrib)
 	- processes the file containing the pseudotime score to perform evaluation
 	- file also produces some visualization as well
