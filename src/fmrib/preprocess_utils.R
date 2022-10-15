@@ -44,7 +44,7 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
 get_ukb_subset_column_names = function(df, df_vars,
                                        subset_option="all") {
   
-  # Code written by Winok
+  # Variable extraction key values compied by Winok
   # This function uses the ukb patient spreadsheet and 
   # extracts the columns needed for further analysis, we then subset
   # these variables depending on the subset_option (all, cardiac, brain,

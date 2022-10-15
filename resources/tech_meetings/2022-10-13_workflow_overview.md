@@ -63,7 +63,7 @@
 - we should only use closed source tools if we are given them
 - any new code should be written in open source languages
 
-# Workflow details for matlab component which is the NeuroPM cTI implementation
+### Workflow details for matlab component which is the NeuroPM cTI implementation
 - cTI - matlab code inputs:
 	- run_NeuroPM.m (/src/fmrib/NeuroPM)
 	- csv file for patients and features (N by M matrix, N = number of patients, M = number of features)
