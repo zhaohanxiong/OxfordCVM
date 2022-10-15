@@ -17,10 +17,11 @@
 	- a command is then used to run this compiled matlab code
 	- this command can be seen in the ```.sh``` file
 
-### Libraries and dependencies (readme located in /src/fmrib)
-- R version and libraries
-- Matlab version and libraries
-- Python version and libraries
+### Libraries and dependencies
+- Complete list is located in the readme in ```/src/fmrib```
+	- R version and libraries
+	- Matlab version and libraries
+	- Python version and libraries
 - Virtual environment (conda)
 	- virtual environments are isolated development environments
 	- allows you to install packages/software in an isolated part of your computer
@@ -68,7 +69,7 @@
 	- ```preprocess_data_preparation.R``` and ```preprocess_feature_selection.R``` using functions is ```preproces_utils.R```
 	- this code is very customized so your code will most likely be different
 - cTI - matlab code inputs:
-	- ```run_NeuroPM.m``` (/src/fmrib/NeuroPM)
+	- ```run_NeuroPM.m``` (```/src/fmrib/NeuroPM```)
 	- ```csv``` file for patients and features (N by M matrix, N = number of patients, M = number of features)
 	- this is currently named ```ukb_num_norm_ft_select.csv```
 	- ```csv``` file for labels (N by 1, N = number of patients, 1 = single column representing group of patient)
@@ -78,10 +79,10 @@
 	- when using your own data, make sure to change this column name, as well as the label you are using to label ur patients ```0 = between, 1 = background, 2 = disease```
 	- optional inputs for covariate adjustment and data harmonization, these are masked out using ```try``` and ```catch``` so code still runs if you dont have these files
 - hypertension modelling - matlab code outputs:
-	- ```csv``` file of labels + additional column containing pseudotime score for each patient, with the column name ```global_pseudotimes```
-	- ```csv``` file of weightings of each variable (M features) outputted
-	- ```csv``` file for threshold value for the variable weightings
+	- output is ```pseudotimes.csv``` file of labels + additional column containing pseudotime score for each patient, with the column name ```global_pseudotimes```
+	- ```var_weightings.csv``` file of weightings of each variable (M features) outputted
+	- ```threshold_weighting.csv``` file for threshold value for the variable weightings
 - postprocessing evaluation code:
-	- ```postproces_evaluation.R``` (/src/fmrib)
+	- ```postproces_evaluation.R``` (```/src/fmrib```)
 	- processes the file containing the pseudotime score to perform evaluation
 	- file also produces some visualization as well
