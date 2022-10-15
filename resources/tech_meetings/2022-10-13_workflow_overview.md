@@ -36,7 +36,7 @@
 - function headers should have clear descript of function inputs/outputs
 - readability (limit commands per line of code), dont nest functions too much
 - "column" code structure, not too many characters per line, allows viewing of multiple files easier
-- arranging logic of code
+- arranging logic of code:
 	- each file should have a level of detail
 	- the main file should have an overview of main steps
 	- subsequent files should then contain the detailed functions used by the main file
@@ -70,14 +70,18 @@
 - cTI - matlab code inputs:
 	- ```run_NeuroPM.m``` (/src/fmrib/NeuroPM)
 	- ```csv``` file for patients and features (N by M matrix, N = number of patients, M = number of features)
+	- this is currently named ```ukb_num_norm_ft_select.csv```
 	- ```csv``` file for labels (N by 1, N = number of patients, 1 = single column representing group of patient)
+	- this is currently named ```labels_ft_select.csv```
 	- current label file uses the column name ```bp_group``` for the grouping of patients
-	- optional inputs for covariate adjustment and data harmonization
-- hypertension modelling - matlab code outputs
-	- ```csv``` file of labels + additional column containing pseudotime score for each patient
+	- each patient is assigned a number ```0 or 1 or 2``` for their group
+	- when using your own data, make sure to change this column name, as well as the label you are using to label ur patients ```0 = between, 1 = background, 2 = disease```
+	- optional inputs for covariate adjustment and data harmonization, these are masked out using ```try``` and ```catch``` so code still runs if you dont have these files
+- hypertension modelling - matlab code outputs:
+	- ```csv``` file of labels + additional column containing pseudotime score for each patient, with the column name ```global_pseudotimes```
 	- ```csv``` file of weightings of each variable (M features) outputted
 	- ```csv``` file for threshold value for the variable weightings
-- postprocessing evaluation code
+- postprocessing evaluation code:
 	- ```postproces_evaluation.R``` (/src/fmrib)
 	- processes the file containing the pseudotime score to perform evaluation
 	- file also produces some visualization as well
