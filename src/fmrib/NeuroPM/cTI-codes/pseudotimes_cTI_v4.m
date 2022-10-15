@@ -1,4 +1,4 @@
-function [keep_indices,global_pseudotimes,mappedX,contrasted_data,Node_contributions,Expected_contribution] = pseudotimes_cTI_v4(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
+function [global_ordering,global_pseudotimes,mappedX,contrasted_data,Node_contributions,Expected_contribution] = pseudotimes_cTI_v4(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
 
 %-- INPUTS:
 %     data: [Nsubjects, Nfeatures] data matrix.
@@ -9,8 +9,6 @@ function [keep_indices,global_pseudotimes,mappedX,contrasted_data,Node_contribut
 %         whole population, e.g. subjects a advanced disease pathology). By
 %     default, the algorithm takes all the subjects that don't belong to the
 %         background.
-%     method: 'cPCA', 'PCA' or 'UMAP'. Notice that the original cTI method uses
-%         cPCA by definition, PCA and UMAP should be considered only for comparison analyses.
 %     max_cPCs (optional): maximum number of principal components to consider.
 %     Default: 10.
 %
@@ -33,12 +31,8 @@ final_subjects = final_subjects(:);
 n_alphas = 100;
 alphas_all = logspace(-2, 2, n_alphas);
 
-% define original indices to remove patients from
-ind_remove_mask = zeros(size(data, 1), 1);
-
-% define counters/storage arrays
-is_accurate = false; % is current model accurate
-prev_alpha  = 50;    % initialze alpha
+% % initialze alpha midpoint for reduced computatation
+prev_alpha  = 50;  
 
 % define alphas, make sure range is always within range provided
 n_points   = 5;
@@ -100,6 +94,7 @@ global_pseudotimes(in_background_target, 1) = datas.A/max_distance;
 temp_dist = dist_matrix0(out_background_target, in_background_target);
 [~, j] = min(temp_dist,[],2);
 global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_target(j), 1);
+[~,global_ordering] = sort(global_pseudotimes);
 
 % evaluate current model efficacy
 Q1_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.25);
@@ -114,7 +109,6 @@ Q3_background = quantile(global_pseudotimes(classes_for_colours == 1), 0.75);
 condition_1 = lower_disease > Q3_background; % minimal overlap for background and disease
 condition_2 = Q1_disease > Q2_between;       % no overlap for IQR of disease and between
 condition_3 = Q1_between > Q3_background;    % no overlap for IQR of between and background
-is_accurate = condition_1 && condition_2 && condition_3;
 
 % convert MST from adjacency matrix into graph object
 MST_graph = graph(MST);
@@ -148,8 +142,5 @@ save('io/PC_Transform.mat','Node_Weights'); % eigen matrix to perform transforma
 save('io/dijkstra.mat','dijkstra_F'); % dijkstra father nodes of every node for computing trajectories
 save('io/MST.mat','MST'); % save minimum spanning tree individually
 %save('io/all.mat'); % save all variables to workspace to study intermediary values
-
-% re-use useless variable global_ordering to output indices to keep 
-keep_indices = find(ind_remove_mask == 0);
 
 return;

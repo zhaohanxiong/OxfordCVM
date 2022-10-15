@@ -1,4 +1,4 @@
-%% add paths (not for compile version)
+%% add paths (uncomment if youre not running the compiled mcc matlab version)
 %addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\","cTI-codes\data_harmonization\");
 
 %% read data
@@ -25,7 +25,7 @@ classes_for_colours(ind_target)     = 3;
 %data(ismissing(data)) = nan;
 %data = TSR(data);
 
-%% feature selection
+%% feature selection (dont use as takes very long to run)
 %[selected_features, ratio_sigma2_s2, sigma2_g, S2_g] = select_features(data, 1, 0.5);
 %data = data(:, selected_features);
 %disp(['Reduced Data To ' num2str(size(data,2)) ' Features'])
