@@ -1,16 +1,19 @@
-function [global_ordering,global_pseudotimes,mappedX,contrasted_data,Node_contributions,Expected_contribution] = pseudotimes_cTI_v4(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
+function [global_ordering,global_pseudotimes,mappedX,contrasted_data,Node_contributions,Expected_contribution] = ... 
+                            pseudotimes_cTI_v4(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
 
+% Author: code re-written by Zhaohan Xiong from the version of Yasser Iturria Medina, 
+%     NeuroPM lab, MNI, McGill.
 %-- INPUTS:
 %     data: [Nsubjects, Nfeatures] data matrix.
 %     starting_point: indices of the background subjects.
-%     classes_for_colours(optional): [Nsubjects, 1] subjects categories/labels, if
+%     classes_for_colours: [Nsubjects, 1] subjects categories/labels, if
 %         available, only for results visualization.
-%     final_subjects (optional): you may specify the indices of a target group (a subgroup of the 
+%     final_subjects: you may specify the indices of a target group (a subgroup of the 
 %         whole population, e.g. subjects a advanced disease pathology). By
 %     default, the algorithm takes all the subjects that don't belong to the
 %         background.
-%     max_cPCs (optional): maximum number of principal components to consider.
-%     Default: 10.
+%     method: cPCA or Kernal cPCA
+%     max_cPCs: maximum number of principal components to consider.
 %
 %-- OUTPUTS:
 %     global_ordering: subjects ordering in the pseudotime line.
@@ -43,8 +46,13 @@ mid_point  = min([mid_point, n_alphas - n_points]);
 alphas_all = alphas_all((mid_point - n_points):(mid_point + n_points));
 
 % perform contrastive PCA (using background and disease as priors into PCA)
-[cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = ... 
-              cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_all);
+if strcmp(method, 'cPCA')
+    [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = ... 
+                cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_all);
+elseif strcmp(method, 'Kernel_cPCA')
+    [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = ... 
+                cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_all);
+end
 
 % store the output values
 [~,j]           = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
