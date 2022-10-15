@@ -28,7 +28,7 @@
 	- good practice to set up virtual environments for each different project
 	- allows installation of packages when you dont have permission to on remote servers
 	- conda is a virtual environment manager
-	- source activate name_of_conda_env (to activate our virtual environment)
+	- ```source activate name_of_conda_env``` (to activate our virtual environment)
 	- we use conda for installing python and R packages used in our workflow
 
 ### Best Coding Practices (using R as example)
