@@ -51,7 +51,7 @@ if strcmp(method, 'cPCA')
                 cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_all);
 elseif strcmp(method, 'Kernel_cPCA')
     [cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = ... 
-                cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_all);
+        contrastiveKernelPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_all);
 end
 
 % store the output values
