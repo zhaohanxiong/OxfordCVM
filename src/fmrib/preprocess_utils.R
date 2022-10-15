@@ -44,7 +44,7 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
 get_ukb_subset_column_names = function(df, df_vars,
                                        subset_option="all") {
   
-  # Code written by Winok
+  # Variable extraction key values compied by Winok
   # This function uses the ukb patient spreadsheet and 
   # extracts the columns needed for further analysis, we then subset
   # these variables depending on the subset_option (all, cardiac, brain,
@@ -76,7 +76,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   
   # Demographic
   Sex = "31-0.0"
-  Age = grep("^21003-", names(df), value=TRUE)
+  Age = grep("21003-2", names(df), value=TRUE)
   
   # blood pressure variables (in addition)
   #bp_var1 = grep("12674", names(df), value=TRUE) # systolic brachial PWA
@@ -128,13 +128,14 @@ get_ukb_subset_column_names = function(df, df_vars,
                     value=TRUE)
   
   # brain MR variables
-  bb_BMR_vars = df_vars$FieldID[df_vars$Category==110 |
-                                  df_vars$Category==112 |
-                                  df_vars$Category==1102 |
-                                  df_vars$Category==109 |
-                                  df_vars$Category==134 |
-                                  df_vars$Category==135 |
-                                  df_vars$Category==1101]
+  bb_BMR_vars = df_vars$FieldID[#df_vars$Category==110 |
+                                  #df_vars$Category==112 |
+                                  #df_vars$Category==1102 |
+                                  #df_vars$Category==109 |
+                                  df_vars$Category==134 | # 428 features
+                                  df_vars$Category==135 | # 241 features
+                                  df_vars$Category==1101 # 138 features
+                                ]
   bb_BMR_vars = grep(
                   paste0("^", paste0(bb_BMR_vars, collapse="-|^"), "-"),
                   names(df),
@@ -175,10 +176,11 @@ get_ukb_subset_column_names = function(df, df_vars,
   bb_AMR_vars= bb_AMR_vars[!bb_AMR_vars %in% bulkvars]
   
   # Body composition variables
-  bb_bodycomp_vars = df_vars$FieldID[df_vars$Category==124 |
-                                       df_vars$Category==125 |
-                                       df_vars$Category==100009 |
-                                       df_vars$Category==170]
+  bb_bodycomp_vars = df_vars$FieldID[#df_vars$Category==124 |
+                                       df_vars$Category==125 | # 48 features
+                                       df_vars$Category==100009 #| # 63 features
+                                       #df_vars$Category==170]
+                                    ]
   bb_bodycomp_vars = grep(
                         paste0("^", 
                                paste0(bb_bodycomp_vars, collapse="-|^"), 
@@ -191,8 +193,6 @@ get_ukb_subset_column_names = function(df, df_vars,
   excl = grep("^4186-|^2404-|^2405-", bb_art_vars, value=TRUE)
   bb_art_vars = bb_art_vars[!bb_art_vars %in% excl]
   bb_art_vars = bb_art_vars[!bb_art_vars %in% bulkvars]
-  bb_art_vars = c() # set to empty as current ukb data does not have 
-                    # these columns
   
   # carotid ultrasound variables
   bb_car_vars = df_vars$FieldID[df_vars$Category==101]
@@ -226,9 +226,10 @@ get_ukb_subset_column_names = function(df, df_vars,
   
   # percentages of blood are coded with tens, the other variables
   # refer to the methods of sample analysis
-  bb_blood_vars = df_vars$FieldID[df_vars$Category==100081 |
-                                    df_vars$Category==17518 |
-                                    df_vars$Category==100083]
+  bb_blood_vars = df_vars$FieldID[df_vars$Category==100081 | # 30 features
+                                    df_vars$Category==17518 #| # 28 features
+                                    #df_vars$Category==100083]
+                                 ]
   bb_blood_vars = grep(
                       paste0("^", paste0(bb_blood_vars, collapse="-|^"), "-"),
                       names(df),
@@ -236,52 +237,37 @@ get_ukb_subset_column_names = function(df, df_vars,
   excl = grep("^30505-|^30515-|^30525-|^30535-", bb_blood_vars, value=TRUE)
   bb_blood_vars = bb_blood_vars[!bb_blood_vars %in% excl]
   
-  # Combine variables together
-  vars = c("eid", "12187-2.0", Age, Sex, StudyDate, Event,bp_var,med_bp,loc_var,
-           bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
-           bb_art_vars,bb_blood_vars,bb_car_vars, bb_spir_vars,
-           bb_ecgrest_vars,bb_dis_vars,bb_med_vars) # bb_antro_vars
-  vars = vars[!vars %in% c(bulkvars, stratavars)]
-  
-  vars_2 = c(grep("\\-2.0",
-                      c(Age, Sex, StudyDate,Event,bp_var,med_bp,loc_var,
-                        bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,
-                        bb_art_vars,bb_blood_vars,bb_car_vars,
-                        bb_ecgrest_vars), # bb_antro_vars
-                  value=TRUE),
-             grep("\\-2.", bb_CMR_vars, value=TRUE),
-             bb_spir_vars, bb_dis_vars, bb_med_vars)
-  vars_2 = vars[!vars_2 %in% c(bulkvars, stratavars)]
-  
-  # takes column names from the ukb and further subset depending 
-  # on input option
-  if (subset_option == "all") {
+  # Combine variables together based on input option
+  if (subset_option == "custom") {
+
+    vars_subset_cols = c(bp_var,med_bp,loc_var,Sex,Age,Event,
+                         bb_CMR_vars,bb_BMR_vars,
+                         bb_bodycomp_vars,bb_blood_vars)
+
+  } else if (subset_option == "all") {
     
     # all
-    vars_subset_cols = vars_2[vars_2 %in% c(
-                                  bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,loc_var,
-                                  bb_AMR_vars,
-                                  bb_bodycomp_vars,bb_art_vars,
-                                  bb_car_vars,bb_blood_vars,bb_spir_vars,
-                                  bb_ecgrest_vars,Sex,Age,Event)]
+    vars_subset_cols = c(bp_var,med_bp,loc_var,Sex,Age,Event,
+                         bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_car_vars,
+                         bb_bodycomp_vars,bb_art_vars,bb_blood_vars,
+                         bb_spir_vars,bb_ecgrest_vars)
     
   } else if (subset_option == "cardiac") {
     
     # cardiac
-    vars_subset_cols = vars_2[vars_2 %in% c(bp_var,med_bp,Sex,Age,Event,
-                                    bb_CMR_vars,bb_art_vars,bb_car_vars)]
+    vars_subset_cols = c(bp_var,med_bp,Sex,Age,Event,
+                         bb_CMR_vars,bb_art_vars,bb_car_vars)
     
   } else if (subset_option == "brain") {
     
     # brain
-    vars_subset_cols = vars_2[vars_2 %in% c(bb_BMR_vars,
-                                            bp_var,med_bp,Sex,Age,Event)]
+    vars_subset_cols = c(bb_BMR_vars,bp_var,med_bp,Sex,Age,Event)
     
   } else if (subset_option == "cardiac + brain + carotid ultrasound") {
     
     # cardiac + brain + carotid ultrasound
-    vars_subset_cols = vars_2[vars_2 %in% c(bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,
-                                            bb_art_vars,bb_car_vars,Sex,Age,Event)]
+    vars_subset_cols = c(bb_CMR_vars,bb_BMR_vars,bp_var,med_bp,
+                         bb_art_vars,bb_car_vars,Sex,Age,Event)
     
   } else {
     warning("Wrong Subset Option Error")
@@ -434,6 +420,10 @@ return_collate_variables = function(df) {
 
   df$events = apply(df_6150, 1, function(x) get_latest_val(x))
   
+  # remove columns which were used for collation
+  df = df[, !grepl(paste0("12674|12677|12697|^93-|4080|",
+                          "12675|12698|^94-|4079|6153|6177|6150"), colnames(df))]
+
   return(df)
   
 }
@@ -724,7 +714,7 @@ return_covariates = function(data, covariates) {
   # this function returns the covariate columns of the dataset provided
   
   # extract columns defined as covariates
-  data = data[, covariates]
+  data = data[, covariates[covariates %in% colnames(data)]]
   
   return(data)
   

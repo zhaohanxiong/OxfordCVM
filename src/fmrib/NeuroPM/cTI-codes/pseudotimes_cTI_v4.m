@@ -38,7 +38,7 @@ ind_remove_mask = zeros(size(data, 1), 1);
 
 % define counters/storage arrays
 is_accurate = false; % is current model accurate
-prev_alpha  = 75;    % initialze alpha
+prev_alpha  = 50;    % initialze alpha
 
 % define alphas, make sure range is always within range provided
 n_points   = 5;

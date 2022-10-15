@@ -13,7 +13,7 @@ print(sprintf("Initial Data Frame is of Size %0.0f by %0.0f",
 # extract UKB columns (variables) we want to keep
 ukb_column_output = get_ukb_subset_column_names(df = ukb$ukb_data,
                                                 df_vars = ukb$ukb_vars,
-                                                subset_option = "all")
+                                                subset_option = "custom")
 
 ukb_filtered_cols = ukb_column_output$vars
 ukb_grouped_cols = ukb_column_output$var_df

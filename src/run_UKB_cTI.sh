@@ -27,7 +27,7 @@ python postprocess_traj.py
 Rscript postprocess_ggplots.R
 
 # run cross validation (very long runtime)
-#bash ./run_x_validate.sh
+bash ./run_x_validate.sh
 
 # ml lifecycle (train, test, save, log, deploy, monitor)
 cd ../ml_lifecycle
@@ -35,7 +35,7 @@ python ./ml_model_build.py
 python ./ml_model_test_pred.py --random_seed=4321
 
 cd ./mlflow
-#mlflow server --backend-store-uri sqlite:///mlruns.db --default-artifact-root ./mlruns
+mlflow server --backend-store-uri sqlite:///mlruns.db --default-artifact-root ./mlruns
 python ./mlflow_tracking.py --experiment_id=1
 python ./mlflow_versioning.py --experiment_id=1
 
