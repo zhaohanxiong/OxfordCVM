@@ -32,10 +32,10 @@ final_subjects = final_subjects(:);
 
 % define range of alphas to compute
 n_alphas = 100;
-alphas_all = logspace(-2, 2, n_alphas);
+alphas_all = logspace(-2, 1, n_alphas);
 
 % % initialze alpha midpoint for reduced computatation
-prev_alpha  = 50;  
+prev_alpha  = 5;
 
 % define alphas, make sure range is always within range provided
 n_points   = 5;
