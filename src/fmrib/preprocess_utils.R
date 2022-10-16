@@ -179,7 +179,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   bb_bodycomp_vars = df_vars$FieldID[df_vars$Category==124 |    # 12 features
                                      df_vars$Category==125 |    # 48 features
                                      df_vars$Category==100009 | # 63 features
-                                     df_vars$Category==170]
+                                     df_vars$Category==170
                                     ]
   bb_bodycomp_vars = grep(
                         paste0("^", 
