@@ -57,9 +57,9 @@
 		- much faster than creating a loop and then summing each value one at a time
 	- ```ifelse``` for vectors
 	- indexing vectors
-		- x = 1:10
-		- x[1:2]
-		- x[-3:-1]
+		- ```x = 1:10```
+		- ```x[1:2]```
+		- ```x[-3:-1]```
 	- recycling
 		- ```x = 1:10```
 		- ```x[c(TRUE,FALSE)]```
