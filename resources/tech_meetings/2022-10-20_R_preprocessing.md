@@ -1,0 +1,90 @@
+### Data Preprocessing in R for UK Biobank cTI - General Overview
+- ```ukb_whole_data_subset.R``` performs extraction of a subset of samples/features from the raw UK Biobank excel table (~30GB)
+	- Raw UK Biobank data is around 500,000 x 15,000 (samples by features)
+	- Selects variables which were are interested in (imaging variables only)
+	- Select samples which do not have too many missing data in the imaging features
+	- Subsetting results in a dataframe of around 50,000 by 2,000 (samples by features)
+	- This code is not run often, we only run it when we want to extract additional features that wasn't in our prior feature set
+	- This code takes a lot of computation to run, so best to minimize its usage
+	- The outputted subset is around 0.5GB which can be easily read into R efficiently for futher processing
+
+- ```preprocess_data_preparation.R``` performs further subsets the data/features
+	- Lines 1 - 41 are custom functions for the UK Biobank data
+		- Reads data from outside the github repository file path
+		- Prints initial data size
+		- Subset features based on the column names we want
+		- Subsets rows based on the patients we want
+		- Filter out these columns/rows that we defined in the previous 2 functions
+		- Add in some custom variables we want to create from existing columns
+		- Print the subset data size
+	- Lines 44 and onwards are general functions
+		- You can re-use these functions for your own data
+		- These functions are located in ```preprocess_utils.R```
+		- You can access these functions by having the code ```source("preprocess_utils.R")``` at the start of your script
+		- The following code/functions are as follows:
+			- ```return_remove_outlier``` removes any values above 3 standard deviations (non-normalized)
+			- ```return_clean_df``` filters our rows/columns based on the threshold of how many missing values there are in each row
+			- Simple filtering out of rows with missing blood pressure values
+			- Print cleaned data size
+			- Write raw data to file so we have access to the raw values later on (before normalizing and imputing missing values)
+			- ```return_ukb_target_background_labels``` is a custom code for assigning labels to your data, you should use your own function here for different dataset
+			- Print summary of the number of patients per group
+			- ```return_remove_single_value_columns``` removes columns which only have one unique value
+			- The ```loc_var``` block of 3 lines code just simply uses the name of the column which tells use which imaging centre data is from and writes it to a file so we can use it later for data harmonization
+			- ```return_normalize_zscore``` normalizes the z-score of every column (to mean = 0 and standard deviation = 1)
+			- ```return_remove_large_zscores``` removes z-scores (values outside of 5 standard deviations) from our dataset
+			- ```return_imputed_data``` fills in missing data with the median value
+			- ```return_covariates``` is a function that returns covarites u want to adjust given the column names and then we can write it to a file for use later on
+			- ```edit_ukb_columns``` is a custom code that removes certain columns we dont want in our feature set after we perform preprocessing, u should edit this with ur own column names for ur own dataset
+			- Some more printing of final dataframe size, number of missing data, final distribution, distribution of number of patients per group
+			- Lastly write the labels (first 4 columns) and data (columns 5 onwards) to file
+
+- ```preprocess_feature_selection.R``` performs selection of features
+	- This code currently doesn't do anything major
+	- The only function is that it shuffles the rows so the dataset can be used for X-validation
+	- The file acts as an intermediate step if we want to do some quick test, without needing to run the previous preprocessing codes which take a long time to execute
+
+### Important R Concepts/Functions
+- Vectorization
+	- Avoid loops
+	- Think of variables in terms of vectors and not individual values inside a vector
+	- Use operations on the entire matrix
+	- Use column/row operations
+	- creating vectors with ```:``` or ```rep``` or ```seq```
+	- vector operations: ```* + / - ```
+	- demonstrate an example of vectorizing a loop
+		- to sum values from 1 to 10: ```sum(1:10)```
+		- much faster than creating a loop and then summing each value one at a time
+	- ```ifelse``` for vectors
+	- indexing vectors
+		- x = 1:10
+		- x[1:2]
+		- x[-3:-1]
+	- recycling
+		- ```x = 1:10```
+		- ```x[c(TRUE,FALSE)]```
+
+- Boolean operations
+	- ```&``` or ```|```
+	- ```which```
+	- ```grep```
+	- ```%in%```
+	- demonstrate an example of boolean vectorization
+		- find the sum of all even numbers up to 100 with:
+			- ```x = 1:100```
+			- ```sum(x[x %% 2 == 0])```
+
+- ```apply``` function
+	- method of iterating or looping through all rows or columns
+	- much faster than loops
+	- much less memory intensive
+	- generate sample data ```x = matrix(c(1:12), nrow = 3)```
+	- ```apply(x, 1, mean)``` for row-wise mean (returns 3 values as 3 rows)
+	- ```apply(x, 2, mean)``` for column-wise mean (returns 4 values as 4 columns)
+	- ```apply(x, 1, function(x) sum(x))``` we can have custom functions like this
+
+- ```sweep``` function
+	- sweep and apply can be used with eachother for fast processing across an entire matrix
+	- ```row_mean = apply(x, 1, mean)``` to get row means of our matrix
+	- ```sweep(x, 1, row_mean, "-")``` to subtract the row mean from every row
+	- This is demonstrated in the ```return_normalize_zscore``` function
