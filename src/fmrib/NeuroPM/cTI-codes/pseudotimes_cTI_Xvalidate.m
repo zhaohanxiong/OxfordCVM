@@ -33,8 +33,8 @@ mappedX      = cPCs(:,1:no_dims(j),j);
 Node_Weights = Vmedoid(:,1:no_dims(j),j);
 
 % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
-disp(['Iteration ' num2str(iter) ' Number of cPCs: ' num2str(no_dims(j))]);
-disp(['Iteration ' num2str(iter) ' Alpha Selected: ' num2str(alphas(j))]);
+disp([' Number of cPCs: ' num2str(no_dims(j))]);
+disp([' Alpha Selected: ' num2str(alphas(j))]);
 
 % Node-node distance
 dist_matrix = double(L2_distance(mappedX', mappedX'));
@@ -61,7 +61,7 @@ datas = dijkstra(MST, Root_node');
 dijkstra_F = datas.F; % dijkstra father nodes for trajectory analysis
 max_distance = max(datas.A(~isinf(datas.A)));
 
-% initialie and define pseudotimes array
+% initialize and define pseudotimes array
 global_pseudotimes = zeros(size(data, 1), 1);
 global_pseudotimes(in_background_target, 1) = datas.A/max_distance;
 

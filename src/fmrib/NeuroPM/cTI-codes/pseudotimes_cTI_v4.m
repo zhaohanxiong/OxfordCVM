@@ -94,7 +94,7 @@ datas = dijkstra(MST, Root_node');
 dijkstra_F = datas.F; % dijkstra father nodes for trajectory analysis
 max_distance = max(datas.A(~isinf(datas.A)));
 
-% initialie and define pseudotimes array
+% initialize and define pseudotimes array
 global_pseudotimes = zeros(size(data, 1), 1);
 global_pseudotimes(in_background_target, 1) = datas.A/max_distance;
 
