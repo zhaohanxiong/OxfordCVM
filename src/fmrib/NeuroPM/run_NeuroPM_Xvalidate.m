@@ -36,7 +36,7 @@ for i = 1:(length(fold_ranges) - 1)
     ind_target = find(bp_group_i == 2);
 
     % run cTI for this fold
-    [global_pseudotimes, eig_mat] = pseudotimes_cTI_Xvalidate(data_i, ind_background, ind_target, 25);
+    [global_pseudotimes, eig_mat] = pseudotimes_cTI_Xvalidate(data_i, ind_background, ind_target);
 
     % convert outputs to dataframe and write to csv/.mat for fold i
     writetable([labels_i, table(global_pseudotimes)], strcat(['io/pseudotimes_fold_' num2str(i) '.csv']));
