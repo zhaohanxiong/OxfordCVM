@@ -25,7 +25,7 @@ alphas_all = alphas_all((mid_point - n_points):(mid_point + n_points));
 
 % perform contrastive PCA (using background and disease as priors into PCA)
 [cPCs,gap_values,alphas,no_dims,~,Vmedoid,~] = ... 
-        cPCA(data,starting_point,final_subjects,50,classes_for_colours,alphas_iter);
+        cPCA(data,starting_point,final_subjects,50,classes_for_colours,alphas_all);
 
 % store the output values
 [~,j]        = max(gap_values);
