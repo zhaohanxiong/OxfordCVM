@@ -128,13 +128,13 @@ get_ukb_subset_column_names = function(df, df_vars,
                     value=TRUE)
   
   # brain MR variables
-  bb_BMR_vars = df_vars$FieldID[#df_vars$Category==110 |
-                                  #df_vars$Category==112 |
-                                  #df_vars$Category==1102 |
-                                  #df_vars$Category==109 |
-                                  df_vars$Category==134 | # 428 features
-                                  df_vars$Category==135 | # 241 features
-                                  df_vars$Category==1101 # 138 features
+  bb_BMR_vars = df_vars$FieldID[df_vars$Category==110 |  # 17 features
+                                df_vars$Category==112 |  # 2 features
+                                df_vars$Category==1102 | # 14 features
+                                df_vars$Category==109 |  # 15 features
+                                df_vars$Category==134 |  # 428 features
+                                df_vars$Category==135 |  # 241 features
+                                df_vars$Category==1101   # 138 features
                                 ]
   bb_BMR_vars = grep(
                   paste0("^", paste0(bb_BMR_vars, collapse="-|^"), "-"),
@@ -176,10 +176,10 @@ get_ukb_subset_column_names = function(df, df_vars,
   bb_AMR_vars= bb_AMR_vars[!bb_AMR_vars %in% bulkvars]
   
   # Body composition variables
-  bb_bodycomp_vars = df_vars$FieldID[#df_vars$Category==124 |
-                                       df_vars$Category==125 | # 48 features
-                                       df_vars$Category==100009 #| # 63 features
-                                       #df_vars$Category==170]
+  bb_bodycomp_vars = df_vars$FieldID[df_vars$Category==124 |    # 12 features
+                                     df_vars$Category==125 |    # 48 features
+                                     df_vars$Category==100009 | # 63 features
+                                     df_vars$Category==170
                                     ]
   bb_bodycomp_vars = grep(
                         paste0("^", 
@@ -227,8 +227,8 @@ get_ukb_subset_column_names = function(df, df_vars,
   # percentages of blood are coded with tens, the other variables
   # refer to the methods of sample analysis
   bb_blood_vars = df_vars$FieldID[df_vars$Category==100081 | # 30 features
-                                    df_vars$Category==17518 #| # 28 features
-                                    #df_vars$Category==100083]
+                                  df_vars$Category==17518 |  # 28 features
+                                  df_vars$Category==100083   # 7 features
                                  ]
   bb_blood_vars = grep(
                       paste0("^", paste0(bb_blood_vars, collapse="-|^"), "-"),

@@ -1,18 +1,19 @@
-function [keep_indices,global_pseudotimes,mappedX,contrasted_data,Node_contributions,Expected_contribution] = pseudotimes_cTI_v4(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
+function [global_pseudotimes,mappedX,contrasted_data,Node_contributions,Expected_contribution] = ... 
+                pseudotimes_cTI_v4(data,starting_point,classes_for_colours,final_subjects,method,max_cPCs)
 
+% Author: code re-written by Zhaohan Xiong from the version of Yasser Iturria Medina, 
+%     NeuroPM lab, MNI, McGill.
 %-- INPUTS:
 %     data: [Nsubjects, Nfeatures] data matrix.
 %     starting_point: indices of the background subjects.
-%     classes_for_colours(optional): [Nsubjects, 1] subjects categories/labels, if
+%     classes_for_colours: [Nsubjects, 1] subjects categories/labels, if
 %         available, only for results visualization.
-%     final_subjects (optional): you may specify the indices of a target group (a subgroup of the 
+%     final_subjects: you may specify the indices of a target group (a subgroup of the 
 %         whole population, e.g. subjects a advanced disease pathology). By
 %     default, the algorithm takes all the subjects that don't belong to the
 %         background.
-%     method: 'cPCA', 'PCA' or 'UMAP'. Notice that the original cTI method uses
-%         cPCA by definition, PCA and UMAP should be considered only for comparison analyses.
-%     max_cPCs (optional): maximum number of principal components to consider.
-%     Default: 10.
+%     method: cPCA or Kernel_cPCA
+%     max_cPCs: maximum number of principal components to consider.
 %
 %-- OUTPUTS:
 %     global_ordering: subjects ordering in the pseudotime line.
@@ -30,15 +31,11 @@ starting_point = starting_point(:);
 final_subjects = final_subjects(:);
 
 % define range of alphas to compute
-n_alphas = 200;
-alphas_all = logspace(-2, 3, n_alphas);
+n_alphas = 50;
+alphas_all = logspace(-2, 1, n_alphas);
 
-% define original indices to remove patients from
-ind_remove_mask = zeros(size(data, 1), 1);
-
-% define counters/storage arrays
-is_accurate = false; % is current model accurate
-prev_alpha  = 50;    % initialze alpha
+% % initialze alpha midpoint for reduced computatation
+prev_alpha  = 5;
 
 % define alphas, make sure range is always within range provided
 n_points   = 5;
@@ -49,8 +46,13 @@ mid_point  = min([mid_point, n_alphas - n_points]);
 alphas_all = alphas_all((mid_point - n_points):(mid_point + n_points));
 
 % perform contrastive PCA (using background and disease as priors into PCA)
-[cPCs,gap_values,alphas,no_dims,contrasted_data,Vmedoid,Dmedoid] = ... 
-              cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_all);
+if strcmp(method, 'cPCA')
+    [cPCs, gap_values, alphas, no_dims, contrasted_data, Vmedoid,Dmedoid] = ... 
+                cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_all);
+elseif strcmp(method, 'Kernel_cPCA')
+    [cPCs, gap_values, alphas, no_dims, contrasted_data, Vmedoid,Dmedoid] = ... 
+        contrastiveKernelPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_all);
+end
 
 % store the output values
 [~,j]           = max(gap_values); % the optimun alpha should maximizes the clusterization in the target dataset
@@ -92,7 +94,7 @@ datas = dijkstra(MST, Root_node');
 dijkstra_F = datas.F; % dijkstra father nodes for trajectory analysis
 max_distance = max(datas.A(~isinf(datas.A)));
 
-% initialie and define pseudotimes array
+% initialize and define pseudotimes array
 global_pseudotimes = zeros(size(data, 1), 1);
 global_pseudotimes(in_background_target, 1) = datas.A/max_distance;
 
@@ -100,21 +102,6 @@ global_pseudotimes(in_background_target, 1) = datas.A/max_distance;
 temp_dist = dist_matrix0(out_background_target, in_background_target);
 [~, j] = min(temp_dist,[],2);
 global_pseudotimes(out_background_target, 1) = global_pseudotimes(in_background_target(j), 1);
-
-% evaluate current model efficacy
-Q1_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.25);
-lower_disease = min(global_pseudotimes(classes_for_colours == 3));
-
-Q1_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.25);
-Q2_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.5);
-
-Q3_background = quantile(global_pseudotimes(classes_for_colours == 1), 0.75);
-
-% define conditions for model efficacy
-condition_1 = lower_disease > Q3_background; % minimal overlap for background and disease
-condition_2 = Q1_disease > Q2_between;       % no overlap for IQR of disease and between
-condition_3 = Q1_between > Q3_background;    % no overlap for IQR of between and background
-is_accurate = condition_1 && condition_2 && condition_3;
 
 % convert MST from adjacency matrix into graph object
 MST_graph = graph(MST);
@@ -149,7 +136,18 @@ save('io/dijkstra.mat','dijkstra_F'); % dijkstra father nodes of every node for 
 save('io/MST.mat','MST'); % save minimum spanning tree individually
 %save('io/all.mat'); % save all variables to workspace to study intermediary values
 
-% re-use useless variable global_ordering to output indices to keep 
-keep_indices = find(ind_remove_mask == 0);
+% evaluate current model efficacy
+Q1_disease = quantile(global_pseudotimes(classes_for_colours == 3), 0.25);
+lower_disease = min(global_pseudotimes(classes_for_colours == 3));
+
+Q1_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.25);
+Q2_between = quantile(global_pseudotimes(classes_for_colours == 2), 0.5);
+
+Q3_background = quantile(global_pseudotimes(classes_for_colours == 1), 0.75);
+
+% define conditions for model efficacy
+condition_1 = lower_disease > Q3_background; % minimal overlap for background and disease
+condition_2 = Q1_disease > Q2_between;       % no overlap for IQR of disease and between
+condition_3 = Q1_between > Q3_background;    % no overlap for IQR of between and background
 
 return;

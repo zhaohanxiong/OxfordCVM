@@ -1,4 +1,4 @@
-function [global_pseudotimes, Node_Weights] = pseudotimes_cTI_Xvalidate(data,starting_point,final_subjects,max_cPCs)
+function [global_pseudotimes, Node_Weights] = pseudotimes_cTI_Xvalidate(data,starting_point,final_subjects)
 
 % Reducing dimensionality
 % define disease/background and number of patients in the dataset
@@ -9,29 +9,23 @@ final_subjects = final_subjects(:);
 classes_for_colours = ones(size(data,1),1);
 
 % define range of alphas to compute
-alphas_all = logspace(-2,2,100);
+n_alphas = 50;
+alphas_all = logspace(-2, 1, n_alphas);
 
-% define original indices to remove patients from
-ind_remove_mask = zeros(size(data, 1), 1);
-
-% define counters/storage arrays
-max_iter     = 1;     % maximum number of iterations
-is_accurate  = false; % is current model accurate
-prev_alpha   = 75;    % initialze alpha
-iter         = 1;     % iteration counter
-n_removed    = [];    % number of outliers removed in each iteration
-removed_inds = [];    % indices of outliers removed in each iteration
+% % initialze alpha midpoint for reduced computatation
+prev_alpha  = 5;
 
 % define alphas, make sure range is always within range provided
-mid_point = find(alphas_all >= prev_alpha);
-mid_point = mid_point(1);
-mid_point = max([mid_point, 6]);
-mid_point = min([mid_point, 95]);
-alphas_iter = alphas_all((mid_point - 5):(mid_point + 5));
+n_points   = 5;
+mid_point  = find(alphas_all >= prev_alpha);
+mid_point  = mid_point(1);
+mid_point  = max([mid_point, 1 + n_points]);
+mid_point  = min([mid_point, n_alphas - n_points]);
+alphas_all = alphas_all((mid_point - n_points):(mid_point + n_points));
 
 % perform contrastive PCA (using background and disease as priors into PCA)
 [cPCs,gap_values,alphas,no_dims,~,Vmedoid,~] = ... 
-        cPCA(data,starting_point,final_subjects,max_cPCs,classes_for_colours,alphas_iter);
+        cPCA(data,starting_point,final_subjects,50,classes_for_colours,alphas_all);
 
 % store the output values
 [~,j]        = max(gap_values);
@@ -39,8 +33,8 @@ mappedX      = cPCs(:,1:no_dims(j),j);
 Node_Weights = Vmedoid(:,1:no_dims(j),j);
 
 % print some output metrics (number of PCs and final alpha of Cd - alpha*Cb)
-disp(['Iteration ' num2str(iter) ' Number of cPCs: ' num2str(no_dims(j))]);
-disp(['Iteration ' num2str(iter) ' Alpha Selected: ' num2str(alphas(j))]);
+disp([' Number of cPCs: ' num2str(no_dims(j))]);
+disp([' Alpha Selected: ' num2str(alphas(j))]);
 
 % Node-node distance
 dist_matrix = double(L2_distance(mappedX', mappedX'));
@@ -67,7 +61,7 @@ datas = dijkstra(MST, Root_node');
 dijkstra_F = datas.F; % dijkstra father nodes for trajectory analysis
 max_distance = max(datas.A(~isinf(datas.A)));
 
-% initialie and define pseudotimes array
+% initialize and define pseudotimes array
 global_pseudotimes = zeros(size(data, 1), 1);
 global_pseudotimes(in_background_target, 1) = datas.A/max_distance;
 
