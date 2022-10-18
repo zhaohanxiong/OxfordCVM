@@ -1,9 +1,11 @@
 
 ## CCRF GPU Server
 ##### Connect
-- VPN Connection using Cisco
+- VPN using Cisco to Connect to Oxford Network
 ```
-vpn.ox.ac.uk (then type ur user ID and password)
+IP Address: vpn.ox.ac.uk
+Input Username: (i.e. card0633)
+Input Password: single-sign-on password
 ```
 
 - SSH Tunnel
@@ -12,12 +14,59 @@ ssh zhaohanx@163.1.212.155
 <type in your password>
 ```
 
-
+- VS-Code Setup for Connection
+```
+```
 
 ##### Navigate Directories
-- location of your home directory
+- location of your home directory (example)
 ```
 cd /home/zxiong/
+cd /home/winokl/
+```
+
+##### Code Base
+- Download Code Base
+```
+git clone 
+fetch all branches
+delete prod branch
+```
+
+- Get Latest Code Version
+```
+git pull origin
+```
+
+- Edit Your Own Code Version
+```
+make ur own branch
+```
+
+##### Installing Dependencies
+- Conda Library Manager
+```
+```
+
+- Pip (Preferred Installer Program)
+```
+```
+
+- Python Libraries
+```
+```
+
+- R Libraries
+```
+```
+
+##### Data Transfer
+- Your Own Computer to Server
+```
+```
+
+- Server to Your Own Computer
+```
 ```
 
 ## FMRIB Cluster
