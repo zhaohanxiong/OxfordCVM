@@ -33,6 +33,13 @@ fetch all branches
 delete prod branch
 ```
 
+- Setup Code Base by Adding Directories Ignored by Git
+```
+io
+ml_lifecycle stuff
+tf-serving stuff
+```
+
 - Get Latest Code Version
 ```
 git pull origin
