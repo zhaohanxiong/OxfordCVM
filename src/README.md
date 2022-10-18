@@ -14,6 +14,10 @@ ssh zhaohanx@163.1.212.155
 <type in your password>
 ```
 
+- VS-Code Installation Setup for Connection
+```
+```
+
 - VS-Code Setup for Connection
 ```
 ```
@@ -51,7 +55,11 @@ make ur own branch
 ```
 
 ##### Installing Dependencies
-- Conda Library Manager
+- Conda Library Manager Installation
+```
+```
+
+- R Libraries
 ```
 ```
 
@@ -60,10 +68,6 @@ make ur own branch
 ```
 
 - Python Libraries
-```
-```
-
-- R Libraries
 ```
 ```
 
