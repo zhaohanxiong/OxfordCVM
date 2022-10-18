@@ -3,7 +3,6 @@
 ##### Ensure loading the inputs in the correct format
 Users have to input the path of the dataset file ("ukb_feature_select.csv") on Line 6 and labels file ("labels_select.csv") on Line 7
 
-
 ##### The code applies the following
 
 1. Load the dataset file in .csv format (pre-processed through "preprocess_data_preparation.R" and "preprocess_feature_selection.R")
