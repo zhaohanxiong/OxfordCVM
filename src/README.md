@@ -45,36 +45,17 @@ ssh winokl@163.1.212.155
 pwd
 ```
 
-- Navigate to your home directory
-```
-cd /home/zxiong/
-cd /home/winokl/
-```
+- Navigate to your home directory ```cd /home/zhaohanx/cd``` or ```/home/winokl/```
 
-- Navigate out of the current directory (to a level above)
-```
-cd ..
-```
+- Navigate out of the current directory (to a level above) ```cd ..```
 
-- List everything in your current directory
-```
-ls -l
-```
+- List everything in your current directory ```ls -l```
 
-- Check file size of file
-```
-du -h file_name
-```
+- Check file size of file ```du -h file_name```
 
-- Create folders
-```
-mkdir folder_name
-```
+- Create folders ```mkdir folder_name```
 
-- Remove folder
-```
-rm -r folder_name
-```
+- Remove folder ```rm -r folder_name```
 
 ##### Code Base
 - Download code base (you should see a new folder in your directory
@@ -82,7 +63,7 @@ rm -r folder_name
 git clone https://github.com/zhaohanxiong/OxfordCVM.git
 ```
 
-- Set Up Code Base
+- Set Up Code Base (Organize Branches)
 ```
 git fetch --all
 git pull --all
@@ -104,6 +85,7 @@ mkdir /src/ml_lifecycle/mlflow/mlruns_staging
 
 - Get Latest Code Version
 ```
+git checkout dev
 git pull origin
 ```
 
@@ -122,28 +104,54 @@ git checkout dev
 
 ##### Installing Dependencies
 - Conda Library Manager Installation
+  - Download miniconda linux installer on your own desktop (computer) https://docs.conda.io/en/latest/miniconda.html#linux-installers
+  - Select version with Python 3.9
+  - Navigate back to your home directory e.g. ```cd /home/zhaohanx/```
+  - Create a new directory ```mkdir miniconda```
+  - Navigate inside the new directory ```cd miniconda```
+  - Drag and drop your downloaded miniconda linux installer from your desktop into VS-Code and into the ```miniconda``` folder
+  - Type ```bash Miniconda3-<name of the file you downloaded>.sh```
+
+- Set up virtual environment (create, activate)
 ```
+conda create --environment_name
+conda activate environment_name
+```
+ 
+- Install R Libraries
+```
+R
+install.packages("data.table")
+install.packages("R.matlab")
+install.packages("ggplot2")
+install.packages("gridExtra")
 ```
 
-- R Libraries
+- Install Python Libraries
 ```
-```
-
-- Pip (Preferred Installer Program)
-```
+pip install numpy scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
 ```
 
-- Python Libraries
-```
-```
+- Exit out of virtual environment
+  - You should activate your virtual environment to install new libraries and run code
+  - You should deactivate your virtual environment when you are finished with ```conda deactivate```
 
 ##### Data Transfer
 - Your Own Computer to Server
+  - SHIFT+RIGHT CLICK "open powershell" (or any terminal)
+  - Enter the following except replace with your user_id before the ```@```
+  - Replace with the desired path after the ```:```
+  - Enter your password for the CCRF server
 ```
+scp -r file_to_transfer.txt zhaohanx@163.1.212.155:/home/zhaohanx
 ```
 
 - Server to Your Own Computer
+  - Open any terminal as above
+  - Type the command with your own user_id and file/folder full path
+  - Enter your password for the CCRF server
 ```
+scp -r zhaohanx@163.1.212.155:/home/zhaohanx/file_to_transfer .
 ```
 
 ## FMRIB Cluster
