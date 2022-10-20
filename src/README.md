@@ -8,33 +8,87 @@ Input Username: (i.e. card0633)
 Input Password: single-sign-on password
 ```
 
-- SSH Tunnel
+- SSH Tunnel (Connection IP Address)
 ```
 ssh zhaohanx@163.1.212.155
-<type in your password>
+ssh winokl@163.1.212.155
 ```
 
-- VS-Code Installation Setup for Connection
-```
-```
+- VS-Code Installation and Setup
+  - Download: https://code.visualstudio.com/download
+  - Go to extension tab (5th one down on the left hand side) and search/install
+    - Remote - SSH (allows vs-code to be setup for SSH connections)
+    - Python (viewing of python code)
+    - Matlab (viewing of matlab code)
+  - 3rd tab (on the left hand side) is Git embedded inside VS-Code
+  - 4th tab (on the left hand side) is the debugger console (requires set up)
+  - 6th tab (on the left hand side) should be the SSH plugin with a computer screen and "><" symbol
 
 - VS-Code Setup for Connection
-```
-```
+  - In the SSH plugin tab, click to open, the side panel should appear with "SSH TARGETS" as a heading
+  - Press the "+" sign at the top of the side panel
+  - VS-Code will then prompt you to enter an ssh command at a pop-up tab in the top
+  - Enter the ssh command mentioned above with your own account name
+  - Enter your password
+  - You should now be connected to the CCRF server
 
 ##### Navigate Directories
-- location of your home directory (example)
+- Initial steps
+  - Click first tab on the left hand side to open the file explorer
+  - Right click and click "open in integrated terminal"
+  - Change password:
+    - In terminal type ```passwd```
+    - Enter your current and new password
+
+- Check current directory you are in in the terminal
+```
+pwd
+```
+
+- Navigate to your home directory
 ```
 cd /home/zxiong/
 cd /home/winokl/
 ```
 
-##### Code Base
-- Download Code Base
+- Navigate out of the current directory (to a level above)
 ```
-git clone 
-fetch all branches
-delete prod branch
+cd ..
+```
+
+- List everything in your current directory
+```
+ls -l
+```
+
+- Check file size of file
+```
+du -h file_name
+```
+
+- Create folders
+```
+mkdir folder_name
+```
+
+- Remove folder
+```
+rm -r folder_name
+```
+
+##### Code Base
+- Download code base (you should see a new folder in your directory
+```
+git clone https://github.com/zhaohanxiong/OxfordCVM.git
+```
+
+- Set Up Code Base
+```
+git fetch --all
+git pull --all
+git pull dev
+git branch dev
+git branch -D prod
 ```
 
 - Setup Code Base by Adding Directories Ignored by Git
