@@ -1,6 +1,6 @@
 
 ## CCRF GPU Server
-##### Connect
+### Connect
 - VPN using Cisco to Connect to Oxford Network
 ```
 IP Address: vpn.ox.ac.uk
@@ -32,7 +32,7 @@ ssh winokl@163.1.212.155
   - Enter your password
   - You should now be connected to the CCRF server
 
-##### Navigate Directories
+### Navigate Directories
 - Initial steps
   - Click first tab on the left hand side to open the file explorer
   - Right click and click "open in integrated terminal"
@@ -54,7 +54,7 @@ ssh winokl@163.1.212.155
 
 - Remove folder ```rm -r folder_name```
 
-##### Code Base
+### Code Base
 - Download code base (you should see a new folder in your directory
 ```
 git clone https://github.com/zhaohanxiong/OxfordCVM.git
@@ -99,7 +99,7 @@ git commit -m "commited everything"
 git checkout dev
 ```
 
-##### Installing Dependencies
+### Installing Dependencies
 - Conda Library Manager Installation
   - Download miniconda linux installer on your own desktop (computer) https://docs.conda.io/en/latest/miniconda.html#linux-installers
   - Select version with Python 3.9
@@ -133,7 +133,7 @@ pip install numpy scipy pandas networkx plotly seaborn matplotlib opencv-python 
   - You should activate your virtual environment to install new libraries and run code
   - You should deactivate your virtual environment when you are finished with ```conda deactivate```
 
-##### Data Transfer
+### Data Transfer
 - Your Own Computer to Server
   - SHIFT+RIGHT CLICK "open powershell" (or any terminal)
   - Enter the following except replace with your user_id before the ```@```
@@ -152,7 +152,7 @@ scp -r zhaohanx@163.1.212.155:/home/zhaohanx/file_to_transfer .
 ```
 
 ## FMRIB Cluster
-##### Connect
+### Connect
 - VPN Connection using Cisco
 ```
 vpn.ox.ac.uk (then type ur user ID and password)
@@ -164,7 +164,7 @@ ssh winokl@jalapeno.fmrib.ox.ac.uk
 <password in keyfile>
 ```
 
-##### Navigate Directories
+### Navigate Directories
 - location of this codebase
 ```
 cd /home/fs0/winokl/zxiong/OxfordCVM
@@ -186,7 +186,7 @@ scp temp.txt winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong
 scp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/fmrib/NeuroPM/io .
 ```
 
-##### Cluster Run Commands
+### Cluster Run Commands
 - link to documentation: https://sharepoint.nexus.ox.ac.uk/sites/NDCN/FMRIB/IT/User%20Guides/GridEngine.aspx
 - extract the entire UKB dataset into a subset dataframe
 ```
