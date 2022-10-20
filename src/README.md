@@ -40,10 +40,7 @@ ssh winokl@163.1.212.155
     - In terminal type ```passwd```
     - Enter your current and new password
 
-- Check current directory you are in in the terminal
-```
-pwd
-```
+- Check current directory you are in in the terminal ```pwd```
 
 - Navigate to your home directory ```cd /home/zhaohanx/cd``` or ```/home/winokl/```
 
