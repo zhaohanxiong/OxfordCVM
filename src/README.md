@@ -44,7 +44,7 @@ ssh winokl@163.1.212.155
 
 - Check current directory you are in in the terminal ```pwd```
 
-- Navigate to your home directory ```cd /home/zhaohanx/cd``` or ```/home/winokl/```
+- Navigate to your home directory ```cd /home/zhaohanx/``` or ```cd /home/winokl/```
 
 - Navigate out of the current directory (to a level above) ```cd ..```
 
