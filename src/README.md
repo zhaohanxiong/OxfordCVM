@@ -31,6 +31,8 @@ ssh winokl@163.1.212.155
   - Enter the ssh command mentioned above with your own account name
   - Enter your password
   - You should now be connected to the CCRF server
+  - You should also see a new SSH configuration in the side panel for your most recent connection
+  - Next time you can simply right click on this and "Open in Current Window"
 
 ### Navigate Directories
 - Initial steps
