@@ -91,11 +91,15 @@ git branch dev
 git branch -D prod
 ```
 
+- To see full git tutorial, refer to ```/resources/tech_meetings/2022-10-06_git.md```
+
 - Setup Code Base by Adding Directories Ignored by Git
 ```
-io
-ml_lifecycle stuff
-tf-serving stuff
+cd OxfordCVM
+mkdir /src/fmrib/NeuroPM/io
+mkdir /src/aws/tf_serving/saved_models
+mkdir /src/ml_lifecycle/mlflow/mlruns
+mkdir /src/ml_lifecycle/mlflow/mlruns_staging
 ```
 
 - Get Latest Code Version
@@ -105,7 +109,15 @@ git pull origin
 
 - Edit Your Own Code Version
 ```
-make ur own branch
+git branch test
+git checkout test
+```
+
+- Go back to main working version of code
+```
+git add .
+git commit -m "commited everything"
+git checkout dev
 ```
 
 ##### Installing Dependencies
