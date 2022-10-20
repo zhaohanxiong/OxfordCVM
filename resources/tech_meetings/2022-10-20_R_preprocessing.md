@@ -63,6 +63,8 @@
 	- recycling
 		- ```x = 1:10```
 		- ```x[c(TRUE,FALSE)]```
+	- sampling
+		- ```sample(x, 5)```
 
 - Boolean operations
 	- ```&``` or ```|```
