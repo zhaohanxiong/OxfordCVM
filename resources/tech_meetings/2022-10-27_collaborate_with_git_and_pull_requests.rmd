@@ -53,8 +53,9 @@ git push --set-upstream origin new_branch
 - The ```dev``` branch can only be updated through pull requests to merge other branches into it
 - The pull requests must be submitted by the person trying to merge their own branch, and be approved by at least one other reviewer (usually a senior or development lead)
 - Some users may have special permissions to override the need for pull requests into branches such as ```dev``` and can push directly to it
-- In our codebase, Zhaohan Xiong has direct permission to push to ```dev``` while everyone else must submit code changes through a pull request
+- In our codebase, one person has permission to push to ```dev``` directly while everyone else must submit code changes through a pull request
 - The ```prod``` branch must be updated through pull requests exclusively and must have at least one reviewer
+- These permissions can be set up in the "Settings" tab at the top, "Branches" tab on the left hand side, and "Branch protection rules"
 
 ### Creating Pull Requests to Submit Your Code Changes
 - To create a pull request, switch to the 3rd tab on the top named "Pull requests"
@@ -62,10 +63,19 @@ git push --set-upstream origin new_branch
 - Then you can select the "base" branch and "compare" branch at the top at the top of the page
 - The "base" branch is the one you are merging into, in this case, ```dev```
 - The compare branch is the one you want to merge into ```dev```, in this case, ```new_branch```
+- Click "Create pull request"
+- Make sure to add a name and description to your pull request so other team members are aware of the changes being made
 
 ### Integrating Code Changes into Codebase for Release
-- 
-
-
-
-``````
+- After creating a pull request, on the right hand side, you can select a reviewer
+- The reviewer will then get a notice in their emails telling them a pull request has been made and review is needed for merging
+- The reviewer will then go through the code and look at the updates
+- The reviewer can make comments and re-request changes
+- You can directly commit again in this case to the same branch and it will appear in the current active pull request
+- You can then re-request review
+- Once the reviewer is happy, they can "resolve" all comments they had and click "merge" to add contents in the new branch to the ```dev``` branch
+- The ```dev``` branch will now be updated and can these changes can be downloaded to your own computer with
+```
+git checkout dev
+git pull origin
+```
