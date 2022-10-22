@@ -15,6 +15,7 @@ git pull origin
 
 - To make your own code changes, branch from the ```dev``` branch
 ```
+git checkout dev
 git branch new_branch
 git checkout new_branch
 ```
