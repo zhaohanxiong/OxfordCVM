@@ -1,0 +1,56 @@
+### Collaboration
+- Collaboration is an important part of a development team
+- Processes exist for ensuring consistent and efficient updates to the codebase
+- A common method is the "branch and merge" which allows multiple team members to collectively develop code
+- By following a strict set of criteria, we can update our codebase in a way to ensure existing functions work and new functions are added to improve our codebase
+
+### Making Edits to the Codebase
+- You should set up your branch with the following (after downloading the repository with  ```git clone```)
+```
+git fetch --all
+git pull --all
+git checkout dev
+git pull origin
+```
+
+- To make your own code changes, branch from the ```dev``` branch
+```
+git branch new_branch
+git checkout new_branch
+```
+
+- Now you have your own version of code that you can edit without affecting the main code in ```dev```
+- You can always switch back to ```dev``` when you need the full working version of the code
+```
+git checkout dev
+```
+
+- To switch back to your own development
+```
+git checkout new_branch
+```
+
+- Once you have made your updates to the code, you can ```add```, ```commit```, ```push```
+```
+git add name_of_files_changes.m
+git commit -m "my commit message here"
+git push
+```
+
+- You may be prompted with a message on ```push``` if your branch is not on the remote repository on github
+- The terminal will give you a new command which you can directly copy, paste, and run in your terminal
+- This one-time command will be the following below, which you only need to do once during the first ever  ```push``` of your branch
+```
+git push --set-upstream origin new_branch
+```
+
+### Creating Pull Requests to Submit Your Code Changes
+- 
+
+
+### Integrating Code Changes into Codebase for Release
+- 
+
+
+
+``````
