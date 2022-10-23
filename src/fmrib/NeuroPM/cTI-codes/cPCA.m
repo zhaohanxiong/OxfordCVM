@@ -121,7 +121,7 @@ for clus_i = 1:n_clusters
     if no_dims(clus_i) < 2, no_dims(clus_i) = 2; end
     
     % Evaluating clustering tendency of the intrinsic target data, for this cluster
-    max_num = 10;
+    max_num = 2;
     rng('default');  % For reproducibility
     eva = evalclusters(cPCs([indices_background; indices_target],:,clus_i),'kmeans','gap','KList',[1:max_num]);
     N_subspaces(clus_i) = eva.OptimalK;
