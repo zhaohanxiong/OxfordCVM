@@ -34,17 +34,6 @@ final_subjects = final_subjects(:);
 n_alphas = 50;
 alphas_all = logspace(-2, 1, n_alphas);
 
-% % initialze alpha midpoint for reduced computatation
-prev_alpha  = 5;
-
-% define alphas, make sure range is always within range provided
-n_points   = 5;
-mid_point  = find(alphas_all >= prev_alpha);
-mid_point  = mid_point(1);
-mid_point  = max([mid_point, 1 + n_points]);
-mid_point  = min([mid_point, n_alphas - n_points]);
-alphas_all = alphas_all((mid_point - n_points):(mid_point + n_points));
-
 % perform contrastive PCA (using background and disease as priors into PCA)
 if strcmp(method, 'cPCA')
     [cPCs, gap_values, alphas, no_dims, contrasted_data, Vmedoid,Dmedoid] = ... 

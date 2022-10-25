@@ -77,9 +77,11 @@ for (i in 1:n_folds) {
 
   # filter out ill-defined scores tune these two numbers below depending 
   # on distribution to improve results
-  new_ind_i = (ref_label < (min_disease * 1) | 
-               ref_label > (max_background * 2.5)) & (ref_group != 0)
-
+  #new_ind_i = (ref_label < (min_disease * 5) | 
+  #             ref_label > (max_background * 0.25)) & (ref_group != 0)
+  new_ind_i = c(which(ref_group == 1),
+                sample(which(ref_group == 2), sum(ref_group == 1)))
+  
   # subset rows based on new row index filter
   ref_label = ref_label[new_ind_i]
   ref_group = ref_group[new_ind_i]
