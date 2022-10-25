@@ -17,7 +17,7 @@ permissions:
 jobs:
 
   # CI python code with basic test build
-  test_build_python:
+  test_code_changes:
 
     runs-on: ubuntu-latest
 

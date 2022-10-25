@@ -22,7 +22,7 @@ env:
 jobs:
 
   # CI python code with basic test build
-  test_build_python:
+  test_build:
 
     runs-on: ubuntu-latest
 
