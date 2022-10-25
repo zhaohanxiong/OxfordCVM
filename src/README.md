@@ -67,7 +67,8 @@ git clone https://github.com/zhaohanxiong/OxfordCVM.git
 git fetch --all
 git pull --all
 git pull dev
-git branch dev
+git checkout dev
+git branch --set-upstream-to=origin/dev dev
 git branch -D prod
 ```
 
