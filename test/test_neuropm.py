@@ -289,16 +289,16 @@ def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
     # check values
     assert df_score["global_pseudotimes"].min() == 0
     assert df_score["global_pseudotimes"].max() == 1
-
-    # evaluate group distributions
     assert scores_background.min() == 0
     assert scores_disease.max() == 1
+    assert q_background[2] <= 0.2
+    assert q_disease[2] >= 0.33
+
+    # evaluate group distributions
     assert scores_between.min() > scores_background.min()
     assert scores_disease.min() > scores_between.min()
     assert scores_between.max() > scores_background.max()
     assert scores_disease.max() > scores_between.max()
-    assert q_background[2] <= 0.2
-    assert q_disease[2] >= 0.33
     assert q_background[2] < q_between[0]
     assert q_background[2] < q_disease[0]
     assert q_between[0] < q_disease[0]
