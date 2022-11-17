@@ -24,9 +24,6 @@ jobs:
   # CI python code with basic test build
   test_build:
 
-    # define name so it can be searched and applied to protected branches
-    name: CICD workflow
-
     runs-on: ubuntu-latest
 
     steps:

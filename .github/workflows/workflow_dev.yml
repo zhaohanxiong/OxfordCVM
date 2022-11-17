@@ -18,9 +18,6 @@ jobs:
 
   # CI python code with basic test build
   test_code_changes:
-
-    # define name so it can be searched and applied to protected branches
-    name: CI workflow
     
     runs-on: ubuntu-latest
 
