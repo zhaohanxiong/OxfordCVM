@@ -88,9 +88,9 @@ neuropm_model_test_2 = {
 @pytest.fixture(params = [neuropm_model_test_1])
 def mock_test_neuro_pm_accuracy_shouldpass(request):
     return request.param
-@pytest.fixture(params = [neuropm_model_test_2])
-def mock_test_neuro_pm_cti_pred_shouldpass(request):
-    return request.param
+# @pytest.fixture(params = [neuropm_model_test_2])
+# def mock_test_neuro_pm_cti_pred_shouldpass(request):
+#     return request.param
 
 ml_model_test_1 = {
     "key_group": "ml",

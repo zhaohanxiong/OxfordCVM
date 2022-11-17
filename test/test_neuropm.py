@@ -251,47 +251,47 @@ def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
                      mock_test_neuro_pm_accuracy_shouldpass["key"],
                      True)
 
-def test_neuro_pm_cti_pred_shouldpass(mock_test_neuro_pm_cti_pred_shouldpass):
+# def test_neuro_pm_cti_pred_shouldpass(mock_test_neuro_pm_cti_pred_shouldpass):
 
-    '''
-    This function tests for the accuracy/effectiveness of the NeuroPM
-    cTI prediction method for inferring new patients by analyzing the 
-    output from the X-validation of the NeuroPM toolbox
-    '''
+#     '''
+#     This function tests for the accuracy/effectiveness of the NeuroPM
+#     cTI prediction method for inferring new patients by analyzing the 
+#     output from the X-validation of the NeuroPM toolbox
+#     '''
 
-    # set test flag to false before running test
-    update_test_dict(mock_test_neuro_pm_cti_pred_shouldpass["key_group"],
-                     mock_test_neuro_pm_cti_pred_shouldpass["key"],
-                     False)
+#     # set test flag to false before running test
+#     update_test_dict(mock_test_neuro_pm_cti_pred_shouldpass["key_group"],
+#                      mock_test_neuro_pm_cti_pred_shouldpass["key"],
+#                      False)
 
-    # Arrange
-    # define paths for i/o
-    path_data      = "src/fmrib/NeuroPM/io/"
-    path_data_pred = os.path.join(path_data, "inference_x_val_pred.csv")
+#     # Arrange
+#     # define paths for i/o
+#     path_data      = "src/fmrib/NeuroPM/io/"
+#     path_data_pred = os.path.join(path_data, "inference_x_val_pred.csv")
 
-    # load data
-    ml_inf = pd.read_csv(path_data_pred)
+#     # load data
+#     ml_inf = pd.read_csv(path_data_pred)
 
-    # Action
-    # transform gt/pred into array
-    gt   = ml_inf["score_gt"].to_numpy()
-    pred = ml_inf["score_pred"].to_numpy()
+#     # Action
+#     # transform gt/pred into array
+#     gt   = ml_inf["score_gt"].to_numpy()
+#     pred = ml_inf["score_pred"].to_numpy()
 
-    # compute overall accuracy
-    rmse = compute_rmse(gt, pred)
+#     # compute overall accuracy
+#     rmse = compute_rmse(gt, pred)
 
-    # compute group-wise accuracy
-    group        = ml_inf["bp_group"].to_numpy()
-    rmse_healthy = compute_rmse(gt[group == 1], pred[group == 1])
-    rmse_disease = compute_rmse(gt[group == 2], pred[group == 2])
+#     # compute group-wise accuracy
+#     group        = ml_inf["bp_group"].to_numpy()
+#     rmse_healthy = compute_rmse(gt[group == 1], pred[group == 1])
+#     rmse_disease = compute_rmse(gt[group == 2], pred[group == 2])
 
-    # Assert
-    # if the error is under the acceptable value
-    assert rmse < 0.05
-    assert rmse_healthy < 0.01
-    assert rmse_disease < 0.05
+#     # Assert
+#     # if the error is under the acceptable value
+#     assert rmse < 0.05
+#     assert rmse_healthy < 0.01
+#     assert rmse_disease < 0.05
 
-    # set test flag to true if passed
-    update_test_dict(mock_test_neuro_pm_cti_pred_shouldpass["key_group"],
-                     mock_test_neuro_pm_cti_pred_shouldpass["key"],
-                     True)
+#     # set test flag to true if passed
+#     update_test_dict(mock_test_neuro_pm_cti_pred_shouldpass["key_group"],
+#                      mock_test_neuro_pm_cti_pred_shouldpass["key"],
+#                      True)
