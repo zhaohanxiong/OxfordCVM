@@ -287,8 +287,8 @@ def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
 
     # Assert
     # check values
-    assert df_score["global_pseudotimes"].min() >= 0
-    assert df_score["global_pseudotimes"].max() <= 0
+    assert df_score["global_pseudotimes"].min() == 0
+    assert df_score["global_pseudotimes"].max() == 1
 
     # evaluate group distributions
     assert scores_background.min() == 0

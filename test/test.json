@@ -5,16 +5,16 @@
     },
     "data_processing": {
         "does_R_postproces_output_exist": false,
-        "does_R_preprocess_output_exist": false
+        "does_R_preprocess_output_exist": true
     },
     "ml": {
         "does_model_exist": false,
         "is_model_accurate": false
     },
     "neuropm": {
-        "does_neuropm_interm_output_exist": false,
-        "does_neuropm_output_exist": false,
-        "is_cti_accurate": false,
+        "does_neuropm_interm_output_exist": true,
+        "does_neuropm_output_exist": true,
+        "is_cti_accurate": true,
         "is_cti_pred_accurate": false
     }
 }

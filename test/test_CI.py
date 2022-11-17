@@ -20,9 +20,8 @@ def test_check_all_flags_shouldpass():
     # none
 
     # Assert
-    # check files present
+    # check files io present
     assert test_dict["data_processing"]["does_R_preprocess_output_exist"]
-    assert test_dict["data_processing"]["does_R_postproces_output_exist"]
     assert test_dict["neuropm"]["does_neuropm_output_exist"]
     assert test_dict["neuropm"]["does_neuropm_interm_output_exist"]
 
