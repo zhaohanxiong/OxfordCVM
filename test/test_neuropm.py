@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import pandas as pd
 from utils import compute_rmse, update_test_dict
 
@@ -269,29 +270,40 @@ def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
     # define paths for i/o
     path_data       = "src/fmrib/NeuroPM/io/"
     path_data_score = os.path.join(path_data, "pseudotimes.csv")
-
-    # Action
-    # try read the files, do they exist? set flag for success or not
-    try:
-        # read dataframes in
-        df_score  = pd.read_csv(path_data_score)
-
-        # set flags for passing read test
-        read_successful = True
-
-    except:
-        # set flags for failing test
-        read_successful = False
+    
+    # read dataframes in
+    df_score  = pd.read_csv(path_data_score)
     
     # compute group overlap
-    
-
-    # compute AUROC 
-
+    scores_background = df_score.loc[df_score["bp_group"] == 1, 
+                                     "global_pseudotimes"]
+    scores_between = df_score.loc[df_score["bp_group"] == 0, 
+                                  "global_pseudotimes"]
+    scores_disease = df_score.loc[df_score["bp_group"] == 2,
+                                  "global_pseudotimes"]
+    q_background = np.quantile(scores_background, [0.25, 0.5, 0.75])
+    q_between = np.quantile(scores_between, [0.25, 0.5, 0.75])
+    q_disease = np.quantile(scores_disease, [0.25, 0.5, 0.75])
 
     # Assert
-    # check if the files were read in with pandas successfully
-    assert read_successful
+    # check values
+    assert df_score["global_pseudotimes"].min() >= 0
+    assert df_score["global_pseudotimes"].max() <= 0
+
+    # evaluate group distributions
+    assert scores_background.min() == 0
+    assert scores_disease.max() == 1
+    assert scores_between.min() > scores_background.min()
+    assert scores_disease.min() > scores_between.min()
+    assert scores_between.max() > scores_background.max()
+    assert scores_disease.max() > scores_between.max()
+    assert q_background[2] <= 0.2
+    assert q_disease[2] >= 0.33
+    assert q_background[2] < q_between[0]
+    assert q_background[2] < q_disease[0]
+    assert q_between[0] < q_disease[0]
+    assert q_between[1] < q_disease[1]
+    assert q_between[2] < q_disease[2]
 
     # set test flag to true if passed
     update_test_dict(mock_test_neuro_pm_accuracy_shouldpass["key_group"],
