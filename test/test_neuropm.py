@@ -174,56 +174,56 @@ def test_io_neuropm_interm_output_exist_shouldpass(mock_test_io_neuropm_interm_o
                      mock_test_io_neuropm_interm_output_exist_shouldpass["key"],
                      True)
 
-def test_io_R_postprocess_output_exist_shouldpas(mock_test_io_R_postprocess_output_exist_shouldpass):
+# def test_io_R_postprocess_output_exist_shouldpas(mock_test_io_R_postprocess_output_exist_shouldpass):
 
-    '''
-    This function tests if the output from postprocess_files.R is correct
-    '''
+#     '''
+#     This function tests if the output from postprocess_files.R is correct
+#     '''
 
-    # set test flag to false before running test
-    update_test_dict(mock_test_io_R_postprocess_output_exist_shouldpass["key_group"],
-                     mock_test_io_R_postprocess_output_exist_shouldpass["key"],
-                     False)
+#     # set test flag to false before running test
+#     update_test_dict(mock_test_io_R_postprocess_output_exist_shouldpass["key_group"],
+#                      mock_test_io_R_postprocess_output_exist_shouldpass["key"],
+#                      False)
 
-    # Arrange
-    # define paths for i/o
-    path_data        = "src/fmrib/NeuroPM/io/"
-    path_data_score  = os.path.join(path_data, "pseudotimes.csv")
-    path_var_names   = os.path.join(path_data, "ukb_varnames.csv")
-    path_var_weights = os.path.join(path_data, "var_weighting_reduced.csv")
-    path_data_frame  = os.path.join(path_data, "ukb_num_reduced.csv")
+#     # Arrange
+#     # define paths for i/o
+#     path_data        = "src/fmrib/NeuroPM/io/"
+#     path_data_score  = os.path.join(path_data, "pseudotimes.csv")
+#     path_var_names   = os.path.join(path_data, "ukb_varnames.csv")
+#     path_var_weights = os.path.join(path_data, "var_weighting_reduced.csv")
+#     path_data_frame  = os.path.join(path_data, "ukb_num_reduced.csv")
 
-    # Action
-    # try read the files, do they exist? set flag for success or not
-    try:
-        # read dataframes in
-        df_score       = pd.read_csv(path_data_score)
-        df_var_names   = pd.read_csv(path_var_names)
-        df_var_weights = pd.read_csv(path_var_weights)
-        df_ukb         = pd.read_csv(path_data_frame)
+#     # Action
+#     # try read the files, do they exist? set flag for success or not
+#     try:
+#         # read dataframes in
+#         df_score       = pd.read_csv(path_data_score)
+#         df_var_names   = pd.read_csv(path_var_names)
+#         df_var_weights = pd.read_csv(path_var_weights)
+#         df_ukb         = pd.read_csv(path_data_frame)
 
-        # set flags for passing read test
-        read_successful = True
+#         # set flags for passing read test
+#         read_successful = True
 
-    except:
-        # set flags for failing test
-        read_successful = False
+#     except:
+#         # set flags for failing test
+#         read_successful = False
     
-    # Assert
-    # check if the files were read in with pandas successfully
-    assert read_successful
+#     # Assert
+#     # check if the files were read in with pandas successfully
+#     assert read_successful
 
-    # check if the size of dataframes were correct
-    assert df_score.shape[0] == df_ukb.shape[0]
-    assert df_var_weights.shape[0] == df_ukb.shape[1]
+#     # check if the size of dataframes were correct
+#     assert df_score.shape[0] == df_ukb.shape[0]
+#     assert df_var_weights.shape[0] == df_ukb.shape[1]
 
-    # check if there are any missing values in score
-    assert df_score["global_pseudotimes"].isna().sum() == 0
+#     # check if there are any missing values in score
+#     assert df_score["global_pseudotimes"].isna().sum() == 0
 
-    # set test flag to true if passed
-    update_test_dict(mock_test_io_R_postprocess_output_exist_shouldpass["key_group"],
-                     mock_test_io_R_postprocess_output_exist_shouldpass["key"],
-                     True)
+#     # set test flag to true if passed
+#     update_test_dict(mock_test_io_R_postprocess_output_exist_shouldpass["key_group"],
+#                      mock_test_io_R_postprocess_output_exist_shouldpass["key"],
+#                      True)
 
 def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
 

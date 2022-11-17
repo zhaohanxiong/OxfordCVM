@@ -36,9 +36,9 @@ def mock_test_io_neuropm_output_exist_shouldpass(request):
 @pytest.fixture(params = [io_data_test_3])
 def mock_test_io_neuropm_interm_output_exist_shouldpass(request):
     return request.param
-@pytest.fixture(params = [io_data_test_4])
-def mock_test_io_R_postprocess_output_exist_shouldpass(request):
-    return request.param
+# @pytest.fixture(params = [io_data_test_4])
+# def mock_test_io_R_postprocess_output_exist_shouldpass(request):
+#     return request.param
 
 ml_model_file_test_1 = {
     "key_group": "ml",
