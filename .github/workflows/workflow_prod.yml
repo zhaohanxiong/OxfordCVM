@@ -22,7 +22,7 @@ env:
 jobs:
 
   # define name so it can be searched and applied to protected branches
-  name: CI-CD workflow
+  name: CICD workflow
 
   # CI python code with basic test build
   test_build:
