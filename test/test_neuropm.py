@@ -39,9 +39,15 @@ def test_io_R_preprocess_output_exist_shouldpass(mock_test_io_R_preprocess_outpu
     # check if the files were read in with pandas successfully
     assert read_successful
 
-    # check if the size of dataframes were correct
+    # check if the size/contents of dataframes were correct
     assert df_ukb.shape[0] == df_ukb_raw.shape[0]
     assert df_ukb.shape[0] == df_score.shape[0]
+    assert len(df_score["bp_group"]) == df_score.shape[0]
+    assert df_score["bp_group"].isna().sum() == 0
+    assert len(df_score["BPSys-2.0"]) == df_score.shape[0]
+    assert df_score["BPSys-2.0"].isna().sum() == 0
+    assert len(df_score["BPDia-2.0"]) == df_score.shape[0]
+    assert df_score["BPDia-2.0"].isna().sum() == 0
 
     # set test flag to true if passed
     update_test_dict(mock_test_io_R_preprocess_output_exist_shouldpass["key_group"],
@@ -85,6 +91,12 @@ def test_io_R_ft_select_output_exist_shouldpass(mock_test_io_R_ft_select_output_
 
     # check if the size of dataframes were correct
     assert df_ukb.shape[0] == df_score.shape[0]
+    assert len(df_score["bp_group"]) == df_score.shape[0]
+    assert df_score["bp_group"].isna().sum() == 0
+    assert len(df_score["BPSys-2.0"]) == df_score.shape[0]
+    assert df_score["BPSys-2.0"].isna().sum() == 0
+    assert len(df_score["BPDia-2.0"]) == df_score.shape[0]
+    assert df_score["BPDia-2.0"].isna().sum() == 0
 
     # set test flag to true if passed
     update_test_dict(mock_test_io_R_ft_select_output_exist_shouldpass["key_group"],
@@ -109,6 +121,9 @@ def test_io_neuropm_output_exist_shouldpass(mock_test_io_neuropm_output_exist_sh
     path_var_weight = os.path.join(path_data, "var_weighting.csv")
     path_threshold  = os.path.join(path_data, "threshold_weighting.csv")
 
+    # read in ukb data file for comparison
+    df_ukb = pd.read_csv(os.path.join(path_data, "ukb_num_norm_ft_select.csv"))
+
     # Action
     # try read the files, do they exist? set flag for success or not
     try:
@@ -128,11 +143,22 @@ def test_io_neuropm_output_exist_shouldpass(mock_test_io_neuropm_output_exist_sh
     # check if the files were read in with pandas successfully
     assert read_successful
 
-    # check if the size of dataframes were correct
+    # check if the size/content of dataframes were correct
+    assert df_score.shape[0] == df_ukb.shape[0]
     assert df_thresh.shape[0] == 1
+    assert df_thresh["Expected_contribution"][0] > 0
+    assert df_ukb.shape[1] == df_weight.shape[0]
+    assert all(df_weight["Node_contributions"] > 0)
 
     # check if there are any missing values in score
+    assert len(df_score["global_pseudotimes"]) == df_score.shape[0]
     assert df_score["global_pseudotimes"].isna().sum() == 0
+    assert len(df_score["bp_group"]) == df_score.shape[0]
+    assert df_score["bp_group"].isna().sum() == 0
+    assert len(df_score["BPSys-2.0"]) == df_score.shape[0]
+    assert df_score["BPSys-2.0"].isna().sum() == 0
+    assert len(df_score["BPDia-2.0"]) == df_score.shape[0]
+    assert df_score["BPDia-2.0"].isna().sum() == 0
 
     # set test flag to true if passed
     update_test_dict(mock_test_io_neuropm_output_exist_shouldpass["key_group"],
@@ -240,11 +266,32 @@ def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
 
     # TO DO
     # Arrange
+    # define paths for i/o
+    path_data       = "src/fmrib/NeuroPM/io/"
+    path_data_score = os.path.join(path_data, "pseudotimes.csv")
 
     # Action
+    # try read the files, do they exist? set flag for success or not
+    try:
+        # read dataframes in
+        df_score  = pd.read_csv(path_data_score)
+
+        # set flags for passing read test
+        read_successful = True
+
+    except:
+        # set flags for failing test
+        read_successful = False
+    
+    # compute group overlap
+    
+
+    # compute AUROC 
+
 
     # Assert
-    assert True
+    # check if the files were read in with pandas successfully
+    assert read_successful
 
     # set test flag to true if passed
     update_test_dict(mock_test_neuro_pm_accuracy_shouldpass["key_group"],
