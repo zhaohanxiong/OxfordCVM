@@ -8,6 +8,7 @@ name: cTI dev pipeline CI
 on:
   push:
     branches: ["dev"]
+  pull_request
 
 # read only permission for files
 permissions:
