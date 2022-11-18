@@ -80,7 +80,19 @@ git checkout new_branch_name
 git add name_of_file_updated
 git commit -m "commited a change in file X for a new functionality"
 ```
-- Run the entirely workflow again on your own computer which runs the preprocessing, modelling, and post processing
+- Run the entirely workflow again on your own computer which runs the preprocessing, modelling, and post processing (for non-linux, you can just run each file individually but MAKE SURE you run all the files)
 ```
-src/run_UKB_cTI_subset.sh (for non-linux, you can just run each file individually by make sure you run all the files)
+src/run_UKB_cTI_subset.sh 
 ```
+- At the end of the file, the workflow uses library ```pytest``` in python to run tests on the outputs of the workflow. Speficially it checks the files in ```src/fmrib/NeuroPM/io```
+- ```python ./test/init.py``` configures the test outputs
+- ```pytest ./test/test_neuropm.py``` runs the tests and stores the outputs
+- The outputs are stored in ```test/test.json``` which is a dictionary containing key-value pairs for whether a certain test has passed or not
+- After running the tests, you can add any updates and push your branch to GitHub
+```
+git add .
+git commit -m "ran tests for CI"
+git push --set-upstream origin new_branch_name
+```
+- Go to github and click the third tab "Pull Request", select your branch on the right and ```dev``` as the base branch on the left to merge into. Finally click open pull request.
+- You will now see the test run. If it has passed, then you can click "merge" and your branch will be merged into ```dev``` without anyone having to review it
