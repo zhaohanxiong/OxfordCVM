@@ -20,11 +20,6 @@ cd ..
 Rscript postprocess_eval_model.R
 
 # run test cases (in root directory)
-cd ../../test
-python init.py
-cd ..
-pytest ./test/test_neuropm.py -k "test_io_R_preprocess_output_exist_shouldpass"
-pytest ./test/test_neuropm.py -k "test_io_R_ft_select_output_exist_shouldpass"
-pytest ./test/test_neuropm.py -k "test_io_neuropm_output_exist_shouldpass"
-pytest ./test/test_neuropm.py -k "test_io_neuropm_interm_output_exist_shouldpass"
-pytest ./test/test_neuropm.py -k "test_neuro_pm_accuracy_shouldpass"
+cd ../..
+python ./test/init.py
+pytest ./test/test_neuropm.py

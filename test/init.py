@@ -1,16 +1,21 @@
 import json
 
-# load dictionary
-fname = "test.json"
-test_dict = json.load(open(fname))
+def initialize_flags():
 
-# iterate through all groups (assumes only 2 layers to dictionary)
-for key_group, value in test_dict.items():
+    # load dictionary
+    fname = "test/test.json"
+    test_dict = json.load(open(fname))
 
-    # iterate through each group
-    for key, value2 in test_dict[key_group].items():
+    # iterate through all groups (assumes only 2 layers to dictionary)
+    for key_group, _ in test_dict.items():
 
-        test_dict[key_group][key] = False
+        # iterate through each group
+        for key, _ in test_dict[key_group].items():
 
-filedict = open(fname, 'w')
-json.dump(test_dict, filedict, indent = 4, sort_keys = True)
+            test_dict[key_group][key] = False
+
+    filedict = open(fname, 'w')
+    json.dump(test_dict, filedict, indent = 4, sort_keys = True)
+
+if __name__ == "__main__":
+    initialize_flags()
