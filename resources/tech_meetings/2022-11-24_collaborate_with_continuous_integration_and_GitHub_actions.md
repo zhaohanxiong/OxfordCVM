@@ -64,5 +64,9 @@
   5) You can also link asks together inside a ```job``` by using ```needs```. You will be able to visualize your action workflow in the 4th tab of GitHub on the top called "Actions"
 
 ### Putting this into Practice for Our Code Base
+- Make sure your code is up to date
+```
+git pull origin
+```
 - 
 
