@@ -52,9 +52,17 @@
   - Automatically deploying your code to production
   - Performing checks to ensure your code performs the correct functionality
 
-### How to Collaborate with CI
+### GitHub Actions
+- GitHub actions are used to for CI/CD
+- The actions are defined as workflow and are located here in the codebase: ```OxfordCVM/.github/workflows/```
+- There are currently two actions, one for the ```dev``` branch and one for the ```prod``` branch
+- The actions are configured using a language called YAML
+  1) Define when the action is executed (on pull request) with ```on```
+  2) Define name/permission with ```name``` and ```permissions```
+  3) Define workflow with ```jobs```
+  4) Include the content of each task inside the workflow which performs some sort of test
+  5) You can also link asks together inside a ```job``` by using ```needs```. You will be able to visualize your action workflow in the 4th tab of GitHub on the top called "Actions"
+
+### Putting this into Practice for Our Code Base
 - 
 
-### 
-- 
-```
