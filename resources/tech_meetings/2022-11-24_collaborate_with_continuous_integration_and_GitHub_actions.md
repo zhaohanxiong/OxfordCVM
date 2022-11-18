@@ -22,7 +22,8 @@
   - Difficult to retrace mistakes and also keep track of very large projects involving many team members
 
 ### How to Add Code Changes 
-- Code changes should be added incrementally to avoid large changes over multiple files which are difficult to track when bugs occur:
+- Code changes should be added incrementally to avoid large changes over multiple files which are difficult to track when bugs occur
+- You should aim to minimize the number of files you are changing at any one time
 - It is important to always be concious of the code changes you are making:
   - How it impacts existing code
   - How it affects other team members
@@ -38,7 +39,7 @@
   - Incrementally adding to the existing code will reduce bugs occuring
   - Even if there may be a better method, you should still follow the existing logic of the code even if it means the code might not be the most optimal
   - Major changes such as adding new pipelines or creating new logic flows should be performed seperately and should not be contributed as a part of improving the current functionality
- - Different developers have different styles and habits, so it is very important for all team members to actively work together to harmonise each others code
+  - Different developers have different styles and habits, so it is very important for all team members to actively work together to harmonise each others code. You should not be changing parts of the code base to make yourself feel comfortable. Even if you see a mistake somewhere unrelated to the component you are currently working on, you should not try to fix it until you have discussed this with another team member.
   - When every team member develops in the same framework, collaboration becomes much easier and efficient
 
 ### CI/CD (Continuous Integration/Continous Delivery)
@@ -54,7 +55,7 @@
 
 ### GitHub Actions
 - GitHub actions are used to for CI/CD
-- The actions are defined as workflow and are located here in the codebase: ```OxfordCVM/.github/workflows/```
+- The actions are defined as workflow and are located here in the codebase: ```.github/workflows/```
 - There are currently two actions, one for the ```dev``` branch and one for the ```prod``` branch
 - The actions are configured using a language called YAML
   1) Define when the action is executed (on pull request) with ```on```
@@ -66,7 +67,20 @@
 ### Putting this into Practice for Our Code Base
 - Make sure your code is up to date
 ```
+git checkout dev
 git pull origin
 ```
-- 
-
+- Make new branch
+```
+git branch new_branch_name
+git checkout new_branch_name
+```
+- Make your code changes (try to only stick with changing only one file at a time) and commit your changes
+```
+git add name_of_file_updated
+git commit -m "commited a change in file X for a new functionality"
+```
+- Run the entirely workflow again on your own computer which runs the preprocessing, modelling, and post processing
+```
+src/run_UKB_cTI_subset.sh (for non-linux, you can just run each file individually by make sure you run all the files)
+```
