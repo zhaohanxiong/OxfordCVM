@@ -49,7 +49,7 @@ jobs:
   # CI model output correctness
   test_model_output:
 
-    needs: [test_build_python]
+    needs: [test_build]
     runs-on: ubuntu-latest
 
     steps:
