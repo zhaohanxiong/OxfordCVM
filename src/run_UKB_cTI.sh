@@ -40,5 +40,7 @@ python ./mlflow_tracking.py --experiment_id=1
 python ./mlflow_versioning.py --experiment_id=1
 
 # run test cases (in root directory)
-cd ../../..
+cd ../../../test
+python init.py
+cd ..
 pytest

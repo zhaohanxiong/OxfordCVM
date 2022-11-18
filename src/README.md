@@ -132,6 +132,12 @@ install.packages("gridExtra")
 pip install numpy scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
 ```
 
+- Matlab
+```
+- All Matlab dependencies should have been installed already
+- Simply type "matlab" followed by the name of the matlab file to run
+```
+
 - Exit out of virtual environment
   - You should activate your virtual environment to install new libraries and run code
   - You should deactivate your virtual environment when you are finished with ```conda deactivate```
