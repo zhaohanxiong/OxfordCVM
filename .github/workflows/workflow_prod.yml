@@ -24,6 +24,8 @@ jobs:
   # CI python code with basic test build
   test_build:
 
+    name: test_build
+
     runs-on: ubuntu-latest
 
     steps:
@@ -49,6 +51,8 @@ jobs:
   # CI model output correctness
   test_model_output:
 
+    name: test_model_output
+
     needs: [test_build]
     runs-on: ubuntu-latest
 
@@ -69,6 +73,8 @@ jobs:
   # CI docker with test build
   test_build_docker_model:
 
+    name: test_build_docker_model
+
     needs: [test_model_output]
     runs-on: ubuntu-latest
 
@@ -81,6 +87,8 @@ jobs:
 
   # CD docker deploy as a container to AWS ECR
   deploy_model_ECR:
+
+    name: deploy_model_ECR
 
     needs: [test_build_docker_model]
     runs-on: ubuntu-latest
@@ -110,6 +118,8 @@ jobs:
 
   # INCOMPLETE # CD deploy data outputted to AWS RDS
   deploy_data_RDS:
+
+    name: deploy_data_RDS
 
     needs: [test_model_output]
     runs-on: ubuntu-latest
