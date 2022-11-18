@@ -19,6 +19,8 @@ jobs:
   # CI python code with basic test build
   test_code_changes:
 
+    name: test_code_changes
+
     runs-on: ubuntu-latest
 
     steps:
