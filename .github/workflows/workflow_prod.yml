@@ -6,8 +6,8 @@ name: cTI prod pipeline CI-CD
 
 # when to run this action
 on:
-  push:
-    branches: ["prod"]
+  pull_request:
+    types: [opened, reopened]
 
 # read only permission for files
 permissions:

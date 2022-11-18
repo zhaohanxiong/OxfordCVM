@@ -6,8 +6,8 @@ name: cTI dev pipeline CI
 
 # when to run this action
 on:
-  push:
-    branches: ["dev"]
+  #push:
+  #  branches: ["dev"]
   pull_request:
     types: [opened, reopened]
 
