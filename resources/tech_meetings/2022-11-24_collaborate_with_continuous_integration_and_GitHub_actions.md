@@ -43,7 +43,7 @@
   - When every team member develops in the same framework, collaboration becomes much easier and efficient
 
 ### CI/CD (Continuous Integration/Continous Delivery)
-- CT/CD is one of the most important principles in software development and is used by most software companies
+- CI/CD is one of the most important principles in software development and is used by most software companies
 - CI/CD automates many parts of the collaboration process which significantly increases productivity and the rate at which new features are released
 - CI (continuous integration) involves:
   - Automatically incorporating code changes
