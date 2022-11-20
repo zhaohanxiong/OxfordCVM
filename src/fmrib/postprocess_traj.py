@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from scipy.sparse.csgraph import laplacian
 
 # source path & set the current working directory
-path = "NeuroPM/io/"
+path = "src/fmrib/NeuroPM/io/"
 os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
@@ -65,7 +65,7 @@ trajectory_groups = [] # list of indices of trajectory which are highly similar
 for i in range(overlap.shape[0]):
     
     # check which paths have enough overlap to be considered the same
-    ij = np.where(overlap[i,:] >= 0.5)[0]
+    ij = np.where(overlap[i,:] >= 0.25)[0]
     set_i = set().union(set([i]),set(ij))
 
     # check current list of trajectories groups to see if these can be added to existing groups
@@ -136,7 +136,7 @@ for i in np.where(labels["bp_group"] == 0)[0]:
 # compute spectral layout using lapacian and eigen decomp (1 minute run time)
 L = laplacian((MST_mat>0).astype(int))
 vals, vecs = np.linalg.eigh(L)
-x, y = vecs[:,0], vecs[:,1]
+x, y = vecs[:,1], vecs[:,2]
 graph_coordinates = {i: (x[i], y[i]) for i in range(MST_mat.shape[0])}
 
 # build list of edges and nodes
@@ -158,7 +158,7 @@ edge_trace = go.Scattergl(x=edge_x, y=edge_y,
                           line=dict(width=1, color='black'), mode='lines')
 
 # define colors for nodes based on disease score,
-if True:
+if False:
 
     # continuous scale for disease scores
     score_col = np.copy(MST_label["pseudotime"].to_numpy())
@@ -169,7 +169,7 @@ if True:
     score_col[score_col>1] = 1
 
 # define colors grouped by trajectories/bp_group
-if False:
+if True:
     
     # group by trajectory
     score_col = np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) 
