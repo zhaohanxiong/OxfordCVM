@@ -84,7 +84,7 @@ git commit -m "commited a change in file X for a new functionality"
 ```
 src/run_UKB_cTI_subset.sh 
 ```
-- At the end of the file, the workflow uses library ```pytest``` in python to run tests on the outputs of the workflow. Speficially it checks the files in ```src/fmrib/NeuroPM/io```
+- At the end of the file, the workflow uses library ```pytest``` in python to run tests on the outputs of the workflow. Speficially it checks the files in ```src/modelling/NeuroPM/io```
 - ```python ./test/init.py``` configures the test outputs
 - ```pytest ./test/test_neuropm.py``` runs the tests and stores the outputs
 - The outputs are stored in ```test/test.json``` which is a dictionary containing key-value pairs for whether a certain test has passed or not

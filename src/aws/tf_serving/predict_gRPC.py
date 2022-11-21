@@ -4,7 +4,7 @@ import tensorflow as tf
 from tensorflow_serving.apis import predict_pb2, prediction_service_pb2_grpc
 
 # load data (change index to change different sample)
-sample = pd.read_csv("../../fmrib/NeuroPM/io/ukb_num_norm.csv").iloc[1]
+sample = pd.read_csv("../../modelling/NeuroPM/io/ukb_num_norm.csv").iloc[1]
 
 # (to do later) normalize data values according to original ukb_mat column-wise mean/sd
 

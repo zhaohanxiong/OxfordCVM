@@ -74,7 +74,7 @@ def test_ml_model_accuracy_shouldpass(mock_test_ml_model_accuracy_shouldpass):
 
     # Arrange
     # define paths for i/o
-    path_data      = "src/fmrib/NeuroPM/io/"
+    path_data      = "src/modelling/NeuroPM/io/"
     path_data_pred = os.path.join(path_data, "inference_cTI_ml_pred.csv")
 
     # load data

@@ -16,7 +16,7 @@ def test_io_R_preprocess_output_exist_shouldpass(mock_test_io_R_preprocess_outpu
 
     # Arrange
     # define paths for i/o
-    path_data           = "src/fmrib/NeuroPM/io/"
+    path_data           = "src/modelling/NeuroPM/io/"
     path_data_frame_raw = os.path.join(path_data, "ukb_num.csv")
     path_data_frame     = os.path.join(path_data, "ukb_num_norm.csv")
     path_data_score     = os.path.join(path_data, "labels.csv")
@@ -68,7 +68,7 @@ def test_io_R_ft_select_output_exist_shouldpass(mock_test_io_R_ft_select_output_
 
     # Arrange
     # define paths for i/o
-    path_data       = "src/fmrib/NeuroPM/io/"
+    path_data       = "src/modelling/NeuroPM/io/"
     path_data_frame = os.path.join(path_data, "ukb_num_norm_ft_select.csv")
     path_data_score = os.path.join(path_data, "labels_select.csv")
 
@@ -117,7 +117,7 @@ def test_io_neuropm_output_exist_shouldpass(mock_test_io_neuropm_output_exist_sh
 
     # Arrange
     # define paths for i/o
-    path_data       = "src/fmrib/NeuroPM/io/"
+    path_data       = "src/modelling/NeuroPM/io/"
     path_data_score = os.path.join(path_data, "pseudotimes.csv")
     path_var_weight = os.path.join(path_data, "var_weighting.csv")
     path_threshold  = os.path.join(path_data, "threshold_weighting.csv")
@@ -179,7 +179,7 @@ def test_io_neuropm_interm_output_exist_shouldpass(mock_test_io_neuropm_interm_o
 
     # Arrange
     # define paths for i/o
-    path_data = "src/fmrib/NeuroPM/io/"
+    path_data = "src/modelling/NeuroPM/io/"
     files = os.listdir(path_data)
 
     # Action
@@ -214,7 +214,7 @@ def test_io_neuropm_interm_output_exist_shouldpass(mock_test_io_neuropm_interm_o
 
 #     # Arrange
 #     # define paths for i/o
-#     path_data        = "src/fmrib/NeuroPM/io/"
+#     path_data        = "src/modelling/NeuroPM/io/"
 #     path_data_score  = os.path.join(path_data, "pseudotimes.csv")
 #     path_var_names   = os.path.join(path_data, "ukb_varnames.csv")
 #     path_var_weights = os.path.join(path_data, "var_weighting_reduced.csv")
@@ -267,7 +267,7 @@ def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
 
     # Arrange
     # define paths for i/o
-    path_data       = "src/fmrib/NeuroPM/io/"
+    path_data       = "src/modelling/NeuroPM/io/"
     path_data_score = os.path.join(path_data, "pseudotimes.csv")
     
     # read dataframes in
@@ -324,7 +324,7 @@ def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
 
 #     # Arrange
 #     # define paths for i/o
-#     path_data      = "src/fmrib/NeuroPM/io/"
+#     path_data      = "src/modelling/NeuroPM/io/"
 #     path_data_pred = os.path.join(path_data, "inference_x_val_pred.csv")
 
 #     # load data

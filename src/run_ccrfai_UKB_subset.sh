@@ -1,10 +1,10 @@
 #!/bin/sh
 
-# activate conda environment (need conda for fmrib) for Python/R Libraries
+# activate conda environment for Python/R Libraries
 source activate env_conda
 
 # run R preprocessing script, writes to NeuroPM/io directory
-cd ./fmrib
+cd ./modelling
 Rscript preprocess_data_preparation.R
 Rscript preprocess_feature_selection.R
 

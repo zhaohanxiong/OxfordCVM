@@ -4,7 +4,7 @@
 source activate env_conda
 
 # run R preprocessing script, writes to NeuroPM/io directory
-cd ./fmrib
+cd ./modelling
 Rscript preprocess_data_preparation.R
 Rscript preprocess_feature_selection.R
 
@@ -13,7 +13,7 @@ cd ./NeuroPM
 ./compile_NeuroPM.sh
 
 # execute the compiled matlab program
-nohup ./run_run_NeuroPM.sh /opt/fmrib/MATLAB/MATLAB_Compiler_Runtime/v98
+nohup ./run_run_NeuroPM.sh /opt/modelling/MATLAB/MATLAB_Compiler_Runtime/v98
 
 # run post-processing file organization/evaluation
 cd ..

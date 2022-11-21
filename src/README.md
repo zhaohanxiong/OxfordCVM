@@ -77,7 +77,7 @@ git branch -D prod
 - Setup Code Base by Adding Directories Ignored by Git
 ```
 cd OxfordCVM
-mkdir /src/fmrib/NeuroPM/io
+mkdir /src/modelling/NeuroPM/io
 mkdir /src/aws/tf_serving/saved_models
 mkdir /src/ml_lifecycle/mlflow/mlruns
 mkdir /src/ml_lifecycle/mlflow/mlruns_staging
@@ -192,7 +192,7 @@ source /home/fs0/winokl/zxiong/env/bin/activate
 - Copying Data Files to/from Server to/from Local Windows (Example)
 ```
 scp temp.txt winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong
-scp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/fmrib/NeuroPM/io .
+scp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/modelling/NeuroPM/io .
 ```
 
 ### Cluster Run Commands

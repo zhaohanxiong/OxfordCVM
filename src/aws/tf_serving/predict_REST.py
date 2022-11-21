@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 
 # load data
-sample = pd.read_csv("../../fmrib/NeuroPM/io/ukb_num_norm.csv").iloc[0]
+sample = pd.read_csv("../../modelling/NeuroPM/io/ukb_num_norm.csv").iloc[0]
 
 # (to do later) normalize data values according to original ukb_mat column-wise mean/sd
 

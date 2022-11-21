@@ -18,7 +18,7 @@ git status
 
 - add data to dvc tracking, this makes sure that they wont be accidentally added to git, do git before dvc
 dvc add ./<directory>
-git add .\src\fmrib\NeuroPM\<directory>.dvc
+git add .\src\modelling\NeuroPM\<directory>.dvc
 
 - commit all dvc/git changes and upload to remote storage (on S3 and GitHub), do git before dvc
 git commit -m "commit message"

@@ -1,6 +1,6 @@
 # manually create these directories for the paths below
 # outputs from cTI
-/src/fmrib/NeuroPM/io
+/src/modelling/NeuroPM/io
 
 # manually create these directories for the paths below
 # machine learning files

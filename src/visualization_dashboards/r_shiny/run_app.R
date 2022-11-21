@@ -44,7 +44,7 @@ if (!local) { # connecting to AWS
 } else { # read from local storage
   
   # set data path
-  path = "../../fmrib/NeuroPM/io/" # "C:/Users/zxiong/Desktop/io"
+  path = "../../modelling/NeuroPM/io/" # "C:/Users/zxiong/Desktop/io"
   
   # load variables used in cTI
   varnames = read.csv(file.path(path, "ukb_varnames.csv"), header=TRUE)

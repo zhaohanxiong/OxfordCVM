@@ -7,7 +7,7 @@ import tensorflow as tf
 
 # define paths for i/o
 path_model     = "../aws/tf_serving/saved_models/2/"
-path_data      = "../fmrib/NeuroPM/io/"
+path_data      = "../modelling/NeuroPM/io/"
 path_data_val  = os.path.join(path_data, "ukb_num_norm_ft_select.csv")
 path_data_lab  = os.path.join(path_data, "pseudotimes.csv")
 path_data_pred = os.path.join(path_data, "inference_cTI_ml_pred.csv")
