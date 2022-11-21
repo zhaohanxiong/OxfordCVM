@@ -95,9 +95,6 @@ for i in range(overlap.shape[0]):
     if len(list_similar) == 0:
         trajectory_groups.append(set_i)
 
-# given unique set of trajectories, reduce down to at most 5 major trajectory paths
-# TO DO
-
 # create sets of unique merged trajectory paths using the indices derived above
 traj_list = [[] for _ in range(MST_label.shape[0])]
 MST_label["trajectory"] = -1
