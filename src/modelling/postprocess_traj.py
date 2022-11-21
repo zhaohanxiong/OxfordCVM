@@ -57,19 +57,24 @@ for i in range(len(trajectories)):
     # compare current path to every other path
     for j in range(i+1,len(trajectories)):
 
-        # convert this part into binary, 0 for not same, 1 for same, merge all 1s later
-        # criteria should be overlap, or if one is inside the other, or something else
-        # this criteria should be done so that there are only 5 trajectory groups left
-        overlap[i,j] = len(path_set & set(trajectories[j]))
-        overlap[i,j] -= 1 # dont count root node
-        overlap[i,j] /= path_length
+        # create a set for the incoming trajectory to compare with the current
+        incoming_traj = set(trajectories[j])
+
+        # calculate the length of overlap between 2 nodes
+        overlap_length = len(path_set & incoming_traj)
+
+        # calculate overlap as a percentage of the path being compared
+        overlap_percentage = overlap_length/np.min([path_length, len(incoming_traj)])
+        
+        # convert this part into binary, False for not same, True for same
+        overlap[i,j] = overlap_percentage > 0.75
 
 # using the similarities, collate lists of indices of paths which are similar
 trajectory_groups = [] # list of indices of trajectory which are highly similar
 for i in range(overlap.shape[0]):
     
     # check which paths have enough overlap to be considered the same
-    ij = np.where(overlap[i,:] > 0.5)[0]
+    ij = np.where(overlap[i,:] == True)[0]
     set_i = set().union(set([i]),set(ij))
 
     # check current list of trajectories groups to see if these can be added to existing groups
