@@ -1,0 +1,22 @@
+#!/bin/sh
+
+# activate conda environment (need conda for fmrib) for Python/R Libraries
+source activate env_conda
+
+# run R preprocessing script, writes to NeuroPM/io directory
+cd ./fmrib
+Rscript preprocess_data_preparation.R
+Rscript preprocess_feature_selection.R
+
+# run matlab (local matlab install)
+cd ./NeuroPM
+/home/zhaohanx/Matlab2020a/bin/matlab -nodisplay -nosplash -nodesktop -r "run('run_NeuroPM.m');exit;"
+
+# run post-processing file organization/evaluation
+cd ..
+Rscript postprocess_eval_model.R
+
+# run test cases (in root directory)
+cd ../..
+python ./test/init.py
+pytest ./test/test_neuropm.py

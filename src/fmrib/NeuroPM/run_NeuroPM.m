@@ -1,5 +1,5 @@
 %% add paths (uncomment if youre not running the compiled mcc matlab version)
-%addpath("cTI-codes\","cTI-codes\auxiliary\","cTI-codes\dijkstra_tools\","cTI-codes\data_harmonization\");
+addpath("cTI-codes/","cTI-codes/auxiliary/","cTI-codes/dijkstra_tools/","cTI-codes/data_harmonization/");
 
 %% read data
 % loads data (main feature matrix) and labels (bp_group)
