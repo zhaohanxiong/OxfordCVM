@@ -5,7 +5,7 @@
     },
     "data_processing": {
         "does_R_postproces_output_exist": false,
-        "does_R_preprocess_output_exist": false
+        "does_R_preprocess_output_exist": true
     },
     "ml": {
         "does_model_exist": false,
