@@ -94,10 +94,10 @@ def test_io_R_ft_select_output_exist_shouldpass(mock_test_io_R_ft_select_output_
     assert df_ukb.shape[0] == df_score.shape[0]
     assert len(df_score["bp_group"]) == df_score.shape[0]
     assert df_score["bp_group"].isna().sum() == 0
-    assert len(df_score["BPSys.2.0"]) == df_score.shape[0]
-    assert df_score["BPSys.2.0"].isna().sum() == 0
-    assert len(df_score["BPDia.2.0"]) == df_score.shape[0]
-    assert df_score["BPDia.2.0"].isna().sum() == 0
+    assert len(df_score["BPSys-2.0"]) == df_score.shape[0]
+    assert df_score["BPSys-2.0"].isna().sum() == 0
+    assert len(df_score["BPDia-2.0"]) == df_score.shape[0]
+    assert df_score["BPDia-2.0"].isna().sum() == 0
 
     # set test flag to true if passed
     update_test_dict(mock_test_io_R_ft_select_output_exist_shouldpass["key_group"],
@@ -156,10 +156,10 @@ def test_io_neuropm_output_exist_shouldpass(mock_test_io_neuropm_output_exist_sh
     assert df_score["global_pseudotimes"].isna().sum() == 0
     assert len(df_score["bp_group"]) == df_score.shape[0]
     assert df_score["bp_group"].isna().sum() == 0
-    assert len(df_score["BPSys.2.0"]) == df_score.shape[0]
-    assert df_score["BPSys.2.0"].isna().sum() == 0
-    assert len(df_score["BPDia.2.0"]) == df_score.shape[0]
-    assert df_score["BPDia.2.0"].isna().sum() == 0
+    assert len(df_score["BPSys-2.0"]) == df_score.shape[0]
+    assert df_score["BPSys-2.0"].isna().sum() == 0
+    assert len(df_score["BPDia-2.0"]) == df_score.shape[0]
+    assert df_score["BPDia-2.0"].isna().sum() == 0
 
     # set test flag to true if passed
     update_test_dict(mock_test_io_neuropm_output_exist_shouldpass["key_group"],
@@ -265,7 +265,6 @@ def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
                      mock_test_neuro_pm_accuracy_shouldpass["key"],
                      False)
 
-    # TO DO
     # Arrange
     # define paths for i/o
     path_data       = "src/fmrib/NeuroPM/io/"
@@ -299,11 +298,11 @@ def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
     assert scores_disease.min() > scores_between.min()
     assert scores_between.max() > scores_background.max()
     assert scores_disease.max() > scores_between.max()
-    assert q_background[2] < q_between[0]
-    assert q_background[2] < q_disease[0]
-    assert q_between[0] < q_disease[0]
-    assert q_between[1] < q_disease[1]
-    assert q_between[2] < q_disease[2]
+    assert np.round(q_background[2],2) <= np.round(q_between[0],2)
+    assert np.round(q_background[2],2) <= np.round(q_disease[0],2)
+    assert np.round(q_between[0],2) <= np.round(q_disease[0],2)
+    assert np.round(q_between[1],2) <= np.round(q_disease[1],2)
+    assert np.round(q_between[2],2) <= np.round(q_disease[2],2)
 
     # set test flag to true if passed
     update_test_dict(mock_test_neuro_pm_accuracy_shouldpass["key_group"],
