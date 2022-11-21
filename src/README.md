@@ -3,7 +3,7 @@
 ### Connect
 - VPN using Cisco to Connect to Oxford Network
 ```
-IP Address: vpn.ox.ac.uk
+IP Address: vpn.medsci.ox.ac.uk
 Input Username: (i.e. card0633)
 Input Password: single-sign-on password
 ```
@@ -164,7 +164,7 @@ scp -r zhaohanx@163.1.212.155:/home/zhaohanx/file_to_transfer .
 ### Connect
 - VPN Connection using Cisco
 ```
-vpn.ox.ac.uk (then type ur user ID and password)
+vpn.medsci.ox.ac.uk (then type ur user ID and password)
 ```
 
 - SSH Tunnel
