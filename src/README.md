@@ -134,8 +134,9 @@ pip install numpy scipy pandas networkx plotly seaborn matplotlib opencv-python 
 
 - Matlab
 ```
-- All Matlab dependencies should have been installed already
-- Simply type "matlab" followed by the name of the matlab file to run
+- You need to install matlab individually as licenses are given to individual accounts
+- The linux setup file for Matlab 2020a is already downloaded
+- Download/unzip this file in your own account folder and run the install file to install matlab
 ```
 
 - Exit out of virtual environment
