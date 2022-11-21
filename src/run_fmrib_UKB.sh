@@ -27,7 +27,7 @@ python postprocess_traj.py
 Rscript postprocess_ggplots.R
 
 # run cross validation (very long runtime)
-bash ./run_x_validate.sh
+bash ./run_fmrib_x_validate.sh
 
 # ml lifecycle (train, test, save, log, deploy, monitor)
 cd ../ml_lifecycle
