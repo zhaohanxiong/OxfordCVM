@@ -60,4 +60,4 @@ print(sprintf("The Filtered Data Frame is of Size %0.0f by %0.0f",
 
 # write to output
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
-fwrite(labels, "NeuroPM/io/labels_select.csv")
+write.csv(labels, "NeuroPM/io/labels_select.csv")
