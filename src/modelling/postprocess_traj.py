@@ -127,7 +127,7 @@ for i in range(len(trajectories_reduced)):
     for j in trajectories_reduced[i]:
         traj_list[j].append(i)
 
-    MST_label.loc[reduced_traj_i, "n_trajectory"] += 1
+    MST_label.loc[trajectories_reduced[i], "n_trajectory"] += 1
 
 # add the trajectory to the MST label as list for each element
 for i in range(MST_label.shape[0]):
