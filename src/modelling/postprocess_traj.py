@@ -100,21 +100,31 @@ for i in range(overlap.shape[0]):
     if len(list_similar) == 0:
         trajectory_groups.append(set_i)
 
+# retrive reduced trajectories list
+trajectories_reduced = [[] for _ in range(len(trajectory_groups))]
+
+for i, traj in enumerate(trajectory_groups):
+
+    # append trajectories
+    reduced_traj_i = []
+    for traj_i in traj:
+        reduced_traj_i.extend(trajectories[traj_i])
+
+    # store unique nodes
+    trajectories_reduced[i] = np.unique(np.array(reduced_traj_i))
+
+# perform pairwise comparisons between reduced trajectories to reduce further to <5
+
+
 # create sets of unique merged trajectory paths using the indices derived above
 traj_list = [[] for _ in range(MST_label.shape[0])]
 MST_label["trajectory"] = -1
 MST_label["n_trajectory"] = 0
 
-for i, traj in enumerate(trajectory_groups):
+# assign trajectory number to node, each node may have multiple trajectories
+for i in range(len(trajectories_reduced)):
 
-    # retire all paths from this trajectory group
-    reduced_traj_i = []
-    for traj_i in traj:
-        reduced_traj_i.extend(trajectories[traj_i])
-
-    # make nodes unique and assign the traj to the node
-    reduced_traj_i = np.unique(np.array(reduced_traj_i))
-    for j in reduced_traj_i:
+    for j in trajectories_reduced[i]:
         traj_list[j].append(i)
 
     MST_label.loc[reduced_traj_i, "n_trajectory"] += 1
