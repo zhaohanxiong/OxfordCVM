@@ -185,7 +185,6 @@ while len(trajectories_reduced) > args.max_traj_num:
 # create sets of unique merged trajectory paths using the indices derived above
 traj_list = [[] for _ in range(MST_label.shape[0])]
 MST_label["trajectory"] = -1
-MST_label["n_trajectory"] = 0
 
 # assign trajectory number to node, each node may have multiple trajectories
 for i in range(len(trajectories_reduced)):
@@ -193,18 +192,34 @@ for i in range(len(trajectories_reduced)):
     for j in trajectories_reduced[i]:
         traj_list[j].append(i)
 
-    MST_label.loc[trajectories_reduced[i], "n_trajectory"] += 1
-
 # add the trajectory to the MST label as list for each element
 for i in range(MST_label.shape[0]):
-    MST_label.at[i, "trajectory"] = ','.join(str(x) for x in traj_list[i])
-    #MST_label.at[i, "trajectory"] = traj_list[i][0]
 
-# map this back to the label file
-labels["trajectory"] = -1
-labels["n_trajectory"] = 0
+    # if root node, don't label as trajectory
+    if i == root_node:
+        MST_label.at[i, "trajectory"] = -1
+
+    # for all other nodes, include in trajectory with most nodes if multiple
+    else:
+
+        # get current list of possible trajectories
+        traj_list_i = traj_list[i]
+
+        # if node belongs to more than 1 trajectory
+        if len(traj_list_i) > 1:
+            traj_list_i = traj_list_i[np.argmax([len(trajectories_reduced[t]) 
+                                                            for t in traj_list_i])]
+        
+        # if only 1 trajectory, then just take that value
+        else:
+            traj_list_i = traj_list_i[0]
+            
+        # store value in table for the node
+        MST_label.at[i, "trajectory"] = traj_list_i
+
+# map this back to the label file, assume order hasnt shuffled, and just between group is gone in MST_label
+labels["trajectory"] = -999
 labels.loc[MST_ind, "trajectory"] = MST_label["trajectory"].to_numpy()
-labels.loc[MST_ind, "n_trajectory"] = MST_label["n_trajectory"].to_numpy()
 
 # infer the traj of between group with the same pseudotime score as the background/target nodes
 for i in np.where(labels["bp_group"] == 0)[0]:
@@ -212,8 +227,7 @@ for i in np.where(labels["bp_group"] == 0)[0]:
     ind = np.where((labels["global_pseudotimes"][i] == labels["global_pseudotimes"]).to_numpy() & 
                             (labels["bp_group"] != 0).to_numpy())[0][0]
 
-    labels.at[i,"trajectory"] = labels.at[ind,"trajectory"]
-    labels.at[i,"n_trajectory"] = labels.at[ind,"n_trajectory"]
+    labels.at[i, "trajectory"] = labels.at[ind, "trajectory"]
 
 # compute spectral layout using lapacian and eigen decomp (1 minute run time)
 L = laplacian((MST_mat>0).astype(int))
@@ -254,9 +268,10 @@ if False:
 if True:
     
     # group by trajectory
-    score_col = np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) 
-                                                        for i in range(MST_label.shape[0])])
-    
+    #score_col = np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) 
+    #                                                    for i in range(MST_label.shape[0])])
+    score_col = MST_label["trajectory"]
+
     # group by bp
     #score_col = MST_label["bp_group"].to_numpy()
 
