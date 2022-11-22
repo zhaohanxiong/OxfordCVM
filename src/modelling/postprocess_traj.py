@@ -11,7 +11,7 @@ from scipy.sparse.csgraph import laplacian
 
 # parameters
 parser = argparse.ArgumentParser()
-parser.add_argument("--max_traj_num", default = 5, type = int, help = "Maximum number of trajectories")
+parser.add_argument("--max_traj_num", default = 8, type = int, help = "Maximum number of trajectories")
 parser.add_argument("--overlap_threshold", default = 0.8, type = float, help = "Maximum threshold for trajectory overlap")
 args = parser.parse_args(sys.argv[1:])
 
@@ -218,7 +218,7 @@ for i in np.where(labels["bp_group"] == 0)[0]:
 # compute spectral layout using lapacian and eigen decomp (1 minute run time)
 L = laplacian((MST_mat>0).astype(int))
 vals, vecs = np.linalg.eigh(L)
-x, y = vecs[:,1], vecs[:,2]
+x, y = vecs[:,1], vecs[:,3]
 graph_coordinates = {i: (x[i], y[i]) for i in range(MST_mat.shape[0])}
 
 # build list of edges and nodes
@@ -283,7 +283,7 @@ node_trace = go.Scattergl(x=node_x, y=node_y,
 node_trace_b = go.Scatter(x=[node_x[root_node]], y=[node_y[root_node]],
                           mode='markers',marker_symbol="star",marker_line_color="black",
                           marker_size=30,marker_line_width=2,marker_color="Green",
-                          hovertemplate="Root Node (Least Diseased Node)"
+                          hovertemplate="Root Node (Least Diseased Patient)"
                           )
                     
 # produce the overall plot
