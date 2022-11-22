@@ -16,7 +16,7 @@ parser.add_argument("--overlap_threshold", default = 0.8, type = float, help = "
 args = parser.parse_args(sys.argv[1:])
 
 # source path & set the current working directory
-path = "src/modelling/NeuroPM/io/"
+path = "NeuroPM/io/"
 os.chdir(path)
 
 # load labels (0 = between, 1 = background, 2 = disease)
