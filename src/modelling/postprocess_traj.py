@@ -1,11 +1,19 @@
 import os
+import sys
 import plotly
 import scipy.io
+import argparse
 import numpy as np
 import pandas as pd
 import networkx as nx
 import plotly.graph_objects as go
 from scipy.sparse.csgraph import laplacian
+
+# parameters
+parser = argparse.ArgumentParser()
+parser.add_argument("--max_traj_num", default = 5, type = int, help = "Maximum number of trajectories")
+parser.add_argument("--overlap_threshold", default = 0.8, type = float, help = "Maximum threshold for trajectory overlap")
+args = parser.parse_args(sys.argv[1:])
 
 # source path & set the current working directory
 path = "src/modelling/NeuroPM/io/"
@@ -67,7 +75,7 @@ for i in range(len(trajectories)):
         overlap_percentage = overlap_length/np.min([path_length, len(incoming_traj)])
         
         # convert this part into binary, False for not same, True for same
-        overlap[i,j] = overlap_percentage > 0.75
+        overlap[i,j] = overlap_percentage > args.overlap_threshold
 
 # using the similarities, collate lists of indices of paths which are similar
 trajectory_groups = [] # list of indices of trajectory which are highly similar
@@ -113,8 +121,66 @@ for i, traj in enumerate(trajectory_groups):
     # store unique nodes
     trajectories_reduced[i] = np.unique(np.array(reduced_traj_i))
 
-# perform pairwise comparisons between reduced trajectories to reduce further to <5
+# initialize list to store trajectories which don't belong with any other
+no_group = np.array([False for _ in range(len(trajectories_reduced))])
 
+# perform pairwise comparisons between reduced trajectories to reduce further to <5
+while len(trajectories_reduced) > args.max_traj_num:
+
+    # debugging, flatten list and print out unique nodes
+    #print(np.unique([item for sublist in trajectories_reduced for item in sublist]).shape[0])
+
+    # find the shortest trajectory
+    traj_lengths = [len(t) for t in trajectories_reduced]
+    shortest_i = np.argsort(traj_lengths)[0]
+
+    # if this node is already a trajectory that doesnt belong to any paths
+    if len(np.where(no_group)[0]) > 0:
+        if shortest_i == np.where(no_group)[0][0]:
+            shortest_i = np.argsort(traj_lengths)[1]
+
+    shortest_traj = set(trajectories_reduced[shortest_i])
+
+    # merge trajectory with closest match
+    match_length = np.array([len(set.intersection(shortest_traj, set(t))) 
+                                                    for t in trajectories_reduced])
+
+    # if all the trajectories are 1s, treat this as special case
+    if (match_length == 1).sum() == (match_length.shape[0] -1):
+
+        # if there are other trajectories which have no overlap with others, merge
+        if no_group.sum() > 0:
+
+            # compute other trajectory which are not grouped
+            ind = np.where(no_group)[0][0]
+            
+            # merge the two
+            trajectories_reduced[ind] = np.append(trajectories_reduced[ind], 
+                                                    trajectories_reduced[shortest_i])
+            trajectories_reduced[ind] = np.unique(trajectories_reduced[ind])
+
+            # remove the former (current shortest) from the array
+            del trajectories_reduced[shortest_i]
+            no_group = np.delete(no_group, shortest_i)
+
+        else:
+
+            # set index as true if there are no current trajectories which don't belong to others
+            no_group[shortest_i] = True
+
+    else:
+
+        # find the index of most overlap (exclude itself)
+        closest_ind = np.argsort(match_length)[len(match_length) - 2]
+
+        # merge the two
+        trajectories_reduced[closest_ind] = np.append(trajectories_reduced[closest_ind], 
+                                                            trajectories_reduced[shortest_i])
+        trajectories_reduced[closest_ind] = np.unique(trajectories_reduced[closest_ind])
+
+        # remove the former (current shortest) from the array
+        del trajectories_reduced[shortest_i]
+        no_group = np.delete(no_group, shortest_i)
 
 # create sets of unique merged trajectory paths using the indices derived above
 traj_list = [[] for _ in range(MST_label.shape[0])]
