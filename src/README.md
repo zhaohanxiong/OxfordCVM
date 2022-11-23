@@ -217,3 +217,6 @@ qstat
 ```
 qdel job_id
 ```
+
+## Workflow
+![image](https://user-images.githubusercontent.com/29684281/203659203-52dd1857-beea-44a6-86d0-04e7618362ba.png)
