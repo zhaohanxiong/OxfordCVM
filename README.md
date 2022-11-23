@@ -1,9 +1,6 @@
 ### Tech Stack
 ![image](https://user-images.githubusercontent.com/29684281/203659049-690d98ec-dd4e-4e43-af54-ec9281086812.png)
 
-### AI Workflow for Cardiovascular Disease Modelling
-![image](https://user-images.githubusercontent.com/29684281/192150943-08ed2784-1919-4f91-9ebb-4ab6055a780a.png)
-
 ### Visualization Dashboard (R-Shiny, Ploty, Databricks)
 https://github.com/zhaohanxiong/OxfordCVM/tree/dev/src/visualization_dashboards
 
