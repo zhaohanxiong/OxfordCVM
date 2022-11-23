@@ -16,6 +16,9 @@ cd ./NeuroPM
 cd ..
 Rscript postprocess_eval_model.R
 
+# run python trajectory visualization/computation
+python postprocess_traj.py --max_traj_num=5 --overlap_threshold=0.9
+
 # run test cases (in root directory)
 cd ../..
 python ./test/init.py
