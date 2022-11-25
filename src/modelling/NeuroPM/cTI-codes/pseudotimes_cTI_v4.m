@@ -120,6 +120,7 @@ writetable(MST_labels,'io/MST.csv', 'WriteVariableNames', true);
 
 % clear and save variables
 clear Tree dist_matrix0 dist_matrix
+writetable(mappedX, 'io/cPC.csv', 'WriteVariableNames', true); % saving cPCs to file
 save('io/PC_Transform.mat','Node_Weights'); % eigen matrix to perform transformation into PCA space
 save('io/dijkstra.mat','dijkstra_F'); % dijkstra father nodes of every node for computing trajectories
 save('io/MST.mat','MST'); % save minimum spanning tree individually
