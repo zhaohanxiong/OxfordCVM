@@ -23,7 +23,6 @@
   - An occurance or initialization of an object
 
 ### Demo Using Existing Library
-
 ```
 import numpy as np
 arr = np.array([0, 1, 2, 3])
@@ -54,4 +53,6 @@ arr.sum()
   - Objects share behaviours and can take on more than one form
   - Allows different types of objects to pass through the same interface
 
-
+### Demo Using Existing Library
+```
+```
