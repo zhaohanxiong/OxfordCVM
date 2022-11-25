@@ -37,11 +37,6 @@ arr.sum()
 - In this example, an instance is also defined when we created the object
 
 ### Main Concepts of OOP
-- Encapsulation
-  - All information is stored inside an object
-  - Information cannot be accessed by other object
-  - Only public methods can be accessed
-  - Keeps object neatly packed and avoids unexpected changes
 - Abstraction
   - Only useful parts of the code are shown
   - Unnecessary code is hidden
@@ -50,9 +45,15 @@ arr.sum()
   - Reusing code from other classes to reuse common logic
   - Reduces development time
   - Maintains quality of code
+- Encapsulation
+  - All information is stored inside an object
+  - Information cannot be accessed by other object
+  - Only public methods can be accessed
+  - Keeps object neatly packed and avoids unexpected changes
 - Polymorphism
   - Objects share behaviours and can take on more than one form
-  - Allows different types of objects to pass through the same interface
+  - We can define functions which generalize to multiple different similar/related classes
+  - Allows different types of objects to pass through the same interface/function
 
 ### Demo - Class Definition
 ```
