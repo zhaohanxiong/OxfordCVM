@@ -17,7 +17,7 @@ cd ..
 Rscript postprocess_eval_model.R
 
 # run python trajectory visualization/computation
-python postprocess_traj.py --max_traj_num=8 --overlap_threshold=0.8
+python postprocess_traj_compute.py --max_traj_num=8 --overlap_threshold=0.8 --color_by="traj"
 
 # run test cases (in root directory)
 cd ../..

@@ -21,7 +21,7 @@ Rscript postprocess_files.R
 Rscript postprocess_eval_model.R
 
 # run python trajectory visualization/computation
-python postprocess_traj.py --max_traj_num=5 --overlap_threshold=0.9
+python postprocess_traj_compute.py --max_traj_num=8 --overlap_threshold=0.8 --color_by="traj"
 
 # generate ggplots for key results
 Rscript postprocess_ggplots.R

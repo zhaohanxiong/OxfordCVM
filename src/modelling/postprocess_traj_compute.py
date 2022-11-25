@@ -13,6 +13,7 @@ from scipy.sparse.csgraph import laplacian
 parser = argparse.ArgumentParser()
 parser.add_argument("--max_traj_num", default = 8, type = int, help = "Maximum number of trajectories")
 parser.add_argument("--overlap_threshold", default = 0.8, type = float, help = "Maximum threshold for trajectory overlap")
+parser.add_argument("--color_by", default = "score", type = str, help = "score/group/traj")
 args = parser.parse_args(sys.argv[1:])
 
 # source path & set the current working directory
@@ -253,8 +254,8 @@ for node in G.nodes():
 edge_trace = go.Scattergl(x=edge_x, y=edge_y,
                           line=dict(width=1, color='black'), mode='lines')
 
-# define colors for nodes based on disease score,
-if False:
+# define colors for continuous value
+if args.color_by == "score":
 
     # continuous scale for disease scores
     score_col = np.copy(MST_label["pseudotime"].to_numpy())
@@ -264,16 +265,20 @@ if False:
     score_col[MST_label["bp_group"]==2] *= 1.0 / disease_UQ
     score_col[score_col>1] = 1
 
-# define colors grouped by trajectories/bp_group
-if True:
-    
-    # group by trajectory
-    #score_col = np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) 
-    #                                                    for i in range(MST_label.shape[0])])
-    score_col = MST_label["trajectory"]
+# define colors by discrete value
+else:
 
-    # group by bp
-    #score_col = MST_label["bp_group"].to_numpy()
+    if args.color_by == "traj":
+    
+        # group by trajectory
+        #score_col = np.array([int(MST_label.at[i, "trajectory"].split(",")[0]) 
+        #                                                    for i in range(MST_label.shape[0])])
+        score_col = MST_label["trajectory"]
+
+    elif args.color_by == "group":
+
+        # group by bp
+        score_col = MST_label["bp_group"].to_numpy()
 
     # assign discrete color
     plotly_cols = np.array(['#FD3216', '#00FE35', '#6A76FC', '#FED4C4', '#FE00CE', '#0DF9FF',
@@ -322,4 +327,4 @@ plotly.offline.plot(fig, filename='Trajectory_Paths.html', auto_open=False)
 labels.to_csv("pseudotimes.csv", index=False)
 
 # print message to indicate completion
-print("Python -- Completed Trajectory Isolation and Visualization")
+print("Python -- Completed Trajectory Isolation")
