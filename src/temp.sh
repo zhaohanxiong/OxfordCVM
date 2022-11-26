@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# activate conda environment for Python/R Libraries
+source activate env_conda
+
+# run R preprocessing script, writes to NeuroPM/io directory
+cd ./modelling
+Rscript preprocess_feature_selection.R
+
+# run matlab (local matlab install)
+cd ./NeuroPM
+/home/zhaohanx/Matlab2020a/bin/matlab -nodisplay -nosplash -nodesktop -r "run('run_NeuroPM.m');exit;"
+
+# run post-processing file organization/evaluation
+cd ..
+Rscript postprocess_eval_model.R
