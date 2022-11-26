@@ -24,31 +24,27 @@ cov_disease = cov(ft_norm[labels$bp_group == 2, ])
 # covariance of a subset of background patients (75)
 cov_background_subset = cov(ft_norm[sample(which(labels$bp_group == 1), 750), ])
 
-# *** TO DO ***
 # identify which features contribute to high covariance
 # note that cPCA: cov = cov_d - a * cov_b
-
 # what is the difference between cov_background and cov_background_subset
 # which makes the cPCA worse when we add more background patients
+# * to do *
 
 # identify which features to keep
 keep_cols = rep(TRUE, ncol(ft_norm))
 
 # keep low covariance ones in the patient feature set
 ft_norm = ft_norm[, keep_cols]
-# *** TO DO ***
 
 # shuffle labels for experimentation
-#labels$bp_group = sample(labels$bp_group, nrow(labels))
+# labels$bp_group = sample(labels$bp_group, nrow(labels))
 
 # only keep subset of background/disease for experimentation
-if (FALSE) {
-    n_sample = 750
-    ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:n_sample, ],
-                    ft_norm[labels$bp_group != 1, ])
-    labels = rbind(labels[labels$bp_group == 1, ][1:n_sample, ],
-                labels[labels$bp_group != 1, ])
-}
+# n_sample = 750
+# ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:n_sample, ],
+#                 ft_norm[labels$bp_group != 1, ])
+# labels = rbind(labels[labels$bp_group == 1, ][1:n_sample, ],
+#             labels[labels$bp_group != 1, ])
 
 # display messages to see in terminal
 print(sprintf("Further Filtering Complete"))
