@@ -1,7 +1,7 @@
 # load dependencies
 library(data.table)
 
-# load data
+# # # load data
 ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
 
@@ -10,39 +10,31 @@ ind_rand = sample(1:nrow(labels), nrow(labels))
 ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
 
-# remove high co-correlation variables
-#cov_all = cov(ft_norm)
-#cov_all[upper.tri(cov_all)] = 0
-#diag(cov_all) = 0
-#ind_filter = !unname(apply(cov_all, 1, function(x) any(abs(x) > 1.0)))
-#ft_norm = ft_norm[, ind_filter]
-
-# compute covariance of background/disease population only
+# remove low covariance variables in background
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
-cov_disease = cov(ft_norm[labels$bp_group == 2, ])
+cov_background[upper.tri(cov_background)] = 0
+diag(cov_background) = 0
+ind_filter = !unname(apply(cov_all, 1, function(x) any(x < -0.25)))
+ft_norm = ft_norm[, ind_filter]
 
-# covariance of a subset of background patients
-cov_background_subset = cov(ft_norm[sample(which(labels$bp_group == 1), 500), ])
-
-c1 = cov_disease - 10*cov_background
-c2 = cov_disease - 10*cov_background_subset
-
-hist(abs(c1), col = rgb(0,0,1,1/4))
-hist(abs(c2), col = rgb(1,0,0,1/4), add = TRUE)
-
-# identify which features contribute to high covariance
+# # # identify which features contribute to high covariance
 # note that cPCA: cov = cov_d - a * cov_b
 # what is the difference between cov_background and cov_background_subset
 # which makes the cPCA worse when we add more background patients
 # * to do *
+# compute covariance of background/disease population only
+# covariance of a subset of background patients
+#cov_background = cov(ft_norm[labels$bp_group == 1, ])
+#cov_disease = cov(ft_norm[labels$bp_group == 2, ])
+#cov_background_subset = cov(ft_norm[sample(which(labels$bp_group == 1), 500), ])
+#c1 = cov_disease - 10*cov_background
+#c2 = cov_disease - 10*cov_background_subset
+#e1 = eigen(c1)
+#e2 = eigen(c2)
+#hist(e1$vectors, col = rgb(0,0,1,1/4))
+#hist(e2$vectors, col = rgb(1,0,0,1/4), add = TRUE)
 
-# identify which features to keep
-keep_cols = rep(TRUE, ncol(ft_norm))
-
-# keep low covariance ones in the patient feature set
-ft_norm = ft_norm[, keep_cols]
-
-# shuffle labels for experimentation
+# # # shuffle labels for experimentation
 # labels$bp_group = sample(labels$bp_group, nrow(labels))
 
 # only keep subset of background/disease for experimentation
