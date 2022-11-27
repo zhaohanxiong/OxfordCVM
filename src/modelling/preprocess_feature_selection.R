@@ -21,8 +21,14 @@ labels = labels[ind_rand, ]
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
 cov_disease = cov(ft_norm[labels$bp_group == 2, ])
 
-# covariance of a subset of background patients (75)
-cov_background_subset = cov(ft_norm[sample(which(labels$bp_group == 1), 750), ])
+# covariance of a subset of background patients
+cov_background_subset = cov(ft_norm[sample(which(labels$bp_group == 1), 500), ])
+
+c1 = cov_disease - 10*cov_background
+c2 = cov_disease - 10*cov_background_subset
+
+hist(abs(c1), col = rgb(0,0,1,1/4))
+hist(abs(c2), col = rgb(1,0,0,1/4), add = TRUE)
 
 # identify which features contribute to high covariance
 # note that cPCA: cov = cov_d - a * cov_b
