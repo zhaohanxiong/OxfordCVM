@@ -46,6 +46,8 @@ if (!local) { # connecting to AWS
   
   # set up SSH tunnel using ssh package
   
+  # secure credentials with config and options
+  
 } else { # read from local storage
   
   # set data path
