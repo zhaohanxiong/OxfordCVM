@@ -20,10 +20,10 @@ g1 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Background"]
 g2 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Between"]
 g3 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Disease"]
 
-# perform t-test between groups
-t.test(g1, g2) # background vs between
-t.test(g2, g3) # between vs disease
-t.test(g1, g3) # background vs disease
+# perform t-test between groups (always significant with large samples)
+#t.test(g1, g2) # background vs between
+#t.test(g2, g3) # between vs disease
+#t.test(g1, g3) # background vs disease
 
 # perform quantile differences between groups, % overlap
 g1_box = unname(c(quantile(g1, 0.25), quantile(g1, 0.75))) # background
