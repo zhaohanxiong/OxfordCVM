@@ -2,7 +2,7 @@
 
 # Define UI for app that draws a histogram
 ui = fluidPage(
-  
+
   # App title
   titlePanel("Hypertension Progression in the UK Biobank"),
   
