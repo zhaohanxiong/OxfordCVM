@@ -13,18 +13,22 @@ labels = labels[ind_rand, ]
 
 # # # remove low covariance variables in background
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
-cov_background[upper.tri(cov_background)] = 0
-diag(cov_background) = 0
+cov_background[upper.tri(cov_background)] = NA
+diag(cov_background) = NA
 
-cov_disease = cov(ft_norm[labels$bp_group == 2, ])
-cov_disease[upper.tri(cov_disease)] = 0
-diag(cov_disease) = 0
-
-#ind_filter = unname(apply(cov_background, 1, function(x) !any(abs(x) > 0.9)))
-#ft_norm = ft_norm[, ind_filter]
+#cov_disease = cov(ft_norm[labels$bp_group == 2, ])
+#cov_disease[upper.tri(cov_disease)] = 0
+#diag(cov_disease) = 0
 
 # # # reduce brain variables in the background
+var_brain = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
+var_mask = colnames(ft_norm) %in% var_brain
 
+ind_omit = unname(apply(cov_background, 1, function(x)
+                            any(abs(x) > 0.65, na.rm = TRUE)))
+
+ind_omit[!var_mask] = FALSE
+ft_norm = ft_norm[, !ind_omit]
 
 
 # # # filter our variables individually more specifically
