@@ -3,10 +3,13 @@ library(data.table)
 library(shiny)
 library(ggplot2)
 
-# -------------------- Connect to Data Base --------------------
 # read from AWS or locally
 local = TRUE
 
+# set deploy option as true or false
+deploy = FALSE
+
+# -------------------- Connect to Data Base --------------------
 if (!local) { # connecting to AWS
   
   library(rjson)
@@ -82,9 +85,6 @@ ukb_df$trajectory = factor(ukb_df$trajectory)
 varnames = varnames[varnames$colname %in% colnames(ukb_df), ]
 
 # -------------------- Run Shiny Application --------------------
-# set deploy option as true or false
-deploy = FALSE
-
 # deploy on shinyapp.io (hosted by R-Shiny)
 if (deploy) {
   
