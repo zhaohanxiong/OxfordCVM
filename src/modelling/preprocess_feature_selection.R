@@ -11,46 +11,41 @@ ind_rand = sample(1:nrow(labels), nrow(labels))
 ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
 
-# # # remove low covariance variables in background
+# # # compute covariance matrices
+# all
+cov_all = cov(ft_norm)
+cov_all[upper.tri(cov_all)] = NA
+diag(cov_all) = NA
+
+# background + disease
+cov_cti = cov(ft_norm[labels$bp_group == 1 | labels$bp_group == 2, ])
+cov_cti[upper.tri(cov_cti)] = NA
+diag(cov_cti) = NA
+
+# background
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
 cov_background[upper.tri(cov_background)] = NA
 diag(cov_background) = NA
 
-#cov_disease = cov(ft_norm[labels$bp_group == 2, ])
-#cov_disease[upper.tri(cov_disease)] = 0
-#diag(cov_disease) = 0
+# disease
+cov_disease = cov(ft_norm[labels$bp_group == 2, ])
+cov_disease[upper.tri(cov_disease)] = 0
+diag(cov_disease) = 0
 
-# # # reduce brain variables in the background
+# # # feature selection # note that cPCA: cov = cov_d - a * cov_b
+# find high co-correlation variables
+ind_omit = unname(apply(cov_all, 1, function(x)
+                            any(abs(x) > 0.75, na.rm = TRUE)))
+
+# find brain variables
 var_brain = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
-var_mask = colnames(ft_norm) %in% var_brain
+var_brain = colnames(ft_norm) %in% var_brain
 
-ind_omit = unname(apply(cov_background, 1, function(x)
-                            any(abs(x) > 0.65, na.rm = TRUE)))
+# remove only brain variables
+ind_omit[!var_brain] = FALSE
 
-ind_omit[!var_mask] = FALSE
+# only keep relevant features
 ft_norm = ft_norm[, !ind_omit]
-
-
-# # # filter our variables individually more specifically
-
-
-
-# # # identify which features contribute to high covariance
-# note that cPCA: cov = cov_d - a * cov_b
-# what is the difference between cov_background and cov_background_subset
-# which makes the cPCA worse when we add more background patients
-# * to do *
-# compute covariance of background/disease population only
-# covariance of a subset of background patients
-#cov_background = cov(ft_norm[labels$bp_group == 1, ])
-#cov_disease = cov(ft_norm[labels$bp_group == 2, ])
-#cov_background_subset = cov(ft_norm[sample(which(labels$bp_group == 1), 500), ])
-#c1 = cov_disease - 10*cov_background
-#c2 = cov_disease - 10*cov_background_subset
-#e1 = eigen(c1)
-#e2 = eigen(c2)
-#hist(e1$vectors, col = rgb(0,0,1,1/4))
-#hist(e2$vectors, col = rgb(1,0,0,1/4), add = TRUE)
 
 # # # shuffle labels for experimentation
 # labels$bp_group = sample(labels$bp_group, nrow(labels))
