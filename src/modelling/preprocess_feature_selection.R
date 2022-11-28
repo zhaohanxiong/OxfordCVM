@@ -4,7 +4,7 @@ library(data.table)
 # # # load data
 ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
-var_groups  = read.csv('NeuroPM/io/labels.csv')
+var_groups  = read.csv('NeuroPM/io/var_grouped.csv')
 
 # shuffle dataset to remove bias during cross-validation
 ind_rand = sample(1:nrow(labels), nrow(labels))
@@ -12,11 +12,11 @@ ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
 
 # # # remove low covariance variables in background
-#cov_background = cov(ft_norm[labels$bp_group == 1, ])
-#cov_background[upper.tri(cov_background)] = 0
-#diag(cov_background) = 0
-#ind_filter = !unname(apply(cov_background, 1, function(x) any(x < -0.50)))
-#ft_norm = ft_norm[, ind_filter]
+cov_background = cov(ft_norm[labels$bp_group == 1, ])
+cov_background[upper.tri(cov_background)] = 0
+diag(cov_background) = 0
+ind_filter = !unname(apply(cov_background, 1, function(x) any(abs(x) > 0.50)))
+ft_norm = ft_norm[, ind_filter]
 
 # # # keep high covariance variables in disease
 
