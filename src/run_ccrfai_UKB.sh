@@ -14,10 +14,14 @@ cd ./NeuroPM
 
 # run post-processing file organization/evaluation
 cd ..
+Rscript postprocess_files.R
 Rscript postprocess_eval_model.R
 
 # run python trajectory visualization/computation
 python postprocess_traj_compute.py --max_traj_num=8 --overlap_threshold=0.8 --color_by="traj"
+
+# generate ggplots for key results
+Rscript postprocess_ggplots.R
 
 # run test cases (in root directory)
 cd ../..
