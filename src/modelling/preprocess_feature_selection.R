@@ -30,7 +30,7 @@ diag(cov_contrast) = NA
 # # # feature selection
 # find high co-correlation variables
 ind_omit = unname(apply(cov_contrast, 1, function(x)
-                            any(abs(x) > 0.5, na.rm = TRUE)))
+                            any(abs(x) > 0.25, na.rm = TRUE)))
 
 # find brain variables
 #var_brain = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
