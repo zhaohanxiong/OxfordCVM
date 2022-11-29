@@ -33,9 +33,10 @@ ind_omit = unname(apply(cov_contrast, 1, function(x)
                             any(abs(x) > 0.25, na.rm = TRUE)))
 
 # find brain variables
-#var_brain = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
-#var_brain = colnames(ft_norm) %in% var_brain
-#ind_omit[!var_brain] = FALSE
+var_filter = var_groups$ukb_var[var_groups$var_group == "Brain_MR" | 
+                                var_groups$var_group == "Body_Composition"]
+var_filter = colnames(ft_norm) %in% var_filter
+ind_omit[!var_filter] = FALSE
 
 # only keep relevant features
 ft_norm = ft_norm[, !ind_omit]
@@ -54,10 +55,13 @@ ft_norm = ft_norm[, !ind_omit]
 # # # output
 # display messages to see in terminal
 print(sprintf("Further Filtering Complete"))
-print(sprintf("Distribution of Classes is"))
-print(table(labels$bp_group))
 print(sprintf("The Filtered Data Frame is of Size %0.0f by %0.0f",
               nrow(ft_norm), ncol(ft_norm)))
+print(sprintf("----- Distribution of Classes is":))
+print(table(labels$bp_group))
+print(sprintf("----- Distribution of Variable Groups is:"))
+print(table(var_groups$var_group[var_groups$ukb_var 
+                                        %in% colnames(ft_norm)]))
 
 # write to output
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
