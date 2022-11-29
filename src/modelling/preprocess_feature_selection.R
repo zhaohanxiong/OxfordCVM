@@ -29,13 +29,13 @@ diag(cov_disease) = NA
 
 # contrast cov = cov_d - a * cov_b
 cov_contrast = cov(ft_norm[labels$bp_group == 2, ]) - cov(ft_norm[labels$bp_group == 1, ])
-cov_contrast[upper.tri(cov_contrast)] = NA
+cov_contrast[upper.tri(cov_contrast)] = 0
 diag(cov_contrast) = NA
 
 # # # feature selection
 # find high co-correlation variables
 ind_omit = unname(apply(cov_contrast, 1, function(x)
-                            mean(abs(x), na.rm = TRUE) < 0.1))
+                            max(abs(x), na.rm = TRUE) < 0.25))
 
 # find brain variables
 var_brain = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
