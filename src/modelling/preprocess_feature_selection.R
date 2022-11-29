@@ -14,7 +14,8 @@ labels = labels[ind_rand, ]
 
 # # # Filtering by contrast covariance matrix
 # contrast cov = cov_d - a * cov_b
-cov_contrast = cov(ft_norm[labels$bp_group == 2, ]) - cov(ft_norm[labels$bp_group == 1, ])
+cov_contrast = cov(ft_norm[labels$bp_group == 2, ]) - 
+                                    cov(ft_norm[labels$bp_group == 1, ])
 cov_contrast[upper.tri(cov_contrast)] = 0
 diag(cov_contrast) = NA
 
@@ -33,16 +34,17 @@ ft_norm = ft_norm[, ind_keep]
 
 # # # Filtering out background variables
 # compute background covariance
-cov_background = cov(ft_norm[labels$bp_group == 1, ])
-cov_background[upper.tri(cov_background)] = 0
-diag(cov_background) = NA
+cov_contrast = cov(ft_norm[labels$bp_group == 2, ]) - 
+                                    cov(ft_norm[labels$bp_group == 1, ])
+cov_contrast[upper.tri(cov_contrast)] = 0
+diag(cov_contrast) = NA
 
 # find high covariance variables
-ind_keep = unname(apply(cov_background, 1, function(x)
-                            !any(abs(x) > 0.9, na.rm = TRUE)))
+ind_keep = unname(apply(cov_contrast, 1, function(x)
+                                !any(abs(x) > 0.1, na.rm = TRUE)))
 
 # mask out brain/body comp variables
-var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
+var_list = var_groups$ukb_var[var_groups$var_group == "Blood"]
 var_filter = colnames(ft_norm) %in% var_list
 ind_keep[!var_filter] = TRUE
 
