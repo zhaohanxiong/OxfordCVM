@@ -24,7 +24,7 @@ ukb_varnames =  read.csv(file.path(path, "ukb_varnames.csv"),
 # Plot 1 - Distribution of Disease Scores Separated by Group
 # ------------------------------------------------------------------------------
 # produce the plot
-png(file.path(path, "final_plot1_Score_Distribution.png"), width = 10, height = 5)
+png(file.path(path, "final_plot1_Score_Distribution.png"), width = 1000, height = 500)
 p1 = ggplot(psuedotimes, aes(y = global_pseudotimes, x = as.factor(bp_group), 
                         fill = as.factor(bp_group))) +
           geom_boxplot(alpha = 0.8) +
@@ -73,7 +73,7 @@ lower = max(psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Background"]
 auc = sum((tpr[1:(length(intervals) - 1)] + tpr[2:length(intervals)]) * diff(1 - fpr) / 2)
 
 # produce the plot
-png(file.path(path, "final_plot2_AUROC.png"), width = 10, height = 6)
+png(file.path(path, "final_plot2_AUROC.png"), width = 1000, height = 600)
 p1 = ggplot(psuedotimes, aes(y = global_pseudotimes, x = as.factor(bp_group), 
                         fill = as.factor(bp_group))) +
           geom_boxplot() +
@@ -108,7 +108,7 @@ fit2$upper = fit2$y + qt(0.75, fit2$y) * sd(fit2$y)
 fit2$lower = fit2$y - qt(0.75, fit2$y) * sd(fit2$y)
 
 # produce the plot
-png(file.path(path, "final_plot3_BP_vs_Score.png"), width = 10, height = 6)
+png(file.path(path, "final_plot3_BP_vs_Score.png"), width = 1000, height = 600)
 p1 = ggplot(psuedotimes, aes_string(x = "global_pseudotimes", y = "BPSys.2.0")) +
           geom_point(aes_string(color = "bp_group"), shape = 19, alpha = 0.25, size = 2) +
           geom_line(aes(x = fit1$x, y = fit1$y), size = 1, color = "deepskyblue4", alpha = 0.5) +
@@ -160,7 +160,7 @@ weight_plot_sig$Total_Weighting = as.numeric(weight_plot_sig$Total_Weighting)
 weight_plot_sig$Total_Weighting = round(weight_plot_sig$Total_Weighting * 100, 2)
 
 # produce the plot
-png(file.path(path, "final_plot4_Variable_Contribution.png"), width = 10, height = 5)
+png(file.path(path, "final_plot4_Variable_Contribution.png"), width = 1000, height = 500)
 
 p1 = ggplot(weight_plot, aes(x = "", y = Total_Weighting, fill = Var_Group)) + 
         geom_bar(width = 1, stat = "identity") + 
