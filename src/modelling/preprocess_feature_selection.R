@@ -41,15 +41,15 @@ diag(cov_contrast) = NA
 
 # find high covariance variables
 ind_keep = unname(apply(cov_contrast, 1, function(x)
-                                !any(abs(x) > 0.1, na.rm = TRUE)))
+                                !any(abs(x) > 0.25, na.rm = TRUE)))
 
 # mask out brain/body comp variables
-var_list = var_groups$ukb_var[var_groups$var_group == "Blood"]
+var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
 var_filter = colnames(ft_norm) %in% var_list
 ind_keep[!var_filter] = TRUE
 
 # only keep relevant features
-#ft_norm = ft_norm[, ind_keep]
+ft_norm = ft_norm[, ind_keep]
 
 # # # Experimentation
 # shuffle labels for experimentation
