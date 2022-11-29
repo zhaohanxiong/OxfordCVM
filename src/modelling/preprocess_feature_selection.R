@@ -1,7 +1,8 @@
 # load dependencies
 library(data.table)
 
-# # # load data
+# # # Prepare data
+# read data
 ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
@@ -22,13 +23,31 @@ ind_keep = unname(apply(cov_contrast, 1, function(x)
                             !any(abs(x) > 0.25, na.rm = TRUE)))
 
 # mask out brain/body comp variables
-var_filter = var_groups$ukb_var[var_groups$var_group == "Brain_MR" | 
-                                var_groups$var_group == "Body_Composition"]
-var_filter = colnames(ft_norm) %in% var_filter
+var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR" | 
+                              var_groups$var_group == "Body_Composition"]
+var_filter = colnames(ft_norm) %in% var_list
 ind_keep[!var_filter] = TRUE
 
 # only keep relevant features
 ft_norm = ft_norm[, ind_keep]
+
+# # # Filtering out background variables
+# compute background covariance
+cov_background = cov(ft_norm[labels$bp_group == 1, ])
+cov_background[upper.tri(cov_background)] = 0
+diag(cov_background) = NA
+
+# find high covariance variables
+ind_keep = unname(apply(cov_background, 1, function(x)
+                            !any(abs(x) > 0.9, na.rm = TRUE)))
+
+# mask out brain/body comp variables
+var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
+var_filter = colnames(ft_norm) %in% var_list
+ind_keep[!var_filter] = TRUE
+
+# only keep relevant features
+#ft_norm = ft_norm[, ind_keep]
 
 # # # Experimentation
 # shuffle labels for experimentation
@@ -41,7 +60,7 @@ ft_norm = ft_norm[, ind_keep]
 #labels = rbind(labels[labels$bp_group == 1, ][1:n_sample, ],
 #               labels[labels$bp_group != 1, ])
 
-# # # output
+# # # Output
 # display messages to see in terminal
 print(sprintf("Further Filtering Complete"))
 print(sprintf("The Filtered Data Frame is of Size %0.0f by %0.0f",
