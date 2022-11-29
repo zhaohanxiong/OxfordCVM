@@ -65,4 +65,4 @@ print(table(var_groups$var_group[var_groups$ukb_var
 
 # write to output
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
-write.csv(labels, "NeuroPM/io/labels_select.csv")
+fwrite(labels, "NeuroPM/io/labels_select.csv")
