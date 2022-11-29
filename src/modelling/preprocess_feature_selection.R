@@ -29,17 +29,17 @@ diag(cov_contrast) = NA
 
 # # # feature selection
 # find high co-correlation variables
-ind_omit = unname(apply(cov_contrast, 1, function(x)
-                            any(abs(x) > 0.25, na.rm = TRUE)))
+ind_keep1 = unname(apply(cov_contrast, 1, function(x)
+                            !any(abs(x) > 0.25, na.rm = TRUE)))
 
 # find brain variables
 var_filter = var_groups$ukb_var[var_groups$var_group == "Brain_MR" | 
                                 var_groups$var_group == "Body_Composition"]
 var_filter = colnames(ft_norm) %in% var_filter
-ind_omit[!var_filter] = FALSE
+ind_keep1[!var_filter] = TRUE
 
 # only keep relevant features
-ft_norm = ft_norm[, !ind_omit]
+ft_norm = ft_norm[, ind_keep1]
 
 # # # Experimentation
 # shuffle labels for experimentation
