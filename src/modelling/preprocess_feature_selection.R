@@ -57,7 +57,7 @@ ft_norm = ft_norm[, !ind_omit]
 print(sprintf("Further Filtering Complete"))
 print(sprintf("The Filtered Data Frame is of Size %0.0f by %0.0f",
               nrow(ft_norm), ncol(ft_norm)))
-print(sprintf("----- Distribution of Classes is":))
+print(sprintf("----- Distribution of Classes is:"))
 print(table(labels$bp_group))
 print(sprintf("----- Distribution of Variable Groups is:"))
 print(table(var_groups$var_group[var_groups$ukb_var 
