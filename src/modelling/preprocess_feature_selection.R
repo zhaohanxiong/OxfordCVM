@@ -12,20 +12,15 @@ ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
 
 # # # compute covariance matrices
-# background + disease
-cov_all = cov(ft_norm[labels$bp_group == 1 | labels$bp_group == 2, ])
-cov_all[upper.tri(cov_all)] = NA
-diag(cov_all) = NA
-
 # background
-cov_background = cov(ft_norm[labels$bp_group == 1, ])
-cov_background[upper.tri(cov_background)] = NA
-diag(cov_background) = NA
+#cov_background = cov(ft_norm[labels$bp_group == 1, ])
+#cov_background[upper.tri(cov_background)] = NA
+#diag(cov_background) = NA
 
 # disease
-cov_disease = cov(ft_norm[labels$bp_group == 2, ])
-cov_disease[upper.tri(cov_disease)] = NA
-diag(cov_disease) = NA
+#cov_disease = cov(ft_norm[labels$bp_group == 2, ])
+#cov_disease[upper.tri(cov_disease)] = NA
+#diag(cov_disease) = NA
 
 # contrast cov = cov_d - a * cov_b
 cov_contrast = cov(ft_norm[labels$bp_group == 2, ]) - cov(ft_norm[labels$bp_group == 1, ])
@@ -35,13 +30,11 @@ diag(cov_contrast) = NA
 # # # feature selection
 # find high co-correlation variables
 ind_omit = unname(apply(cov_contrast, 1, function(x)
-                            max(abs(x), na.rm = TRUE) < 0.25))
+                            any(abs(x) > 0.5, na.rm = TRUE)))
 
 # find brain variables
-var_brain = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
-var_brain = colnames(ft_norm) %in% var_brain
-
-# remove only brain variables
+#var_brain = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
+#var_brain = colnames(ft_norm) %in% var_brain
 #ind_omit[!var_brain] = FALSE
 
 # only keep relevant features
