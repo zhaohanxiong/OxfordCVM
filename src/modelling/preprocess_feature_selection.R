@@ -11,35 +11,24 @@ ind_rand = sample(1:nrow(labels), nrow(labels))
 ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
 
-# # # compute covariance matrices
-# background
-#cov_background = cov(ft_norm[labels$bp_group == 1, ])
-#cov_background[upper.tri(cov_background)] = NA
-#diag(cov_background) = NA
-
-# disease
-#cov_disease = cov(ft_norm[labels$bp_group == 2, ])
-#cov_disease[upper.tri(cov_disease)] = NA
-#diag(cov_disease) = NA
-
+# # # Filtering by contrast covariance matrix
 # contrast cov = cov_d - a * cov_b
 cov_contrast = cov(ft_norm[labels$bp_group == 2, ]) - cov(ft_norm[labels$bp_group == 1, ])
 cov_contrast[upper.tri(cov_contrast)] = 0
 diag(cov_contrast) = NA
 
-# # # feature selection
-# find high co-correlation variables
-ind_keep1 = unname(apply(cov_contrast, 1, function(x)
+# find high contrast variables
+ind_keep = unname(apply(cov_contrast, 1, function(x)
                             !any(abs(x) > 0.25, na.rm = TRUE)))
 
-# find brain variables
+# mask out brain/body comp variables
 var_filter = var_groups$ukb_var[var_groups$var_group == "Brain_MR" | 
                                 var_groups$var_group == "Body_Composition"]
 var_filter = colnames(ft_norm) %in% var_filter
-ind_keep1[!var_filter] = TRUE
+ind_keep[!var_filter] = TRUE
 
 # only keep relevant features
-ft_norm = ft_norm[, ind_keep1]
+ft_norm = ft_norm[, ind_keep]
 
 # # # Experimentation
 # shuffle labels for experimentation
