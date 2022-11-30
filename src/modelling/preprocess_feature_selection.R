@@ -8,6 +8,7 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
 # shuffle dataset to remove bias during cross-validation
+set.seed(123)
 ind_rand = sample(1:nrow(labels), nrow(labels))
 ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
@@ -24,7 +25,7 @@ ind_keep = unname(apply(cov_contrast, 1, function(x)
                             !any(abs(x) > 0.25, na.rm = TRUE)))
 
 # mask out brain/body comp variables
-var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR" | 
+var_list = var_groups$ukb_var[#var_groups$var_group == "Brain_MR" | 
                               var_groups$var_group == "Body_Composition"]
 var_filter = colnames(ft_norm) %in% var_list
 ind_keep[!var_filter] = TRUE
