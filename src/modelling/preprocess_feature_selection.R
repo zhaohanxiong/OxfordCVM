@@ -39,13 +39,19 @@ cov = cov_disease - cov_background
 cov[upper.tri(cov)] = NA
 diag(cov) = 0
 
+# find brain variables
+var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
+var_filter = colnames(ft_norm) %in% var_list
+
+# mask out brain variables
+cov[, !var_filter] = NA
+cov[!var_filter, ] = NA
+
 # find high covariance variables
 ind_keep = unname(apply(cov, 1, function(x)
                             !any(abs(x) > 0.25, na.rm = TRUE)))
 
-# mask out brain/body comp variables
-var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
-var_filter = colnames(ft_norm) %in% var_list
+# mask out brain variables
 ind_keep[!var_filter] = TRUE
 
 # only keep relevant features
