@@ -13,25 +13,31 @@ ind_rand = sample(1:nrow(labels), nrow(labels))
 ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
 
-# # # Filtering by contrast covariance matrix
+# # # Filtering Body Composition Variables
 # compute background covariance
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
 cov_background[upper.tri(cov_background)] = NA
 diag(cov_background) = 0
 
-# find high contrast variables
-ind_keep = unname(apply(cov_background, 1, function(x)
-                                !any(abs(x) >= 0.5, na.rm = TRUE)))
-
-# mask out brain/body comp variables
+# find body composition varaibles
 var_list = var_groups$ukb_var[var_groups$var_group == "Body_Composition"]
 var_filter = colnames(ft_norm) %in% var_list
+
+# mask out body composition variables
+cov_background[, !var_filter] = NA
+cov_background[!var_filter, ] = NA
+
+# remove high co-correlated variables
+ind_keep = unname(apply(cov_background, 1, function(x)
+                                !any(abs(x) >= 0.475, na.rm = TRUE)))
+
+# mask out body comp variables
 ind_keep[!var_filter] = TRUE
 
 # only keep relevant features
 ft_norm = ft_norm[, ind_keep]
 
-# # # Filtering out background variables
+# # # Filtering Brain MR Variables
 # compute background covariance
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
 cov_disease = cov(ft_norm[labels$bp_group == 2, ])
@@ -47,9 +53,9 @@ var_filter = colnames(ft_norm) %in% var_list
 cov[, !var_filter] = NA
 cov[!var_filter, ] = NA
 
-# find high covariance variables
+# remove high co-correlated variables
 ind_keep = unname(apply(cov, 1, function(x)
-                            !any(abs(x) > 0.25, na.rm = TRUE)))
+                            !any(abs(x) > 0.2, na.rm = TRUE)))
 
 # mask out brain variables
 ind_keep[!var_filter] = TRUE
