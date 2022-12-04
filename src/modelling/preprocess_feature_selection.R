@@ -14,22 +14,23 @@ ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
 
 # # # Filtering Body Composition Variables
-# compute background covariance
+# compute contrast covariance
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
-cov_background[upper.tri(cov_background)] = NA
-diag(cov_background) = 0
+cov_disease = cov(ft_norm[labels$bp_group == 2, ])
+cov = cov_disease - cov_background
+diag(cov) = 0
 
 # find body composition varaibles
 var_list = var_groups$ukb_var[var_groups$var_group == "Body_Composition"]
 var_filter = colnames(ft_norm) %in% var_list
 
 # mask out body composition variables
-cov_background[, !var_filter] = NA
-cov_background[!var_filter, ] = NA
+cov[, !var_filter] = NA
+cov[!var_filter, ] = NA
 
 # remove high co-correlated variables
-ind_keep = unname(apply(cov_background, 1, function(x)
-                                !any(abs(x) >= 0.475, na.rm = TRUE)))
+ind_keep = unname(apply(cov, 1, function(x)
+                                !any(abs(x) > 0.275, na.rm = TRUE)))
 
 # mask out body comp variables
 ind_keep[!var_filter] = TRUE
