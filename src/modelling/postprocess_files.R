@@ -106,11 +106,7 @@ var_weights$pvals = sapply(1:nrow(var_weights), function(i)
 #                              var_weights$pval < 0.0001
 
 # manually define columns we want to keep
-var_weights$significant[var_weights$Var1 == "X31.0.0"] = TRUE
-
-# keep variables which are significant (by cTI) and strongly correlated
-#var_weights = var_weights[var_weights$significant | var_weights$significant_cor, ]
-var_weights = var_weights[var_weights$significant, ]
+#var_weights$significant[var_weights$Var1 == "X31.0.0"] = TRUE
 
 # retrieve original names
 var_weights$name = sapply(1:nrow(var_weights), function(i) varnames$Field[
@@ -129,10 +125,6 @@ print(sprintf(paste0("%.0f Significant Columns (cTI Selected) Contributed to "
                     ," %0.1f%% of the Total Weighting"), 
               nrow(var_weights[var_weights$significant, ]),
               sum(var_weights$Node_contributions[var_weights$significant]) * 100))
-print(sprintf(paste0("%.0f Significant Columns (cTI + Cor Test) Contributed to "
-                     ," %0.1f%% of the Total Weighting"), 
-              nrow(var_weights),
-              sum(var_weights$Node_contributions) * 100))
 print(sprintf(paste0("Number of Variables with Statistically Significant ",
                      "Correlations (p < 0.05) is %0.f"),
               sum(var_weights$pvals < 0.05, na.rm = TRUE)))
@@ -144,8 +136,8 @@ print(sprintf(paste0("Number of Variables with Statistically Significant ",
               sum(var_weights$pvals < 0.0001, na.rm = TRUE)))
 
 # subset ukb_num dataframe to obtain only highest correlated variables
-ukb_df = ukb_df[, var_weights$Var1]
-ukb_df_raw = ukb_df_raw[, var_weights$Var1]
+ukb_df = ukb_df[, var_weights$Var1[var_weights$significant]]
+ukb_df_raw = ukb_df_raw[, var_weights$Var1[var_weights$significant]]
 
 # write the reduced variable data frame to output
 fwrite(ukb_df, file.path(path, "ukb_num_norm_reduced.csv"))

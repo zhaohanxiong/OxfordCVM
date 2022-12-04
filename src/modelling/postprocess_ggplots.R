@@ -151,15 +151,16 @@ print(weight_plot)
 
 # compute summary of weighting by group for only the significant variables
 var_weight_sig = var_weights[var_weights$significant, ]
+var_weight_sig$Node_contributions = var_weight_sig$Node_contributions / 
+                                        sum(var_weight_sig$Node_contributions)
 weight_plot_sig = aggregate(var_weight_sig$Node_contributions,
                             by = list(var_weight_sig$group),
                             FUN = "sum")
 names(weight_plot_sig) = c("Var_Group", "Total_Weighting")
-significant_total = sum(weight_plot_sig$Total_Weighting)
-weight_plot_sig = rbind(weight_plot_sig,
-                        c("Non_Significant_Variables", 1 - significant_total))
 weight_plot_sig$Total_Weighting = as.numeric(weight_plot_sig$Total_Weighting)
 weight_plot_sig$Total_Weighting = round(weight_plot_sig$Total_Weighting * 100, 2)
+print(sprintf("----- (Significant) Variable Weighting Distribution is:"))
+print(weight_plot_sig)
 
 # produce the plot
 png(file.path(path, "final_plot4_Variable_Contribution.png"), width = 1000, height = 500)
