@@ -38,7 +38,7 @@ ind_keep[!var_filter] = TRUE
 ft_norm = ft_norm[, ind_keep]
 
 # # # Filtering Brain MR Variables
-# compute background covariance
+# compute contrast covariance
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
 cov_disease = cov(ft_norm[labels$bp_group == 2, ])
 cov = cov_disease - cov_background
