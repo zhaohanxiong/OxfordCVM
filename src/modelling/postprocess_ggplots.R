@@ -146,8 +146,6 @@ names(weight_plot) = c("Var_Group", "Total_Weighting")
 significant_total = sum(weight_plot$Total_Weighting)
 weight_plot$Total_Weighting = as.numeric(weight_plot$Total_Weighting)
 weight_plot$Total_Weighting = round(weight_plot$Total_Weighting * 100, 2)
-print(sprintf("----- Variable Weighting Distribution is:"))
-print(weight_plot)
 
 # compute summary of weighting by group for only the significant variables
 var_weight_sig = var_weights[var_weights$significant, ]
