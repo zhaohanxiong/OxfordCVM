@@ -26,14 +26,39 @@
     - Model evaluation (validation, meeting objectives)
     - Model testing (independent testing)
     - Model packaging (exporting model into a specific format for a business application)
+        - .pb in Tensorflow
+        - .pt in PyTorch
+        - MLeap in SparkML
+        - Keras in .h5
+        - .mlmodel for iOS (objective-C/Swift)
 - Model deployment:
     - Model serving (addressing the ML model artifact in a production environment)
     - Performance monitoring (tracking, using these metrics as triggers for re-training)
     - Performance logging (inference request results in log-record)
 
-### 
-- 
+### Online Learning
+- Embed machine learning model into a production system
+- The model receives a data stream and gets re-trains on-the-fly
+- Works well with the lambda architecture (large data handling and processing)
+- Usually runs on a service such as kunernettes cluster
+- Must monitor the quality of data to drive the online-learning
 
-https://ml-ops.org/
+### Model Serving Patterns
+- Model-as-Service:
+    - Wrap model in a web service with a REST API or gRPC service
+    - Called as a web app for input/prediction
+- Model-as-Dependency:
+    - Package ML model as a dependency within a software application
+- Precompute-Serving:
+    - Pre-compute predictions for incoming batch of data when we query a database, and store in a database
+    - Use these as further input for a model serving
+
+### Deployment Strategies
+- Docker containers, managed through kubernettes
+- Serverless functions (Sagemaker, Google Cloud AI Platform, Azure Machine Learning, IBM Watson, AWS Lambda)
+- Containerization services (AWS Lambda, Google App Engine)
+
+### 
+
 ```
 ```
