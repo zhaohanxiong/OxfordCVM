@@ -1,5 +1,39 @@
 ### MLOps
+- Extension of DevOps to include machine learning and data science
+- Current MLOps revolve around containerization for scalability, Dockerized open-source ML stacks, Kubernetes for deployment
+
+### Machine Learning Considerations
+- Value proposition: identifiy the objectives and end-goals
+- Data sources: Hadoop clusters, REST APIs, web scraping, data marts
+- Prediction tasks: model type
+- Feature engineering
+- Offline evaluation
+- Decisions: defining the decisions making to replace humans
+- Prediction
+- Collection more data
+- Building models
+- Evaluation and monitoring
+
+### End-to-End Machine Learning Workflow
+- Data engineering:
+    - Data ingestion (spark, HDFS, CSV, data generation, data enrichment)
+    - Data exploration (explorative analysis, extracting meta-data, error detection)
+    - Data cleaning (handling missing values, re-formating, transforming)
+    - Data labeling
+    - Data splitting (train, validation, test)
+- ML model engineering:
+    - ML model training (feature engineering, hyperparameter tuning, training)
+    - Model evaluation (validation, meeting objectives)
+    - Model testing (independent testing)
+    - Model packaging (exporting model into a specific format for a business application)
+- Model deployment:
+    - Model serving (addressing the ML model artifact in a production environment)
+    - Performance monitoring (tracking, using these metrics as triggers for re-training)
+    - Performance logging (inference request results in log-record)
+
+### 
 - 
+
 https://ml-ops.org/
 ```
 ```
