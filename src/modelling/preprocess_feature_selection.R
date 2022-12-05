@@ -30,7 +30,7 @@ cov[!var_filter, ] = NA
 
 # remove high co-correlated variables
 ind_keep = unname(apply(cov, 1, function(x)
-                                !any(abs(x) > 0.275, na.rm = TRUE)))
+                            !any(abs(x) > sd(cov, na.rm = TRUE) * 1.25, na.rm = TRUE)))
 
 # mask out body comp variables
 ind_keep[!var_filter] = TRUE
@@ -56,7 +56,7 @@ cov[!var_filter, ] = NA
 
 # remove high co-correlated variables
 ind_keep = unname(apply(cov, 1, function(x)
-                            !any(abs(x) > 0.2, na.rm = TRUE)))
+                            !any(abs(x) > sd(cov, na.rm = TRUE) * 2.25, na.rm = TRUE)))
 
 # mask out brain variables
 ind_keep[!var_filter] = TRUE
