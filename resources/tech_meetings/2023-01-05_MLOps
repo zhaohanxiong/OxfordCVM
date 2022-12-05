@@ -38,11 +38,11 @@
     - Model evaluation (validation, meeting objectives)
     - Model testing (independent testing)
     - Model packaging (exporting model into a specific format for a business application)
-        - .pb in Tensorflow
-        - .pt in PyTorch
-        - MLeap in SparkML
-        - Keras in .h5
-        - .mlmodel for iOS (objective-C/Swift)
+        - ```.pb``` in Tensorflow
+        - ```.pt``` in PyTorch
+        - ```MLeap``` in SparkML
+        - ```.h5``` in Keras
+        - ```.mlmodel``` for iOS (objective-C/Swift)
 - Model deployment:
     - Model serving (addressing the ML model artifact in a production environment)
     - Performance monitoring (tracking, using these metrics as triggers for re-training)
@@ -70,7 +70,27 @@
 - Serverless functions (Sagemaker, Google Cloud AI Platform, Azure Machine Learning, IBM Watson, AWS Lambda)
 - Containerization services (AWS Lambda, Google App Engine)
 
-### 
-
-```
-```
+### Automation
+- Machine learning pipelines contain more automation with increased maturity
+- Manual process:
+    - Manual execution at every stage of the pipeline (preparation, validation, training, testing)
+    - Often use Jupyter notebooks
+- ML pipeline automation:
+    - Trigger a process of re-training when new data is available
+    - Automate data and model validation steps
+- CI/CD pipelines:
+    - Automate all the above
+    - Also automate build, test, deploy for the data, model, and model training components
+    - Continuous integration of source code and code testing
+    - Continuous delivery of pipelines to the target environment (package and deploy executables)
+    - Automated triggering (automatically executed pipeline in production, train model stored in a model registry)
+    - Continuous delivery of models (serving models for prediction)
+    - Monitoring (model performance, logging)
+- Components:
+    - Source control (versioning, experiment tracking)
+    - Test/build services
+    - Deployment services
+    - Model services
+    - Feature store
+    - ML meta data store
+    - ML pipeline orchestrator
