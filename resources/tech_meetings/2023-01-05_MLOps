@@ -1,6 +1,18 @@
 ### MLOps
 - Extension of DevOps to include machine learning and data science
 - Current MLOps revolve around containerization for scalability, Dockerized open-source ML stacks, Kubernetes for deployment
+- Design:
+    - Requirements engineering
+    - ML use-cases prioritization
+    - Data availability
+- Model Development:
+    - Data engineering
+    - Model engineering
+    - Model testing and validation
+- Operations:
+    - Model deployment
+    - CI/CD pipelines
+    - Monitoring & triggering
 
 ### Machine Learning Considerations
 - Value proposition: identifiy the objectives and end-goals
