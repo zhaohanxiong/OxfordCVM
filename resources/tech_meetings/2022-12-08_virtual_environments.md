@@ -33,8 +33,10 @@ pip freeze > requirements.txt
 ```
 pip install -r requirements.txt
 ```
+- This file can then be shared, tracked, and modified (using git) so someone else can use it
+- To install the same dependencies, simply download the ```requirements.txt``` file, create your own virtual environment, and run the command above
 
-VS-Code
+Virtual Environments in VS-Code:
 - In VS-Code, you can select your python interpreter to be your virtual environment
 - Open a ```.py``` file
 - On the right hand bottom side, you can see your python version e.g. ```3.10.1```
