@@ -28,4 +28,4 @@ group_cols = col_temp[scores$bp_group + 1]
 traj_cols = col_temp[scores$traj + 1]
 
 # produce plot
-plot(ukb[, weights$Var1[42]], scores$global_pseudotimes, col = cols)
+plot(ukb[, weights$Var1[42]], scores$global_pseudotimes, col = traj_cols)
