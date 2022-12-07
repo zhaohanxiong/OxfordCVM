@@ -24,7 +24,19 @@ Installing libraries:
 - These packages will only be accesible while you are inside the virtual environment
 - Once you exit it, you will no longer have access to it
 
-VS-Code
+Freezing:
+- You can freeze all your python dependencies with the command
+```
+pip freeze > requirements.txt
+```
+- This can then be shared with another user to install
+```
+pip install -r requirements.txt
+```
+- This file can then be shared, tracked, and modified (using git) so someone else can use it
+- To install the same dependencies, simply download the ```requirements.txt``` file, create your own virtual environment, and run the command above
+
+Virtual Environments in VS-Code:
 - In VS-Code, you can select your python interpreter to be your virtual environment
 - Open a ```.py``` file
 - On the right hand bottom side, you can see your python version e.g. ```3.10.1```
