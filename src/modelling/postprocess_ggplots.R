@@ -163,7 +163,7 @@ p1 = ggplot(weight_plot, aes(x = "", y = Total_Weighting, fill = Var_Group)) +
         geom_bar(width = 1, stat = "identity") + 
         coord_polar("y", start = 0) + 
         scale_y_continuous(breaks = seq(0, 100, 5)) +
-        scale_fill_brewer(palette = "rainbow") + 
+        scale_fill_brewer(palette = "Spectral") + 
         ggtitle("All Variable Weighting Contribution") +
         xlab("") + ylab("")
 
@@ -171,7 +171,7 @@ p2 = ggplot(weight_plot_sig, aes(x = "", y = Total_Weighting, fill = Var_Group))
         geom_bar(width = 1, stat = "identity") + 
         coord_polar("y", start = 0) + 
         scale_y_continuous(breaks = seq(0, 100, 5)) +
-        scale_fill_brewer(palette = "rainbow") + 
+        scale_fill_brewer(palette = "Spectral") + 
         ggtitle("cTI Significant Variable Weighting Contribution") +
         xlab("") + ylab("")
 
