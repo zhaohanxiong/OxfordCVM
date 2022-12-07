@@ -116,6 +116,10 @@ var_weights$name = sapply(1:nrow(var_weights), function(i) varnames$Field[
 var_weights = var_weights[order(var_weights$Node_contributions,
                                 decreasing = TRUE), ]
 
+# add grouping to variables
+var_weights$group = varnames$Field_Group[unname(sapply(var_weights$Var1, 
+                                     function(v) which(varnames$colname == v)))]
+
 # write the reduced variable list to file
 write.csv(var_weights, file.path(path, "var_weighting_reduced.csv"),
           row.names = FALSE)

@@ -134,10 +134,6 @@ dev.off()
 # Plot 4 - Individual Trajectory Scores
 # ------------------------------------------------------------------------------
 
-# retrieve what groups each significant variable contribute to
-var_weights$group = ukb_varnames$Field_Group[unname(sapply(var_weights$Var1, 
-                                  function(v) which(ukb_varnames$colname == v)))]
-
 # compute summary of weighting by group
 weight_plot = aggregate(var_weights$Node_contributions,
                         by = list(var_weights$group),
