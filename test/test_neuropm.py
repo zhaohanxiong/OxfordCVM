@@ -298,7 +298,7 @@ def test_neuro_pm_accuracy_shouldpass(mock_test_neuro_pm_accuracy_shouldpass):
     assert scores_disease.min() > scores_between.min()
     assert scores_between.max() > scores_background.max()
     assert scores_disease.max() >= scores_between.max()
-    assert np.round(q_background[2],2) <= np.round(q_between[0],2)
+    assert np.round(q_background[1],2) <= np.round(q_between[0],2)
     assert np.round(q_background[2],2) <= np.round(q_disease[0],2)
     assert np.round(q_between[0],2) <= np.round(q_disease[0],2)
     assert np.round(q_between[1],2) <= np.round(q_disease[1],2)
