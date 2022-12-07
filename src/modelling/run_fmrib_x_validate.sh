@@ -13,5 +13,5 @@ nohup ./run_run_NeuroPM_Xvalidate.sh /opt/modelling/MATLAB/MATLAB_Compiler_Runti
 
 # run post-analysis evaluation
 cd ..
-Rscript postprocess_x_validate.R
-Rscript postprocess_x_validate_KNNpredPC.R
+Rscript x_validate.R
+Rscript x_validate_KNNpredPC.R

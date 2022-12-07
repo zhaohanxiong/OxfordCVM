@@ -8,5 +8,5 @@ cd ./NeuroPM
 
 # run post-analysis evaluation
 cd ..
-Rscript postprocess_x_validate.R
-Rscript postprocess_x_validate_KNNpredPC.R
+Rscript x_validate.R
+Rscript x_validate_KNNpredPC.R
