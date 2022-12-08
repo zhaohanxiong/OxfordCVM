@@ -82,7 +82,7 @@ ukb_df[, 6:ncol(ukb_df)] = return_normalize_zscore(data =
 
 # further filtering outliers
 ukb_df[, 6:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 6:ncol(ukb_df)], 
-                                                       sd_threshold = 10)
+                                                       sd_threshold = 5)
 
 # impute data
 ukb_df[, 6:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 6:ncol(ukb_df)], 

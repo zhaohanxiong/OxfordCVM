@@ -18,7 +18,7 @@ v_names = ifelse(grepl("\\.", varnames),
 
 # find and remove duplicates (first instance after sorting)
 varnames = varnames[!duplicated(v_names, fromLast = TRUE)]
-ft_norm = ft_norm[, varnames]
+#ft_norm = ft_norm[, varnames]
 
 # shuffle dataset to remove bias during cross-validation
 set.seed(125)
