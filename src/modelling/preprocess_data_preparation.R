@@ -97,10 +97,10 @@ ukb_df = edit_ukb_columns(ukb_df,
             #keep_cols = c("31-0.0", "21003-2.0",
             #              fread("../../../var_list.csv")$x),
             remove_cols = c("bp_sys_", "bp_dia_",                      # blood pressure (all)
-                            "bp_medication", "6153", "6177",           # medication (all)
-                            "6150", "events",                          # events (all)
                             "12675", "12698", "^93-", "4079",          # dia BP
                             "12674", "12677", "12697", "^94-", "4080", # sys BP
+                            "bp_medication", "6153", "6177",           # medication (all)
+                            "events", "6150",                          # events (all)
                             "^54-0.0", "^54-1.0", "^54-2.0", "^54-3.0" # centre location
                             )
           )
