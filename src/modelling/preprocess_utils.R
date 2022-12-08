@@ -34,7 +34,7 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   }
   
   # add sex information
-  df[["Sex"]] = df[["31-0.0"]]
+  df[["Sex"]] = ifelse(as.numeric(df[["31-0.0"]]) == 1, "Male", "Female")
   
   # change some data types
   df_vars$Field = as.character(df_vars$Field)
