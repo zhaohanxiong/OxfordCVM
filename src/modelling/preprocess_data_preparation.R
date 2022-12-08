@@ -105,6 +105,10 @@ ukb_df = edit_ukb_columns(ukb_df,
                             )
           )
 
+# remove duplicate variable instances
+ukb_df = cbind(ukb_df[, 1:5], 
+               remove_ukb_duplicate_instances(ukb_df[, 6:ncol(ukb_df)]))
+
 # display final dataframe size
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
                                                     nrow(ukb_df), ncol(ukb_df)))

@@ -709,6 +709,26 @@ edit_ukb_columns = function(ukb_data, keep_cols = c(), remove_cols = c()) {
   
 }
 
+remove_ukb_duplicate_instances = function(df) {
+
+  # this function only keep latest instance of each variable 
+
+  # sort by ascending such that instance 0 comes first
+  varnames = sort(colnames(df))
+
+  # filter out all instance information from variable names
+  v_names = ifelse(grepl("\\.", varnames),
+                   substring(varnames, 1, regexpr("\\.", varnames)-1),
+                   varnames)
+
+  # find and remove duplicates (first instance after sorting)
+  varnames = varnames[!duplicated(v_names, fromLast = TRUE)]
+  df = df[, varnames]
+
+  return(df)
+
+}
+
 return_covariates = function(data, covariates) {
   
   # this function returns the covariate columns of the dataset provided

@@ -7,19 +7,6 @@ ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
-# # # only keep latest instance of each variable (or instance 2)
-# sort by ascending such that instance 0 comes first
-varnames = sort(colnames(ft_norm))
-
-# filter out all instance information from variable names
-v_names = ifelse(grepl("\\.", varnames),
-                 substring(varnames, 1, regexpr("\\.", varnames)-1),
-                 varnames)
-
-# find and remove duplicates (first instance after sorting)
-varnames = varnames[!duplicated(v_names, fromLast = TRUE)]
-#ft_norm = ft_norm[, varnames]
-
 # shuffle dataset to remove bias during cross-validation
 set.seed(125)
 ind_rand = sample(1:nrow(labels), nrow(labels))
