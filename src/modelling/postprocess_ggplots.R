@@ -13,7 +13,7 @@ psuedotimes$bp_group = ordered(psuedotimes$bp_group,
                                levels = c("Background", "Between", "Disease"))
 
 # load variable weighting outputs
-var_weights = read.csv(file.path(path, "var_weighting_reduced.csv"),
+var_weights = read.csv(file.path(path, "var_weighting.csv"),
                                              header=TRUE, stringsAsFactor=FALSE)
 
 # load variable names

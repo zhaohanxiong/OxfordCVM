@@ -7,7 +7,7 @@ path = "NeuroPM/io/"
 scores = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
 
 # load variable weighting outputs
-weights = read.csv(file.path(path, "var_weighting_reduced.csv"),
+weights = read.csv(file.path(path, "var_weighting.csv"),
                                            header=TRUE, stringsAsFactor=FALSE)
 
 # load uk raw variables

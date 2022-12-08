@@ -99,7 +99,7 @@ var_weights$group = varnames$Field_Group[unname(sapply(var_weights$Var1,
                                      function(v) which(varnames$colname == v)))]
 
 # write the reduced variable list to file
-write.csv(var_weights, file.path(path, "var_weighting_reduced.csv"),
+write.csv(var_weights, file.path(path, "var_weighting.csv"),
           row.names = FALSE)
 
 # print summary statistics for output
