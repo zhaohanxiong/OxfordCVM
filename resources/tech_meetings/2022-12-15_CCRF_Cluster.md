@@ -37,5 +37,5 @@ sudo make install
   - Drag and drop your downloaded miniconda linux installer from your desktop into VS-Code and into the ```miniconda``` folder
   - Type ```bash Miniconda3-<name of the file you downloaded>.sh```
 
-### CCRF Server Setup
+### CCRF Server User Setup
 - https://github.com/zhaohanxiong/OxfordCVM/blob/prod/src/README.md
