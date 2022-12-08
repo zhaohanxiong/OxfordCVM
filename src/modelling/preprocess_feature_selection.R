@@ -7,6 +7,8 @@ ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
+# only keep latest instance of each variable
+
 # shuffle dataset to remove bias during cross-validation
 set.seed(125)
 ind_rand = sample(1:nrow(labels), nrow(labels))

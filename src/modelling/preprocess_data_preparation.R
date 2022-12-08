@@ -68,10 +68,6 @@ ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
 print("Distribution of Patients Per Group")
 print(table(ukb_df$bp_group))
 
-# only keep the "x" instance of a variable, or only keep latest occurence
-ukb_df = return_keep_latest_instance(data = ukb_df
-                                     preferred_instance = 2)
-
 # remove columns which contain the same value (extremely low variance)
 ukb_df = return_remove_single_value_columns(data = ukb_df)
 
