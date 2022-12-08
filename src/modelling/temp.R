@@ -26,6 +26,3 @@ col_temp = c('#FD3216', '#00FE35', '#6A76FC', '#FED4C4', '#FE00CE', '#0DF9FF',
              '#E3EE9E', '#86CE00', '#BC7196', '#7E7DCD', '#FC6955', '#E48F72')
 group_cols = col_temp[scores$bp_group + 1]
 traj_cols = col_temp[scores$traj + 1]
-
-# produce plot
-plot(ukb[, weights$Var1[10]], scores$global_pseudotimes, col = traj_cols)
