@@ -22,7 +22,6 @@ python postprocess_traj_compute.py --max_traj_num=8 --overlap_threshold=0.8 --co
 
 # generate ggplots for key results and perform further analysis
 Rscript postprocess_ggplots.R
-Rscript postprocess_variable_understanding.R
 
 # run test cases (in root directory)
 cd ../..

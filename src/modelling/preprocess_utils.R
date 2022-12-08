@@ -33,6 +33,9 @@ load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
 
   }
   
+  # add sex information
+  df[["Sex"]] = df[["31-0.0"]]
+  
   # change some data types
   df_vars$Field = as.character(df_vars$Field)
   df_vars$FieldID = as.character(df_vars$FieldID)
@@ -84,13 +87,11 @@ get_ukb_subset_column_names = function(df, df_vars,
   #bp_var3 = grep("12677", names(df), value=TRUE) # central systolic PWA
   #bp_var4 = grep("12697", names(df), value=TRUE) # systolic brachial 
   #bp_var5 = grep("12698", names(df), value=TRUE) # diastolic brachial
-  bp_var6 = grep("^93-",  names(df), value=TRUE) # sys manual
-  bp_var7 = grep("^94-",  names(df), value=TRUE) # dia manual
+  #bp_var6 = grep("^93-",  names(df), value=TRUE) # sys manual
+  #bp_var7 = grep("^94-",  names(df), value=TRUE) # dia manual
   bp_var8 = grep("4080",  names(df), value=TRUE) # sys automated
   bp_var9 = grep("4079",  names(df), value=TRUE) # dia automated
-  bp_var = c(#bp_var1, bp_var2, bp_var3, bp_var4, bp_var5,
-             #bp_var6, bp_var7,
-             bp_var8, bp_var9)
+  bp_var = c(bp_var8, bp_var9)
   bp_var = bp_var[!grepl("-3.|-4.", bp_var)]
 
   # medication
@@ -289,15 +290,14 @@ get_ukb_subset_column_names = function(df, df_vars,
                  rep("ECG",                length(bb_ecgrest_vars)),
                  rep("Blood_Pressure",     length(bp_var)),
                  rep("Medication",         length(med_bp)),
-                 rep("Sex",                length(Sex)),
-                 rep("Age",                length(Age)),
+                 rep("Demographics",       length(c(Sex, Age))),
                  rep("Event",              length(Event))
                  )
   
   var_output = data.frame(ukb_var = vars, var_group = var_groups)
   
   # add back useful columns involving blood pressure
-  vars_subset_cols = c("Record.Id","BPSys-2.0","BPDia-2.0",vars_subset_cols)
+  vars_subset_cols = c("Record.Id","BPSys-2.0","BPDia-2.0","Sex",vars_subset_cols)
                          
   return(list(vars = vars_subset_cols, var_df = var_output))
   
@@ -553,9 +553,9 @@ return_ukb_target_background_labels = function(df_subset,
   bp_label_vector[target_rows] = 2
   
   # add this new column to df, insert into 4th column index position
-  df_subset = cbind(df_subset[,1:3],
+  df_subset = cbind(df_subset[,1:4],
                     bp_group = bp_label_vector,
-                    df_subset[4:ncol(df_subset)])
+                    df_subset[5:ncol(df_subset)])
   
   return(df_subset)
   
@@ -686,7 +686,7 @@ edit_ukb_columns = function(ukb_data, keep_cols = c(), remove_cols = c()) {
   # and adds/removes these columns from the data frame
 
   # subset away first 4 columns as these contain important labels
-  data = ukb_data[, 5:ncol(ukb_data)]
+  data = ukb_data[, 6:ncol(ukb_data)]
 
   # index dataframe (if not empty input)
   if (length(keep_cols) > 0) {
@@ -703,7 +703,7 @@ edit_ukb_columns = function(ukb_data, keep_cols = c(), remove_cols = c()) {
   }
 
   # re-combine new subset of columns with dataframe
-  ukb_data = cbind(ukb_data[, 1:4], data)
+  ukb_data = cbind(ukb_data[, 1:5], data)
 
   return(ukb_data)
   
