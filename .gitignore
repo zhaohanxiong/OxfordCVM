@@ -25,3 +25,6 @@
 
 # visualization files
 /src/visualization_dashboards/r_shiny/rsconnect/
+
+# ignore matlab code (proprietary
+/src/modelling/NeuroPM/cTI-codes/
