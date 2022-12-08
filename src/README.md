@@ -3,7 +3,7 @@
 ### Connect
 - VPN using Cisco to Connect to Oxford Network
 ```
-IP Address: vpn.ox.ac.uk
+IP Address: vpn.medsci.ox.ac.uk
 Input Username: (i.e. card0633)
 Input Password: single-sign-on password
 ```
@@ -77,7 +77,7 @@ git branch -D prod
 - Setup Code Base by Adding Directories Ignored by Git
 ```
 cd OxfordCVM
-mkdir /src/fmrib/NeuroPM/io
+mkdir /src/modelling/NeuroPM/io
 mkdir /src/aws/tf_serving/saved_models
 mkdir /src/ml_lifecycle/mlflow/mlruns
 mkdir /src/ml_lifecycle/mlflow/mlruns_staging
@@ -134,8 +134,9 @@ pip install numpy scipy pandas networkx plotly seaborn matplotlib opencv-python 
 
 - Matlab
 ```
-- All Matlab dependencies should have been installed already
-- Simply type "matlab" followed by the name of the matlab file to run
+- You need to install matlab individually as licenses are given to individual accounts
+- The linux setup file for Matlab 2020a is already downloaded
+- Download/unzip this file in your own account folder and run the install file to install matlab
 ```
 
 - Exit out of virtual environment
@@ -164,7 +165,7 @@ scp -r zhaohanx@163.1.212.155:/home/zhaohanx/file_to_transfer .
 ### Connect
 - VPN Connection using Cisco
 ```
-vpn.ox.ac.uk (then type ur user ID and password)
+vpn.medsci.ox.ac.uk (then type ur user ID and password)
 ```
 
 - SSH Tunnel
@@ -192,7 +193,7 @@ source /home/fs0/winokl/zxiong/env/bin/activate
 - Copying Data Files to/from Server to/from Local Windows (Example)
 ```
 scp temp.txt winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong
-scp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/fmrib/NeuroPM/io .
+scp -r winokl@jalapeno.fmrib.ox.ac.uk:/home/fs0/winokl/zxiong/OxfordCVM/src/modelling/NeuroPM/io .
 ```
 
 ### Cluster Run Commands
@@ -216,3 +217,6 @@ qstat
 ```
 qdel job_id
 ```
+
+## Workflow
+![image](https://user-images.githubusercontent.com/29684281/203659203-52dd1857-beea-44a6-86d0-04e7618362ba.png)

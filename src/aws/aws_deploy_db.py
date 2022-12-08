@@ -7,7 +7,7 @@ import pandas as pd
 aws_cred = json.load(open("../../../keys/aws/postgresql.json"))
 
 # source path of data and switch to this path
-path = "../fmrib/NeuroPM/io/"
+path = "../modelling/NeuroPM/io/"
 os.chdir(path)
 
 # set up connection to AWS RDS postgresql

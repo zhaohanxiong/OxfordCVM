@@ -15,7 +15,7 @@ def test_deploy_aws_rds_data_shouldpass(mock_test_deploy_aws_rds_data_shouldpass
 
     # Arrange
     # define paths for i/o
-    path_data           = "src/fmrib/NeuroPM/io/"
+    path_data           = "src/modelling/NeuroPM/io/"
     path_data_names = os.path.join(path_data, "ukb_varnames.csv")
     path_data_frame = os.path.join(path_data, "ukb_num_reduced.csv")
     path_data_score = os.path.join(path_data, "pseudotimes.csv")

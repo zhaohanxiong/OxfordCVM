@@ -6,7 +6,7 @@
 	- ```python my_python_code.py``` (run python code)
 	- ```cd``` command for directory navigation
 - How to navigate/find the code themselves
-	- all files ran by current workflow is located in ```/src/fmrib```
+	- all files ran by current workflow is located in ```/src/modelling```
 - The workflow should work automatically
 	- runs all scripts continuously one after the other
 	- each file produces an output which is read in by the next file
@@ -18,7 +18,7 @@
 	- this command can be seen in the ```.sh``` file
 
 ### Libraries and dependencies
-- Complete list is located in the readme in ```/src/fmrib```
+- Complete list is located in the readme in ```/src/modelling```
 	- R version and libraries
 	- Matlab version and libraries
 	- Python version and libraries
@@ -69,7 +69,7 @@
 	- ```preprocess_data_preparation.R``` and ```preprocess_feature_selection.R``` using functions is ```preproces_utils.R```
 	- this code is very customized so your code will most likely be different
 - cTI - matlab code inputs:
-	- ```run_NeuroPM.m``` (```/src/fmrib/NeuroPM```)
+	- ```run_NeuroPM.m``` (```/src/modelling/NeuroPM```)
 	- ```csv``` file for patients and features (N by M matrix, N = number of patients, M = number of features)
 	- this is currently named ```ukb_num_norm_ft_select.csv```
 	- ```csv``` file for labels (N by 1, N = number of patients, 1 = single column representing group of patient)
@@ -83,6 +83,6 @@
 	- ```var_weightings.csv``` file of weightings of each variable (M features) outputted
 	- ```threshold_weighting.csv``` file for threshold value for the variable weightings
 - postprocessing evaluation code:
-	- ```postproces_evaluation.R``` (```/src/fmrib```)
+	- ```postproces_evaluation.R``` (```/src/modelling```)
 	- processes the file containing the pseudotime score to perform evaluation
 	- file also produces some visualization as well

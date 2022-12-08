@@ -1,3 +1,6 @@
+library(rjson)
+library(RPostgres)
+
 ### This file defines the logic and functionality of the R Shiny App
 
 # Define server logic required to draw a histogram ----
