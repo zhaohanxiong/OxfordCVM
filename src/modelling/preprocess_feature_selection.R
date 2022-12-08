@@ -8,6 +8,7 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
 # only keep latest instance of each variable
+varnames = colnames(ft_norm)
 
 # shuffle dataset to remove bias during cross-validation
 set.seed(125)

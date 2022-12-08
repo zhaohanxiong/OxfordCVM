@@ -118,6 +118,9 @@ print(sprintf("Final Distribution is E(x) = %0.3f +- %0.3f [%0.3f, %0.3f]",
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f", 
                                                     nrow(ukb_df), ncol(ukb_df)))
 
+# convert label variables from numeric to string
+ukb_df$Sex = ifelse(ukb_df$Sex == 1, "Male", "Female")
+
 # write to output (data & labels)
 write.csv(ukb_df[, 1:5], "NeuroPM/io/labels.csv", row.names = FALSE)
 fwrite(ukb_df[, 6:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
