@@ -7,9 +7,16 @@ ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
-# only keep latest instance of each variable
-varnames = colnames(ft_norm)
-#varnames = strsplit(varnames, ",")
+# # # only keep latest instance of each variable (or instance 2)
+# filter out all instance information from variable names
+varnames = sort(colnames(ft_norm))
+v_names = ifelse(grepl("\\.", varnames),
+                 substring(varnames, 1, regexpr("\\.", varnames)-1),
+                 varnames)
+
+# find and remove duplicates (first instance after sorting)
+varnames = varnames[!duplicated(v_names, fromLast = TRUE)]
+ft_norm = ft_norm[, varnames]
 
 # shuffle dataset to remove bias during cross-validation
 set.seed(125)
@@ -34,7 +41,7 @@ cov[!var_filter, ] = NA
 
 # remove high co-correlated variables
 ind_keep = unname(apply(cov, 1, function(x)
-                            !any(abs(x) > sd(cov, na.rm = TRUE) * 1.25, na.rm = TRUE)))
+             !any(abs(x) > sd(cov, na.rm = TRUE) * 1.25, na.rm = TRUE)))
 
 # mask out body comp variables
 ind_keep[!var_filter] = TRUE
@@ -60,7 +67,7 @@ cov[!var_filter, ] = NA
 
 # remove high co-correlated variables
 ind_keep = unname(apply(cov, 1, function(x)
-                            !any(abs(x) > sd(cov, na.rm = TRUE) * 2.25, na.rm = TRUE)))
+             !any(abs(x) > sd(cov, na.rm = TRUE) * 2.25, na.rm = TRUE)))
 
 # mask out brain variables
 ind_keep[!var_filter] = TRUE
