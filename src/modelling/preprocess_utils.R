@@ -717,8 +717,8 @@ remove_ukb_duplicate_instances = function(df) {
   varnames = sort(colnames(df))
 
   # filter out all instance information from variable names
-  v_names = ifelse(grepl("\\.", varnames),
-                   substring(varnames, 1, regexpr("\\.", varnames)-1),
+  v_names = ifelse(grepl("\\-", varnames),
+                   substring(varnames, 1, regexpr("\\-", varnames)-1),
                    varnames)
 
   # find and remove duplicates (first instance after sorting)
