@@ -52,3 +52,8 @@ conda deactivate
 - On linux, it may make more sense to use conda instead, especially if you have multiple languages
 - After install conda, you can run the above commands which performs the same functions as described in the previous section above using ```venv```
 - This virtual environment works in exact the same way, but you can also install dependencies for other languages such as R libraries
+
+- To freeze dependencies using conda
+```
+conda list --export > requirements.txt
+```
