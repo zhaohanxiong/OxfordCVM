@@ -8,8 +8,10 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
 # # # only keep latest instance of each variable (or instance 2)
-# filter out all instance information from variable names
+# sort by ascending such that instance 0 comes first
 varnames = sort(colnames(ft_norm))
+
+# filter out all instance information from variable names
 v_names = ifelse(grepl("\\.", varnames),
                  substring(varnames, 1, regexpr("\\.", varnames)-1),
                  varnames)
