@@ -10,7 +10,7 @@
 
 ### Installing Git on Linux
 - most software can be installed directly from the web
-- install from web via ```apt``
+- install from web via ```apt```
 ```
 sudo apt-get update
 sudo apt-get install git
