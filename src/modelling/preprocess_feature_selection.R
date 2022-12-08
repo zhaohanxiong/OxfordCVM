@@ -13,11 +13,21 @@ ind_rand = sample(1:nrow(labels), nrow(labels))
 ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
 
-# # # Filtering Body Composition Variables
+# compute co-correlation
+cor_all = cor(ft_norm)
+cor_all[upper.tri(cor_all)] = 0
+diag(cor_all) = 0
+
+# filtering out very highly co-correlated variables
+ft_norm = ft_norm[, !apply(cor_all, 2, function(x) 
+                                any(abs(x) >= 0.95, na.rm = TRUE))]
+
+# # # Reducing Body Composition Variables
 # compute contrast covariance
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
 cov_disease = cov(ft_norm[labels$bp_group == 2, ])
 cov = cov_disease - cov_background
+cov[upper.tri(cov)] = NA
 diag(cov) = 0
 
 # find body composition varaibles
@@ -38,7 +48,7 @@ ind_keep[!var_filter] = TRUE
 # only keep relevant features
 ft_norm = ft_norm[, ind_keep]
 
-# # # Filtering Brain MR Variables
+# # # Reducing Brain MR Variables
 # compute contrast covariance
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
 cov_disease = cov(ft_norm[labels$bp_group == 2, ])
