@@ -55,5 +55,5 @@ conda deactivate
 
 - To freeze dependencies using conda
 ```
-conda list --export > requirements.txt
+conda list -e > requirements.txt
 ```
