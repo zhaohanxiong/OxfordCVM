@@ -64,17 +64,6 @@ ind_keep[!var_filter] = TRUE
 # only keep relevant features
 ft_norm = ft_norm[, ind_keep]
 
-# # # Experimentation
-# shuffle labels for experimentation
-#labels$bp_group = sample(labels$bp_group, nrow(labels))
-
-# only keep subset of background/disease for experimentation
-#n_sample = 500
-#ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:n_sample, ],
-#                ft_norm[labels$bp_group != 1, ])
-#labels = rbind(labels[labels$bp_group == 1, ][1:n_sample, ],
-#               labels[labels$bp_group != 1, ])
-
 # # # Output
 # display messages to see in terminal
 print(sprintf("Further Filtering Complete"))

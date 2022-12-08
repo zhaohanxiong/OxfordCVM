@@ -94,8 +94,7 @@ fwrite(cov, "NeuroPM/io/cov.csv")
 
 # remove columns which we dont want influence the model
 ukb_df = edit_ukb_columns(ukb_df, 
-            #keep_cols = c("31-0.0", "21003-2.0",
-            #              fread("../../../var_list.csv")$x),
+            #keep_cols = c("31-0.0", "21003-2.0"),
             remove_cols = c("bp_sys_", "bp_dia_",                      # blood pressure (all)
                             "12675", "12698", "^93-", "4079",          # dia BP
                             "12674", "12677", "12697", "^94-", "4080", # sys BP
