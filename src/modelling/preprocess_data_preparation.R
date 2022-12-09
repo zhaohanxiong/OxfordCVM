@@ -88,6 +88,9 @@ ukb_df[, 6:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 6:ncol(ukb_df)],
 ukb_df[, 6:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 6:ncol(ukb_df)], 
                                                method = "median")
 
+# filter again
+ukb_df[, 6:ncol(ukb_df)] = return_remove_low_sd(data = ukb_df[, 6:ncol(ukb_df)])
+
 # write to output (covariates)
 cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
 fwrite(cov, "NeuroPM/io/cov.csv")
@@ -106,7 +109,7 @@ ukb_df = edit_ukb_columns(ukb_df,
 
 # remove duplicate variable instances
 ukb_df = cbind(ukb_df[, 1:5], 
-               remove_ukb_duplicate_instances(ukb_df[, 6:ncol(ukb_df)]))
+               remove_ukb_duplicate_instances(data = ukb_df[, 6:ncol(ukb_df)]))
 
 # display final dataframe size
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 

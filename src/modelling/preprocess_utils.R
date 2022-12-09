@@ -679,6 +679,21 @@ return_imputed_data = function(data, method="median") {
   
 }
 
+return_remove_low_sd = function(data) {
+  
+  # this function removes variables which has low standard deviation
+  # the input variables must be z-score normalized
+  
+  # compute the standard deviation of each column
+  sds = apply(data, 2, function(x) sd(data))
+  
+  # only keep the variables with sufficient standard deviation
+  data = data[, sds > 0.1]
+  
+  return(data)
+  
+}
+
 edit_ukb_columns = function(ukb_data, keep_cols = c(), remove_cols = c()) {
 
   # given a ukb dataset
@@ -709,12 +724,12 @@ edit_ukb_columns = function(ukb_data, keep_cols = c(), remove_cols = c()) {
   
 }
 
-remove_ukb_duplicate_instances = function(df) {
+remove_ukb_duplicate_instances = function(data) {
 
   # this function only keep latest instance of each variable 
 
   # sort by ascending such that instance 0 comes first
-  varnames = sort(colnames(df))
+  varnames = sort(colnames(data))
 
   # filter out all instance information from variable names
   v_names = ifelse(grepl("\\-", varnames),
@@ -723,9 +738,9 @@ remove_ukb_duplicate_instances = function(df) {
 
   # find and remove duplicates (first instance after sorting)
   varnames = varnames[!duplicated(v_names, fromLast = TRUE)]
-  df = df[, varnames]
+  data = data[, varnames]
 
-  return(df)
+  return(data)
 
 }
 
