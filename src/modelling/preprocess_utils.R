@@ -685,7 +685,7 @@ return_remove_low_sd = function(data) {
   # the input variables must be z-score normalized
   
   # compute the standard deviation of each column
-  sds = apply(data, 2, function(x) sd(data))
+  sds = apply(data, 2, function(x) sd(x))
   
   # only keep the variables with sufficient standard deviation
   data = data[, sds > 0.1]
