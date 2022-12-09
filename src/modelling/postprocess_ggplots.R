@@ -157,7 +157,7 @@ weight_plot_sig = merge(aggregate(var_weight_sig$Node_contributions,
 names(weight_plot_sig) = c("Var_Group", "Total_Weighting", "Count")
 weight_plot_sig$Total_Weighting = as.numeric(weight_plot_sig$Total_Weighting)
 weight_plot_sig$Total_Weighting = round(weight_plot_sig$Total_Weighting * 100, 2)
-print(sprintf("----- (Significant) Variable Weighting Distribution is:"))
+print(sprintf("----- Significant Variable Weighting Distribution is:"))
 print(weight_plot_sig)
 
 # produce the plot
