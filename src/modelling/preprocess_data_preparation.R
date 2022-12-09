@@ -89,7 +89,8 @@ ukb_df[, 6:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 6:ncol(ukb_df)],
                                                method = "median")
 
 # filter again
-ukb_df[, 6:ncol(ukb_df)] = return_remove_low_sd(data = ukb_df[, 6:ncol(ukb_df)])
+ukb_df = cbind(ukb_df[, 1:5], 
+               return_remove_low_sd(data = ukb_df[, 6:ncol(ukb_df)]))
 
 # write to output (covariates)
 cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
