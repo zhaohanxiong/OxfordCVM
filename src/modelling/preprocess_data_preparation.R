@@ -68,7 +68,7 @@ ukb_df = return_ukb_target_background_labels(df_subset = ukb_df,
 print("Distribution of Patients Per Group")
 print(table(ukb_df$bp_group))
 
-# remove columns which contain the same value (extremely low variance)
+# remove columns which contain the same value
 ukb_df = return_remove_single_value_columns(data = ukb_df)
 
 # write to output (imaging centres)
