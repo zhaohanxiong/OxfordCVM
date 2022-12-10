@@ -71,8 +71,8 @@ git clone https://github.com/docker/getting-started.git
      ```
      docker run -dp 3000:3000 getting-started
      ```
-        - The ```d``` is the flag that means we want to run the container in detached mode
-        - The ```p``` is the flag to create the mapping between the host's port (3000) to the containers port (also 3000), which is the endpoint needed to access the application
-        - Once running, you can see your app at ```http://localhost:3000```
+    - The ```d``` is the flag that means we want to run the container in detached mode
+    - The ```p``` is the flag to create the mapping between the host's port (3000) to the containers port (also 3000), which is the endpoint needed to access the application
+    - Once running, you can see your app at ```http://localhost:3000```
 
 ###
