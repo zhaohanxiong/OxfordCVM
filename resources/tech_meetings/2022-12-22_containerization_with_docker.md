@@ -65,8 +65,8 @@ git clone https://github.com/docker/getting-started.git
     ```
     docker build -t getting-started .
     ```
-        - Your image gets tagged with ```-t``` with a name such as ```getting-started```
-        - The ```.``` tells docker that it should look for the ```Dockerfile``` in the current directory
+    - Your image gets tagged with ```-t``` with a name such as ```getting-started```
+    - The ```.``` tells docker that it should look for the ```Dockerfile``` in the current directory
     - Once built, you can start your container with
      ```
      docker run -dp 3000:3000 getting-started
