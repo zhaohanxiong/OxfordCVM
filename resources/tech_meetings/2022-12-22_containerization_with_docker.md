@@ -44,7 +44,9 @@ git clone https://github.com/docker/getting-started.git
 cd app
 type nul > Dockerfile
 ```
+
     - Paste the following into the ```Dockerfile```
+
 ```
 # syntax=docker/dockerfile:1
 FROM node:18-alpine
@@ -54,6 +56,7 @@ RUN yarn install --production
 CMD ["node", "src/index.js"]
 EXPOSE 3000
 ```
+
     - Build the container image with the following command (in the directory where your ```Dockerfile``` is located)
         - The ```docker build``` command uses the ```Dockerfile``` to create a new image
         - The image is consisted of many layers
@@ -62,15 +65,19 @@ EXPOSE 3000
         - It then uses ```yarn``` to install the dependencies
         - It then runs the command to execute ```node.js``` programs from the run file ```src/index.js```
         - Lastly, it exposes port 3000 as the endpoint
+ 
 ```
 docker build -t getting-started .
 ```
+
         - Your image gets tagged with ```-t``` with a name such as ```getting-started```
         - The ```.``` tells docker that it should look for the ```Dockerfile``` in the current directory
     - Once built, you can start your container with
+    
  ```
  docker run -dp 3000:3000 getting-started
  ```
+ 
         - The ```d``` is the flag that means we want to run the container in detached mode
         - The ```p``` is the flag to create the mapping between the host's port (3000) to the containers port (also 3000), which is the endpoint needed to access the application
         - Once running, you can see your app at ```http://localhost:3000```
