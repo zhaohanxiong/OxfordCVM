@@ -75,4 +75,26 @@ git clone https://github.com/docker/getting-started.git
     - The ```p``` is the flag to create the mapping between the host's port (3000) to the containers port (also 3000), which is the endpoint needed to access the application
     - Once running, you can see your app at ```http://localhost:3000```
 
-###
+### Update the Application
+- When you want to update your code, re-build the container, and run it, you cannot do so when the current container is still running
+- This is because the old container is already using port 3000 (host port) and only one process on the machine can listen to a specific port
+- To remove a container, you need to
+    - Retrive teh ID of the container
+    - Stop the container
+    - Remove the container
+```
+docker ps
+docker stop <id-of-container-from-docker-ps>
+docker rm <id-of-container-from-docker-ps>
+```
+- Then you can do ```docker run``` with your updated build, refreash your browser listening to your port 3000, and you should see the updated container running
+
+### Share the Application
+
+
+### Multi-Container Apps
+
+### Docker-Compose
+
+### Best Practices
+
