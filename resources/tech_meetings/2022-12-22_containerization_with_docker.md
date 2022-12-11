@@ -165,6 +165,13 @@ services:
 volumes:
   <volume-name>:
 ```
+- You can save this file as ```docker-compose.yml```
+- This multi-container definition can then be built/run/stopped with
+```
+docker-compose build
+docker-compose up
+docker-compose down
+```
 
 ### DNA Nexus
 - 
