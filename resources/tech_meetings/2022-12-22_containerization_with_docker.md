@@ -89,6 +89,36 @@ docker rm <id-of-container-from-docker-ps>
 ```
 - Then you can do ```docker run``` with your updated build, refreash your browser listening to your port 3000, and you should see the updated container running
 
+### Dockerfile Convention
+- Each line consists of an instruction then an argument
+    - The instruction command is not case sensitive but a good practice is to capitalize it to distinguish them from the arguments
+    - Comments can be added with ```#```
+    - To continue your command to the next line, use a ```\```
+    - You may choose to add a parser directive at the first line of the Dockerfile in the format ```# directive=value``` to define how the commands in the Dockerfile are handled, it is often used to add special cases in terms of the commands provided
+    - Environment variables are declared with the ```ENV varname=var``` statement, this allows you to use the variable with ```${varname}``` in the Dockerfile
+- Files can be ignored during docker build by defining them in the ```.dockerignore``` file
+    - Examples to include in the ignore file are ```# comment``` to ignore all comments, ```temp?``` to ignore files and directories that start with ```temp```, ```!README.md``` to add expections to previous commands, and ```*``` can be used similarly to linux CLI
+- A Dockerfile must begine with a ```FROM``` instruction as the first instruction
+    - ```FROM``` instruction specifies the parent image from which the current image is being built from
+    - ```RUN``` instruction can be in the form of ```RUN <command>``` or ```RUN ["executable", "param1", "param2"]```
+    - ```RUN``` execute any in a new layer on top of the current image and commit the results which will be used i nthe next step in the Dockerfile
+    - ```CMD``` is in the form ```CMD ["executable", "param1", "param2"]``` and is used to provide defaults for an executing container or provide entry points if you choose not to include an executable (using ```ENTRYPOINT```)
+    - There can be only one ```CMD``` command in a Dockerfile
+    - ```LABEL``` can be used to add meta data to an image
+    - ```EXPOSE``` instructs Docker that the container listens to a specific network port at runtime, it can be TCP or UDP, with TCP being the default
+    - ```EXPOSE``` does not publish the port, rather acts as a type of documentation for other users. To actually publish the port, use the ```-p``` flag during docker run
+    - ```ADD <src> <dest>``` copies new files, directories, or remote file ULs from src to dest, with the paths being relative to source of the context of the build
+    - ```COPY <src> <dest>``` is basically the same as ```ADD``` with more limitations and can only be used fro files or directories, copying them from the source to the filsystem of the container
+    - ```ENTRYPOINT ["executable", "param1", "param2"]``` allows you to configure a container that will run as an executable, allowing arguments to be passed in through the entrypoint when using docker run on the command line (```docker run executable -param1```)
+    - ```VOLUME``` creates a mount point with the speicified name and marks it as holding externally mounted volumes from native host or other containers
+    - ```USER``` can be used to define the user and user group
+    - ```WORKDIR``` sets the working directory for any ```RUN```, ```CMD```, ```COPY```, ```ADD``` instructions that follow it in the Dockerfile
+    - ```WORKDIR``` can be defined several times, and if relative paths are used, the new path is defined relative to the path defined in the previous ```WORKDIR``` command
+    - It is best practice to define ```WORKDIR``` explicitly, even if its defined automatically by the image you are using, to fully define your environment setup
+    - ```ONBUILD``` adds an image trigger instruction to be executed at a later time when the image is used as a base for another build
+    - ```HEALTHCHECK``` tells docker how to test a container to check that it is still working, you have to define the check
+    - ```SHELL``` is used for the default shell of the operating system, and is useful when using windows as it has cmd and powershell
+
 ### Share the Application
 - Sign up to DockerHub
 - Create repository and make it public
