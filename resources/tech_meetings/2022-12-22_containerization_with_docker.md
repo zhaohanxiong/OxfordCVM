@@ -202,3 +202,16 @@ docker-compose build
 docker-compose up
 docker-compose down
 ```
+- Multiple containers can be networked together using the ```network``` command in each container definetion, with the network being defined at the bottom
+```
+services:
+    container1:
+        networks:
+            - my-network
+    container2:
+        networks:
+            - my-network
+networks:
+    my-network:
+        name: my-network
+```
