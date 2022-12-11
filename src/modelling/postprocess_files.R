@@ -86,28 +86,6 @@ var_weights$significant = var_weights$Node_contributions > var_thresh
 var_weights$Node_contributions = var_weights$Node_contributions/sum(
                                               var_weights$Node_contributions)
 
-# compute correlation with every variable
-cors = apply(ukb_df, 2, function(x) 
-                        cor.test(x, psuedotimes$global_pseudotimes)$estimate)
-pvals = apply(ukb_df, 2, function(x)
-                        cor.test(x, psuedotimes$global_pseudotimes)$p.val)
-names(cors) = names(ukb_df)
-names(pvals) = names(ukb_df)
-
-# match variable weighting dataframe with variable correlation data frame
-var_weights$cor = sapply(1:nrow(var_weights), function(i) 
-                                  cors[var_weights$Var1[i] == names(cors)])
-var_weights$pvals = sapply(1:nrow(var_weights), function(i) 
-                                  pvals[var_weights$Var1[i] == names(pvals)])
-
-# get top 10% of highly correlated variables which are also significant
-#var_weights$significant_cor = var_weights$cor > sort(abs(var_weights$cor), 
-#                                  decreasing=TRUE)[floor(nrow(var_weights)*0.1)] & 
-#                              var_weights$pval < 0.0001
-
-# manually define columns we want to keep
-#var_weights$significant[var_weights$Var1 == "X31.0.0"] = TRUE
-
 # retrieve original names
 var_weights$name = sapply(1:nrow(var_weights), function(i) varnames$Field[
                                          varnames$colname == var_weights$Var1[i]])
@@ -121,7 +99,7 @@ var_weights$group = varnames$Field_Group[unname(sapply(var_weights$Var1,
                                      function(v) which(varnames$colname == v)))]
 
 # write the reduced variable list to file
-write.csv(var_weights, file.path(path, "var_weighting_reduced.csv"),
+write.csv(var_weights, file.path(path, "var_weighting.csv"),
           row.names = FALSE)
 
 # print summary statistics for output
@@ -129,17 +107,8 @@ print(sprintf(paste0("%.0f Significant Columns (cTI Selected) Contributed to "
                     ," %0.1f%% of the Total Weighting"), 
               nrow(var_weights[var_weights$significant, ]),
               sum(var_weights$Node_contributions[var_weights$significant]) * 100))
-print(sprintf(paste0("Number of Variables with Statistically Significant ",
-                     "Correlations (p < 0.05) is %0.f"),
-              sum(var_weights$pvals < 0.05, na.rm = TRUE)))
-print(sprintf(paste0("Number of Variables with Statistically Significant ",
-                     "Correlations (p < 0.001) is %0.f"),
-              sum(var_weights$pvals < 0.001, na.rm = TRUE)))
-print(sprintf(paste0("Number of Variables with Statistically Significant ",
-                     "Correlations (p < 0.0001) is %0.f"),
-              sum(var_weights$pvals < 0.0001, na.rm = TRUE)))
 
-# subset ukb_num dataframe to obtain only highest correlated variables
+# subset ukb_num dataframe to keep highest weighted variables
 ukb_df = ukb_df[, var_weights$Var1[var_weights$significant]]
 ukb_df_raw = ukb_df_raw[, var_weights$Var1[var_weights$significant]]
 

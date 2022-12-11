@@ -217,7 +217,7 @@ def test_io_neuropm_interm_output_exist_shouldpass(mock_test_io_neuropm_interm_o
 #     path_data        = "src/modelling/NeuroPM/io/"
 #     path_data_score  = os.path.join(path_data, "pseudotimes.csv")
 #     path_var_names   = os.path.join(path_data, "ukb_varnames.csv")
-#     path_var_weights = os.path.join(path_data, "var_weighting_reduced.csv")
+#     path_var_weights = os.path.join(path_data, "var_weighting.csv")
 #     path_data_frame  = os.path.join(path_data, "ukb_num_reduced.csv")
 
 #     # Action

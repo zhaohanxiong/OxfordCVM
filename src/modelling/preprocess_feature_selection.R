@@ -8,16 +8,26 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
 # shuffle dataset to remove bias during cross-validation
-set.seed(125)
+set.seed(11)
 ind_rand = sample(1:nrow(labels), nrow(labels))
 ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
 
-# # # Filtering Body Composition Variables
+# compute co-correlation
+cor_all = cor(ft_norm)
+cor_all[upper.tri(cor_all)] = 0
+diag(cor_all) = 0
+
+# filtering out very highly co-correlated variables
+ft_norm = ft_norm[, !apply(cor_all, 2, function(x) 
+                                any(abs(x) >= 0.95, na.rm = TRUE))]
+
+# # # Reducing Body Composition Variables
 # compute contrast covariance
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
 cov_disease = cov(ft_norm[labels$bp_group == 2, ])
 cov = cov_disease - cov_background
+cov[upper.tri(cov)] = NA
 diag(cov) = 0
 
 # find body composition varaibles
@@ -30,7 +40,7 @@ cov[!var_filter, ] = NA
 
 # remove high co-correlated variables
 ind_keep = unname(apply(cov, 1, function(x)
-                            !any(abs(x) > sd(cov, na.rm = TRUE) * 1.25, na.rm = TRUE)))
+             !any(abs(x) > sd(cov, na.rm = TRUE) * 1.25, na.rm = TRUE)))
 
 # mask out body comp variables
 ind_keep[!var_filter] = TRUE
@@ -38,7 +48,7 @@ ind_keep[!var_filter] = TRUE
 # only keep relevant features
 ft_norm = ft_norm[, ind_keep]
 
-# # # Filtering Brain MR Variables
+# # # Reducing Brain MR Variables
 # compute contrast covariance
 cov_background = cov(ft_norm[labels$bp_group == 1, ])
 cov_disease = cov(ft_norm[labels$bp_group == 2, ])
@@ -56,24 +66,13 @@ cov[!var_filter, ] = NA
 
 # remove high co-correlated variables
 ind_keep = unname(apply(cov, 1, function(x)
-                            !any(abs(x) > sd(cov, na.rm = TRUE) * 2.25, na.rm = TRUE)))
+             !any(abs(x) > sd(cov, na.rm = TRUE) * 2.25, na.rm = TRUE)))
 
 # mask out brain variables
 ind_keep[!var_filter] = TRUE
 
 # only keep relevant features
 ft_norm = ft_norm[, ind_keep]
-
-# # # Experimentation
-# shuffle labels for experimentation
-#labels$bp_group = sample(labels$bp_group, nrow(labels))
-
-# only keep subset of background/disease for experimentation
-#n_sample = 500
-#ft_norm = rbind(ft_norm[labels$bp_group == 1, ][1:n_sample, ],
-#                ft_norm[labels$bp_group != 1, ])
-#labels = rbind(labels[labels$bp_group == 1, ][1:n_sample, ],
-#               labels[labels$bp_group != 1, ])
 
 # # # Output
 # display messages to see in terminal

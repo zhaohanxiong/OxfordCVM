@@ -13,7 +13,7 @@ psuedotimes$bp_group = ordered(psuedotimes$bp_group,
                                levels = c("Background", "Between", "Disease"))
 
 # load variable weighting outputs
-var_weights = read.csv(file.path(path, "var_weighting_reduced.csv"),
+var_weights = read.csv(file.path(path, "var_weighting.csv"),
                                              header=TRUE, stringsAsFactor=FALSE)
 
 # load variable names
@@ -147,13 +147,17 @@ weight_plot$Total_Weighting = round(weight_plot$Total_Weighting * 100, 2)
 var_weight_sig = var_weights[var_weights$significant, ]
 var_weight_sig$Node_contributions = var_weight_sig$Node_contributions / 
                                         sum(var_weight_sig$Node_contributions)
-weight_plot_sig = aggregate(var_weight_sig$Node_contributions,
-                            by = list(var_weight_sig$group),
-                            FUN = "sum")
-names(weight_plot_sig) = c("Var_Group", "Total_Weighting")
+weight_plot_sig = merge(aggregate(var_weight_sig$Node_contributions,
+                                  by = list(var_weight_sig$group),
+                                  FUN = "sum"),
+                        aggregate(var_weight_sig$group,
+                                  by = list(var_weight_sig$group),
+                                  FUN = "length"),
+                        by = "Group.1")
+names(weight_plot_sig) = c("Var_Group", "Total_Weighting", "Count")
 weight_plot_sig$Total_Weighting = as.numeric(weight_plot_sig$Total_Weighting)
 weight_plot_sig$Total_Weighting = round(weight_plot_sig$Total_Weighting * 100, 2)
-print(sprintf("----- (Significant) Variable Weighting Distribution is:"))
+print(sprintf("----- Significant Variable Weighting Distribution is:"))
 print(weight_plot_sig)
 
 # produce the plot
