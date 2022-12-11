@@ -173,5 +173,5 @@ docker-compose up
 docker-compose down
 ```
 
-### DNA Nexus
+### DNAnexus
 - 
