@@ -149,7 +149,7 @@ services:
     volumes:
       - ./:/app
     environment:
-      HOST: <alias-of-first-app-above>
+      HOST: <alias-of-second-app-below>
       MYSQL_USER: root
       MYSQL_PASSWORD: secret
       MYSQL_DB: todos
