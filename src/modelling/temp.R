@@ -1,3 +1,5 @@
+library(ggplot2)
+library(tools)
 
 # # # read input data
 # set file path
@@ -29,9 +31,20 @@ col_temp = c('#FD3216', '#00FE35', '#6A76FC', '#FED4C4', '#FE00CE',
 group_cols = col_temp[scores$bp_group + 1]
 traj_cols = col_temp[scores$traj + 1]
 
-# # # visualize
-# try some random examples
-plot(scores$global_pseudotimes, ukb[,weights$Var1[7]], col = group_cols)
-plot(ukb[,weights$Var1[7]], ukb[,weights$Var1[8]], col = group_cols)
-plot(cPC$mappedX_1, cPC$mappedX_2, col = group_cols)
-
+# # # visualize 
+# boxplot by group
+i = 2
+var = ukb[,weights$Var1[i]]
+df_plot = data.frame(y = scores$global_pseudotimes,
+                     x = cut(var, breaks = seq(min(var, na.rm = TRUE), 
+                                               max(var, na.rm = TRUE), 
+                                               length = 50)),
+                     fill = as.factor(scores$bp_group))
+df_plot = df_plot[!is.na(df_plot$x), ]
+ggplot(aes(y = y, x = x, fill = x), data = df_plot) + 
+  geom_boxplot() +
+  ggtitle("Trend of Patient Characteristic") +
+  xlab(sprintf("%s (Regular Intervals)", toTitleCase(weights$name[i]))) + 
+  ylab("Hyper Score [0-1]") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
