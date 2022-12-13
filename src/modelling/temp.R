@@ -34,23 +34,27 @@ traj_cols = col_temp[scores$traj + 1]
 
 # # # visualize
 # variable index to view
-i = 9
+i = 5
+loess_factor = 0.5
+n_intervals = 25
+var = ukb[, weights$Var1[i]]
 
 # boxplot by intervals
-var = ukb[,weights$Var1[i]]
 df_plot = data.frame(y = scores$global_pseudotimes,
                      x = cut(var, breaks = seq(min(var, na.rm = TRUE), 
                                                max(var, na.rm = TRUE), 
-                                               length = 50)),
+                                               length = n_intervals)),
                      fill = as.factor(scores$bp_group))
 df_plot = df_plot[!is.na(df_plot$x), ]
 p1 = ggplot(aes(y = y, x = x, fill = x), data = df_plot) + 
         geom_boxplot() +
-        ggtitle("Trend of Patient Characteristic (Per Interval)") +
+        ggtitle(sprintf("Trend of %s Variable (Per Interval)", 
+                                            gsub("_", " ", weights$group[i]))) +
         xlab(sprintf("%s (Regular Intervals)", toTitleCase(weights$name[i]))) + 
         ylab("Hyper Score [0-1]") +
         theme(legend.position = "none",
-              axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+              axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+              plot.title = element_text(size = 20, face = "bold"))
 
 # loess plot by interval means
 df_median = aggregate(df_plot$y, by = list(df_plot$x), "median")
@@ -60,11 +64,13 @@ df_median$group = sapply(strsplit(gsub(",", " ",
                               function(x) mean(as.numeric(x)))
 p2 = ggplot(df_median, aes(x = group, y = x)) + 
         geom_point(size = 5, alpha = 0.5, fill = "grey50") +
-        geom_smooth(orientation = "x", span = 0.3, col = "red") +
-        ggtitle("Trend of Patient Characteristic (Median of Each Interval)") +
+        geom_smooth(orientation = "x", span = loess_factor, col = "red") +
+        ggtitle(sprintf("Trend of %s Variable (Per Interval)",
+                                              gsub("_", " ", weights$group[i]))) +
         xlab(sprintf("%s (Median Per Interval)", toTitleCase(weights$name[i]))) + 
         ylab("Hyper Score [0-1]") +
         theme(legend.position = "none",
-              axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+              axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+              plot.title = element_text(size = 15, face = "bold"))
 
 grid.arrange(p1, p2, ncol = 2)
