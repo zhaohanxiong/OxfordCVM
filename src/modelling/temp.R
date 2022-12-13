@@ -1,5 +1,6 @@
-library(ggplot2)
 library(tools)
+library(ggplot2)
+require(gridExtra)
 
 # # # read input data
 # set file path
@@ -31,9 +32,11 @@ col_temp = c('#FD3216', '#00FE35', '#6A76FC', '#FED4C4', '#FE00CE',
 group_cols = col_temp[scores$bp_group + 1]
 traj_cols = col_temp[scores$traj + 1]
 
-# # # visualize 
-# boxplot by group
-i = 2
+# # # visualize
+# variable index to view
+i = 9
+
+# boxplot by intervals
 var = ukb[,weights$Var1[i]]
 df_plot = data.frame(y = scores$global_pseudotimes,
                      x = cut(var, breaks = seq(min(var, na.rm = TRUE), 
@@ -41,10 +44,27 @@ df_plot = data.frame(y = scores$global_pseudotimes,
                                                length = 50)),
                      fill = as.factor(scores$bp_group))
 df_plot = df_plot[!is.na(df_plot$x), ]
-ggplot(aes(y = y, x = x, fill = x), data = df_plot) + 
-  geom_boxplot() +
-  ggtitle("Trend of Patient Characteristic") +
-  xlab(sprintf("%s (Regular Intervals)", toTitleCase(weights$name[i]))) + 
-  ylab("Hyper Score [0-1]") +
-  theme(legend.position = "none",
-        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+p1 = ggplot(aes(y = y, x = x, fill = x), data = df_plot) + 
+        geom_boxplot() +
+        ggtitle("Trend of Patient Characteristic (Per Interval)") +
+        xlab(sprintf("%s (Regular Intervals)", toTitleCase(weights$name[i]))) + 
+        ylab("Hyper Score [0-1]") +
+        theme(legend.position = "none",
+              axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+# loess plot by interval means
+df_median = aggregate(df_plot$y, by = list(df_plot$x), "median")
+df_median$group = sapply(strsplit(gsub(",", " ",
+                                  gsub("\\(|\\]", "",
+                                  df_median$Group.1)), " "), 
+                              function(x) mean(as.numeric(x)))
+p2 = ggplot(df_median, aes(x = group, y = x)) + 
+        geom_point(size = 5, alpha = 0.5, fill = "grey50") +
+        geom_smooth(orientation = "x", span = 0.3, col = "red") +
+        ggtitle("Trend of Patient Characteristic (Median of Each Interval)") +
+        xlab(sprintf("%s (Median Per Interval)", toTitleCase(weights$name[i]))) + 
+        ylab("Hyper Score [0-1]") +
+        theme(legend.position = "none",
+              axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+
+grid.arrange(p1, p2, ncol = 2)
