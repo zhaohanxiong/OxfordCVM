@@ -1,5 +1,5 @@
 ### Tech Stack
-![image](https://user-images.githubusercontent.com/29684281/206934592-f514576b-9584-47ba-918e-a047941efc20.png)
+![image](https://user-images.githubusercontent.com/29684281/207478511-d2885707-6e5c-4008-b8e0-6549fa8478a7.png)
 
 ### ML-OPs (MLflow)
 ![image](https://user-images.githubusercontent.com/29684281/206934638-897d41f8-2ae9-42c0-b0f7-3dc7633b1a10.png)
