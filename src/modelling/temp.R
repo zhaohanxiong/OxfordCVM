@@ -34,7 +34,7 @@ traj_cols = col_temp[scores$traj + 1]
 
 # # # visualize
 # variable index to view
-i = 5
+i = 2
 loess_factor = 0.5
 n_intervals = 25
 var = ukb[, weights$Var1[i]]
@@ -54,7 +54,7 @@ p1 = ggplot(aes(y = y, x = x, fill = x), data = df_plot) +
         ylab("Hyper Score [0-1]") +
         theme(legend.position = "none",
               axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-              plot.title = element_text(size = 20, face = "bold"))
+              plot.title = element_text(size = 15, face = "bold"))
 
 # loess plot by interval means
 df_median = aggregate(df_plot$y, by = list(df_plot$x), "median")
