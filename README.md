@@ -1,8 +1,8 @@
 ### Tech Stack
-![image](https://user-images.githubusercontent.com/29684281/206916273-c3fc4f48-5e99-4a90-b743-98dabd3c520f.png)
+![image](https://user-images.githubusercontent.com/29684281/207478511-d2885707-6e5c-4008-b8e0-6549fa8478a7.png)
 
 ### ML-OPs (MLflow)
-![image](https://user-images.githubusercontent.com/29684281/192304951-b3333df2-0f51-4758-a639-184fb81c38ef.png)
+![image](https://user-images.githubusercontent.com/29684281/206934638-897d41f8-2ae9-42c0-b0f7-3dc7633b1a10.png)
 
 ### CI/CD (Github Actions Workflow)
 ![image](https://user-images.githubusercontent.com/29684281/192305485-6b7338bb-af2a-4ab3-8553-87fdd3487f95.png)
@@ -11,4 +11,4 @@
 https://github.com/zhaohanxiong/OxfordCVM/tree/dev/src/visualization_dashboards
 
 ### Backend Blueprint
-![image](https://user-images.githubusercontent.com/29684281/206916240-23a1fc9b-719a-4abf-abce-690cfba83638.png)
+![image](https://user-images.githubusercontent.com/29684281/206934645-0358f177-1059-4c74-9140-dfe1567d98f0.png)
