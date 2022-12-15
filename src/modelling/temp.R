@@ -31,8 +31,8 @@ traj_cols = col_temp[scores$traj + 1]
 # # # visualize
 png(file.path(path, "temp.png"), width = 1000, height = 600)
 # variable index to view
-i = i
-loess_factor = 0.75
+i = 8
+loess_factor = 1.5
 n_intervals = 25
 var = ukb[, weights$Var1[i]]
 
