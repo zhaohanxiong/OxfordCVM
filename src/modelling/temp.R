@@ -33,6 +33,7 @@ group_cols = col_temp[scores$bp_group + 1]
 traj_cols = col_temp[scores$traj + 1]
 
 # # # visualize
+png(file.path(path, "temp.png"), width = 1000, height = 600)
 # variable index to view
 i = 2
 loess_factor = 0.5
@@ -74,3 +75,4 @@ p2 = ggplot(df_median, aes(x = group, y = x)) +
               plot.title = element_text(size = 15, face = "bold"))
 
 grid.arrange(p1, p2, ncol = 2)
+dev.off()

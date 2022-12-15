@@ -8,10 +8,10 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
 # shuffle dataset to remove bias during cross-validation
-set.seed(111)
-ind_rand = sample(1:nrow(labels), nrow(labels))
-ft_norm = ft_norm[ind_rand, ]
-labels = labels[ind_rand, ]
+set.seed(11111)
+ind_rand1 = sample(1:nrow(labels), nrow(labels))
+labels = labels[ind_rand1, ]
+ft_norm = ft_norm[ind_rand1, ]
 
 # compute co-correlation
 cor_all = cor(ft_norm)
