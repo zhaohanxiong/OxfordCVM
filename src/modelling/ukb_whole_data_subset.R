@@ -5,7 +5,7 @@ source("preprocess_utils.R")
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
 # to add new ukb dataset, just change the first input argument below
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139.csv",
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_v2.csv",
                                    path_ukb_vars = "../../../bb_variablelist.csv")
 
 # for exploratory analysis, only get one row/column
