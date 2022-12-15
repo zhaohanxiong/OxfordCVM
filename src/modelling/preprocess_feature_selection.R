@@ -8,7 +8,7 @@ labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
 # shuffle dataset to remove bias during cross-validation
-set.seed(11111)
+set.seed(12345)
 ind_rand1 = sample(1:nrow(labels), nrow(labels))
 labels = labels[ind_rand1, ]
 ft_norm = ft_norm[ind_rand1, ]
