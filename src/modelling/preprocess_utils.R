@@ -160,6 +160,8 @@ get_ukb_subset_column_names = function(df, df_vars,
                     names(df),
                     value=TRUE)
   bb_CMR_vars = bb_CMR_vars[!bb_CMR_vars %in% bulkvars]
+  bb_CMR_vars = c(bb_CMR_vars, grep("^12681-|^12687-", names(df), value=TRUE))
+  bb_CMR_vars = c(bb_CMR_vars, paste0("^", 24100:24181, "-"))
   bb_CMR_vars = c(bb_CMR_vars,
                   c("LVM__g_","LVEDV__mL_","RVEDV__mL_","LVEF","RVEF"))
 
