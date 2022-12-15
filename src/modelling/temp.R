@@ -16,13 +16,9 @@ weights = read.csv(file.path(path, "var_weighting.csv"),
 # load uk raw variables
 ukb = read.csv(file.path(path, "ukb_num_reduced.csv"), header=TRUE)
 
-# load cPCs
-cPC = read.csv(file.path(path, "cPC.csv"), header=TRUE)
-
 # # # process data
 # filter out between group for now
 ukb = ukb[scores$bp_group != 0, ]
-cPC = cPC[scores$bp_group != 0, ]
 scores = scores[scores$bp_group != 0, ]
 
 # compute colors (12 max)
@@ -35,8 +31,8 @@ traj_cols = col_temp[scores$traj + 1]
 # # # visualize
 png(file.path(path, "temp.png"), width = 1000, height = 600)
 # variable index to view
-i = 2
-loess_factor = 0.5
+i = 4
+loess_factor = 0.75
 n_intervals = 25
 var = ukb[, weights$Var1[i]]
 
