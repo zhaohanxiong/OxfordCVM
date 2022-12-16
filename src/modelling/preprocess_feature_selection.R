@@ -7,6 +7,11 @@ ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
+# subset background patients
+#ind_rand = sample(1:sum(labels$bp_group == 1), 750)
+#ft_norm = rbind(ft_norm[labels$bp_group == 1, ][ind_rand, ], ft_norm[labels$bp_group != 1, ])
+#labels = rbind(labels[labels$bp_group == 1, ][ind_rand, ], labels[labels$bp_group != 1, ])
+
 # shuffle dataset to remove bias during cross-validation
 set.seed(555)
 ind_rand1 = sample(1:nrow(labels), nrow(labels))
