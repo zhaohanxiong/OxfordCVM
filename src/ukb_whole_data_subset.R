@@ -5,8 +5,8 @@ source("preprocess_utils.R")
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
 # to add new ukb dataset, just change the first input argument below
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../../ukb51139_v2.csv",
-                                   path_ukb_vars = "../../../bb_variablelist.csv")
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../ukb51139_v2.csv",
+                                   path_ukb_vars = "../../bb_variablelist.csv")
 
 # for exploratory analysis, only get one row/column
 #df = fread("../../../ukb51139.csv", nrows = 1)
@@ -44,7 +44,7 @@ print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
 ukb_df = ukb_df[rowMeans(is.na(ukb_df)) < 0.95, ]
 
 # write to output (data & labels)
-fwrite(ukb_df, "../../../ukb_subset.csv")
+fwrite(ukb_df, "../../ukb_subset.csv")
 
 # display output to indicate full ukb dataset subsetting is complete
 print(sprintf("UKB Whole Data Subsetting is Complete"))
