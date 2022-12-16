@@ -3,7 +3,7 @@ library(ggplot2)
 require(gridExtra)
 
 # # # define input parameters
-i = 11 # index of variable weighting to view
+i = 1 # index of variable weighting to view
 loess_factor = 1.5 # smoothing factor
 n_intervals = 25 # number of intervals to divide
 
@@ -81,13 +81,17 @@ dev.off()
 # start offline plot
 png(file.path(path, "temp2.png"), width = 600, height = 600)
 
+# generate plotting dataframe with 3 major trajectories
 df_plot = data.frame(y = scores$global_pseudotimes,
                      x = cut(var, breaks = seq(min(var, na.rm = TRUE), 
                                                max(var, na.rm = TRUE), 
-                                               length = n_intervals * 2)),
+                                               length = n_intervals)),
                      traj = as.factor(scores$trajectory))
-df_plot = df_plot[!is.na(df_plot$x) & df_plot$traj != -1, ]
+df_plot = df_plot[df_plot$traj %in% names(sort(table(scores$trajectory), 
+                                               decreasing = TRUE)[1:3]), ]
+df_plot = df_plot[!is.na(df_plot$x), ]
 
+# aggregate score means by interval and trajectory
 df_plot = aggregate(df_plot$y,
                     by = list(group = df_plot$x, traj = df_plot$traj),
                     "median")
@@ -98,10 +102,10 @@ df_plot$group = sapply(strsplit(gsub(",", " ",
 
 # plot loess over interval means and by trajectory
 ggplot(df_plot, aes(x = group, y = x, group = traj, color = traj)) + 
-  geom_point(size = 10, alpha = 0.25) +
+  geom_point(size = 7.5, alpha = 0.25) +
   geom_smooth(orientation = "x", method = "loess", span = loess_factor, 
               linewidth = 2, se = FALSE, fullrange = TRUE) +
-  ggtitle(sprintf("Trend of %s Variable (Per Interval)",
+  ggtitle(sprintf("Trend of %s Variable In 3 Dominant Trajectories",
                   gsub("_", " ", weights$group[i]))) +
   xlab(sprintf("%s (Median Per Interval)", toTitleCase(weights$name[i]))) + 
   ylab("Hyper Score [0-1]") +
