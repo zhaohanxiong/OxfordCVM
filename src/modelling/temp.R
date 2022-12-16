@@ -2,6 +2,11 @@ library(tools)
 library(ggplot2)
 require(gridExtra)
 
+# # # define input parameters
+i = 11 # index of variable weighting to view
+loess_factor = 1.5 # smoothing factor
+n_intervals = 25 # number of intervals to divide
+
 # # # read input data
 # set file path
 path = "NeuroPM/io/"
@@ -16,33 +21,25 @@ weights = read.csv(file.path(path, "var_weighting.csv"),
 # load uk raw variables
 ukb = read.csv(file.path(path, "ukb_num_reduced.csv"), header=TRUE)
 
-# # # process data
-# filter out between group for now
+# filter out between group
 ukb = ukb[scores$bp_group != 0, ]
 scores = scores[scores$bp_group != 0, ]
 
-# compute colors (12 max)
-col_temp = c('#FD3216', '#00FE35', '#6A76FC', '#FED4C4', '#FE00CE', 
-             '#0DF9FF', '#F6F926', '#FF9616', '#479B55', '#EEA6FB', 
-             '#DC587D', '#D626FF')
-group_cols = col_temp[scores$bp_group + 1]
-traj_cols = col_temp[scores$traj + 1]
-
-# # # visualize
-png(file.path(path, "temp.png"), width = 1000, height = 600)
 # variable index to view
-i = 8
-loess_factor = 1.5
-n_intervals = 25
 var = ukb[, weights$Var1[i]]
 
-# boxplot by intervals
+# # # Visualize by Intervals
+# start offline plot
+png(file.path(path, "temp1.png"), width = 1600, height = 800)
+
+# generate plotting data frame
 df_plot = data.frame(y = scores$global_pseudotimes,
                      x = cut(var, breaks = seq(min(var, na.rm = TRUE), 
                                                max(var, na.rm = TRUE), 
-                                               length = n_intervals)),
-                     fill = as.factor(scores$bp_group))
+                                               length = n_intervals)))
 df_plot = df_plot[!is.na(df_plot$x), ]
+
+# boxplot by intervals
 p1 = ggplot(aes(y = y, x = x, fill = x), data = df_plot) + 
         geom_boxplot() +
         ggtitle(sprintf("Trend of %s Variable (Per Interval)", 
@@ -53,14 +50,18 @@ p1 = ggplot(aes(y = y, x = x, fill = x), data = df_plot) +
               axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
               plot.title = element_text(size = 15, face = "bold"))
 
-# loess plot by interval means
-df_median = aggregate(df_plot$y, by = list(df_plot$x), "median")
+# aggregate mean of scores by interval
+df_median = aggregate(df_plot$y,
+                      by = list(group = df_plot$x),
+                      "median")
 df_median$group = sapply(strsplit(gsub(",", " ",
                                   gsub("\\(|\\]", "",
-                                  df_median$Group.1)), " "), 
+                                  df_median$group)), " "), 
                               function(x) mean(as.numeric(x)))
+
+# loess plot by interval means
 p2 = ggplot(df_median, aes(x = group, y = x)) + 
-        geom_point(size = 5, alpha = 0.5, fill = "grey50") +
+        geom_point(size = 5, alpha = 0.5, col = "grey50") +
         geom_smooth(orientation = "x", span = loess_factor, col = "red") +
         ggtitle(sprintf("Trend of %s Variable (Per Interval)",
                                               gsub("_", " ", weights$group[i]))) +
@@ -70,5 +71,43 @@ p2 = ggplot(df_median, aes(x = group, y = x)) +
               axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
               plot.title = element_text(size = 15, face = "bold"))
 
+# mutli-plot
 grid.arrange(p1, p2, ncol = 2)
+
+# stop offline plot
+dev.off()
+
+# # # Visualize by Trajectory
+# start offline plot
+png(file.path(path, "temp2.png"), width = 600, height = 600)
+
+df_plot = data.frame(y = scores$global_pseudotimes,
+                     x = cut(var, breaks = seq(min(var, na.rm = TRUE), 
+                                               max(var, na.rm = TRUE), 
+                                               length = n_intervals * 2)),
+                     traj = as.factor(scores$trajectory))
+df_plot = df_plot[!is.na(df_plot$x) & df_plot$traj != -1, ]
+
+df_plot = aggregate(df_plot$y,
+                    by = list(group = df_plot$x, traj = df_plot$traj),
+                    "median")
+df_plot$group = sapply(strsplit(gsub(",", " ",
+                                     gsub("\\(|\\]", "",
+                                         df_plot$group)), " "), 
+                                     function(x) mean(as.numeric(x)))
+
+# plot loess over interval means and by trajectory
+ggplot(df_plot, aes(x = group, y = x, group = traj, color = traj)) + 
+  geom_point(size = 10, alpha = 0.25) +
+  geom_smooth(orientation = "x", method = "loess", span = loess_factor, 
+              linewidth = 2, se = FALSE, fullrange = TRUE) +
+  ggtitle(sprintf("Trend of %s Variable (Per Interval)",
+                  gsub("_", " ", weights$group[i]))) +
+  xlab(sprintf("%s (Median Per Interval)", toTitleCase(weights$name[i]))) + 
+  ylab("Hyper Score [0-1]") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+        plot.title = element_text(size = 15, face = "bold"))
+
+# stop offline plot
 dev.off()
