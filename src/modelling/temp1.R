@@ -3,7 +3,7 @@ library(ggplot2)
 require(gridExtra)
 
 # # # define input parameters
-i = 1 # index of variable weighting to view
+i = 8 # index of variable weighting to view
 loess_factor = 1.5 # smoothing factor
 n_intervals = 25 # number of intervals to divide
 
