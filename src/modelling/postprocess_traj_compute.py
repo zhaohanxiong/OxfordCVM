@@ -281,8 +281,8 @@ else:
         score_col = MST_label["bp_group"].to_numpy()
 
     # assign discrete color
-    ggplot_cols = np.array(["#F8766D" "#CD9600" "#7CAE00" "#00BE67" 
-                            "#00BFC4" "#00A9FF" "#C77CFF" "#FF61CC"])
+    ggplot_cols = np.array(["#F8766D", "#CD9600", "#7CAE00", "#00BE67", 
+                            "#00BFC4", "#00A9FF", "#C77CFF", "#FF61CC"])
     #plotly_cols = np.array(['#FD3216', '#00FE35', '#6A76FC', '#FED4C4', '#FE00CE', '#0DF9FF',
     #                        '#F6F926', '#FF9616', '#479B55', '#EEA6FB', '#DC587D', '#D626FF',
     #                        '#6E899C', '#00B5F7', '#B68E00', '#C9FBE5', '#FF0092', '#22FFA7',
