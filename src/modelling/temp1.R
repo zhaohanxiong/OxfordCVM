@@ -21,12 +21,21 @@ weights = read.csv(file.path(path, "var_weighting.csv"),
 # load uk raw variables
 ukb = read.csv(file.path(path, "ukb_num_reduced.csv"), header=TRUE)
 
+# filter out root node (avoid coloring issues)
+ukb = ukb[scores$trajectory != -1, ]
+scores = scores[scores$trajectory != -1, ]
+
 # filter out between group
 ukb = ukb[scores$bp_group != 0, ]
 scores = scores[scores$bp_group != 0, ]
 
 # variable index to view
 var = ukb[, weights$Var1[i]]
+
+# define plotly color pallette
+cols = c('#FD3216', '#00FE35', '#6A76FC', 
+         '#FED4C4', '#FE00CE', '#0DF9FF')
+scores$traj_cols = cols[scores$trajectory + 1]
 
 # # # Visualize by Intervals
 # start offline plot
@@ -93,7 +102,8 @@ df_plot = df_plot[!is.na(df_plot$x), ]
 
 # aggregate score means by interval and trajectory
 df_plot = aggregate(df_plot$y,
-                    by = list(group = df_plot$x, traj = df_plot$traj),
+                    by = list(group = df_plot$x,
+                              traj = df_plot$traj),
                     "median")
 df_plot$group = sapply(strsplit(gsub(",", " ",
                                      gsub("\\(|\\]", "",
@@ -101,7 +111,7 @@ df_plot$group = sapply(strsplit(gsub(",", " ",
                                      function(x) mean(as.numeric(x)))
 
 # plot loess over interval means and by trajectory
-ggplot(df_plot, aes(x = group, y = x, group = traj, color = traj)) + 
+ggplot(df_plot, aes(x = group, y = x, group = traj, colour = traj)) + 
     geom_point(size = 7.5, alpha = 0.25) +
     geom_smooth(orientation = "x", method = "loess", span = loess_factor, 
                 linewidth = 2, se = FALSE, fullrange = TRUE) +
@@ -109,6 +119,7 @@ ggplot(df_plot, aes(x = group, y = x, group = traj, color = traj)) +
                     gsub("_", " ", weights$group[i]))) +
     xlab(sprintf("%s (Median Per Interval)", toTitleCase(weights$name[i]))) + 
     ylab("Hyper Score [0-1]") +
+    scale_fill_manual(values = df_plot$traj_col) +
     theme(legend.position = "none",
           axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
           plot.title = element_text(size = 15, face = "bold"))
