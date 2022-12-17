@@ -120,7 +120,7 @@ grid.arrange(p1, p2, ncol = 2)
 dev.off()
 
 # ------------------------------------------------------------------------------
-# Plot 4 - Individual Trajectory Scores
+# Plot 4 - Distriubtion of Variable Weightings by Modality
 # ------------------------------------------------------------------------------
 
 # compute summary of weighting by group
