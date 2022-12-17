@@ -3,7 +3,7 @@ library(ggplot2)
 require(gridExtra)
 
 # # # define input parameters
-i = 8 # index of variable weighting to view
+i = 13 # index of variable weighting to view
 loess_factor = 1.5 # smoothing factor
 n_intervals = 25 # number of intervals to divide
 
@@ -116,8 +116,8 @@ ggplot(df_plot, aes(x = group, y = x, group = traj, color = traj)) +
     geom_point(size = 7.5, alpha = 0.25) +
     geom_smooth(orientation = "x", method = "loess", span = loess_factor, 
                 linewidth = 2, se = FALSE, fullrange = TRUE) +
-    ggtitle(sprintf("Trend of %s Variable In 3 Dominant Trajectories",
-                    gsub("_", " ", weights$group[i]))) +
+    ggtitle(sprintf("Trend of %s Variable In %i Dominant Trajectories",
+                    gsub("_", " ", weights$group[i]), length(group_cols))) +
     xlab(sprintf("%s (Median Per Interval)", toTitleCase(weights$name[i]))) + 
     ylab("Hyper Score [0-1]") +
     scale_color_manual("Trajectories", values = group_cols) +
