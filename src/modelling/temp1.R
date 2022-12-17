@@ -33,9 +33,8 @@ scores = scores[scores$bp_group != 0, ]
 var = ukb[, weights$Var1[i]]
 
 # define plotly color pallette
-cols = c('#FD3216', '#00FE35', '#6A76FC', 
-         '#FED4C4', '#FE00CE', '#0DF9FF')
-scores$traj_cols = cols[scores$trajectory + 1]
+cols = c("#F8766D", "#CD9600", "#7CAE00", "#00BE67", 
+         "#00BFC4", "#00A9FF", "#C77CFF", "#FF61CC")
 
 # # # Visualize by Intervals
 # start offline plot
@@ -97,7 +96,7 @@ df_plot = data.frame(y = scores$global_pseudotimes,
                                                length = n_intervals)),
                      traj = as.factor(scores$trajectory))
 df_plot = df_plot[df_plot$traj %in% names(sort(table(scores$trajectory), 
-                                               decreasing = TRUE)[1:3]), ]
+                                               decreasing = TRUE)[1:4]), ]
 df_plot = df_plot[!is.na(df_plot$x), ]
 
 # aggregate score means by interval and trajectory
@@ -109,9 +108,11 @@ df_plot$group = sapply(strsplit(gsub(",", " ",
                                      gsub("\\(|\\]", "",
                                          df_plot$group)), " "), 
                                      function(x) mean(as.numeric(x)))
+group_cols = cols[unique(df_plot$traj)]
+names(group_cols) = unique(df_plot$traj)
 
 # plot loess over interval means and by trajectory
-ggplot(df_plot, aes(x = group, y = x, group = traj, colour = traj)) + 
+ggplot(df_plot, aes(x = group, y = x, group = traj, color = traj)) + 
     geom_point(size = 7.5, alpha = 0.25) +
     geom_smooth(orientation = "x", method = "loess", span = loess_factor, 
                 linewidth = 2, se = FALSE, fullrange = TRUE) +
@@ -119,9 +120,8 @@ ggplot(df_plot, aes(x = group, y = x, group = traj, colour = traj)) +
                     gsub("_", " ", weights$group[i]))) +
     xlab(sprintf("%s (Median Per Interval)", toTitleCase(weights$name[i]))) + 
     ylab("Hyper Score [0-1]") +
-    scale_fill_manual(values = df_plot$traj_col) +
-    theme(legend.position = "none",
-          axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+    scale_color_manual("Trajectories", values = group_cols) +
+    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
           plot.title = element_text(size = 15, face = "bold"))
 
 # stop offline plot
