@@ -6,9 +6,10 @@
 - ```mkdir /name_of_new_folder``` (create directory)
 - ```rm /filename``` (remove single files)
 - ```rm -r /file/directory``` (remove entire directories)
-- ```chmod``` (changing permissions of access)
+- ```chmod -r 755``` or ```chmod -r 777``` (changing permissions of access)
+- ```du -h file_name``` (check file size of file)
 
-### Installing Git on Linux
+### Installing Git on Linux (Example of Linux Installation)
 - most software can be installed directly from the web
 - install from web via ```apt```
 ```
