@@ -34,27 +34,13 @@ ssh winokl@163.1.212.155
   - You should also see a new SSH configuration in the side panel for your most recent connection
   - Next time you can simply right click on this and "Open in Current Window"
 
-### Navigate Directories
+### Change Password
 - Initial steps
   - Click first tab on the left hand side to open the file explorer
   - Right click and click "open in integrated terminal"
   - Change password:
     - In terminal type ```passwd```
     - Enter your current and new password
-
-- Check current directory you are in in the terminal ```pwd```
-
-- Navigate to your home directory ```cd /home/zhaohanx/``` or ```cd /home/winokl/```
-
-- Navigate out of the current directory (to a level above) ```cd ..```
-
-- List everything in your current directory ```ls -l```
-
-- Check file size of file ```du -h file_name```
-
-- Create folders ```mkdir folder_name```
-
-- Remove folder ```rm -r folder_name```
 
 ### Code Base
 - Download code base (you should see a new folder in your directory
@@ -82,6 +68,8 @@ mkdir /src/aws/tf_serving/saved_models
 mkdir /src/ml_lifecycle/mlflow/mlruns
 mkdir /src/ml_lifecycle/mlflow/mlruns_staging
 ```
+
+- Ask for a copy of ```/src/modelling/NeuroPM/cTI-codes``` folder as it is not on git due to it being from an external group 
 
 - Get Latest Code Version
 ```
