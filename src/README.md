@@ -46,13 +46,14 @@ ssh winokl@163.1.212.155
 - Download code base (you should see a new folder in your directory
 ```
 git clone https://github.com/zhaohanxiong/OxfordCVM.git
+cd OxfordCVM
 ```
 
 - Set Up Code Base (Organize Branches)
 ```
+
 git fetch --all
 git pull --all
-git pull dev
 git checkout dev
 git branch --set-upstream-to=origin/dev dev
 git branch -D prod
@@ -62,11 +63,10 @@ git branch -D prod
 
 - Setup Code Base by Adding Directories Ignored by Git
 ```
-cd OxfordCVM
-mkdir /src/modelling/NeuroPM/io
-mkdir /src/aws/tf_serving/saved_models
-mkdir /src/ml_lifecycle/mlflow/mlruns
-mkdir /src/ml_lifecycle/mlflow/mlruns_staging
+mkdir src/modelling/NeuroPM/io
+mkdir src/aws/tf_serving/saved_models
+mkdir src/ml_lifecycle/mlflow/mlruns
+mkdir src/ml_lifecycle/mlflow/mlruns_staging
 ```
 
 - Ask for a copy of ```/src/modelling/NeuroPM/cTI-codes``` folder as it is not on git due to it being from an external group 
@@ -98,15 +98,18 @@ git checkout dev
   - Create a new directory ```mkdir miniconda```
   - Navigate inside the new directory ```cd miniconda```
   - Drag and drop your downloaded miniconda linux installer from your desktop into VS-Code and into the ```miniconda``` folder
-  - Type ```bash Miniconda3-<name of the file you downloaded>.sh```
-
-- Set up virtual environment (create, activate)
+  - Type ```bash Miniconda3-<name of the file you downloaded>.sh``` to install
+  - To set up environment path so you can use ```conda``` command: ```echo 'export PATH=/home/andyf/miniconda3/bin:$PATH' >> ~/.bashrc```
+   
+- Set up virtual environment (create, map, activate)
 ```
-conda create --environment_name
-conda activate environment_name
+conda create --name env_name
+export PATH=/home/username/miniconda3/bin:$PATH
+activate env_name
 ```
  
 - Install R Libraries
+  - type ```yes``` following the terminal prompt
 ```
 R
 install.packages("data.table")
@@ -116,6 +119,8 @@ install.packages("gridExtra")
 ```
 
 - Install Python Libraries
+  - Check python is working with ```python3``` (conda version) or ```python3.10``` (our own install)
+
 ```
 pip install numpy scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
 ```
