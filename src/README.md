@@ -51,7 +51,6 @@ cd OxfordCVM
 
 - Set Up Code Base (Organize Branches)
 ```
-
 git fetch --all
 git pull --all
 git checkout dev
