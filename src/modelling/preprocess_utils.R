@@ -153,15 +153,13 @@ get_ukb_subset_column_names = function(df, df_vars,
   # cardiac MR variables
   # removed all blood pressure related variables, kept cardiac 
   # structure and heart rate variables, kept pulse pressure
-  bb_CMR_vars = grep(
-                    "^22426-|^22425-|^22424-|^22420-|^22421-|^22422-
+  bb_CMR_vars = grep("^22426-|^22425-|^22424-|^22420-|^22421-|^22422-
                      |^22423-|^12702-|^12682-|^12673-|^12679-|^12676-
                      |^12686-|^12685-|^22427-",
-                    names(df),
-                    value=TRUE)
+                     names(df), value=TRUE)
+  bb_CMR_vars = c(bb_CMR_vars, paste0("^", 24100:24181, "-"))
   bb_CMR_vars = bb_CMR_vars[!bb_CMR_vars %in% bulkvars]
-  bb_CMR_vars = c(bb_CMR_vars,
-                  c("LVM__g_","LVEDV__mL_","RVEDV__mL_","LVEF","RVEF"))
+  bb_CMR_vars = c(bb_CMR_vars,c("LVM__g_","LVEDV__mL_","RVEDV__mL_","LVEF","RVEF"))
 
   # abdominal MR variables
   bb_AMR_vars = df_vars$FieldID[df_vars$Category==126 | df_vars$Category==149]
