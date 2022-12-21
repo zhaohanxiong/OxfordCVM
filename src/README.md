@@ -117,7 +117,13 @@ git checkout dev
 conda create --environment_name
 conda activate environment_name
 ```
- 
+
+- Install Python Libraries
+```
+conda install numpy 
+pip install scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
+```
+
 - Install R Libraries
 ```
 R
@@ -125,11 +131,6 @@ install.packages("data.table")
 install.packages("R.matlab")
 install.packages("ggplot2")
 install.packages("gridExtra")
-```
-
-- Install Python Libraries
-```
-pip install numpy scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
 ```
 
 - Matlab
