@@ -103,7 +103,6 @@ git checkout dev
 - Set up virtual environment (create, map, activate)
 ```
 conda create --name env_name
-export PATH=/home/username/miniconda3/bin:$PATH
 activate env_name
 ```
 
