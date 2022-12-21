@@ -41,6 +41,10 @@ ssh winokl@163.1.212.155
   - Change password:
     - In terminal type ```passwd```
     - Enter your current and new password
+  - Make sure you are using bash as your default terminal language:
+    - If you cannot perform any shortcuts in the terminal, then you are probably using shell
+    - Run the command below and restart your SSH session to fix this issue
+    - ```chsh -s /bin/bash```
 
 ### Code Base
 - Download code base (you should see a new folder in your directory
@@ -98,7 +102,7 @@ git checkout dev
   - Navigate inside the new directory ```cd miniconda```
   - Drag and drop your downloaded miniconda linux installer from your desktop into VS-Code and into the ```miniconda``` folder
   - Type ```bash Miniconda3-<name of the file you downloaded>.sh``` to install
-  - To set up environment path so you can use ```conda``` command: ```echo 'export PATH=/home/andyf/miniconda3/bin:$PATH' >> ~/.bashrc```
+  - Your conda should be automatically mapped to an environment variable. Otherwise, modify the ```~/.bashrc``` file
    
 - Set up virtual environment (create, map, activate)
 ```
@@ -129,6 +133,7 @@ install.packages("gridExtra")
 - Download/unzip this file in your own account folder and run the install file to install matlab
 ```
 
+- Test everything is working by typing in ```R```, ```python```, ```matlab```
 - Exit out of virtual environment
   - You should activate your virtual environment to install new libraries and run code
   - You should deactivate your virtual environment when you are finished with ```conda deactivate```
