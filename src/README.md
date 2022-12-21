@@ -107,7 +107,13 @@ conda create --name env_name
 export PATH=/home/username/miniconda3/bin:$PATH
 activate env_name
 ```
- 
+
+- Install Python Libraries
+```
+conda install numpy
+pip install scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
+```
+
 - Install R Libraries
   - type ```yes``` following the terminal prompt
 ```
@@ -116,13 +122,6 @@ install.packages("data.table")
 install.packages("R.matlab")
 install.packages("ggplot2")
 install.packages("gridExtra")
-```
-
-- Install Python Libraries
-  - Check python is working with ```python3``` (conda version) or ```python3.10``` (our own install)
-
-```
-pip install numpy scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
 ```
 
 - Matlab
