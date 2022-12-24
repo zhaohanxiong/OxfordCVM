@@ -182,10 +182,6 @@ dev.off()
 # produce the plot
 png(file.path(path, "final_plot5_ClinicalVariables.png"), width = 600, height = 600)
 
-# define input parameters
-loess_factor = 1.5 # smoothing factor for loess plot
-n_intervals = 25   # number of intervals to divide
-
 # list out variables to plot hyperscore against
 vars = c("X22423.2.0", # LV Stroke Volume
          "X22421.2.0", # LV End Diastole Volume
@@ -194,53 +190,55 @@ vars = c("X22423.2.0", # LV Stroke Volume
          "X25020.2.0"  # Volume of Hippocampus (Right)
          )
 
+# find real name in ukb corresponding to variable code
+vars_real = sapply(vars, function(s) 
+                             ukb_varnames$Field[ukb_varnames$colname == s])
+vars_real = c("LVSV","LVEDV","WMH","Hippo(left)","Hippo(Right)")
+
 # intialize the dataframe with all the hyperscores repeated, and var column
 df_conc = data.frame(y = rep(scores$global_pseudotimes, length(vars)),
-                     x = NA,
-                     name = rep(vars, each = nrow(scores)))
+                     x = NA, # placeholder
+                     name = rep(vars_real, each = nrow(scores)))
 
 # iterate all the variables and compile
 for (i in 1:length(vars)) {
 
-        # define variable
-        v = vars[i]
+        # define variable values from ukb column and normalize between 0 and 1
+        v = ukb[, vars[i]]
+        v = v - min(v, na.rm = TRUE)
+        v = v / max(v, na.rm = TRUE)
 
         # break variable up into intervals
-        intervals = cut(ukb[, v], breaks = seq(min(ukb[, v], na.rm = TRUE), 
-                                               max(ukb[, v], na.rm = TRUE), 
-                                               length = n_intervals))
+        intervals = as.character(cut(v, breaks = seq(min(v, na.rm = TRUE),
+                                                     max(v, na.rm = TRUE),
+                                                     length = 21)))
 
         # assign values to collated df
         df_conc$x[((i - 1) * nrow(scores) + 1):(i * nrow(scores))] = intervals
 
 }
 
-# Compute median hyperscore per interval for each variable
-df_median = aggregate(df_conc$y,
-                      by = list(x1 = df_conc$x, name = df_conc$name),
-                      "mean")
-df_median$x1 = sapply(strsplit(gsub(",", " ",
-                               gsub("\\(|\\]", "",
-                               df_median$x1)), " "),
-                      function(xx) mean(as.numeric(xx)))
+# remove rows with missing values
+df_conc = df_conc[!is.na(df_conc$x), ]
 
-# define plotly color pallette
-cols = c("#F8766D", "#CD9600", "#7CAE00", "#00BE67", 
-         "#00BFC4", "#00A9FF", "#C77CFF", "#FF61CC")
-group_cols = cols[unique(df_median$name)]
-names(group_cols) = unique(df_median$name)
+# Compute median hyperscore per interval for each variable
+df_plot = aggregate(df_conc$y,
+                    by = list(x1 = df_conc$x, name = df_conc$name),
+                    "mean")
+df_plot$x1 = sapply(strsplit(gsub("\\(|\\]", "", df_plot$x1), ","),
+                    function(xx) mean(as.numeric(xx)))
+df_plot$name = as.factor(df_plot$name)
 
 # produce plot
-ggplot(df_median, aes(x = x1, y = x, group = name, color = name)) + 
+ggplot(df_plot, aes(x = x1, y = x, group = name, color = name)) + 
         geom_point(size = 7.5, alpha = 0.25) +
-        geom_smooth(orientation = "x", method = "loess", span = loess_factor, 
+        geom_smooth(orientation = "x", method = "loess", span = 1.5, 
                      linewidth = 2, se = FALSE, fullrange = TRUE) +
         ggtitle("Trend of Clinical Variables") +
-        xlab("Clinical Variables") + 
+        xlab("Clinical Variables (Normalized between 0 to 1)") + 
         ylab("Hyper Score [0 to 1]") +
-        scale_color_manual("Variables", values = group_cols) +
-        theme(legend.position = "none",
-              axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+        #scale_color_manual("Variables", values = group_cols) +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
               plot.title = element_text(size = 15, face = "bold"))
 
 dev.off()
