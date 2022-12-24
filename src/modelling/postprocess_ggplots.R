@@ -180,8 +180,16 @@ dev.off()
 # ------------------------------------------------------------------------------
 
 # manually list out variables to plot hyperscore against
-vars      = c("X22423.2.0", "X22421.2.0", "X25781.2.0",  "X25019.2.0",   "X25020.2.0")
-var_names = c("LV SV",      "LV EDV",     "WhiteMatter", "Hippo (Left)", "Hippo (Right)")
+vars      = c("X22423.2.0",
+              "X22421.2.0",
+              "X25781.2.0", 
+              "X25019.2.0",
+              "X25020.2.0")
+var_names = c("LV SV",
+              "LV EDV",
+              "WM Hyperintensity",
+              "Hippo (Left Volume)",
+              "Hippo (Right Volume)")
 
 # intialize the dataframe with all the hyperscores repeated, and var column
 df_conc = data.frame(x = rep(scores$global_pseudotimes, length(vars)),
@@ -193,6 +201,7 @@ for (i in 1:length(vars)) {
 
         # define variable values from ukb column and normalize between 0 and 1
         v = ukb[, vars[i]]
+        v = v / max(abs(v), na.rm = TRUE)
 
         # break variable up into intervals
         intervals = as.character(cut(v, breaks = seq(min(v, na.rm = TRUE),
