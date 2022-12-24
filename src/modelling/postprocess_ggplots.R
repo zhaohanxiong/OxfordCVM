@@ -22,7 +22,7 @@ var_weights = read.csv(file.path(path, "var_weighting.csv"),
 ukb_varnames =  read.csv(file.path(path, "ukb_varnames.csv"), 
                                              header=TRUE, stringsAsFactor=FALSE)
 # load uk raw variables
-ukb = data.frame(fread(file.path(path, "ukb_num.csv"), header=TRUE))
+ukb = data.frame(fread(file.path(path, "ukb_num_norm.csv"), header=TRUE))
 
 # ------------------------------------------------------------------------------
 # Plot 1 - Distribution of Disease Scores Separated by Group
@@ -179,34 +179,20 @@ dev.off()
 # Plot 5 - Clinical Variables Against Hyperscore
 # ------------------------------------------------------------------------------
 
-# produce the plot
-png(file.path(path, "final_plot5_ClinicalVariables.png"), width = 600, height = 600)
-
-# list out variables to plot hyperscore against
-vars = c("X22423.2.0", # LV Stroke Volume
-         "X22421.2.0", # LV End Diastole Volume
-         "X25781.2.0", # Total Volume of White Matter Hyperintensities
-         "X25019.2.0", # Volume of Hippocampus (Left)
-         "X25020.2.0"  # Volume of Hippocampus (Right)
-         )
-
-# find real name in ukb corresponding to variable code
-vars_real = sapply(vars, function(s) 
-                             ukb_varnames$Field[ukb_varnames$colname == s])
-vars_real = c("LVSV","LVEDV","WMH","Hippo(left)","Hippo(Right)")
+# manually list out variables to plot hyperscore against
+vars      = c("X22423.2.0", "X22421.2.0", "X25781.2.0",  "X25019.2.0",   "X25020.2.0")
+var_names = c("LV SV",      "LV EDV",     "WhiteMatter", "Hippo (Left)", "Hippo (Right)")
 
 # intialize the dataframe with all the hyperscores repeated, and var column
-df_conc = data.frame(y = rep(scores$global_pseudotimes, length(vars)),
-                     x = NA, # placeholder
-                     name = rep(vars_real, each = nrow(scores)))
+df_conc = data.frame(x = rep(scores$global_pseudotimes, length(vars)),
+                     y = NA, # placeholder
+                     name = rep(var_names, each = nrow(scores)))
 
 # iterate all the variables and compile
 for (i in 1:length(vars)) {
 
         # define variable values from ukb column and normalize between 0 and 1
         v = ukb[, vars[i]]
-        v = v - min(v, na.rm = TRUE)
-        v = v / max(v, na.rm = TRUE)
 
         # break variable up into intervals
         intervals = as.character(cut(v, breaks = seq(min(v, na.rm = TRUE),
@@ -214,29 +200,32 @@ for (i in 1:length(vars)) {
                                                      length = 21)))
 
         # assign values to collated df
-        df_conc$x[((i - 1) * nrow(scores) + 1):(i * nrow(scores))] = intervals
+        df_conc$y[((i - 1) * nrow(scores) + 1):(i * nrow(scores))] = intervals
 
 }
 
 # remove rows with missing values
-df_conc = df_conc[!is.na(df_conc$x), ]
+df_conc = df_conc[!is.na(df_conc$y), ]
 
 # Compute median hyperscore per interval for each variable
-df_plot = aggregate(df_conc$y,
-                    by = list(x1 = df_conc$x, name = df_conc$name),
+df_plot = aggregate(df_conc$x,
+                    by = list(y = df_conc$y, name = df_conc$name),
                     "mean")
-df_plot$x1 = sapply(strsplit(gsub("\\(|\\]", "", df_plot$x1), ","),
+df_plot$y = sapply(strsplit(gsub("\\(|\\]", "", df_plot$y), ","),
                     function(xx) mean(as.numeric(xx)))
 df_plot$name = as.factor(df_plot$name)
 
+# produce the plot
+png(file.path(path, "final_plot5_ClinicalVariables.png"), width = 600, height = 600)
+
 # produce plot
-ggplot(df_plot, aes(x = x1, y = x, group = name, color = name)) + 
+ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) + 
         geom_point(size = 7.5, alpha = 0.25) +
         geom_smooth(orientation = "x", method = "loess", span = 1.5, 
                      linewidth = 2, se = FALSE, fullrange = TRUE) +
         ggtitle("Trend of Clinical Variables") +
-        xlab("Clinical Variables (Normalized between 0 to 1)") + 
-        ylab("Hyper Score [0 to 1]") +
+        xlab("Hyper Score [0 to 1]") +
+        ylab("Clinical Variables (Normalized between 0 to 1)") +
         #scale_color_manual("Variables", values = group_cols) +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
               plot.title = element_text(size = 15, face = "bold"))
