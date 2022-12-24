@@ -1,3 +1,4 @@
+library(tools)
 library(ggplot2)
 library(gridExtra)
 library(data.table)
@@ -105,7 +106,7 @@ dev.off()
 png(file.path(path, "final_plot3_BP_vs_Score.png"), width = 1000, height = 600)
 p1 = ggplot(scores, aes_string(x = "global_pseudotimes", y = "BPSys.2.0")) +
           geom_point(aes_string(color = "bp_group"), shape = 19, alpha = 0.25, size = 2) +
-          geom_smooth(orientation = "x", span = 1, col = "deepskyblue") +
+          geom_smooth(orientation = "x", span = 1.5, linewidth = 1.5 , col = "deepskyblue") +
           ggtitle("Disease Scores vs Systolic BP") +
           xlab("Pseudotime (Disease Progression) Scores (0-1)") + 
           ylab("Systolic Blood Pressure (mmHg)") +
@@ -113,7 +114,7 @@ p1 = ggplot(scores, aes_string(x = "global_pseudotimes", y = "BPSys.2.0")) +
 
 p2 = ggplot(scores, aes_string(x = "global_pseudotimes", y = "BPDia.2.0")) +
           geom_point(aes_string(color = "bp_group"), shape = 19, alpha = 0.25, size = 2) +
-          geom_smooth(orientation = "x", span = 1, col = "deepskyblue") +
+          geom_smooth(orientation = "x", span = 1.5, linewidth = 1.5 , col = "deepskyblue") +
           ggtitle("Disease Scores vs Diastolic BP") +
           xlab("Pseudotime (Disease Progression) Scores (0-1)") + 
           ylab("Diastolic Blood Pressure (mmHg)") +
@@ -179,7 +180,7 @@ dev.off()
 # ------------------------------------------------------------------------------
 
 # produce the plot
-png(file.path(path, "final_plot5_ClinicalVariables.png"), width = 1000, height = 500)
+png(file.path(path, "final_plot5_ClinicalVariables.png"), width = 600, height = 600)
 
 # define input parameters
 loess_factor = 1.5 # smoothing factor for loess plot
@@ -194,8 +195,8 @@ vars = c("X22423.2.0", # LV Stroke Volume
          )
 
 # intialize the dataframe with all the hyperscores repeated, and var column
-df_conc = data.frame(y = rep(scores$global_pseudotimes, len(vars)),
-                     x = NA
+df_conc = data.frame(y = rep(scores$global_pseudotimes, length(vars)),
+                     x = NA,
                      name = rep(vars, each = nrow(scores)))
 
 # iterate all the variables and compile
@@ -220,8 +221,8 @@ df_median = aggregate(df_conc$y,
                       "mean")
 df_median$x1 = sapply(strsplit(gsub(",", " ",
                                gsub("\\(|\\]", "",
-                               df_median$x)), " "),
-                      function(x1) mean(as.numeric(x)))
+                               df_median$x1)), " "),
+                      function(xx) mean(as.numeric(xx)))
 
 # define plotly color pallette
 cols = c("#F8766D", "#CD9600", "#7CAE00", "#00BE67", 
@@ -232,12 +233,14 @@ names(group_cols) = unique(df_median$name)
 # produce plot
 ggplot(df_median, aes(x = x1, y = x, group = name, color = name)) + 
         geom_point(size = 7.5, alpha = 0.25) +
-        ggeom_smooth(orientation = "x", method = "loess", span = loess_factor, 
+        geom_smooth(orientation = "x", method = "loess", span = loess_factor, 
                      linewidth = 2, se = FALSE, fullrange = TRUE) +
         ggtitle("Trend of Clinical Variables") +
-        xlab(sprintf("%s (Median Per Interval)", toTitleCase(weights$name[i]))) + 
+        xlab("Clinical Variables") + 
         ylab("Hyper Score [0 to 1]") +
         scale_color_manual("Variables", values = group_cols) +
         theme(legend.position = "none",
               axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
               plot.title = element_text(size = 15, face = "bold"))
+
+dev.off()
