@@ -1,6 +1,8 @@
 
 # load functions
+setwd("modelling")
 source("preprocess_utils.R")
+setwd("..")
 
 # load UKB datasets
 # these datsets have to be located directly outside the base dir (OxfordCVM)
