@@ -3,7 +3,7 @@ library(ggplot2)
 require(gridExtra)
 
 # # # define input parameters
-i = 13 # index of variable weighting to view
+i = 8 # index of variable weighting to view
 loess_factor = 1.5 # smoothing factor
 n_intervals = 25 # number of intervals to divide
 
@@ -24,10 +24,6 @@ ukb = read.csv(file.path(path, "ukb_num_reduced.csv"), header=TRUE)
 # filter out root node (avoid coloring issues)
 ukb = ukb[scores$trajectory != -1, ]
 scores = scores[scores$trajectory != -1, ]
-
-# filter out between group
-ukb = ukb[scores$bp_group != 0, ]
-scores = scores[scores$bp_group != 0, ]
 
 # variable index to view
 var = ukb[, weights$Var1[i]]
