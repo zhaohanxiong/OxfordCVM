@@ -196,7 +196,7 @@ df_conc = data.frame(x = rep(scores$global_pseudotimes, length(vars)),
                      y = NA, # placeholder
                      name = rep(var_names, each = nrow(scores)))
 
-# iterate all the variables and compile
+# iterate all the variables and compile 
 for (i in 1:length(vars)) {
 
         # define variable values from ukb column and normalize between 0 and 1
