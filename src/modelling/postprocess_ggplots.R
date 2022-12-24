@@ -1,5 +1,6 @@
 library(ggplot2)
 library(gridExtra)
+library(data.table)
 
 # load outputs from NeuroPM
 path = "NeuroPM/io/"
@@ -19,6 +20,8 @@ var_weights = read.csv(file.path(path, "var_weighting.csv"),
 # load variable names
 ukb_varnames =  read.csv(file.path(path, "ukb_varnames.csv"), 
                                              header=TRUE, stringsAsFactor=FALSE)
+# load uk raw variables
+ukb = data.frame(fread(file.path(path, "ukb_num.csv"), header=TRUE))
 
 # ------------------------------------------------------------------------------
 # Plot 1 - Distribution of Disease Scores Separated by Group
@@ -172,7 +175,69 @@ grid.arrange(p1, p2, ncol = 2)
 dev.off()
 
 # ------------------------------------------------------------------------------
-# Plot - Clinical Variables Against Hyperscore
+# Plot 5 - Clinical Variables Against Hyperscore
 # ------------------------------------------------------------------------------
 
+# produce the plot
+png(file.path(path, "final_plot5_ClinicalVariables.png"), width = 1000, height = 500)
 
+# define input parameters
+loess_factor = 1.5 # smoothing factor for loess plot
+n_intervals = 25   # number of intervals to divide
+
+# list out variables to plot hyperscore against
+vars = c("X22423.2.0", # LV Stroke Volume
+         "X22421.2.0", # LV End Diastole Volume
+         "X25781.2.0", # Total Volume of White Matter Hyperintensities
+         "X25019.2.0", # Volume of Hippocampus (Left)
+         "X25020.2.0"  # Volume of Hippocampus (Right)
+         )
+
+# intialize the dataframe with all the hyperscores repeated, and var column
+df_conc = data.frame(y = rep(scores$global_pseudotimes, len(vars)),
+                     x = NA
+                     name = rep(vars, each = nrow(scores)))
+
+# iterate all the variables and compile
+for (i in 1:length(vars)) {
+
+        # define variable
+        v = vars[i]
+
+        # break variable up into intervals
+        intervals = cut(ukb[, v], breaks = seq(min(ukb[, v], na.rm = TRUE), 
+                                               max(ukb[, v], na.rm = TRUE), 
+                                               length = n_intervals))
+
+        # assign values to collated df
+        df_conc$x[((i - 1) * nrow(scores) + 1):(i * nrow(scores))] = intervals
+
+}
+
+# Compute median hyperscore per interval for each variable
+df_median = aggregate(df_conc$y,
+                      by = list(x1 = df_conc$x, name = df_conc$name),
+                      "mean")
+df_median$x1 = sapply(strsplit(gsub(",", " ",
+                               gsub("\\(|\\]", "",
+                               df_median$x)), " "),
+                      function(x1) mean(as.numeric(x)))
+
+# define plotly color pallette
+cols = c("#F8766D", "#CD9600", "#7CAE00", "#00BE67", 
+         "#00BFC4", "#00A9FF", "#C77CFF", "#FF61CC")
+group_cols = cols[unique(df_median$name)]
+names(group_cols) = unique(df_median$name)
+
+# produce plot
+ggplot(df_median, aes(x = x1, y = x, group = name, color = name)) + 
+        geom_point(size = 7.5, alpha = 0.25) +
+        ggeom_smooth(orientation = "x", method = "loess", span = loess_factor, 
+                     linewidth = 2, se = FALSE, fullrange = TRUE) +
+        ggtitle("Trend of Clinical Variables") +
+        xlab(sprintf("%s (Median Per Interval)", toTitleCase(weights$name[i]))) + 
+        ylab("Hyper Score [0 to 1]") +
+        scale_color_manual("Variables", values = group_cols) +
+        theme(legend.position = "none",
+              axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+              plot.title = element_text(size = 15, face = "bold"))
