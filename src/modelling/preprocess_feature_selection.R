@@ -14,7 +14,6 @@ ind_rand = sample(1:nrow(labels), nrow(labels))
 labels = labels[ind_rand, ]
 ft_norm = ft_norm[ind_rand, ]
 ft_raw = ft_raw[ind_rand, ]
-fwrite(ft_norm, "NeuroPM/io/ukb_num_ft_select.csv")
 
 # compute co-correlation
 cor_all = cor(ft_norm)
@@ -94,5 +93,6 @@ print(table(var_groups$var_group[var_groups$ukb_var
                                         %in% colnames(ft_norm)]))
 
 # write to output
+fwrite(ft_raw, "NeuroPM/io/ukb_num_ft_select.csv")
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
 fwrite(labels, "NeuroPM/io/labels_select.csv")

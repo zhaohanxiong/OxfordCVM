@@ -18,7 +18,7 @@ engine = sqlalchemy.create_engine(url, echo = False)
 # load data frames to deploy
 pseudotimes = pd.read_csv("pseudotimes.csv", index_col = False)
 ukb_varnames = pd.read_csv("ukb_varnames.csv", index_col = False)
-ukb_num = pd.read_csv("ukb_num_norm_reduced.csv", index_col = False)
+ukb_num = pd.read_csv("ukb_num_reduced.csv", index_col = False)
 
 # deploy data frames to to AWS
 pseudotimes.to_sql(name = "psuedotimes", con = engine, if_exists = "replace")
