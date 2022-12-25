@@ -188,8 +188,8 @@ vars      = c("X22423.2.0",
 var_names = c("LV SV",
               "LV EDV",
               "WM Hyperintensity",
-              "Hippo (Left Volume)",
-              "Hippo (Right Volume)")
+              "Hippocampus Volume",
+              "Hippocampus Volume")
 
 # intialize the dataframe with all the hyperscores repeated, and var column
 df_conc = data.frame(x = rep(scores$global_pseudotimes, length(vars)),
