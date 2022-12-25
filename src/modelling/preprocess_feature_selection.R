@@ -35,7 +35,7 @@ diag(cov) = 0
 var_list = var_groups$ukb_var[var_groups$var_group == "Body_Composition"]
 var_filter = colnames(ft_norm) %in% var_list
 
-# mask out body composition variables
+# mask out non-body composition variables
 cov[, !var_filter] = NA
 cov[!var_filter, ] = NA
 
@@ -43,7 +43,7 @@ cov[!var_filter, ] = NA
 ind_keep = unname(apply(cov, 1, function(x)
              !any(abs(x) > sd(cov, na.rm = TRUE) * 1.25, na.rm = TRUE)))
 
-# mask out body comp variables
+# mask out non-body comp variables
 ind_keep[!var_filter] = TRUE
 
 # only keep relevant features
@@ -61,7 +61,7 @@ diag(cov) = 0
 var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
 var_filter = colnames(ft_norm) %in% var_list
 
-# mask out brain variables
+# mask out non-brain variables
 cov[, !var_filter] = NA
 cov[!var_filter, ] = NA
 
@@ -69,8 +69,11 @@ cov[!var_filter, ] = NA
 ind_keep = unname(apply(cov, 1, function(x)
              !any(abs(x) > sd(cov, na.rm = TRUE) * 2.25, na.rm = TRUE)))
 
-# mask out brain variables
+# mask out non-brain variables
 ind_keep[!var_filter] = TRUE
+ind_keep[colnames(ft_norm) %in% c("X25781.2.0", # brain vars to keep 
+                                  "X25019.2.0",
+                                  "X25020.2.0")] == TRUE
 
 # only keep relevant features
 ft_norm = ft_norm[, ind_keep]
