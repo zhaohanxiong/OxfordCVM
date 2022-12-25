@@ -196,31 +196,30 @@ df_conc = data.frame(x = rep(scores$global_pseudotimes, length(vars)),
                      y = NA, # placeholder
                      name = rep(var_names, each = nrow(scores)))
 
+# partition hyper scores into intervals (could be variable)
+df_conc$x = cut(df_conc$x, breaks = seq(min(df_conc$x, na.rm = TRUE),
+                                        max(df_conc$x, na.rm = TRUE),
+                                        length = 11))
+
 # iterate all the variables and compile 
 for (i in 1:length(vars)) {
 
-        # define variable values from ukb column and normalize between 0 and 1
+        # define variable values from ukb column
         v = ukb[, vars[i]]
-        v = v / max(abs(v), na.rm = TRUE)
-
-        # break variable up into intervals
-        intervals = as.character(cut(v, breaks = seq(min(v, na.rm = TRUE),
-                                                     max(v, na.rm = TRUE),
-                                                     length = 21)))
 
         # assign values to collated df
-        df_conc$y[((i - 1) * nrow(scores) + 1):(i * nrow(scores))] = intervals
+        df_conc$y[((i - 1) * nrow(scores) + 1):(i * nrow(scores))] = v
 
 }
 
 # remove rows with missing values
-df_conc = df_conc[!is.na(df_conc$y), ]
+df_conc = df_conc[!is.na(df_conc$x), ]
 
 # Compute median hyperscore per interval for each variable
-df_plot = aggregate(df_conc$x,
-                    by = list(y = df_conc$y, name = df_conc$name),
+df_plot = aggregate(list(y = df_conc$y),
+                    by = list(x = df_conc$x, name = df_conc$name),
                     "mean")
-df_plot$y = sapply(strsplit(gsub("\\(|\\]", "", df_plot$y), ","),
+df_plot$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot$x), ","),
                     function(xx) mean(as.numeric(xx)))
 df_plot$name = as.factor(df_plot$name)
 
@@ -232,10 +231,10 @@ ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) +
         geom_point(size = 7.5, alpha = 0.25) +
         geom_smooth(orientation = "x", method = "loess", span = 1.5, 
                      linewidth = 2, se = FALSE, fullrange = TRUE) +
-        ggtitle("Trend of Clinical Variables") +
+        ggtitle("Trend of Clinical Variables vs Hyper Score") +
         xlab("Hyper Score [0 to 1]") +
         ylab("Clinical Variables (Normalized between 0 to 1)") +
-        #scale_color_manual("Variables", values = group_cols) +
+        scale_color_manual(name = "Variable Name") +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
               plot.title = element_text(size = 15, face = "bold"))
 
