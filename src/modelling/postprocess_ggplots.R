@@ -22,7 +22,7 @@ var_weights = read.csv(file.path(path, "var_weighting.csv"),
 ukb_varnames =  read.csv(file.path(path, "ukb_varnames.csv"), 
                                              header=TRUE, stringsAsFactor=FALSE)
 # load uk raw variables
-ukb = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"), header=TRUE))
+ukb = data.frame(fread(file.path(path, "ukb_num_norm_temp.csv"), header=TRUE))
 
 # ------------------------------------------------------------------------------
 # Plot 1 - Distribution of Disease Scores Separated by Group
@@ -197,6 +197,7 @@ df_conc = data.frame(x = rep(scores$global_pseudotimes, length(vars)),
                      name = rep(var_names, each = nrow(scores)))
 
 # partition hyper scores into intervals (could be variable)
+df_conc$x[df_conc$x > 0.9] = NA
 df_conc$x = cut(df_conc$x, breaks = seq(min(0, na.rm = TRUE),
                                         max(1, na.rm = TRUE),
                                         length = 11))
@@ -213,7 +214,7 @@ for (i in 1:length(vars)) {
 }
 
 # remove rows with missing values
-df_conc = df_conc[!is.na(df_conc$x), ]
+df_conc = df_conc[!is.na(df_conc$x) | !is.na(df_conc$y), ]
 
 # Compute median hyperscore per interval for each variable
 df_plot = aggregate(list(y = df_conc$y),
@@ -230,7 +231,7 @@ png(file.path(path, "final_plot5_ClinicalVariables.png"), width = 600, height = 
 # produce plot
 ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) + 
         geom_point(size = 7.5, alpha = 0.25) +
-        geom_smooth(orientation = "x", method = "loess", span = 1.5, 
+        geom_smooth(orientation = "x", method = "loess", span = 5, 
                     linewidth = 2, se = FALSE, fullrange = TRUE) +
         ggtitle("Trend of Clinical Variables vs Hyper Score") +
         xlab("Hyper Score [0 to 1]") +
