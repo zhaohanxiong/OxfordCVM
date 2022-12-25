@@ -22,7 +22,7 @@ var_weights = read.csv(file.path(path, "var_weighting.csv"),
 ukb_varnames =  read.csv(file.path(path, "ukb_varnames.csv"), 
                                              header=TRUE, stringsAsFactor=FALSE)
 # load uk raw variables
-ukb = data.frame(fread(file.path(path, "ukb_num_norm.csv"), header=TRUE))
+ukb = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"), header=TRUE))
 
 # ------------------------------------------------------------------------------
 # Plot 1 - Distribution of Disease Scores Separated by Group
@@ -197,9 +197,9 @@ df_conc = data.frame(x = rep(scores$global_pseudotimes, length(vars)),
                      name = rep(var_names, each = nrow(scores)))
 
 # partition hyper scores into intervals (could be variable)
-df_conc$x = cut(df_conc$x, breaks = seq(min(df_conc$x, na.rm = TRUE),
-                                        max(df_conc$x, na.rm = TRUE),
-                                        length = 21))
+df_conc$x = cut(df_conc$x, breaks = seq(min(0, na.rm = TRUE),
+                                        max(1, na.rm = TRUE),
+                                        length = 11))
 
 # iterate all the variables and compile 
 for (i in 1:length(vars)) {
@@ -218,9 +218,10 @@ df_conc = df_conc[!is.na(df_conc$x), ]
 # Compute median hyperscore per interval for each variable
 df_plot = aggregate(list(y = df_conc$y),
                     by = list(x = df_conc$x, name = df_conc$name),
-                    "mean")
+                    "median")
 df_plot$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot$x), ","),
                     function(xx) mean(as.numeric(xx)))
+df_plot$x = as.factor(df_plot$x)
 df_plot$name = as.factor(df_plot$name)
 
 # produce the plot
