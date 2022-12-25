@@ -201,7 +201,7 @@ df_conc$x = cut(df_conc$x, breaks = seq(min(0, na.rm = TRUE),
                                         max(1, na.rm = TRUE),
                                         length = 11))
 
-# iterate all the variables and compile 
+# iterate all the variables and compile into one dataframe
 for (i in 1:length(vars)) {
 
         # define variable values from ukb column
@@ -234,7 +234,7 @@ ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) +
                     linewidth = 2, se = FALSE, fullrange = TRUE) +
         ggtitle("Trend of Clinical Variables vs Hyper Score") +
         xlab("Hyper Score [0 to 1]") +
-        ylab("Clinical Variables (Normalized between 0 to 1)") +
+        ylab("Clinical Variables (Normalized Z-Score)") +
         labs(color = "Variable Name") +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
               plot.title = element_text(size = 15, face = "bold"))
