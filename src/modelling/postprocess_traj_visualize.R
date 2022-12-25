@@ -3,8 +3,8 @@ library(ggplot2)
 require(gridExtra)
 
 # # # define input parameters
-i = 5 # index of variable weighting to view
-n_intervals = 21 # number of intervals to divide
+i = 30 # index of variable weighting to view
+n_intervals = 11 # number of intervals to divide
 n_traj = 4 # number of trajectories
 
 # # # read input data
