@@ -22,7 +22,7 @@ var_weights = read.csv(file.path(path, "var_weighting.csv"),
 ukb_varnames =  read.csv(file.path(path, "ukb_varnames.csv"), 
                                              header=TRUE, stringsAsFactor=FALSE)
 # load uk raw variables
-ukb = data.frame(fread(file.path(path, "ukb_num_norm_temp.csv"), header=TRUE))
+ukb = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"), header=TRUE))
 
 # ------------------------------------------------------------------------------
 # Plot 1 - Distribution of Disease Scores Separated by Group

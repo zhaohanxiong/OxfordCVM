@@ -12,7 +12,6 @@ set.seed(11111)
 ind_rand = sample(1:nrow(labels), nrow(labels))
 labels = labels[ind_rand, ]
 ft_norm = ft_norm[ind_rand, ]
-fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_temp.csv")
 
 # compute co-correlation
 cor_all = cor(ft_norm)
@@ -59,7 +58,12 @@ diag(cov) = 0
 
 # find brain variables
 var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
-var_filter = colnames(ft_norm) %in% var_list
+var_filter = colnames(ft_norm) %in% var_list &
+             # force brain variables to be kept at the end
+             !(colnames(ft_norm) %in% c("X25781.2.0", # WM Hyperintensity
+                                        "X25019.2.0", # Hippocampus (Left)
+                                        "X25020.2.0") # Hippocampus (Right)
+                                        )
 
 # mask out non-brain variables
 cov[, !var_filter] = NA
@@ -71,9 +75,6 @@ ind_keep = unname(apply(cov, 1, function(x)
 
 # mask out non-brain variables
 ind_keep[!var_filter] = TRUE
-ind_keep[colnames(ft_norm) %in% c("X25781.2.0", # brain vars to keep 
-                                  "X25019.2.0",
-                                  "X25020.2.0")] == TRUE
 
 # only keep relevant features
 ft_norm = ft_norm[, ind_keep]
