@@ -197,7 +197,6 @@ df_conc = data.frame(x = rep(scores$global_pseudotimes, length(vars)),
                      name = rep(var_names, each = nrow(scores)))
 
 # partition hyper scores into intervals (could be variable)
-df_conc$x[df_conc$x > 0.9] = NA
 df_conc$x = cut(df_conc$x, breaks = seq(min(0, na.rm = TRUE),
                                         max(1, na.rm = TRUE),
                                         length = 11))
