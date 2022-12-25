@@ -218,7 +218,7 @@ df_conc = df_conc[!is.na(df_conc$x) | !is.na(df_conc$y), ]
 # Compute median hyperscore per interval for each variable
 df_plot = aggregate(list(y = df_conc$y),
                     by = list(x = df_conc$x, name = df_conc$name),
-                    "median")
+                    "mean")
 df_plot$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot$x), ","),
                     function(xx) mean(as.numeric(xx)))
 df_plot$x = as.factor(df_plot$x)
