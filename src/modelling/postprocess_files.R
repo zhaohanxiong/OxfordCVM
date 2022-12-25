@@ -73,6 +73,7 @@ var_weights = read.csv(file.path(path, "var_weighting.csv"),
 var_thresh = read.csv(file.path(path, "threshold_weighting.csv"),
                       header=TRUE, stringsAsFactor=FALSE)$Expected_contribution
 ukb_df = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"),header=TRUE))
+ukb_df_raw = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"),header=TRUE))
 
 # rename variable weightings
 var_weights$Var1 = gsub("_", ".", var_weights$Var1)
@@ -113,3 +114,4 @@ ukb_df_raw = ukb_df_raw[, var_weights$Var1[var_weights$significant]]
 
 # write the reduced variable data frame to output
 fwrite(ukb_df, file.path(path, "ukb_num_norm_reduced.csv"))
+fwrite(ukb_df_raw, file.path(path, "ukb_num_reduced.csv"))

@@ -4,6 +4,7 @@ library(data.table)
 # # # Prepare data
 # read data
 ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
+ft_raw = data.frame(fread('NeuroPM/io/ukb_num.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
@@ -12,6 +13,8 @@ set.seed(11111)
 ind_rand = sample(1:nrow(labels), nrow(labels))
 labels = labels[ind_rand, ]
 ft_norm = ft_norm[ind_rand, ]
+ft_raw = ft_raw[ind_rand, ]
+fwrite(ft_norm, "NeuroPM/io/ukb_num_ft_select.csv")
 
 # compute co-correlation
 cor_all = cor(ft_norm)

@@ -19,7 +19,7 @@ weights = read.csv(file.path(path, "var_weighting.csv"),
                                header=TRUE, stringsAsFactor=FALSE)
 
 # load uk raw variables
-ukb = read.csv(file.path(path, "ukb_num_norm_reduced.csv"), header=TRUE)
+ukb = read.csv(file.path(path, "ukb_num_reduced.csv"), header=TRUE)
 
 # filter out root node (avoid coloring issues)
 ukb = ukb[scores$trajectory != -1, ]
