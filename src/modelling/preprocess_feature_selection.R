@@ -7,11 +7,6 @@ ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
-# subset background patients
-#ind_rand = sample(1:sum(labels$bp_group == 1), 500)
-#ft_norm = rbind(ft_norm[labels$bp_group == 1, ][ind_rand, ], ft_norm[labels$bp_group != 1, ])
-#labels = rbind(labels[labels$bp_group == 1, ][ind_rand, ], labels[labels$bp_group != 1, ])
-
 # shuffle dataset to remove bias during cross-validation
 set.seed(555)
 ind_rand1 = sample(1:nrow(labels), nrow(labels))
@@ -27,57 +22,57 @@ diag(cor_all) = 0
 ft_norm = ft_norm[, !apply(cor_all, 2, function(x) 
                                 any(abs(x) >= 0.95, na.rm = TRUE))]
 
-# # # Reducing Body Composition Variables
-# compute contrast covariance
-cov_background = cov(ft_norm[labels$bp_group == 1, ])
-cov_disease = cov(ft_norm[labels$bp_group == 2, ])
-cov = cov_disease - cov_background
-cov[upper.tri(cov)] = NA
-diag(cov) = 0
+# # # # Reducing Body Composition Variables
+# # compute contrast covariance
+# cov_background = cov(ft_norm[labels$bp_group == 1, ])
+# cov_disease = cov(ft_norm[labels$bp_group == 2, ])
+# cov = cov_disease - cov_background
+# cov[upper.tri(cov)] = NA
+# diag(cov) = 0
 
-# find body composition varaibles
-var_list = var_groups$ukb_var[var_groups$var_group == "Body_Composition"]
-var_filter = colnames(ft_norm) %in% var_list
+# # find body composition varaibles
+# var_list = var_groups$ukb_var[var_groups$var_group == "Body_Composition"]
+# var_filter = colnames(ft_norm) %in% var_list
 
-# mask out body composition variables
-cov[, !var_filter] = NA
-cov[!var_filter, ] = NA
+# # mask out body composition variables
+# cov[, !var_filter] = NA
+# cov[!var_filter, ] = NA
 
-# remove high co-correlated variables
-ind_keep = unname(apply(cov, 1, function(x)
-             !any(abs(x) > sd(cov, na.rm = TRUE) * 1.25, na.rm = TRUE)))
+# # remove high co-correlated variables
+# ind_keep = unname(apply(cov, 1, function(x)
+#              !any(abs(x) > sd(cov, na.rm = TRUE) * 1.25, na.rm = TRUE)))
 
-# mask out body comp variables
-ind_keep[!var_filter] = TRUE
+# # mask out body comp variables
+# ind_keep[!var_filter] = TRUE
 
-# only keep relevant features
-#ft_norm = ft_norm[, ind_keep]
+# # only keep relevant features
+# ft_norm = ft_norm[, ind_keep]
 
-# # # Reducing Brain MR Variables
-# compute contrast covariance
-cov_background = cov(ft_norm[labels$bp_group == 1, ])
-cov_disease = cov(ft_norm[labels$bp_group == 2, ])
-cov = cov_disease - cov_background
-cov[upper.tri(cov)] = NA
-diag(cov) = 0
+# # # # Reducing Brain MR Variables
+# # compute contrast covariance
+# cov_background = cov(ft_norm[labels$bp_group == 1, ])
+# cov_disease = cov(ft_norm[labels$bp_group == 2, ])
+# cov = cov_disease - cov_background
+# cov[upper.tri(cov)] = NA
+# diag(cov) = 0
 
-# find brain variables
-var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
-var_filter = colnames(ft_norm) %in% var_list
+# # find brain variables
+# var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
+# var_filter = colnames(ft_norm) %in% var_list
 
-# mask out brain variables
-cov[, !var_filter] = NA
-cov[!var_filter, ] = NA
+# # mask out brain variables
+# cov[, !var_filter] = NA
+# cov[!var_filter, ] = NA
 
-# remove high co-correlated variables
-ind_keep = unname(apply(cov, 1, function(x)
-             !any(abs(x) > sd(cov, na.rm = TRUE) * 2.25, na.rm = TRUE)))
+# # remove high co-correlated variables
+# ind_keep = unname(apply(cov, 1, function(x)
+#              !any(abs(x) > sd(cov, na.rm = TRUE) * 2.25, na.rm = TRUE)))
 
-# mask out brain variables
-ind_keep[!var_filter] = TRUE
+# # mask out brain variables
+# ind_keep[!var_filter] = TRUE
 
-# only keep relevant features
-#ft_norm = ft_norm[, ind_keep]
+# # only keep relevant features
+# ft_norm = ft_norm[, ind_keep]
 
 # # # Output
 # display messages to see in terminal
