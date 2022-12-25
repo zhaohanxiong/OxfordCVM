@@ -197,9 +197,7 @@ df_conc = data.frame(x = rep(scores$global_pseudotimes, length(vars)),
                      name = rep(var_names, each = nrow(scores)))
 
 # partition hyper scores into intervals (could be variable)
-df_conc$x = cut(df_conc$x, breaks = seq(min(0, na.rm = TRUE),
-                                        max(1, na.rm = TRUE),
-                                        length = 11))
+df_conc$x = cut(df_conc$x, breaks = seq(0, 1, length = 11))
 
 # iterate all the variables and compile into one dataframe
 for (i in 1:length(vars)) {
@@ -213,7 +211,7 @@ for (i in 1:length(vars)) {
 }
 
 # remove rows with missing values
-df_conc = df_conc[!is.na(df_conc$x) | !is.na(df_conc$y), ]
+df_conc = df_conc[!is.na(df_conc$x) & !is.na(df_conc$y), ]
 
 # Compute median hyperscore per interval for each variable
 df_plot = aggregate(list(y = df_conc$y),
