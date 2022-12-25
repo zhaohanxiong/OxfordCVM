@@ -28,7 +28,7 @@ ukb = data.frame(fread(file.path(path, "ukb_num_norm.csv"), header=TRUE))
 # Plot 1 - Distribution of Disease Scores Separated by Group
 # ------------------------------------------------------------------------------
 # produce the plot
-png(file.path(path, "final_plot1_Score_Distribution.png"), width = 1000, height = 500)
+png(file.path(path, "final_plot1_ScoreDistribution.png"), width = 1000, height = 500)
 p1 = ggplot(scores, aes(y = global_pseudotimes, x = as.factor(bp_group), 
                         fill = as.factor(bp_group))) +
           geom_boxplot(alpha = 0.8) +
@@ -103,7 +103,7 @@ dev.off()
 # Plot 3 - Hyperscore vs Blood Pressure Measurements
 # ------------------------------------------------------------------------------
 # produce the plot
-png(file.path(path, "final_plot3_BP_vs_Score.png"), width = 1000, height = 600)
+png(file.path(path, "final_plot3_BP.png"), width = 1000, height = 600)
 p1 = ggplot(scores, aes_string(x = "global_pseudotimes", y = "BPSys.2.0")) +
           geom_point(aes_string(color = "bp_group"), shape = 19, alpha = 0.25, size = 2) +
           geom_smooth(orientation = "x", span = 1.5, linewidth = 1.5 , col = "deepskyblue") +
@@ -154,7 +154,7 @@ print(sprintf("----- Significant Variable Weighting Distribution is:"))
 print(weight_plot_sig)
 
 # produce the plot
-png(file.path(path, "final_plot4_Variable_Contribution.png"), width = 1000, height = 500)
+png(file.path(path, "final_plot4_VariableContribution.png"), width = 1000, height = 500)
 
 p1 = ggplot(weight_plot, aes(x = "", y = Total_Weighting, fill = Var_Group)) + 
         geom_bar(width = 1, stat = "identity") + 
