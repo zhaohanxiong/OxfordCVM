@@ -51,7 +51,7 @@ ind_keep = unname(apply(cov, 1, function(x)
 ind_keep[!var_filter] = TRUE
 
 # only keep relevant features
-ft_norm = ft_norm[, ind_keep]
+#ft_norm = ft_norm[, ind_keep]
 
 # # # Reducing Brain MR Variables
 # compute contrast covariance
@@ -77,7 +77,7 @@ ind_keep = unname(apply(cov, 1, function(x)
 ind_keep[!var_filter] = TRUE
 
 # only keep relevant features
-ft_norm = ft_norm[, ind_keep]
+#ft_norm = ft_norm[, ind_keep]
 
 # # # Output
 # display messages to see in terminal
