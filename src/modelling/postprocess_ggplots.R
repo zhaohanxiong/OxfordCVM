@@ -42,8 +42,8 @@ p1 = ggplot(scores, aes(y = global_pseudotimes, x = as.factor(bp_group),
 p2 = ggplot(scores, aes(x = global_pseudotimes, fill = as.factor(bp_group))) +
           geom_density(alpha = 0.5) + theme_bw() +
           ggtitle("Distribution of Disease Score By Group") + 
-          xlab("Disease Group") + 
-          ylab("Disease Score") +
+          xlab("Disease Score") + 
+          ylab("Density") +
           theme(legend.title = element_blank())
   
 grid.arrange(p1, p2, ncol = 2, widths = c(1, 1.5))
