@@ -199,7 +199,7 @@ df_conc = data.frame(x = rep(scores$global_pseudotimes, length(vars)),
 # partition hyper scores into intervals (could be variable)
 df_conc$x = cut(df_conc$x, breaks = seq(min(df_conc$x, na.rm = TRUE),
                                         max(df_conc$x, na.rm = TRUE),
-                                        length = 11))
+                                        length = 21))
 
 # iterate all the variables and compile 
 for (i in 1:length(vars)) {
@@ -230,11 +230,11 @@ png(file.path(path, "final_plot5_ClinicalVariables.png"), width = 600, height = 
 ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) + 
         geom_point(size = 7.5, alpha = 0.25) +
         geom_smooth(orientation = "x", method = "loess", span = 1.5, 
-                     linewidth = 2, se = FALSE, fullrange = TRUE) +
+                    linewidth = 2, se = FALSE, fullrange = TRUE) +
         ggtitle("Trend of Clinical Variables vs Hyper Score") +
         xlab("Hyper Score [0 to 1]") +
         ylab("Clinical Variables (Normalized between 0 to 1)") +
-        scale_color_manual(name = "Variable Name") +
+        labs(color = "Variable Name") +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
               plot.title = element_text(size = 15, face = "bold"))
 
