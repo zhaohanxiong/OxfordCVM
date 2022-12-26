@@ -12,7 +12,7 @@ setwd("..")
 ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../ukb51139_v2.csv",
                                    path_ukb_vars = "../../bb_variablelist.csv")
 
-# save other columns for post-analysis
+# save other columns for post-analysis, only keep rows without all NAs
 col_list = c("eid",         # ukb patient id
              "X22423.3.0",  # repeat imaging visit: LV stroke volume
              "X22421.3.0",  # repeat imaging visit: LV end diastole volume
@@ -20,8 +20,9 @@ col_list = c("eid",         # ukb patient id
              "X25019.3.0",  # repeat imaging visit: Hippocampus volume (left)
              "X25020.3.0"   # repeat imaging visit: Hippocampus volume (right)
              )
-df_post_analysis = ukb$ukb_data[, col_list]
-fwrite(df_post_analysis, "modelling/NeuroPM/io/future.csv")
+df_future = ukb$ukb_data[, col_list]
+df_future = df_future[apply(df_future, 1, function(x) sum(!is.na(x))) > 0, ]
+fwrite(df_future, "modelling/NeuroPM/io/future.csv")
 
 # display initial dataframe size
 print(sprintf("Initial Data Frame is of Size %0.0f by %0.0f",
@@ -55,7 +56,7 @@ print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
 ukb_df = ukb_df[rowMeans(is.na(ukb_df)) < 0.95, ]
 
 # write to output (data & labels)
-fwrite(ukb_df, "../../ukb_subset.csv")
+#fwrite(ukb_df, "../../ukb_subset.csv")
 
 # display output to indicate full ukb dataset subsetting is complete
 print(sprintf("UKB Whole Data Subsetting is Complete"))
