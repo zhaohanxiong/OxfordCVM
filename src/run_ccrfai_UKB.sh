@@ -15,7 +15,7 @@ cd ./NeuroPM
 # run evaluation (model and cross-validation)
 cd ..
 Rscript postprocess_eval_model.R
-#bash ./run_fmrib_x_validate.sh
+#bash ./run_ccrfai_x_validate.sh
 
 # run python trajectory visualization/computation
 python postprocess_traj_compute.py --max_traj_num=5 --overlap_threshold=0.8 --color_by="traj"
