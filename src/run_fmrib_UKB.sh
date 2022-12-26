@@ -24,7 +24,7 @@ Rscript postprocess_eval_model.R
 python postprocess_traj_compute.py --max_traj_num=8 --overlap_threshold=0.8 --color_by="traj"
 
 # generate ggplots for key results
-Rscript postprocess_ggplots.R
+Rscript postanalysis_ggplots.R
 
 # run cross validation (very long runtime)
 bash ./run_fmrib_x_validate.sh
