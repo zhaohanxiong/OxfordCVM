@@ -1,6 +1,29 @@
 # load dependencies
 library(data.table)
 
+quick_ETL_ukb = function(path_in, path_out, var_list,
+                         remove_all_missing = TRUE) {
+
+  # This function provides a quick tool to subset columns from the
+  # entire UKB spreadsheet. It also has the option to remove rows
+  # which have too many missing values.
+
+  # add patient ID if its not provided in the input 
+  var_list = unique(c("eid", var_list))
+
+  # read the dataframe with the custom columns for fast access
+  df = fread(path_in, var_list)
+
+  # removes all rows which has all missing (apart from eid column)
+  if (remove_all_missing) {
+    df = df[apply(df, 1, function(x) sum(!is.na(x))) > 1, ]
+  }
+
+  # write to output
+  fwrite(df, path_out)
+
+}
+
 load_raw_ukb_patient_dataset = function(path_ukb_data, path_ukb_vars) {
   
   # This function takes two file paths, the path to the UKB patient

@@ -8,17 +8,16 @@ setwd("..")
 #df = fread("../../ukb51139_v2.csv", nrows = 1, skip = 0)
 #df = fread("../../ukb51139_v2.csv", select = c("eid", "6150.0.0"))
 
-# save other columns for post-analysis, only keep rows without all NAs
-col_list = c("eid",         # ukb patient id
-             "X22423.3.0",  # repeat imaging visit: LV stroke volume
-             "X22421.3.0",  # repeat imaging visit: LV end diastole volume
-             "X25781.3.0",  # repeat imaging visit: white matter hyperintensities
-             "X25019.3.0",  # repeat imaging visit: Hippocampus volume (left)
-             "X25020.3.0"   # repeat imaging visit: Hippocampus volume (right)
-             )
-df_future = fread("../../ukb51139_v2.csv", select = col_list)
-df_future = df_future[apply(df_future, 1, function(x) sum(!is.na(x))) > 1, ]
-fwrite(df_future, "modelling/NeuroPM/io/future.csv")
+# extract few columns for post-analysis
+quick_ETL_ukb(path_in = "../../ukb51139_v2.csv",
+              path_out = "modelling/NeuroPM/io/future.csv",
+              var_list = c("X22423.3.0",  # 2nd imaging visit: LV stroke volume
+                          "X22421.3.0",  # 2nd imaging visit: LV end diastole volume
+                          "X25781.3.0",  # 2nd imaging visit: white matter hyperintensities
+                          "X25019.3.0",  # 2nd imaging visit: Hippocampus volume (left)
+                          "X25020.3.0"   # 2nd imaging visit: Hippocampus volume (right)
+                          ),
+              remove_all_missing = TRUE)
 
 # premature quitting if we only want a quick extraction
 quit(save = "no")
