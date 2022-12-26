@@ -90,7 +90,7 @@ p1 = ggplot(scores, aes(y = global_pseudotimes, x = as.factor(bp_group),
           geom_hline(yintercept = c(upper, lower), col = "red")
 
 p2 = ggplot(metrics_plot, aes(x = fpr, y = tpr)) +
-          geom_line(color = "purple", lwd = 1) + 
+          geom_line(color = "purple", linewidth = 1) + 
           ggtitle("ROC (Receiver Operating Characteristic) Curve") + 
           xlab("False Positive Rate (1 - Specificity)") + 
           ylab("True Positive Rate (Sensitivity)") +
