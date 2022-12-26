@@ -12,15 +12,13 @@ Rscript preprocess_feature_selection.R
 cd ./NeuroPM
 /home/zhaohanx/Matlab2020a/bin/matlab -nodisplay -nosplash -nodesktop -r "run('run_NeuroPM.m');exit;"
 
-# run evaluation
+# run evaluation (model and cross-validation)
 cd ..
 Rscript postprocess_eval_model.R
+#bash ./run_fmrib_x_validate.sh
 
 # run python trajectory visualization/computation
 python postprocess_traj_compute.py --max_traj_num=5 --overlap_threshold=0.8 --color_by="traj"
-
-# perform cross validation
-#bash ./run_fmrib_x_validate.sh
 
 # arrange/tidy up files for post-analysis
 Rscript postprocess_files.R
