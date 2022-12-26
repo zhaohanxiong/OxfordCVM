@@ -28,8 +28,7 @@ ukb = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"), header=TRU
 # Plot 1 - Distribution of Disease Scores Separated by Group
 # ------------------------------------------------------------------------------
 # produce the plot
-png(file.path(path, "final_plot1_ScoreDistribution.png"), 
-    width = 1000, height = 500)
+png("plots/final_plot1_ScoreDistribution.png", width = 1000, height = 500)
 p1 = ggplot(scores, aes(y = global_pseudotimes, x = as.factor(bp_group), 
                         fill = as.factor(bp_group))) +
           geom_boxplot(alpha = 0.8) +
@@ -81,7 +80,7 @@ auc = sum((tpr[1:(length(intervals) - 1)] +
            tpr[2:length(intervals)]) * diff(1 - fpr) / 2)
 
 # produce the plot
-png(file.path(path, "final_plot2_AUROC.png"), width = 1000, height = 600)
+png("plots/final_plot2_AUROC.png", width = 1000, height = 600)
 p1 = ggplot(scores, aes(y = global_pseudotimes, x = as.factor(bp_group), 
                         fill = as.factor(bp_group))) +
           geom_boxplot() +
@@ -107,7 +106,7 @@ dev.off()
 # Plot 3 - Hyperscore vs Blood Pressure Measurements
 # ------------------------------------------------------------------------------
 # produce the plot
-png(file.path(path, "final_plot3_BP.png"), width = 1000, height = 600)
+png("plots/final_plot3_BP.png", width = 1000, height = 600)
 p1 = ggplot(scores, aes(x = global_pseudotimes, y = `BPSys.2.0`)) +
           geom_point(aes(color = bp_group), shape = 19, alpha = 0.25, size = 2) +
           geom_smooth(orientation = "x", span = 1.5,
@@ -160,8 +159,7 @@ print(sprintf("----- Significant Variable Weighting Distribution is:"))
 print(weight_plot_sig)
 
 # produce the plot
-png(file.path(path, "final_plot4_VariableContribution.png"), 
-    width = 1000, height = 500)
+png("plots/final_plot4_VariableContribution.png", width = 1000, height = 500)
 
 p1 = ggplot(weight_plot, aes(x = "", y = Total_Weighting, fill = Var_Group)) + 
         geom_bar(width = 1, stat = "identity") + 
@@ -231,8 +229,7 @@ df_plot$x = as.factor(df_plot$x)
 df_plot$name = as.factor(df_plot$name)
 
 # produce the plot
-png(file.path(path, "final_plot5_ClinicalVariables.png"),
-    width = 600, height = 600)
+png("plots/final_plot5_ClinicalVariables.png", width = 600, height = 600)
 
 # produce plot
 ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) + 
