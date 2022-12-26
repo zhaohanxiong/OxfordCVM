@@ -34,7 +34,7 @@ ssh winokl@163.1.212.155
   - You should also see a new SSH configuration in the side panel for your most recent connection
   - Next time you can simply right click on this and "Open in Current Window"
 
-### Navigate Directories
+### Change Password
 - Initial steps
   - Click first tab on the left hand side to open the file explorer
   - Right click and click "open in integrated terminal"
@@ -42,31 +42,17 @@ ssh winokl@163.1.212.155
     - In terminal type ```passwd```
     - Enter your current and new password
 
-- Check current directory you are in in the terminal ```pwd```
-
-- Navigate to your home directory ```cd /home/zhaohanx/``` or ```cd /home/winokl/```
-
-- Navigate out of the current directory (to a level above) ```cd ..```
-
-- List everything in your current directory ```ls -l```
-
-- Check file size of file ```du -h file_name```
-
-- Create folders ```mkdir folder_name```
-
-- Remove folder ```rm -r folder_name```
-
 ### Code Base
 - Download code base (you should see a new folder in your directory
 ```
 git clone https://github.com/zhaohanxiong/OxfordCVM.git
+cd OxfordCVM
 ```
 
 - Set Up Code Base (Organize Branches)
 ```
 git fetch --all
 git pull --all
-git pull dev
 git checkout dev
 git branch --set-upstream-to=origin/dev dev
 git branch -D prod
@@ -76,12 +62,13 @@ git branch -D prod
 
 - Setup Code Base by Adding Directories Ignored by Git
 ```
-cd OxfordCVM
-mkdir /src/modelling/NeuroPM/io
-mkdir /src/aws/tf_serving/saved_models
-mkdir /src/ml_lifecycle/mlflow/mlruns
-mkdir /src/ml_lifecycle/mlflow/mlruns_staging
+mkdir src/modelling/NeuroPM/io
+mkdir src/aws/tf_serving/saved_models
+mkdir src/ml_lifecycle/mlflow/mlruns
+mkdir src/ml_lifecycle/mlflow/mlruns_staging
 ```
+
+- Ask for a copy of ```/src/modelling/NeuroPM/cTI-codes``` folder as it is not on git due to it being from an external group 
 
 - Get Latest Code Version
 ```
@@ -110,26 +97,29 @@ git checkout dev
   - Create a new directory ```mkdir miniconda```
   - Navigate inside the new directory ```cd miniconda```
   - Drag and drop your downloaded miniconda linux installer from your desktop into VS-Code and into the ```miniconda``` folder
-  - Type ```bash Miniconda3-<name of the file you downloaded>.sh```
+  - Type ```bash Miniconda3-<name of the file you downloaded>.sh``` to install
+  - To set up environment path so you can use ```conda``` command: ```echo 'export PATH=/home/andyf/miniconda3/bin:$PATH' >> ~/.bashrc```
+   
+- Set up virtual environment (create, map, activate)
+```
+conda create --name env_name
+activate env_name
+```
 
-- Set up virtual environment (create, activate)
+- Install Python Libraries
 ```
-conda create --environment_name
-conda activate environment_name
+conda install numpy
+pip install scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
 ```
- 
+
 - Install R Libraries
+  - type ```yes``` following the terminal prompt
 ```
 R
 install.packages("data.table")
 install.packages("R.matlab")
 install.packages("ggplot2")
 install.packages("gridExtra")
-```
-
-- Install Python Libraries
-```
-pip install numpy scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
 ```
 
 - Matlab

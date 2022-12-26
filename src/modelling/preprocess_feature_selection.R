@@ -4,14 +4,16 @@ library(data.table)
 # # # Prepare data
 # read data
 ft_norm = data.frame(fread('NeuroPM/io/ukb_num_norm.csv'))
+ft_raw = data.frame(fread('NeuroPM/io/ukb_num.csv'))
 labels  = read.csv('NeuroPM/io/labels.csv')
 var_groups = read.csv('NeuroPM/io/var_grouped.csv')
 
 # shuffle dataset to remove bias during cross-validation
-set.seed(11)
+set.seed(11111)
 ind_rand = sample(1:nrow(labels), nrow(labels))
-ft_norm = ft_norm[ind_rand, ]
 labels = labels[ind_rand, ]
+ft_norm = ft_norm[ind_rand, ]
+ft_raw = ft_raw[ind_rand, ]
 
 # compute co-correlation
 cor_all = cor(ft_norm)
@@ -34,7 +36,7 @@ diag(cov) = 0
 var_list = var_groups$ukb_var[var_groups$var_group == "Body_Composition"]
 var_filter = colnames(ft_norm) %in% var_list
 
-# mask out body composition variables
+# mask out non-body composition variables
 cov[, !var_filter] = NA
 cov[!var_filter, ] = NA
 
@@ -42,7 +44,7 @@ cov[!var_filter, ] = NA
 ind_keep = unname(apply(cov, 1, function(x)
              !any(abs(x) > sd(cov, na.rm = TRUE) * 1.25, na.rm = TRUE)))
 
-# mask out body comp variables
+# mask out non-body comp variables
 ind_keep[!var_filter] = TRUE
 
 # only keep relevant features
@@ -58,9 +60,14 @@ diag(cov) = 0
 
 # find brain variables
 var_list = var_groups$ukb_var[var_groups$var_group == "Brain_MR"]
-var_filter = colnames(ft_norm) %in% var_list
+var_filter = colnames(ft_norm) %in% var_list &
+             # force brain variables to be kept at the end
+             !(colnames(ft_norm) %in% c("X25781.2.0", # WM Hyperintensity
+                                        "X25019.2.0", # Hippocampus (Left)
+                                        "X25020.2.0") # Hippocampus (Right)
+                                        )
 
-# mask out brain variables
+# mask out non-brain variables
 cov[, !var_filter] = NA
 cov[!var_filter, ] = NA
 
@@ -68,7 +75,7 @@ cov[!var_filter, ] = NA
 ind_keep = unname(apply(cov, 1, function(x)
              !any(abs(x) > sd(cov, na.rm = TRUE) * 2.25, na.rm = TRUE)))
 
-# mask out brain variables
+# mask out non-brain variables
 ind_keep[!var_filter] = TRUE
 
 # only keep relevant features
@@ -86,5 +93,6 @@ print(table(var_groups$var_group[var_groups$ukb_var
                                         %in% colnames(ft_norm)]))
 
 # write to output
+fwrite(ft_raw, "NeuroPM/io/ukb_num_ft_select.csv")
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
 fwrite(labels, "NeuroPM/io/labels_select.csv")
