@@ -104,16 +104,16 @@ dev.off()
 # ------------------------------------------------------------------------------
 # produce the plot
 png(file.path(path, "final_plot3_BP.png"), width = 1000, height = 600)
-p1 = ggplot(scores, aes_string(x = "global_pseudotimes", y = "BPSys.2.0")) +
-          geom_point(aes_string(color = "bp_group"), shape = 19, alpha = 0.25, size = 2) +
+p1 = ggplot(scores, aes(x = global_pseudotimes, y = `BPSys.2.0`)) +
+          geom_point(aes(color = bp_group), shape = 19, alpha = 0.25, size = 2) +
           geom_smooth(orientation = "x", span = 1.5, linewidth = 1.5 , col = "deepskyblue") +
           ggtitle("Disease Scores vs Systolic BP") +
           xlab("Pseudotime (Disease Progression) Scores (0-1)") + 
           ylab("Systolic Blood Pressure (mmHg)") +
           scale_colour_brewer(palette = "Dark2")
 
-p2 = ggplot(scores, aes_string(x = "global_pseudotimes", y = "BPDia.2.0")) +
-          geom_point(aes_string(color = "bp_group"), shape = 19, alpha = 0.25, size = 2) +
+p2 = ggplot(scores, aes(x = global_pseudotimes, y = `BPDia.2.0`)) +
+          geom_point(aes(color = bp_group), shape = 19, alpha = 0.25, size = 2) +
           geom_smooth(orientation = "x", span = 1.5, linewidth = 1.5 , col = "deepskyblue") +
           ggtitle("Disease Scores vs Diastolic BP") +
           xlab("Pseudotime (Disease Progression) Scores (0-1)") + 
