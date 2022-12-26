@@ -8,10 +8,6 @@ setwd("..")
 #df = fread("../../ukb51139_v2.csv", nrows = 1, skip = 0)
 #df = fread("../../ukb51139_v2.csv", select = c("eid", "6150.0.0"))
 
-# load UKB datasets
-ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../ukb51139_v2.csv",
-                                   path_ukb_vars = "../../bb_variablelist.csv")
-
 # save other columns for post-analysis, only keep rows without all NAs
 col_list = c("eid",         # ukb patient id
              "X22423.3.0",  # repeat imaging visit: LV stroke volume
@@ -20,9 +16,20 @@ col_list = c("eid",         # ukb patient id
              "X25019.3.0",  # repeat imaging visit: Hippocampus volume (left)
              "X25020.3.0"   # repeat imaging visit: Hippocampus volume (right)
              )
-df_future = ukb$ukb_data[, col_list]
+df = fread("../../ukb51139_v2.csv", select = col_list)
+df_future = df[, col_list]
 df_future = df_future[apply(df_future, 1, function(x) sum(!is.na(x))) > 0, ]
 fwrite(df_future, "modelling/NeuroPM/io/future.csv")
+
+# premature quitting if we only want a quick extraction
+#quit(save = "no")
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Preprocessing and subsetting whole UKB dataset
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# load whole UKB datasets + variable name list
+ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../ukb51139_v2.csv",
+                                   path_ukb_vars = "../../bb_variablelist.csv")
 
 # display initial dataframe size
 print(sprintf("Initial Data Frame is of Size %0.0f by %0.0f",
@@ -56,7 +63,7 @@ print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
 ukb_df = ukb_df[rowMeans(is.na(ukb_df)) < 0.95, ]
 
 # write to output (data & labels)
-#fwrite(ukb_df, "../../ukb_subset.csv")
+fwrite(ukb_df, "../../ukb_subset.csv")
 
 # display output to indicate full ukb dataset subsetting is complete
 print(sprintf("UKB Whole Data Subsetting is Complete"))
