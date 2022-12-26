@@ -112,7 +112,7 @@ p3 = ggplot(df_plot3, aes(x = x, y = y, group = traj, color = traj)) +
               plot.title = element_text(size = 15, face = "bold"))
 
 # start offline plot
-png("plots/temp.png", width = 1200, height = 1200)
+png("plots/temp_traj.png", width = 1200, height = 1200)
 
 # mutli-plot
 grid.arrange(p1, p2, p3, ncol = 2)
