@@ -3,9 +3,9 @@ library(ggplot2)
 require(gridExtra)
 
 # # # define input parameters
-i = 5 # index of variable weighting to view
+i = 21 # index of variable weighting to view
 n_intervals = 21 # number of intervals to divide
-n_traj = 3 # number of trajectories
+n_traj = 4 # number of trajectories
 
 # # # read input data
 # set file path
@@ -83,7 +83,7 @@ df_plot = df_plot[!is.na(df_plot$x) & !is.na(df_plot$y), ]
 df_plot = aggregate(list(y = df_plot$y),
                     by = list(x = df_plot$x,
                               traj = df_plot$traj),
-                    "median")
+                    "mean")
 df_plot$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot$x), ","), 
                    function(x) mean(as.numeric(x)))
 group_cols = cols[unique(df_plot$traj)]
@@ -92,7 +92,7 @@ names(group_cols) = unique(df_plot$traj)
 # plot loess over interval means and by trajectory
 p3 = ggplot(df_plot, aes(x = x, y = y, group = traj, color = traj)) + 
         geom_point(size = 7.5, alpha = 0.25) +
-        geom_smooth(orientation = "x", span = 5,
+        geom_smooth(orientation = "x", span = 15,
                     linewidth = 2, se = FALSE, fullrange = TRUE) +
         ggtitle(sprintf("Trend of %s Variable In %i Dominant Trajectories",
                         gsub("_", " ", weights$group[i]), length(group_cols))) +
