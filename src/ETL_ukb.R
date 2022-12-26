@@ -4,15 +4,24 @@ setwd("modelling")
 source("preprocess_utils.R")
 setwd("..")
 
+# for exploratory analysis, only get subset rows/columns
+#df = fread("../../ukb51139_v2.csv", nrows = 1, skip = 0)
+#df = fread("../../ukb51139_v2.csv", select = c("eid", "6150.0.0"))
+
 # load UKB datasets
-# these datsets have to be located directly outside the base dir (OxfordCVM)
-# to add new ukb dataset, just change the first input argument below
 ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../ukb51139_v2.csv",
                                    path_ukb_vars = "../../bb_variablelist.csv")
 
-# for exploratory analysis, only get one row/column
-#df = fread("../../../ukb51139.csv", nrows = 1)
-#df = fread("../../../ukb51139.csv", select = c("6150-0.0"))
+# save other columns for post-analysis
+col_list = c("eid",         # ukb patient id
+             "X22423.3.0",  # repeat imaging visit: LV stroke volume
+             "X22421.3.0",  # repeat imaging visit: LV end diastole volume
+             "X25781.3.0",  # repeat imaging visit: white matter hyperintensities
+             "X25019.3.0",  # repeat imaging visit: Hippocampus volume (left)
+             "X25020.3.0"   # repeat imaging visit: Hippocampus volume (right)
+             )
+df_post_analysis = ukb$ukb_data[, col_list]
+fwrite(df_post_analysis, "modelling/NeuroPM/io/future.csv")
 
 # display initial dataframe size
 print(sprintf("Initial Data Frame is of Size %0.0f by %0.0f",
