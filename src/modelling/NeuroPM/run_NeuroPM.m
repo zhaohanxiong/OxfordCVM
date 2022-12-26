@@ -49,7 +49,7 @@ catch
 end
 
 %% call function
-[global_pseudotimes, ~, ~, Node_contributions, Expected_contribution] = ...
+[global_pseudotimes, mappedX, ~, Node_contributions, Expected_contribution] = ...
     pseudotimes_cTI_v4(data, ind_background, classes_for_colours, ind_target, 'cPCA', 50);
 
 %% convert outputs to dataframes

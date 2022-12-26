@@ -238,6 +238,20 @@ get_ukb_subset_column_names = function(df, df_vars,
   excl = grep("^30505-|^30515-|^30525-|^30535-", bb_blood_vars, value=TRUE)
   bb_blood_vars = bb_blood_vars[!bb_blood_vars %in% excl]
   
+  # Death
+  death_information = grep("40000-|40001-|40002-|40007-|40010-|132306-",names(df),value=TRUE)
+  # Cancer
+  cancer_information = grep("40005-|40006-|40008-|40009-|40011-|40012-|40013-",names(df),value=TRUE)
+  # Cesarean section
+  delivery_information = grep("132272-|132274-|132276-|132278-|132280-|132282-|132284-",names(df),value=TRUE)
+  # Maternal postpartum disorders
+  Mpostpartum_information = grep("132268-|132270-|132286-|132288-|132290-|132292-|132294-|132296-|132298-|132300-|132302-|132310-|132312-
+                               |132352-|132354-|132356-|132358-|132360-|132362-",names(df),value=TRUE)
+  # Fetal postpartum disorders
+  Fpostpartum_information = grep("132314-|132318-|132320-|132322-|132324-|132350-|132364-|132368-|132372-",names(df),value=TRUE)
+  
+  
+  
   # Combine variables together based on input option
   if (subset_option == "custom") {
 
