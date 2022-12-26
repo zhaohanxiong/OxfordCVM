@@ -8,6 +8,9 @@ setwd("..")
 #df = fread("../../ukb51139_v2.csv", nrows = 1, skip = 0)
 #df = fread("../../ukb51139_v2.csv", select = c("eid", "6150.0.0"))
 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Quick ETL (Extract, Transform, Load)
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # extract few columns for post-analysis
 quick_ETL_ukb(path_in = "../../ukb51139_v2.csv",
               path_out = "modelling/NeuroPM/io/future.csv",
