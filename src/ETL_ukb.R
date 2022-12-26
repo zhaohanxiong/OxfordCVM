@@ -16,13 +16,12 @@ col_list = c("eid",         # ukb patient id
              "X25019.3.0",  # repeat imaging visit: Hippocampus volume (left)
              "X25020.3.0"   # repeat imaging visit: Hippocampus volume (right)
              )
-df = fread("../../ukb51139_v2.csv", select = col_list)
-df_future = df[, col_list]
-df_future = df_future[apply(df_future, 1, function(x) sum(!is.na(x))) > 0, ]
+df_future = fread("../../ukb51139_v2.csv", select = col_list)
+df_future = df_future[apply(df_future, 1, function(x) sum(!is.na(x))) > 1, ]
 fwrite(df_future, "modelling/NeuroPM/io/future.csv")
 
 # premature quitting if we only want a quick extraction
-#quit(save = "no")
+quit(save = "no")
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Preprocessing and subsetting whole UKB dataset
