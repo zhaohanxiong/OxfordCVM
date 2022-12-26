@@ -11,7 +11,7 @@ setwd("..")
 # extract few columns for post-analysis
 quick_ETL_ukb(path_in = "../../ukb51139_v2.csv",
               path_out = "modelling/NeuroPM/io/future.csv",
-              var_list = c("X22423.3.0",  # 2nd imaging visit: LV stroke volume
+              var_list = c("X22423.3.0", # 2nd imaging visit: LV stroke volume
                           "X22421.3.0",  # 2nd imaging visit: LV end diastole volume
                           "X25781.3.0",  # 2nd imaging visit: white matter hyperintensities
                           "X25019.3.0",  # 2nd imaging visit: Hippocampus volume (left)
@@ -51,11 +51,12 @@ ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
 rm(ukb)
 
 # remove rows with missing blood pressure values
-ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
+ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) &
+                (!is.na(ukb_df$`BPDia-2.0`)), ]
 
 # display subset dataframe size
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
-                                                    nrow(ukb_df), ncol(ukb_df)))
+              nrow(ukb_df), ncol(ukb_df)))
 
 # clean dataset of rows with too many missing values (less than 5% data)
 ukb_df = ukb_df[rowMeans(is.na(ukb_df)) < 0.95, ]
