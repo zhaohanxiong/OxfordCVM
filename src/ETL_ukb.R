@@ -12,10 +12,10 @@ setwd("..")
 quick_ETL_ukb(path_in = "../../ukb51139_v2.csv",
               path_out = "modelling/NeuroPM/io/future.csv",
               var_list = c("X22423.3.0", # 2nd imaging visit: LV stroke volume
-                          "X22421.3.0",  # 2nd imaging visit: LV end diastole volume
-                          "X25781.3.0",  # 2nd imaging visit: white matter hyperintensities
-                          "X25019.3.0",  # 2nd imaging visit: Hippocampus volume (left)
-                          "X25020.3.0"   # 2nd imaging visit: Hippocampus volume (right)
+                           "X22421.3.0", # 2nd imaging visit: LV end diastole volume
+                           "X25781.3.0", # 2nd imaging visit: white matter hyperintensities
+                           "X25019.3.0", # 2nd imaging visit: Hippocampus volume (left)
+                           "X25020.3.0"  # 2nd imaging visit: Hippocampus volume (right)
                           ),
               remove_all_missing = TRUE)
 
