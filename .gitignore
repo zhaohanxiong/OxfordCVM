@@ -1,6 +1,7 @@
 # manually create these directories for the paths below
 # outputs from cTI
 /src/modelling/NeuroPM/io
+/src/postanalysis/plots
 
 # manually create these directories for the paths below
 # machine learning files

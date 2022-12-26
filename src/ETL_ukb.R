@@ -1,16 +1,36 @@
 
 # load functions
+setwd("modelling")
 source("preprocess_utils.R")
+setwd("..")
 
-# load UKB datasets
-# these datsets have to be located directly outside the base dir (OxfordCVM)
-# to add new ukb dataset, just change the first input argument below
+# for exploratory analysis, only get subset rows/columns
+#df = fread("../../ukb51139_v2.csv", nrows = 1, skip = 0)
+#df = fread("../../ukb51139_v2.csv", select = c("eid", "6150.0.0"))
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Quick ETL (Extract, Transform, Load)
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# extract few columns for post-analysis
+quick_ETL_ukb(path_in = "../../ukb51139_v2.csv",
+              path_out = "modelling/NeuroPM/io/future.csv",
+              var_list = c("X22423.3.0", # 2nd imaging visit: LV stroke volume
+                           "X22421.3.0", # 2nd imaging visit: LV end diastole volume
+                           "X25781.3.0", # 2nd imaging visit: white matter hyperintensities
+                           "X25019.3.0", # 2nd imaging visit: Hippocampus volume (left)
+                           "X25020.3.0"  # 2nd imaging visit: Hippocampus volume (right)
+                          ),
+              remove_all_missing = TRUE)
+
+# premature quitting if we only want a quick extraction
+quit(save = "no")
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Preprocessing and subsetting whole UKB dataset
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# load whole UKB datasets + variable name list
 ukb = load_raw_ukb_patient_dataset(path_ukb_data = "../../ukb51139_v2.csv",
                                    path_ukb_vars = "../../bb_variablelist.csv")
-
-# for exploratory analysis, only get one row/column
-#df = fread("../../../ukb51139.csv", nrows = 1)
-#df = fread("../../../ukb51139.csv", select = c("6150-0.0"))
 
 # display initial dataframe size
 print(sprintf("Initial Data Frame is of Size %0.0f by %0.0f",
@@ -34,11 +54,12 @@ ukb_df = return_cols_rows_filter_df(df = ukb$ukb_data,
 rm(ukb)
 
 # remove rows with missing blood pressure values
-ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
+ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) &
+                (!is.na(ukb_df$`BPDia-2.0`)), ]
 
 # display subset dataframe size
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
-                                                    nrow(ukb_df), ncol(ukb_df)))
+              nrow(ukb_df), ncol(ukb_df)))
 
 # clean dataset of rows with too many missing values (less than 5% data)
 ukb_df = ukb_df[rowMeans(is.na(ukb_df)) < 0.95, ]

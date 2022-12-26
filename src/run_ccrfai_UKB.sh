@@ -12,16 +12,21 @@ Rscript preprocess_feature_selection.R
 cd ./NeuroPM
 /home/zhaohanx/Matlab2020a/bin/matlab -nodisplay -nosplash -nodesktop -r "run('run_NeuroPM.m');exit;"
 
-# run post-processing file organization/evaluation
+# run evaluation (model and cross-validation)
 cd ..
-Rscript postprocess_files.R
 Rscript postprocess_eval_model.R
+#bash ./run_ccrfai_x_validate.sh
 
 # run python trajectory visualization/computation
 python postprocess_traj_compute.py --max_traj_num=5 --overlap_threshold=0.8 --color_by="traj"
 
-# generate ggplots for key results and perform further analysis
-Rscript postprocess_ggplots.R
+# arrange/tidy up files for post-analysis
+Rscript postprocess_files.R
+
+# perform series of post-analysis visualizations
+cd ../postanalysis
+Rscript ukb_visualize_key_cTI_results.R
+Rscript ukb_visualize_traj.R
 
 # run test cases (in root directory)
 cd ../..
