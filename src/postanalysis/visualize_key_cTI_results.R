@@ -4,7 +4,7 @@ library(gridExtra)
 library(data.table)
 
 # define data path
-path = "NeuroPM/io/"
+path = "../modelling/NeuroPM/io/"
 
 # load data
 scores = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)

@@ -4,7 +4,7 @@ library(gridExtra)
 library(data.table)
 
 # define data path
-path = "NeuroPM/io/"
+path = "../modelling/NeuroPM/io/"
 
 # ------------------------------------------------------------------------------
 # Prepare Data
