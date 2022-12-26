@@ -3,7 +3,7 @@ library(ggplot2)
 library(gridExtra)
 library(data.table)
 
-# load outputs from NeuroPM
+# define data path
 path = "NeuroPM/io/"
 
 # load data

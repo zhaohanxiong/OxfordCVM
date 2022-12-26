@@ -8,7 +8,7 @@ n_intervals = 21 # number of intervals to divide
 n_traj = 4 # number of trajectories
 
 # # # read input data
-# set file path
+# define data path
 path = "NeuroPM/io/"
 
 # load data
