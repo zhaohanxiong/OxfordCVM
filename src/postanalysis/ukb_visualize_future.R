@@ -6,6 +6,9 @@ library(data.table)
 # define data path
 path = "../modelling/NeuroPM/io/"
 
+# define variable to view
+var_i = 1
+
 # ------------------------------------------------------------------------------
 # Prepare Data
 # ------------------------------------------------------------------------------
@@ -55,7 +58,7 @@ for (i in grep("X[0-9]{1,10}\\.[0-9]\\.[0-9]", colnames(df))) {
 # Aggregate Data for Plots
 # ------------------------------------------------------------------------------
 # iterate through all variables to analyze
-f = paste0("X", future_cols[1])
+f = paste0("X", future_cols[var_i])
 f_name = weights$name[grep(f, weights$Var1)]
 
 # define 2 variable columns to analyze
@@ -81,9 +84,8 @@ df_plot = data.frame(score = as.factor(rep(df_plot$score, 2)),
 # ------------------------------------------------------------------------------
 # Produce Plots
 # ------------------------------------------------------------------------------
-
 # open plot saving
-png("plots/temp_1st_vs_2nd_visit.png", width = 600, height = 600)
+png("plots/temp_future.png", width = 600, height = 600)
 
 # produce plot
 ggplot(df_plot, aes(x = score, y = var, fill = visit)) + 
