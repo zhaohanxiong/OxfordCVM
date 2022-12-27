@@ -28,12 +28,20 @@ future_cols = future_cols[future_cols != ""]
 df = cbind(scores, ukb[, ukb_cols %in% future_cols])
 df = merge(df, future, by.x = "patid", by.y = "eid")
 
+# clear memory
+rm("ukb", "scores", "future")
+
 # ------------------------------------------------------------------------------
 # Aggregate Data for Plots
 # ------------------------------------------------------------------------------
-# perform 
 
 # ------------------------------------------------------------------------------
 # Produce Plots
 # ------------------------------------------------------------------------------
+# perform
+change = df$X22421.2.0 - df$X22421.3.0
+plot(df$global_pseudotimes, change)
 
+df_plot = aggregate(list(y = cut(df$global_pseudotimes,breaks = seq(0, 1,length = 11))),
+                    by = list(x = df$global_pseudotimes),
+                    function(x) mean(x, na.rm = TRUE))
