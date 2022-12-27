@@ -55,7 +55,7 @@ for (i in grep("X[0-9]{1,10}\\.[0-9]\\.[0-9]", colnames(df))) {
 # Aggregate Data for Plots
 # ------------------------------------------------------------------------------
 # iterate through all variables to analyze
-f = paste0("X", future_cols[2])
+f = paste0("X", future_cols[1])
 f_name = weights$name[grep(f, weights$Var1)]
 
 # define 2 variable columns to analyze
@@ -78,16 +78,20 @@ df_plot = data.frame(score = as.factor(rep(df_plot$score, 2)),
 #df_plot$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot$x), ","), 
 #                   function(x) mean(as.numeric(x)))
 
-# compute statistical significance between columns
-#ttest = t.test(df_plot$y[df_plot$visit == "first"],
-#               df_plot$y[df_plot$visit == "repeat"],
-#               alternative = "two.sided")
-#sprintf("%s has P-Value = %0.3f in Visit 1 vs 2", f, ttest$p.value)
-
 # ------------------------------------------------------------------------------
 # Produce Plots
 # ------------------------------------------------------------------------------
 # produce plot
+ggplot(df_plot, aes(x = score, y = var, fill = visit)) + 
+  geom_boxplot() +
+  ggtitle(sprintf("%s vs Hyper Score (1st & 2nd Visit)",
+                  toTitleCase(f_name))) +
+  ylab(toTitleCase(f_name)) + 
+  xlab("Hyper Score Range") +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+        plot.title = element_text(size = 15, face = "bold"))
+
 #ggplot(df_plot, aes(x = x, y = y, group = visit, color = visit)) + 
 #    geom_point(size = 7.5, alpha = 0.25) +
 #    geom_smooth(orientation = "x", span = 15,
@@ -98,17 +102,6 @@ df_plot = data.frame(score = as.factor(rep(df_plot$score, 2)),
 #    xlab("Hyper Score [0-1]") +
 #    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
 #          plot.title = element_text(size = 15, face = "bold"))
-ggplot(df_plot, aes(x = score, y = var, fill = visit)) + 
-    geom_boxplot() +
-    ggtitle(sprintf("%s vs Hyper Score (1st & 2nd Visit)",
-                    toTitleCase(f_name))) +
-    ylab(toTitleCase(f_name)) + 
-    xlab("Hyper Score Range") +
-    theme(legend.position = "none",
-          axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-          plot.title = element_text(size = 15, face = "bold"))
-
-
 
 # start offline plot
 #png("plots/temp_1st_vs_2nd_visit.png", width = 1200, height = 1200)
