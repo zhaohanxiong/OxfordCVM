@@ -3,7 +3,7 @@ library(ggplot2)
 require(gridExtra)
 
 # define input parameters
-i = 8 # index of variable weighting to view
+i = 5 # index of variable weighting to view
 n_intervals = 21 # number of intervals to divide
 n_traj = 4 # number of trajectories
 
@@ -112,7 +112,7 @@ p3 = ggplot(df_plot3, aes(x = x, y = y, group = traj, color = traj)) +
               plot.title = element_text(size = 15, face = "bold"))
 
 # start offline plot
-png("plots/temp_traj.png", width = 1200, height = 600)
+png("plots/temp_traj.png", width = 1500, height = 600)
 
 # mutli-plot
 grid.arrange(p1, p2, p3, ncol = 3)
