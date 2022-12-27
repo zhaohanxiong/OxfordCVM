@@ -1,9 +1,10 @@
 library(tools)
 library(ggplot2)
-require(gridExtra)
+library(gridExtra)
+library(data.table)
 
 # define input parameters
-i = 5 # index of variable weighting to view
+i = 457 # index of variable weighting to view
 n_intervals = 21 # number of intervals to divide
 n_traj = 4 # number of trajectories
 
@@ -22,7 +23,7 @@ weights = read.csv(file.path(path, "var_weighting.csv"),
                                header=TRUE, stringsAsFactor=FALSE)
 
 # load uk raw variables
-ukb = read.csv(file.path(path, "ukb_num_reduced.csv"), header=TRUE)
+ukb = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"), header = TRUE))
 
 # filter out root node (avoid coloring issues)
 ukb = ukb[scores$trajectory != -1, ]
