@@ -31,7 +31,7 @@ future_cols = future_cols[future_cols != ""]
 # merge data frames into one
 df = cbind(scores, ukb[, ukb_cols %in% future_cols])
 df = merge(df, future, by.x = "patid", by.y = "eid")
-df$score = cut(df$global_pseudotimes,breaks = seq(0, 1,length = 11))
+df$score = cut(df$global_pseudotimes,breaks = seq(0, 1,length = 21))
 
 # clear memory
 rm("ukb", "scores", "future")
@@ -81,6 +81,10 @@ df_plot = data.frame(score = as.factor(rep(df_plot$score, 2)),
 # ------------------------------------------------------------------------------
 # Produce Plots
 # ------------------------------------------------------------------------------
+
+# open plot saving
+png("plots/temp_1st_vs_2nd_visit.png", width = 600, height = 600)
+
 # produce plot
 ggplot(df_plot, aes(x = score, y = var, fill = visit)) + 
   geom_boxplot() +
@@ -91,6 +95,9 @@ ggplot(df_plot, aes(x = score, y = var, fill = visit)) +
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
         plot.title = element_text(size = 15, face = "bold"))
+
+# stop offline plot
+dev.off()
 
 #ggplot(df_plot, aes(x = x, y = y, group = visit, color = visit)) + 
 #    geom_point(size = 7.5, alpha = 0.25) +
@@ -108,6 +115,3 @@ ggplot(df_plot, aes(x = score, y = var, fill = visit)) +
 
 # mutli-plot
 #grid.arrange(p1, p2, p3, ncol = 2)
-
-# stop offline plot
-#dev.off()
