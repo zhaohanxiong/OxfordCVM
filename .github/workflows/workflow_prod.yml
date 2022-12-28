@@ -20,7 +20,7 @@ env:
   ECR_REPOSITORY: cti-pred                    # set this to your Amazon ECR repository name
   ECS_SERVICE: cti_model                      # set this to your Amazon ECS service name
   ECS_CLUSTER: cti-cluster                    # set this to your Amazon ECS cluster name
-  ECS_TASK_DEFINITION: ./task_definition.json   # set this to the path to your Amazon ECS task definition
+  ECS_TASK_DEFINITION: ./.github/workflows/CD_ECR_task.json   # set this to the path to your Amazon ECS task definition
   CONTAINER_NAME: cti_model                   # set this to the name of the container in the
                                               # containerDefinitions section of your task definition
 
@@ -103,7 +103,7 @@ jobs:
 
     name: deploy_model_ECR
 
-    #needs: [test_build_docker_model]
+    needs: [test_build_docker_model]
     runs-on: ubuntu-latest
 
     steps:
@@ -134,13 +134,13 @@ jobs:
     
     # dont deploy as this task definition conflicts with terraform
     # use terraform to deploy automatically instead
-     - name: Fill in the new image ID in the Amazon ECS task definition
-       id: task-def
-       uses: aws-actions/amazon-ecs-render-task-definition@v1
-       with:
-           task-definition: ${{ env.ECS_TASK_DEFINITION }}
-           container-name: ${{ env.CONTAINER_NAME }}
-           image: ${{ steps.build-image.outputs.image }}
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{ steps.build-image.outputs.image }}
 
     # - name: Deploy Amazon ECS task definition
     #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
