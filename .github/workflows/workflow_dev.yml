@@ -9,6 +9,7 @@ on:
   #push:
   #  branches: ["dev"]
   pull_request:
+    branches: ["dev"]
     types: [opened, reopened]
 
 # read only permission for files

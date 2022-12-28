@@ -1,10 +1,10 @@
 library(tools)
 library(ggplot2)
-require(gridExtra)
+library(gridExtra)
+library(data.table)
 
 # define input parameters
-i = 21 # index of variable weighting to view
-n_intervals = 21 # number of intervals to divide
+i = 10 # index of variable weighting to view: 43, 5, 30, 457, 462
 n_traj = 4 # number of trajectories
 
 # # # read input data
@@ -22,7 +22,7 @@ weights = read.csv(file.path(path, "var_weighting.csv"),
                                header=TRUE, stringsAsFactor=FALSE)
 
 # load uk raw variables
-ukb = read.csv(file.path(path, "ukb_num_reduced.csv"), header=TRUE)
+ukb = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"), header = TRUE))
 
 # filter out root node (avoid coloring issues)
 ukb = ukb[scores$trajectory != -1, ]
@@ -42,7 +42,7 @@ cols = c("#F8766D", "#CD9600", "#7CAE00", "#00BE67",
 # generate plotting data frame
 df_plot = data.frame(y = var,
                      x = cut(scores$global_pseudotimes,
-                             breaks = seq(0, 1,length = n_intervals)))
+                             breaks = seq(0, 1,length = 21)))
 df_plot = df_plot[!is.na(df_plot$x) & !is.na(df_plot$y), ]
 
 # aggregate mean of scores by interval
@@ -56,7 +56,7 @@ df_plot2$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot2$x), ","),
 # generate plotting dataframe with 3 major trajectories
 df_plot3 = data.frame(y = var,
                       x = cut(scores$global_pseudotimes,
-                              breaks = seq(0, 1,length = n_intervals)),
+                              breaks = seq(0, 1,length = 21)),
                       traj = as.factor(scores$trajectory))
 df_plot3 = df_plot3[df_plot3$traj %in% names(sort(table(scores$trajectory), 
                                                   decreasing = TRUE)[1:n_traj]), ]
@@ -112,10 +112,10 @@ p3 = ggplot(df_plot3, aes(x = x, y = y, group = traj, color = traj)) +
               plot.title = element_text(size = 15, face = "bold"))
 
 # start offline plot
-png("plots/temp_traj.png", width = 1200, height = 1200)
+png("plots/temp_traj.png", width = 1800, height = 600)
 
 # mutli-plot
-grid.arrange(p1, p2, p3, ncol = 2)
+grid.arrange(p1, p2, p3, ncol = 3)
 
 # stop offline plot
 dev.off()

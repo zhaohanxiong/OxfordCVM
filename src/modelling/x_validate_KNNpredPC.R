@@ -77,10 +77,10 @@ for (i in 1:n_folds) {
 
   # filter out ill-defined scores tune these two numbers below depending 
   # on distribution to improve results
-  #new_ind_i = (ref_label < (min_disease * 5) | 
-  #             ref_label > (max_background * 0.25)) & (ref_group != 0)
-  new_ind_i = c(which(ref_group == 1),
-                sample(which(ref_group == 2), sum(ref_group == 1)))
+  new_ind_i = (ref_label < (min_disease * 5) | 
+               ref_label > (max_background * 0.25)) & (ref_group != 0)
+  #new_ind_i = c(which(ref_group == 1),
+  #              sample(which(ref_group == 2), sum(ref_group == 1)))
   
   # subset rows based on new row index filter
   ref_label = ref_label[new_ind_i]
@@ -116,8 +116,20 @@ for (i in 1:n_folds) {
   # compute err
   eval$err = sqrt((eval$pred - eval$gt)**2)
 
-  # define prediction and ground truth
+  # define ground truth
   y_true = ifelse(eval$gt > opt_thres, 1, 0)
+  
+  # define prediction with new optimal threshold
+  intervals = seq(0, 1, by = 0.001)
+  threshold_mat = sapply(intervals, function(thres) ifelse(eval$pred > thres, 1, 0))
+  fpr = apply(threshold_mat, 2, function(x) 
+                  sum(x == 1 & y_true == 0) / 
+                    (sum(x == 1 & y_true == 0) + sum(x == 0 & y_true == 0)))
+  tpr = apply(threshold_mat, 2, function(x)
+                    sum(x == 1 & y_true == 1) / 
+                      (sum(x == 1 & y_true == 1) + sum(x == 0 & y_true == 1)))
+  opt_ind = which.min(abs((1 - fpr) - tpr))
+  opt_thres = intervals[opt_ind]
   y_pred = ifelse(eval$pred > opt_thres, 1, 0)
 
   # compute true/false positive/negatives
@@ -160,40 +172,27 @@ print(aggregate(pseudotimes_full[, c("err", "knn_dist")],
                 list(pseudotimes_full$bp_group), 
                 function(x) mean(x, na.rm = TRUE)))
 
-# plot side by side ground truth vs predictions
-if (FALSE) {
-  
-  # create subplots
-  par(mfrow = c(1, 2))
-  boxplot(pseudotimes_full$global_pseudotimes ~ pseudotimes_full$bp_group,
-          main = "cTI Modelled Scores",
-          xlab = "Blood Pressure Group", ylab = "Disease Score",
-          col = c("tomato", "lawngreen", "deepskyblue"),
-          ylim = c(0, 1))
-  boxplot(pseudotimes_full$pred_score ~ pseudotimes_full$bp_group,
-          main = "Predicted Score Over 10-fold Cross-Validation", 
-          xlab = "Blood Pressure Group", ylab = "Disease Score",
-          col = c("tomato", "lawngreen", "deepskyblue"),
-          ylim = c(0, 1))
-  
-}
-
-# plot cPCs
-if (FALSE) {
-  
-  # load the eigen matrix for the full model
-  PC_transform = readMat(file.path(path, paste0("PC_Transform.mat")))$Node.Weights
-  cPC_plot = data.frame(PC_transform[, 1:10])
-  
-  # plot pairwise
-  pdf("cPC_All_Pairs.pdf", width = 25, height = 25)
-  plot(cPC_plot)
-  dev.off()
-  
-}
-
 # write output to file
 out_df = data.frame(score_gt   = pseudotimes_full$global_pseudotimes,
                     score_pred = pseudotimes_full$pred_score,
                     bp_group   = pseudotimes_full$bp_group)
 write.csv(out_df, file.path(path, "inference_x_val_pred.csv"), row.names = FALSE)
+
+# generate plot for predicted vs ground truth distribution
+png(file.path(path, "cTI_predict.png"), width = 600, height = 600)
+
+# create subplots
+par(mfrow = c(1, 2))
+boxplot(pseudotimes_full$global_pseudotimes ~ pseudotimes_full$bp_group,
+        main = "cTI Modelled Scores",
+        xlab = "Blood Pressure Group", ylab = "Disease Score",
+        col = c("tomato", "lawngreen", "deepskyblue"),
+        ylim = c(0, 1))
+boxplot(pseudotimes_full$pred_score ~ pseudotimes_full$bp_group,
+        main = "Predicted Score Over 10-fold Cross-Validation", 
+        xlab = "Blood Pressure Group", ylab = "Disease Score",
+        col = c("tomato", "lawngreen", "deepskyblue"),
+        ylim = c(0, 1))
+
+# close plot
+dev.off()

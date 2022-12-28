@@ -92,7 +92,8 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 data "template_file" "task_definition_template" {
     template = file("task_definition.json.tpl")
     vars = {
-        REPOSITORY_URL = aws_ecrpublic_repository.ecr_name1.repository_uri
+        #REPOSITORY_URL = aws_ecrpublic_repository.ecr_name1.repository_uri
+        REPOSITORY_URL = aws_ecr_repository.ecr_name2.repository_url
     }
 }
 
