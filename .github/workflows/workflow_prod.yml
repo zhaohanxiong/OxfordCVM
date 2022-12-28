@@ -21,7 +21,7 @@ env:
   ECS_SERVICE: cti_model                      # set this to your Amazon ECS service name
   ECS_CLUSTER: cti-cluster                    # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: ./src/aws/terraform/task_definition.json.tpl # set this to the path to your Amazon ECS task definition
-  CONTAINER_NAME: ""                          # set this to the name of the container in the
+  CONTAINER_NAME: "cti_model"                 # set this to the name of the container in the
                                               # containerDefinitions section of your task definition
 
 # define workflow for different jobs to run
