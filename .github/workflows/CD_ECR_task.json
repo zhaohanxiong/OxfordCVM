@@ -1,5 +1,5 @@
 {
-    "family": "",
+    "family": "cti",
     "taskRoleArn": "",
     "executionRoleArn": "ecsTaskExecutionRole",
     "networkMode": "awsvpc",
