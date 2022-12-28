@@ -63,6 +63,7 @@ git branch -D prod
 - Setup Code Base by Adding Directories Ignored by Git
 ```
 mkdir src/modelling/NeuroPM/io
+mkdir src/postanalysis/plots
 mkdir src/aws/tf_serving/saved_models
 mkdir src/ml_lifecycle/mlflow/mlruns
 mkdir src/ml_lifecycle/mlflow/mlruns_staging
