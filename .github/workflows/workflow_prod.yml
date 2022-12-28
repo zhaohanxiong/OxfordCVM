@@ -103,7 +103,7 @@ jobs:
 
     name: deploy_model_ECR
 
-    #needs: [test_build_docker_model]
+    needs: [test_build_docker_model]
     runs-on: ubuntu-latest
 
     steps:
