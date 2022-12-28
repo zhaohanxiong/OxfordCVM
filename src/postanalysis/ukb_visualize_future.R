@@ -34,7 +34,8 @@ future_cols = future_cols[future_cols != ""]
 # merge data frames into one
 df = cbind(scores, ukb[, ukb_cols %in% future_cols])
 df = merge(df, future, by.x = "patid", by.y = "eid")
-df$score = cut(df$global_pseudotimes, breaks = seq(0, 0.8, length = 18))
+df$score = cut(df$global_pseudotimes, breaks = seq(0, 0.5, length = 11))
+df = df[!is.na(df$score), ]
 
 # clear memory
 rm("ukb", "scores", "future")
