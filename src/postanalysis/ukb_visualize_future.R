@@ -34,7 +34,7 @@ future_cols = future_cols[future_cols != ""]
 # merge data frames into one
 df = cbind(scores, ukb[, ukb_cols %in% future_cols])
 df = merge(df, future, by.x = "patid", by.y = "eid")
-df$score = cut(df$global_pseudotimes,breaks = seq(0, 1,length = 21))
+df$score = cut(df$global_pseudotimes, breaks = seq(0, 0.8, length = 18))
 
 # clear memory
 rm("ukb", "scores", "future")
@@ -69,51 +69,47 @@ var_2nd = paste0(f, ".3.0")
 df_plot = df[, c("score", var_1st, var_2nd)]
 df_plot = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
 
-# convert from wide to long format for the 2 variables and aggregate
+# convert from wide to long format for the 2 variables
 df_plot = data.frame(score = as.factor(rep(df_plot$score, 2)),
                      var   = c(df_plot[, var_1st], df_plot[, var_2nd]),
                      visit = as.factor(rep(c("first", "repeat"), each = nrow(df_plot))))
-#df_plot = aggregate(list(y = df_plot$var),
-#                    by = list(x = df_plot$score, visit = df_plot$visit),
-#                    "mean")
 
-# convert hyperscore intervals back to numeric (mid-point)
-#df_plot$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot$x), ","), 
-#                   function(x) mean(as.numeric(x)))
+# aggregate by interval means, convert intervals back to numeric (mid-point)
+df_plot2 = aggregate(list(y = df_plot$var),
+                     by = list(x = df_plot$score, visit = df_plot$visit),
+                     "mean")
 
 # ------------------------------------------------------------------------------
 # Produce Plots
 # ------------------------------------------------------------------------------
-# open plot saving
-png("plots/temp_future.png", width = 600, height = 600)
+# produce plots
+p1 = ggplot(df_plot, aes(x = score, y = var, fill = visit)) + 
+        geom_boxplot() +
+        ggtitle(sprintf("%s vs Hyper Score (1st & 2nd Visit)",
+                        toTitleCase(f_name))) +
+        ylab(toTitleCase(f_name)) + 
+        xlab("Hyper Score") +
+        scale_fill_brewer(palette = "Dark2") +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+              plot.title = element_text(size = 15, face = "bold"))
 
-# produce plot
-ggplot(df_plot, aes(x = score, y = var, fill = visit)) + 
-  geom_boxplot() +
-  ggtitle(sprintf("%s vs Hyper Score (1st & 2nd Visit)",
-                  toTitleCase(f_name))) +
-  ylab(toTitleCase(f_name)) + 
-  xlab("Hyper Score Range") +
-  theme(legend.position = "none",
-        axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-        plot.title = element_text(size = 15, face = "bold"))
+p2 = ggplot(df_plot2, aes(x = x, y = y, group = visit, color = visit)) + 
+        geom_point(size = 7.5, alpha = 0.25) +
+        geom_smooth(orientation = "x", span = 15,
+                    linewidth = 2, se = FALSE, fullrange = TRUE) +
+        ggtitle(sprintf("%s vs Hyper Score (1st & 2nd Visit)",
+                        toTitleCase(f_name))) +
+        ylab(sprintf("%s (averaged per interval)", toTitleCase(f_name))) + 
+        xlab("Hyper Score [0-1]") +
+        scale_color_brewer(palette = "Dark2") +
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
+              plot.title = element_text(size = 15, face = "bold"))
+
+# start offline plot
+png("plots/temp_future.png", width = 1200, height = 600)
+
+# mutli-plot
+grid.arrange(p1, p2, ncol = 2)
 
 # stop offline plot
 dev.off()
-
-#ggplot(df_plot, aes(x = x, y = y, group = visit, color = visit)) + 
-#    geom_point(size = 7.5, alpha = 0.25) +
-#    geom_smooth(orientation = "x", span = 15,
-#                linewidth = 2, se = FALSE, fullrange = TRUE) +
-#    ggtitle(sprintf("%s (First & Repeat Imaging Visit) vs Hyper Score",
-#                    toTitleCase(f_name))) +
-#    ylab(toTitleCase(f_name)) + 
-#    xlab("Hyper Score [0-1]") +
-#    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-#          plot.title = element_text(size = 15, face = "bold"))
-
-# start offline plot
-#png("plots/temp_1st_vs_2nd_visit.png", width = 1200, height = 1200)
-
-# mutli-plot
-#grid.arrange(p1, p2, p3, ncol = 2)
