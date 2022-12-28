@@ -26,6 +26,22 @@ quick_ETL_ukb(path_in = "../../ukb51139_v2.csv",
 quit(save = "no")
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Selecting specific outcomes before creating the subset
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+file_name = "../../ukb51139_v2.csv"
+df = fread(file_name, nrows = 1)
+df_patid = fread(file_name, nrows = Inf, select = c("eid"))
+df_death = fread(file_name, nrows = Inf, select = grep("X40000.|X40010.",names(df),value=TRUE))
+df_heartattack = fread(file_name, nrows = Inf, select = grep("X3894.",names(df),value=TRUE))
+df_stroke = fread(file_name, nrows = Inf, select = grep("X4056.",names(df),value=TRUE))
+df_angina = fread(file_name, nrows = Inf, select = grep("X3627.",names(df),value=TRUE))
+df_LVEF = fread(file_name, nrows = Inf, select = grep("X24103.",names(df),value=TRUE))
+
+df_outcomes = cbind(df_patid,df_death,df_heartattack,df_stroke,df_angina,df_LVEF)
+
+fwrite(df_outcomes, "modelling/NeuroPM/io/ukb_outcomes.csv")
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Preprocessing and subsetting whole UKB dataset
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # load whole UKB datasets + variable name list
