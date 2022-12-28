@@ -805,3 +805,18 @@ return_covariates = function(data, covariates) {
   return(data)
   
 }
+
+add_outcomes = function(pat_ids, outcomes_path) {
+
+  # this function returns the outcomes of the selected ukb subjects
+  
+  df_outcomes = fread(outcomes_path, header=TRUE)
+  df_outcomes = data.frame(df_outcomes)
+
+  df_outcomes_pat_id = df_outcomes$eid
+  
+  df_outcomes_selected = df_outcomes[df_outcomes$eid %in% pat_ids,]
+  
+  return(df_outcomes_selected)
+  
+}

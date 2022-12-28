@@ -128,6 +128,11 @@ print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
 # convert label variables from numeric to string
 ukb_df$Sex = ifelse(ukb_df$Sex == 1, "Male", "Female")
 
+# add outcomes to the df
+pat_ids = ukb_df$`df[, ignore_cols]`
+outcomes_path = "../../../ukb_outcomes.csv"
+df_outcomes_selected = add_outcomes(pat_ids, outcomes_path)
+
 # write to output (data & labels)
 write.csv(ukb_df[, 1:5], "NeuroPM/io/labels.csv", row.names = FALSE)
 fwrite(ukb_df[, 6:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
