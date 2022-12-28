@@ -97,7 +97,7 @@ jobs:
         docker build -t cti-pred . --file Dockerfile
 
   # CD docker deploy as a container to AWS ECR and ECS
-  deploy_model_ECR:
+  deploy_model_ECS:
 
     name: deploy_model_ECR
 
