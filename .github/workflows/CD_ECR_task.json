@@ -1,6 +1,5 @@
 {
     "family": "cti",
-    "executionRoleArn": "arn:aws:iam::123456789012:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
     "containerDefinitions": [
         {
