@@ -82,32 +82,8 @@ pred_analyze = cbind(pred, ukb2[, sapply(analyze, function(s)
 # merge 2nd visit hyper scores into the 1st visit dataframe
 follow_up = merge(scores_analyze, pred_analyze, by.x = "patid", by.y = "patid") 
 
-# ------------------------------------------------------------------------------
-# Produce Basic Plots for Score Distribution
-# ------------------------------------------------------------------------------
 # change blood pressure groups into a ordered factor for plotting
 follow_up$bp_group = ordered(follow_up$bp_group, c(1, 0, 2))
-
-# generate plot for predicted vs ground truth distribution
-png(file.path("plots/temp_1st_2nd_visit_scores.png"), width = 600, height = 600)
-
-# create subplots
-par(mfrow = c(1, 2))
-boxplot(follow_up$global_pseudotimes ~ follow_up$bp_group,
-        main = "1st Imaging Visit Hyper Scores",
-        xlab = "Blood Pressure Group", ylab = "Disease Score",
-        col = c("tomato", "lawngreen", "deepskyblue"),
-        ylim = c(0, 1))
-boxplot(follow_up$global_pseudotimes2 ~ follow_up$bp_group,
-        main = "2nd Imaging Visit Hyper Scores",
-        xlab = "Blood Pressure Group", ylab = "Disease Score",
-        col = c("tomato", "lawngreen", "deepskyblue"),
-        ylim = c(0, 1))
-
-# close plot
-dev.off()
-
-quit(save = "no")
 
 # ------------------------------------------------------------------------------
 # Aggregate Data for Plots
@@ -119,52 +95,48 @@ var_2nd = grep(paste0(analyze[var_i], "\\.3\\."),
                colnames(follow_up), value = TRUE)
 
 # subset and remove missing values
-df_plot = follow_up[, c("global_pseudotimes", "global_pseudotimes2",
+df_plot = follow_up[, c("bp_group", "global_pseudotimes", "global_pseudotimes2",
                         var_1st, var_2nd)]
 df_plot = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
 
-# convert from wide to long format for the 2 variables
-df_plot = data.frame(score = c(df_plot$global_pseudotimes, df_plot$global_pseudotimes),
-                     var   = c(df_plot[, var_1st], df_plot[, var_2nd]),
-                     visit = as.factor(rep(c("1st", "2nd"), each = nrow(df_plot))))
-df_plot$score = cut(df_plot$score, breaks = seq(0, 1, length = 11))
+# compute change in score and change in variable
+df_plot$score_change = df_plot$global_pseudotimes2 - df_plot$global_pseudotimes
+df_plot$var_change = df_plot[, var_2nd] - df_plot[, var_1st]
 
-# aggregate by interval means, convert intervals back to numeric (mid-point)
-df_plot2 = aggregate(list(y = df_plot$var),
-                     by = list(x = df_plot$score, visit = df_plot$visit),
-                     "mean")
+# convert from wide to long format for the 2 variables
+df_plot2 = data.frame(score = c(df_plot$global_pseudotimes,
+                                df_plot$global_pseudotimes),
+                      var   = c(df_plot[, var_1st], df_plot[, var_2nd]),
+                      group = rep(df_plot$bp_group, 2),
+                      visit = as.factor(rep(c("1st", "2nd"), each = nrow(df_plot))))
 
 # ------------------------------------------------------------------------------
 # Produce Plots
 # ------------------------------------------------------------------------------
 # produce plots
-p1 = ggplot(df_plot, aes(x = score, y = var, fill = visit)) + 
+p1 = ggplot(df_plot2, aes(y = score, x = group, fill = visit)) + 
         geom_boxplot() +
-        ggtitle(sprintf("%s vs Hyper Score (1st & 2nd Visit)",
-                        toTitleCase(analyze_names[var_i]))) +
-        ylab(toTitleCase(analyze_names[var_i])) + 
-        xlab("Hyper Score") +
-        scale_fill_brewer(palette = "Dark2") +
-        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-              plot.title = element_text(size = 15, face = "bold"))
+        ggtitle("1st & 2nd Imaging Visit Hyper Scores") +
+        ylab("Hyper Score") + 
+        xlab("Blood Pressure Group") +
+        scale_fill_brewer(palette = "Set2") +
+        scale_y_continuous(limits = c(0, 1)) + 
+        theme(plot.title = element_text(size = 15, face = "bold"))
 
-p2 = ggplot(df_plot2, aes(x = x, y = y, group = visit, color = visit)) + 
+p2 = ggplot(df_plot, aes(x = score_change, y = var_change)) + 
         geom_point(size = 7.5, alpha = 0.25) +
         geom_smooth(orientation = "x", span = 15,
-                    linewidth = 2, se = FALSE, fullrange = TRUE) +
-        ggtitle(sprintf("%s vs Hyper Score (1st & 2nd Visit)",
+                        linewidth = 2, se = FALSE, fullrange = TRUE) +
+        ggtitle(sprintf("Change in %s vs Change in Hyper Score (1st & 2nd Visit)",
                         toTitleCase(analyze_names[var_i]))) +
-        ylab(sprintf("%s (averaged per interval)", toTitleCase(analyze_names[var_i]))) + 
-        xlab("Hyper Score [0-1]") +
-        scale_color_brewer(palette = "Dark2") +
+        xlab("Change in Hyper Score (2nd - 1st)") + 
+        ylab(sprintf("Change in %s (2nd - 1st)",
+                        toTitleCase(analyze_names[var_i]))) + 
+        scale_fill_brewer(palette = "Dark2") +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-              plot.title = element_text(size = 15, face = "bold"))
+                plot.title = element_text(size = 15, face = "bold"))
 
-# start offline plot
+# start offline plot, arrange multi-plot, then close plot
 png("plots/temp_follow_up.png", width = 1200, height = 600)
-
-# mutli-plot
 grid.arrange(p1, p2, ncol = 2)
-
-# stop offline plot
 dev.off()
