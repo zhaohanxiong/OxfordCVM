@@ -5,7 +5,7 @@ library(R.matlab)
 path = "NeuroPM/io"
 
 # set K (for KNN)
-K = 10
+K = 25
 
 # load pseudotime scores
 pseudotimes_full = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
@@ -70,13 +70,12 @@ for (i in 1:n_folds) {
   ref_data = unname(as.matrix(ukb_df[-ind_i, ])) %*% PC_transform
 
   # compute subset index of which have well defined disease scores
-  f1 = quantile(pseudotimes$global_pseudotimes[pseudotimes$bp_group == 1], 0.25)
-  f2 = quantile(pseudotimes$global_pseudotimes[pseudotimes$bp_group == 2], 0.5)
+  #f1 = quantile(pseudotimes$global_pseudotimes[pseudotimes$bp_group == 1], 1)
+  #f2 = quantile(pseudotimes$global_pseudotimes[pseudotimes$bp_group == 2], 0)
 
   # filter out ill-defined scores
-  ind1 = (ref_label <= f1 | ref_label >= f2) & (ref_group != 0)
-  #ind2 = (ref_label > f1 & ref_label < f2) & (ref_group == 0)
-  new_ind_i = ind1 #| ind2
+  #ind1 = (ref_label <= f1 | ref_label >= f2) & (ref_group != 0)
+  new_ind_i = (ref_group != 0)
 
   # subset rows based on new row index filter
   ref_label = ref_label[new_ind_i]
