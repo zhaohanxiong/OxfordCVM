@@ -74,7 +74,7 @@ for (i in 1:n_folds) {
   f2 = quantile(pseudotimes$global_pseudotimes[pseudotimes$bp_group == 2], 0.5)
 
   # filter out ill-defined scores
-  new_ind_i = (ref_label < q3 | ref_label > q1) & (ref_group != 0) #(ref_label > f1 & ref_label < f2 & ref_group == 0)
+  new_ind_i = (ref_label < f1 | ref_label > f2) & (ref_group != 0) #(ref_label > f1 & ref_label < f2 & ref_group == 0)
 
   # subset rows based on new row index filter
   ref_label = ref_label[new_ind_i]
