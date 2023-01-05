@@ -72,13 +72,13 @@ patid = labels[, 1]
 ukb_df = fread(ukb_data_file, header = TRUE, select = visit2_cols)
 
 # subset rows with patid
-ukb_df = ukb_df[all_patid %in% patid, ]
+ukb2 = ukb_df[all_patid %in% patid, ]
 
 # ------------------------------------------------------------------------------
 # Pre-Process
 # ------------------------------------------------------------------------------
 # remove outliers
-ukb_df = apply(ukb_df, 2, function(x) {
+ukb2 = apply(ukb2, 2, function(x) {
     
                             # compute mean and sd
                             mean_val = mean(x, na.rm = TRUE)
@@ -92,16 +92,16 @@ ukb_df = apply(ukb_df, 2, function(x) {
                         })
 
 # filter out rows with too many missing data and 
-row_filter = rowMeans(is.na(ukb_df)) <= 0.05
-ukb_df = ukb_df[row_filter, ]
+row_filter = rowMeans(is.na(ukb2)) <= 0.05
+ukb2 = ukb2[row_filter, ]
 print(sprintf("Number of Missing Data is %0.1f%%",
-                                        sum(is.na(ukb_df))/prod(dim(ukb_df))))
+                                        sum(is.na(ukb2))/prod(dim(ukb2))))
 
 # store patient IDs with sufficient repeat visit information
 repeat_patid = patid[row_filter]
 
 # save non-normalized values
-fwrite(cbind(eid = repeat_patid, ukb_df),
+fwrite(cbind(eid = repeat_patid, ukb2),
                             file.path(path, "ukb_num_ft_select_2nd_visit.csv"))
 
 # load 1st visit raw values
@@ -109,13 +109,13 @@ ukb1 = fread(file.path(path, "ukb_num_ft_select.csv"),
                                             header = TRUE, select = visit1_cols)
 
 # normalize data with means/sd from previous visit
-data_means = colMeans(ukb1, na.rm = TRUE)
-data_std   = apply(ukb1, 2, function(x) sd(x, na.rm = TRUE))
-ukb_df     = sweep(ukb_df, 2, data_means, "-")
-ukb_df     = sweep(ukb_df, 2, data_std, "/")
+data_means = colMeans(ukb2, na.rm = TRUE)
+data_std   = apply(ukb2, 2, function(x) sd(x, na.rm = TRUE))
+ukb2       = sweep(ukb2, 2, data_means, "-")
+ukb2       = sweep(ukb2, 2, data_std, "/")
 
 # impute data
-ukb_df = apply(ukb_df, 2, function(x) {
+ukb2 = apply(ukb2, 2, function(x) {
                                 x[is.na(x)] = median(x, na.rm=TRUE)
                                 return(x)
                           })
@@ -123,13 +123,13 @@ ukb_df = apply(ukb_df, 2, function(x) {
 # ------------------------------------------------------------------------------
 # Write to File
 # ------------------------------------------------------------------------------
-fwrite(ukb_df, file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"))
+fwrite(ukb2, file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"))
 
 # display outputs
 print(sprintf("---------- Repeat Visit Data Subset Complete"))
 print(sprintf("Imaging Visit 1: Originally %i Rows and %i Columns",
                                                     nrow(ukb1), ncol(ukb1)))
 print(sprintf("Imaging Visit 2: Extracted %i Rows and %i Columns",
-                                                    nrow(ukb_df), ncol(ukb_df)))
+                                                    nrow(ukb2), ncol(ukb2)))
 print("Distribution of Repeat Imaging Patients Per Blood Pressure Group:")
 table(labels$bp_group[labels[, 1] %in% repeat_patid])
