@@ -5,7 +5,7 @@ library(R.matlab)
 path = "NeuroPM/io"
 
 # set K (for KNN)
-K = 1
+K = 10
 
 # load pseudotime scores
 pseudotimes_full = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
