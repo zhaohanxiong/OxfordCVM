@@ -13,6 +13,8 @@ scores = read.csv(file.path(path, "pseudotimes.csv"), header = TRUE)
 # load 1st visit values
 ukb1 = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"), 
                                                                 header = TRUE))
+ukb1_norm = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"), 
+                                                                header = TRUE))
 
 # load 2nd visit values
 ukb2 = data.frame(fread(file.path(path, "ukb_num_ft_select_2nd_visit.csv"), 

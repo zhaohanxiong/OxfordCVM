@@ -81,6 +81,9 @@ ind_keep[!var_filter] = TRUE
 # only keep relevant features
 ft_norm = ft_norm[, ind_keep]
 
+# # # only store the selected columns in the ukb raw value data frame
+ft_raw = ft_raw[, colnames(ft_norm)]
+
 # # # Output
 # display messages to see in terminal
 print(sprintf("Further Filtering Complete"))
