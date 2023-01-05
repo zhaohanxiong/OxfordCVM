@@ -61,7 +61,7 @@ PC_ukb2 = unname(as.matrix(ukb2_norm)) %*% PC_transform
 
 # compute distance with each row
 pred = apply(PC_ukb2, 1, function(p)
-                                gt[which.min(rowMeans((PC_ukb1**2 - p**2)**0.5))])
+                              mean(gt[order(rowMeans(abs(p - PC_ukb1)))[1:1]]))
 
 # create dataframe for this score
 pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = pred)
