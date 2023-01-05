@@ -65,7 +65,8 @@ for (i in 1:length(visit1_cols)) {
 all_patid = as.list(fread(ukb_data_file, header = TRUE, select = c("eid")))[[1]]
 
 # load 1st visit patient IDs
-patid = as.list(fread(file.path(path, "labels_select.csv"), header = TRUE)[, 1])[[1]]
+labels = read.csv(file.path(path, "labels_select.csv"), header = TRUE)
+patid = labels[, 1]
 
 # read all new columns from raw ukb
 ukb_df = fread(ukb_data_file, header = TRUE, select = visit2_cols)
@@ -80,18 +81,22 @@ ukb_df = ukb_df[all_patid %in% patid, ]
 ukb_df = apply(ukb_df, 2, function(x) {
     
                             # compute mean and sd
-                            mean_val = mean(x, na.rm=TRUE)
-                            std = sd(x, na.rm=TRUE)
+                            mean_val = mean(x, na.rm = TRUE)
+                            std = sd(x, na.rm = TRUE)
                             z_score = abs(x - mean_val)/std
                             
                             # set outliers as NA
-                            x[z_score > 3] = NA
+                            x[z_score > 5] = NA
                             return(x)
                           
                         })
 
-# filter out rows with too many missing data
-ukb_df = ukb_df[rowMeans(is.na(ukb_df)) <= 0.05, ]
+# filter out rows with too many missing data and 
+row_filter = rowMeans(is.na(ukb_df)) <= 0.05
+ukb_df = ukb_df[row_filter, ]
+
+# store patient IDs with sufficient repeat visit information
+repeat_patid = patid[row_filter]
 
 # normalize data
 data_means = colMeans(ukb_df, na.rm = TRUE)
@@ -116,3 +121,5 @@ print(sprintf("Imaging Visit 1: Originally %i Rows and %i Columns",
               length(patid), length(visit1_cols)))
 print(sprintf("Imaging Visit 2: Extracted %i Rows and %i Columns",
               nrow(ukb_df), ncol(ukb_df)))
+print("Distribution of Repeat Imaging Patients Per Blood Pressure Group:")
+table(labels$bp_group[labels[, 1] %in% repeat_patid])

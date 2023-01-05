@@ -1,10 +1,70 @@
 library(tools)
 library(ggplot2)
+library(R.matlab)
 library(gridExtra)
 library(data.table)
 
 # define data path
 path = "../modelling/NeuroPM/io/"
+
+# load data
+scores = read.csv(file.path(path, "pseudotimes.csv"), header = TRUE)
+
+# load 1st visit values
+ukb1 = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"), 
+                                                                header = TRUE))
+
+# load 2nd visit values
+ukb2 = data.frame(fread(file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"), 
+                                                                header = TRUE))
+
+# load transformation matrix into PC space
+PC_transform = readMat(file.path(path, "PC_Transform.mat"))$eig.mat
+
+
+
+
+
+ref_data = unname(as.matrix(ukb_df[-ind_i, ])) %*% PC_transform
+
+# compute subset index of which have well defined disease scores
+max_background = max(pseudotimes$global_pseudotimes[
+                                          pseudotimes$bp_group == 1])
+min_disease = min(pseudotimes$global_pseudotimes[
+                                          pseudotimes$bp_group == 2])
+
+# filter out ill-defined scores tune these two numbers below depending 
+# on distribution to improve results
+new_ind_i = (ref_label < (min_disease * 5) | 
+              ref_label > (max_background * 0.25)) & (ref_group != 0)
+#new_ind_i = c(which(ref_group == 1),
+#              sample(which(ref_group == 2), sum(ref_group == 1)))
+
+# subset rows based on new row index filter
+ref_label = ref_label[new_ind_i]
+ref_group = ref_group[new_ind_i]
+ref_data = ref_data[new_ind_i, ]
+
+# extract data to predict
+pred_data = unname(as.matrix(ukb_df[ind_i, ]))
+
+# do this one at a time to demonstrate speed/applicability
+pred_PC = (pred_data[j,] %*% PC_transform)[1,]
+
+# compute distance with each row
+dist_j = rowMeans(t(abs(t(ref_data) - pred_PC)), na.rm = TRUE)
+
+# compute KNN and prediction
+sorted_ind = order(dist_j)[1:K]
+eval$pred[j] = sum(ref_label[sorted_ind])/K
+
+
+
+#Run KNN on new set to make prediction for new score
+#Combine new and old pseudo times dataframe
+#Perform analysis between these 2 scores for important variables
+
+quit(save = "no")
 
 # define variable to view
 var_i = 1
