@@ -95,7 +95,7 @@ ukb_df = apply(ukb_df, 2, function(x) {
 row_filter = rowMeans(is.na(ukb_df)) <= 0.05
 ukb_df = ukb_df[row_filter, ]
 print(sprintf("Number of Missing Data is %0.1f%%",
-                                        sum(is.na(ukb_df)/prod(dim(ukb_df)))))
+                                        sum(is.na(ukb_df))/prod(dim(ukb_df))))
 
 # saw non-normalized values
 fwrite(ukb_df, file.path(path, "ukb_num_ft_select_2nd_visit.csv"))
