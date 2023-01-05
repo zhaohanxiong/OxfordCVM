@@ -38,10 +38,13 @@ gt = scores$global_pseudotime
 # only keep obvious scores with good separation
 #ind = (ref_label < (min_disease * 5) | ref_label > (max_background * 0.25)) & (ref_group != 0)
 
-# keep balance class in reference dataset
-ind = c(which(scores$bp_group == 1),
-        sample(which(scores$bp_group == 2), sum(scores$bp_group == 1)),
-        sample(which(scores$bp_group == 0), sum(scores$bp_group == 1)))
+# compute subset index of which have well defined disease scores
+f1 = quantile(scores$global_pseudotimes[scores$bp_group == 1], 0.25)
+f2 = quantile(scores$global_pseudotimes[scores$bp_group == 2], 0.5)
+
+# filter out ill-defined scores
+ind = (scores$global_pseudotimes <= f1 |
+       scores$global_pseudotimes >= f2) & (scores$bp_group != 0)
 
 # subset reference matrix rows based on new row index filter
 PC_ukb1 = PC_ukb1[ind, ]
@@ -58,54 +61,50 @@ pred = apply(PC_ukb2, 1, function(p)
 pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = pred)
 
 # ------------------------------------------------------------------------------
-# Arrange Data For Analysis
+# Merge Data For Analysis
 # ------------------------------------------------------------------------------
-# store predicted hyper scores into the label dataframe
-follow_up = merge(scores, pred, by.x = "patid", by.y = "patid") 
-
 # add columns of interest (visit 1 and 2) to this dataframe
+analyze = c("X22423", # LV stroke volume
+            "X22421", # LV end diastole volume
+            "X25781", # white matter hyperintensities
+            "X25019", # Hippocampus volume (left)
+            "X25020")  # Hippocampus volume (right)
 
+# append 1st imaging visit values to original hyper score df
+scores_analyze = cbind(scores, ukb1[, sapply(analyze, function(s) grep(s, colnames(ukb1), value = TRUE))])
 
+# append 2nd imaging visit values to original hyper score df
+pred_analyze = cbind(pred, ukb2[, sapply(analyze, function(s) grep(s, colnames(ukb2), value = TRUE))])
 
+# merge 2nd visit hyper scores into the 1st visit dataframe
+follow_up = merge(scores_analyze, pred_analyze, by.x = "patid", by.y = "patid") 
 
+# ------------------------------------------------------------------------------
+# Produce Basic Plots for Score Distribution
+# ------------------------------------------------------------------------------
 
-#Perform analysis between these 2 scores for important variables
+follow_up$bp_group = ordered(follow_up$bp_group, c(1, 0, 2))
+
+# generate plot for predicted vs ground truth distribution
+png(file.path("plots/temp_1st_2nd_visit_scores.png"), width = 600, height = 600)
+
+# create subplots
+par(mfrow = c(1, 2))
+boxplot(follow_up$global_pseudotimes ~ follow_up$bp_group,
+        main = "1st Imaging Visit Hyper Scores",
+        xlab = "Blood Pressure Group", ylab = "Disease Score",
+        col = c("tomato", "lawngreen", "deepskyblue"),
+        ylim = c(0, 1))
+boxplot(follow_up$global_pseudotimes2 ~ follow_up$bp_group,
+        main = "2nd Imaging Visit Hyper Scores",
+        xlab = "Blood Pressure Group", ylab = "Disease Score",
+        col = c("tomato", "lawngreen", "deepskyblue"),
+        ylim = c(0, 1))
+
+# close plot
+dev.off()
 
 quit(save = "no")
-
-# define variable to view
-var_i = 1
-
-# ------------------------------------------------------------------------------
-# Prepare Data
-# ------------------------------------------------------------------------------
-# load data
-scores = read.csv(file.path(path, "pseudotimes.csv"), header = TRUE)
-
-# load 1st visit values
-ukb = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"), header = TRUE))
-
-# load 2nd visit values
-future = read.csv(file.path(path, "future.csv"), header = TRUE)
-
-# load variable weighting outputs
-weights = read.csv(file.path(path, "var_weighting.csv"),
-                   header = TRUE, stringsAsFactor = FALSE)
-
-# keep only variable name for ease of comparison between two data frames
-ukb_cols    = substring(colnames(ukb), 2, regexpr("\\.", colnames(ukb)) - 1)
-ukb_cols    = ukb_cols[ukb_cols != ""]
-future_cols = substring(colnames(future), 2, regexpr("\\.", colnames(future)) - 1)
-future_cols = future_cols[future_cols != ""]
-
-# merge data frames into one
-df = cbind(scores, ukb[, ukb_cols %in% future_cols])
-df = merge(df, future, by.x = "patid", by.y = "eid")
-df$score = cut(df$global_pseudotimes, breaks = seq(0, 0.5, length = 11))
-df = df[!is.na(df$score), ]
-
-# clear memory
-rm("ukb", "scores", "future")
 
 # ------------------------------------------------------------------------------
 # Aggregate Data for Plots
