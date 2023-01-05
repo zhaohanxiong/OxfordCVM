@@ -15,7 +15,9 @@ ukb1 = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"),
                                                                 header = TRUE))
 
 # load 2nd visit values
-ukb2 = data.frame(fread(file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"), 
+ukb2 = data.frame(fread(file.path(path, "ukb_num_ft_select_2nd_visit.csv"), 
+                                                                header = TRUE))
+ukb2_norm = data.frame(fread(file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"), 
                                                                 header = TRUE))
 
 # load transformation matrix into PC space
