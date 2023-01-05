@@ -96,9 +96,11 @@ ukb2 = apply(ukb2, 2, function(x) {
                         })
 
 # filter out rows with too many missing data and 
-row_filter = rowMeans(is.na(ukb2)) <= 0.05
+print(sprintf("Number of Missing Data Before Filtering is %0.1f%%",
+                                        sum(is.na(ukb2))/prod(dim(ukb2))))
+row_filter = rowMeans(is.na(ukb2)) <= 0.10
 ukb2 = ukb2[row_filter, ]
-print(sprintf("Number of Missing Data is %0.1f%%",
+print(sprintf("Number of Missing Data After Filtering is %0.1f%%",
                                         sum(is.na(ukb2))/prod(dim(ukb2))))
 
 # store patient IDs with sufficient repeat visit information
