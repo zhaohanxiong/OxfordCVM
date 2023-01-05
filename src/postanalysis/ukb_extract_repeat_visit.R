@@ -76,10 +76,34 @@ ukb_df = ukb_df[all_patid %in% patid, ]
 # ------------------------------------------------------------------------------
 # Pre-Process
 # ------------------------------------------------------------------------------
+# remove outliers
+ukb_df = apply(ukb_df, 2, function(x) {
+    
+                            # compute mean and sd
+                            mean_val = mean(x, na.rm=TRUE)
+                            std = sd(x, na.rm=TRUE)
+                            z_score = abs(x - mean_val)/std
+                            
+                            # set outliers as NA
+                            x[z_score > 3] = NA
+                            return(x)
+                          
+                        })
+
 # filter out rows with too many missing data
+ukb_df = ukb_df[rowMeans(is.na(ukb_df)) <= 0.05, ]
 
 # normalize data
+data_means = colMeans(ukb_df, na.rm = TRUE)
+data_std   = apply(ukb_df, 2, function(x) sd(x, na.rm = TRUE))
+ukb_df     = sweep(ukb_df, 2, data_means, "-")
+ukb_df     = sweep(ukb_df, 2, data_std, "/")
 
+# impute data
+ukb_df = apply(ukb_df, 2, function(x) {
+                                x[is.na(x)] = median(x, na.rm=TRUE)
+                                return(x)
+                          })
 
 # ------------------------------------------------------------------------------
 # Write to File
@@ -87,5 +111,8 @@ ukb_df = ukb_df[all_patid %in% patid, ]
 fwrite(ukb_df, file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"))
 
 # display outputs
-print(sprintf("Repeat Visit Data Subset Complete"))
-print(sprintf("Subsetted %i Rows and %i Columns", nrows(ukb_df), ncols(ukb_df)))
+print(sprintf("---------- Repeat Visit Data Subset Complete"))
+print(sprintf("Imaging Visit 1: Originally %i Rows and %i Columns",
+              length(patid), length(visit1_cols)))
+print(sprintf("Imaging Visit 2: Extracted %i Rows and %i Columns",
+              nrow(ukb_df), ncol(ukb_df)))

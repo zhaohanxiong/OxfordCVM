@@ -27,6 +27,7 @@ Rscript postprocess_files.R
 cd ../postanalysis
 Rscript ukb_visualize_key_cTI_results.R
 Rscript ukb_visualize_traj.R
+Rscript ukb_extract_repeat_visit.R
 
 # run test cases (in root directory)
 cd ../..
