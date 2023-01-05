@@ -50,7 +50,9 @@ PC_ukb1 = unname(as.matrix(ukb1_norm)) %*% PC_transform
 gt = scores$global_pseudotime
 
 # filter out ill-defined scores
-ind = (scores$bp_group != 0)
+f1  = quantile(gt[scores$bp_group == 1], 0.25)
+f2  = quantile(gt[scores$bp_group == 2], 0.75)
+ind = (gt <= f1 | gt >= f2) & (scores$bp_group != 0)
 
 # subset reference matrix rows based on new row index filter
 PC_ukb1 = PC_ukb1[ind, ]
@@ -61,7 +63,7 @@ PC_ukb2 = unname(as.matrix(ukb2_norm)) %*% PC_transform
 
 # compute distance with each row
 pred = apply(PC_ukb2, 1, function(p)
-                              mean(gt[order(rowMeans(abs(p - PC_ukb1)))[1:1]]))
+                              mean(gt[order(rowMeans(abs(p - PC_ukb1)))[1:10]]))
 
 # create dataframe for this score
 pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = pred)
