@@ -21,13 +21,13 @@ visit1_cols = names(fread(file.path(path, "ukb_num_norm_ft_select.csv"),
 visit2_cols = visit1_cols
 
 # extract only variable names
-visit1_cols = substring(visit1_cols, 1, regexpr("\\.", visit1_cols) - 1)
+visit1_cols_sub = substring(visit1_cols, 1, regexpr("\\.", visit1_cols) - 1)
 
 # find cols 1st visit contain repeat visit
-for (i in 1:length(visit1_cols)) {
+for (i in 1:length(visit1_cols_sub)) {
 
   # find all related columns in original dataframe
-  cols = grep(paste0(visit1_cols[i], "\\."), all_cols, value = TRUE)
+  cols = grep(paste0(visit1_cols_sub[i], "\\."), all_cols, value = TRUE)
 
   # find if there is instance 3
   repeat_visits = grep("\\.3\\.\\d", cols, value = TRUE)
@@ -98,9 +98,14 @@ ukb_df = ukb_df[row_filter, ]
 # store patient IDs with sufficient repeat visit information
 repeat_patid = patid[row_filter]
 
-# normalize data
-data_means = colMeans(ukb_df, na.rm = TRUE)
-data_std   = apply(ukb_df, 2, function(x) sd(x, na.rm = TRUE))
+# load 1st visit raw values
+ukb1 = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"),
+                                                              header = TRUE))
+ukb1 = ukb1[, visit1_cols]
+
+# normalize data with means/sd from previous visit
+data_means = colMeans(ukb1, na.rm = TRUE)
+data_std   = apply(ukb1, 2, function(x) sd(x, na.rm = TRUE))
 ukb_df     = sweep(ukb_df, 2, data_means, "-")
 ukb_df     = sweep(ukb_df, 2, data_std, "/")
 
@@ -118,7 +123,7 @@ fwrite(ukb_df, file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"))
 # display outputs
 print(sprintf("---------- Repeat Visit Data Subset Complete"))
 print(sprintf("Imaging Visit 1: Originally %i Rows and %i Columns",
-              length(patid), length(visit1_cols)))
+              nrow(ukb1), ncol(ukb1)))
 print(sprintf("Imaging Visit 2: Extracted %i Rows and %i Columns",
               nrow(ukb_df), ncol(ukb_df)))
 print("Distribution of Repeat Imaging Patients Per Blood Pressure Group:")
