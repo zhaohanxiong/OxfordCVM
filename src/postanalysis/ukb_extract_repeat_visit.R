@@ -104,8 +104,8 @@ fwrite(ukb_df, file.path(path, "ukb_num_ft_select_2nd_visit.csv"))
 repeat_patid = patid[row_filter]
 
 # load 1st visit raw values
-ukb1 = fread(file.path(path, "ukb_num_ft_select.csv"), header = TRUE)
-ukb1 = ukb1[, visit1_cols]
+ukb1 = fread(file.path(path, "ukb_num_ft_select.csv"), 
+                                            header = TRUE, select = visit1_cols)
 
 # normalize data with means/sd from previous visit
 data_means = colMeans(ukb1, na.rm = TRUE)
