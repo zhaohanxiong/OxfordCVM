@@ -70,18 +70,13 @@ for (i in 1:n_folds) {
   ref_data = unname(as.matrix(ukb_df[-ind_i, ])) %*% PC_transform
 
   # compute subset index of which have well defined disease scores
-  max_background = max(pseudotimes$global_pseudotimes[
-                                            pseudotimes$bp_group == 1])
-  min_disease = min(pseudotimes$global_pseudotimes[
-                                            pseudotimes$bp_group == 2])
+  q3 = quantile(pseudotimes$global_pseudotimes[pseudotimes$bp_group == 1], 0.75)
+  q1 = quantile(pseudotimes$global_pseudotimes[pseudotimes$bp_group == 2], 0.25)
 
   # filter out ill-defined scores tune these two numbers below depending 
   # on distribution to improve results
-  new_ind_i = (ref_label < (min_disease * 5) | 
-               ref_label > (max_background * 0.25)) & (ref_group != 0)
-  #new_ind_i = c(which(ref_group == 1),
-  #              sample(which(ref_group == 2), sum(ref_group == 1)))
-  
+  new_ind_i = (ref_label < 0.15 | ref_label > 0.2) & (ref_group != 0)
+
   # subset rows based on new row index filter
   ref_label = ref_label[new_ind_i]
   ref_group = ref_group[new_ind_i]
