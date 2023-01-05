@@ -59,7 +59,6 @@ sorted_ind = order(dist_j)[1:K]
 eval$pred[j] = sum(ref_label[sorted_ind])/K
 
 
-
 #Run KNN on new set to make prediction for new score
 #Combine new and old pseudo times dataframe
 #Perform analysis between these 2 scores for important variables

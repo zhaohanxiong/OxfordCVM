@@ -95,6 +95,9 @@ ukb_df = apply(ukb_df, 2, function(x) {
 row_filter = rowMeans(is.na(ukb_df)) <= 0.05
 ukb_df = ukb_df[row_filter, ]
 
+# saw non-normalized values
+fwrite(ukb_df, file.path(path, "ukb_num_ft_select_2nd_visit.csv"))
+
 # store patient IDs with sufficient repeat visit information
 repeat_patid = patid[row_filter]
 
