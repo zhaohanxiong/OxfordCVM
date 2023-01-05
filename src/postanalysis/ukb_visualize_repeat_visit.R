@@ -108,7 +108,8 @@ df_plot2 = data.frame(score = c(df_plot$global_pseudotimes,
                                 df_plot$global_pseudotimes),
                       var   = c(df_plot[, var_1st], df_plot[, var_2nd]),
                       group = rep(df_plot$bp_group, 2),
-                      visit = as.factor(rep(c("1st", "2nd"), each = nrow(df_plot))))
+                      visit = as.factor(rep(c("1st", "2nd"),
+                                            each = nrow(df_plot))))
 
 # ------------------------------------------------------------------------------
 # Produce Plots
@@ -127,7 +128,7 @@ p2 = ggplot(df_plot, aes(x = score_change, y = var_change)) +
         geom_point(size = 7.5, alpha = 0.25) +
         geom_smooth(orientation = "x", span = 15,
                         linewidth = 2, se = FALSE, fullrange = TRUE) +
-        ggtitle(sprintf("Change in %s vs Change in Hyper Score (1st & 2nd Visit)",
+        ggtitle(sprintf("Change in %s vs Change in Hyper Score (1st & 2nd Imaging Visit)",
                         toTitleCase(analyze_names[var_i]))) +
         xlab("Change in Hyper Score (2nd - 1st)") + 
         ylab(sprintf("Change in %s (2nd - 1st)",
