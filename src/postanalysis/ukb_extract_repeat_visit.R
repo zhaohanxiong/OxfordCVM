@@ -113,8 +113,8 @@ ukb1 = fread(file.path(path, "ukb_num_ft_select.csv"),
                                             header = TRUE, select = visit1_cols)
 
 # normalize data with means/sd from previous visit
-data_means = colMeans(ukb2, na.rm = TRUE)
-data_std   = apply(ukb2, 2, function(x) sd(x, na.rm = TRUE))
+data_means = colMeans(ukb1, na.rm = TRUE)
+data_std   = apply(ukb1, 2, function(x) sd(x, na.rm = TRUE))
 ukb2       = sweep(ukb2, 2, data_means, "-")
 ukb2       = sweep(ukb2, 2, data_std, "/")
 

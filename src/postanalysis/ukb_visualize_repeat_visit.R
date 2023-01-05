@@ -49,27 +49,19 @@ PC_transform = readMat(file.path(path, "PC_Transform.mat"))$Node.Weights
 PC_ukb1 = unname(as.matrix(ukb1_norm)) %*% PC_transform
 gt = scores$global_pseudotime
 
-# only keep obvious scores with good separation
-#ind = (ref_label < (min_disease * 5) | ref_label > (max_background * 0.25)) & (ref_group != 0)
+# filter out ill-defined scores
+ind = (scores$bp_group != 0)
 
-# # compute subset index of which have well defined disease scores
-# f1 = quantile(scores$global_pseudotimes[scores$bp_group == 1], 0.25)
-# f2 = quantile(scores$global_pseudotimes[scores$bp_group == 2], 0.75)
-
-# # filter out ill-defined scores
-# ind = (scores$global_pseudotimes <= f1 |
-#        scores$global_pseudotimes >= f2) & (scores$bp_group != 0)
-
-# # subset reference matrix rows based on new row index filter
-# PC_ukb1 = PC_ukb1[ind, ]
-# gt      = gt[ind]
+# subset reference matrix rows based on new row index filter
+PC_ukb1 = PC_ukb1[ind, ]
+gt      = gt[ind]
 
 # transform visit 2 data into PC space
 PC_ukb2 = unname(as.matrix(ukb2_norm)) %*% PC_transform
 
 # compute distance with each row
 pred = apply(PC_ukb2, 1, function(p)
-                gt[which.min(rowMeans(abs(PC_ukb1 - p)))])
+                                gt[which.min(rowMeans((PC_ukb1**2 - p**2)**0.5))])
 
 # create dataframe for this score
 pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = pred)
@@ -78,10 +70,12 @@ pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = pred)
 # Merge Data For Analysis
 # ------------------------------------------------------------------------------
 # append 1st imaging visit values to original hyper score df
-scores_analyze = cbind(scores, ukb1[, sapply(analyze, function(s) grep(s, colnames(ukb1), value = TRUE))])
+scores_analyze = cbind(scores, ukb1[, sapply(analyze, function(s) 
+                                        grep(s, colnames(ukb1), value = TRUE))])
 
 # append 2nd imaging visit values to original hyper score df
-pred_analyze = cbind(pred, ukb2[, sapply(analyze, function(s) grep(s, colnames(ukb2), value = TRUE))])
+pred_analyze = cbind(pred, ukb2[, sapply(analyze, function(s)
+                                        grep(s, colnames(ukb2), value = TRUE))])
 
 # merge 2nd visit hyper scores into the 1st visit dataframe
 follow_up = merge(scores_analyze, pred_analyze, by.x = "patid", by.y = "patid") 
