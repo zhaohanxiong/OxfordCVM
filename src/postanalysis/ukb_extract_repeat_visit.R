@@ -104,8 +104,7 @@ fwrite(ukb_df, file.path(path, "ukb_num_ft_select_2nd_visit.csv"))
 repeat_patid = patid[row_filter]
 
 # load 1st visit raw values
-ukb1 = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"),
-                                                              header = TRUE))
+ukb1 = fread(file.path(path, "ukb_num_ft_select.csv"), header = TRUE)
 ukb1 = ukb1[, visit1_cols]
 
 # normalize data with means/sd from previous visit
@@ -128,8 +127,8 @@ fwrite(ukb_df, file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"))
 # display outputs
 print(sprintf("---------- Repeat Visit Data Subset Complete"))
 print(sprintf("Imaging Visit 1: Originally %i Rows and %i Columns",
-              nrow(ukb1), ncol(ukb1)))
+                                                    nrow(ukb1), ncol(ukb1)))
 print(sprintf("Imaging Visit 2: Extracted %i Rows and %i Columns",
-              nrow(ukb_df), ncol(ukb_df)))
+                                                    nrow(ukb_df), ncol(ukb_df)))
 print("Distribution of Repeat Imaging Patients Per Blood Pressure Group:")
 table(labels$bp_group[labels[, 1] %in% repeat_patid])
