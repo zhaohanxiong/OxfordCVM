@@ -58,6 +58,10 @@ for (i in 1:length(visit1_cols_sub)) {
 
 }
 
+# display message for how many columns new values are being used for
+print(sprintf("Number of New Columns Found in Follow Up: %i (Out of %i)",
+              sum(visit2_cols != visit1_cols), length(visit1_cols)))
+
 # ------------------------------------------------------------------------------
 # Extract Repeat Visit Rows
 # ------------------------------------------------------------------------------
