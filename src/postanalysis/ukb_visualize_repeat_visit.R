@@ -124,17 +124,15 @@ p1 = ggplot(df_plot2, aes(y = score, x = group, fill = visit)) +
         theme(plot.title = element_text(size = 15, face = "bold"))
 
 p2 = ggplot(df_plot, aes(x = score_change, y = var_change)) + 
-        geom_point(size = 7.5, alpha = 0.25) +
-        geom_smooth(orientation = "x", span = 15,
-                    linewidth = 2, se = FALSE, fullrange = TRUE) +
-        ggtitle(sprintf("Change in %s vs Change in Hyper Score (1st & 2nd Imaging Visit)",
+        geom_point(size = 7.5, alpha = 0.25, color = "orange") +
+        geom_smooth(span = 15, linewidth = 2, se = TRUE, color = "purple") +
+        ggtitle(sprintf("Change in %s vs Change in Hyper Score",
                         toTitleCase(analyze_names[var_i]))) +
-        xlab("Change in Hyper Score (2nd - 1st)") + 
-        ylab(sprintf("Change in %s (2nd - 1st)",
+        xlab("Change in Hyper Score (2nd - 1st Imaging Visit)") + 
+        ylab(sprintf("Change in %s (2nd - 1st Imaging Visit)",
                      toTitleCase(analyze_names[var_i]))) + 
         scale_fill_brewer(palette = "Dark2") +
-        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
-              plot.title = element_text(size = 15, face = "bold"))
+        theme(plot.title = element_text(size = 15, face = "bold"))
 
 # start offline plot, arrange multi-plot, then close plot
 png("plots/temp_follow_up.png", width = 1200, height = 600)
