@@ -4,6 +4,9 @@ library(R.matlab)
 library(gridExtra)
 library(data.table)
 
+# ------------------------------------------------------------------------------
+# Load Data
+# ------------------------------------------------------------------------------
 # define data path
 path = "../modelling/NeuroPM/io/"
 
@@ -23,48 +26,49 @@ ukb2_norm = data.frame(fread(file.path(path, "ukb_num_norm_ft_select_2nd_visit.c
                                                                 header = TRUE))
 
 # load transformation matrix into PC space
-PC_transform = readMat(file.path(path, "PC_Transform.mat"))$eig.mat
+PC_transform = readMat(file.path(path, "PC_Transform.mat"))$Node.Weights
 
+# ------------------------------------------------------------------------------
+# Perform KNN Prediction
+# ------------------------------------------------------------------------------
+# prepare reference dataset from visit 1
+PC_ukb1 = unname(as.matrix(ukb1_norm)) %*% PC_transform
+gt = scores$global_pseudotime
 
+# only keep obvious scores with good separation
+#ind = (ref_label < (min_disease * 5) | ref_label > (max_background * 0.25)) & (ref_group != 0)
 
+# keep balance class in reference dataset
+ind = c(which(scores$bp_group == 1),
+        sample(which(scores$bp_group == 2), sum(scores$bp_group == 1)),
+        sample(which(scores$bp_group == 0), sum(scores$bp_group == 1)))
 
+# subset reference matrix rows based on new row index filter
+PC_ukb1 = PC_ukb1[ind, ]
+gt      = gt[ind]
 
-ref_data = unname(as.matrix(ukb_df[-ind_i, ])) %*% PC_transform
-
-# compute subset index of which have well defined disease scores
-max_background = max(pseudotimes$global_pseudotimes[
-                                          pseudotimes$bp_group == 1])
-min_disease = min(pseudotimes$global_pseudotimes[
-                                          pseudotimes$bp_group == 2])
-
-# filter out ill-defined scores tune these two numbers below depending 
-# on distribution to improve results
-new_ind_i = (ref_label < (min_disease * 5) | 
-              ref_label > (max_background * 0.25)) & (ref_group != 0)
-#new_ind_i = c(which(ref_group == 1),
-#              sample(which(ref_group == 2), sum(ref_group == 1)))
-
-# subset rows based on new row index filter
-ref_label = ref_label[new_ind_i]
-ref_group = ref_group[new_ind_i]
-ref_data = ref_data[new_ind_i, ]
-
-# extract data to predict
-pred_data = unname(as.matrix(ukb_df[ind_i, ]))
-
-# do this one at a time to demonstrate speed/applicability
-pred_PC = (pred_data[j,] %*% PC_transform)[1,]
+# transform visit 2 data into PC space
+PC_ukb2 = unname(as.matrix(ukb2_norm)) %*% PC_transform
 
 # compute distance with each row
-dist_j = rowMeans(t(abs(t(ref_data) - pred_PC)), na.rm = TRUE)
+pred = apply(PC_ukb2, 1, function(p)
+                gt[which.min(rowMeans(abs(PC_ukb1 - p)))])
 
-# compute KNN and prediction
-sorted_ind = order(dist_j)[1:K]
-eval$pred[j] = sum(ref_label[sorted_ind])/K
+# create dataframe for this score
+pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = pred)
+
+# ------------------------------------------------------------------------------
+# Arrange Data For Analysis
+# ------------------------------------------------------------------------------
+# store predicted hyper scores into the label dataframe
+follow_up = merge(scores, pred, by.x = "patid", by.y = "patid") 
+
+# add columns of interest (visit 1 and 2) to this dataframe
 
 
-#Run KNN on new set to make prediction for new score
-#Combine new and old pseudo times dataframe
+
+
+
 #Perform analysis between these 2 scores for important variables
 
 quit(save = "no")
@@ -102,21 +106,6 @@ df = df[!is.na(df$score), ]
 
 # clear memory
 rm("ukb", "scores", "future")
-
-# ------------------------------------------------------------------------------
-# Preprocess Data for Outliers
-# ------------------------------------------------------------------------------
-# Iterate through all variable columns
-for (i in grep("X[0-9]{1,10}\\.[0-9]\\.[0-9]", colnames(df))) {
-  
-  # compute quantiles  
-  qs = unname(quantile(df[, i], prob = c(0.25, 0.5, 0.75), na.rm = TRUE))
-  iqr = qs[3] - qs[1]
-
-  # set values outside range as outliers
-  df[, i][df[, i] < qs[1] - 2*iqr | df[, i] > qs[3] + 2*iqr] = NA
-  
-}
 
 # ------------------------------------------------------------------------------
 # Aggregate Data for Plots

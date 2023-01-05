@@ -97,11 +97,12 @@ ukb_df = ukb_df[row_filter, ]
 print(sprintf("Number of Missing Data is %0.1f%%",
                                         sum(is.na(ukb_df))/prod(dim(ukb_df))))
 
-# saw non-normalized values
-fwrite(ukb_df, file.path(path, "ukb_num_ft_select_2nd_visit.csv"))
-
 # store patient IDs with sufficient repeat visit information
 repeat_patid = patid[row_filter]
+
+# save non-normalized values
+fwrite(cbind(eid = repeat_patid, ukb_df),
+                            file.path(path, "ukb_num_ft_select_2nd_visit.csv"))
 
 # load 1st visit raw values
 ukb1 = fread(file.path(path, "ukb_num_ft_select.csv"), 
