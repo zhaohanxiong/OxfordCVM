@@ -4,7 +4,7 @@ library(R.matlab)
 library(gridExtra)
 library(data.table)
 
-var_i = 1
+var_i = 3
 
 # define columns of interest (visit 1 and 2) to this dataframe
 analyze = c("X22423", # LV stroke volume
@@ -113,8 +113,13 @@ df_plot2 = data.frame(score = c(df_plot$global_pseudotimes,
                                             each = nrow(df_plot))))
 
 # ------------------------------------------------------------------------------
-# Produce Plots
+# Produce Outputs
 # ------------------------------------------------------------------------------
+# perform correlation test
+cortest = cor.test(df_plot$score_change, df_plot$var_change)
+print(sprintf("Pearson Correlation Test: R = %0.1f, p = %0.3f",
+              cortest$estimate, cortest$p.value))
+
 # produce plots
 p1 = ggplot(df_plot2, aes(y = score, x = group, fill = visit)) + 
         geom_boxplot() +
