@@ -4,7 +4,7 @@ library(R.matlab)
 library(gridExtra)
 library(data.table)
 
-var_i = 3
+var_i = 1
 
 # define columns of interest (visit 1 and 2) to this dataframe
 analyze = c("X22423", # LV stroke volume
@@ -50,13 +50,13 @@ PC_ukb1 = unname(as.matrix(ukb1_norm)) %*% PC_transform
 gt = scores$global_pseudotime
 
 # filter out ill-defined scores
-f1  = quantile(gt[scores$bp_group == 1], 0.25)
-f2  = quantile(gt[scores$bp_group == 2], 0.75)
-ind = (gt <= f1 | gt >= f2) & (scores$bp_group != 0)
+#f1  = quantile(gt[scores$bp_group == 1], 0.25)
+#f2  = quantile(gt[scores$bp_group == 2], 0.75)
+#ind = (gt <= f1 | gt >= f2) & (scores$bp_group != 0)
 
 # subset reference matrix rows based on new row index filter
-PC_ukb1 = PC_ukb1[ind, ]
-gt      = gt[ind]
+#PC_ukb1 = PC_ukb1[ind, ]
+#gt      = gt[ind]
 
 # transform visit 2 data into PC space
 PC_ukb2 = unname(as.matrix(ukb2_norm)) %*% PC_transform
