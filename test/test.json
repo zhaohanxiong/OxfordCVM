@@ -1,20 +1,20 @@
 {
     "aws": {
-        "is_ecr_files_correct": true,
-        "is_rds_data_correct": true
+        "is_ecr_files_correct": false,
+        "is_rds_data_correct": false
     },
     "data_processing": {
-        "does_R_postproces_output_exist": true,
+        "does_R_postproces_output_exist": false,
         "does_R_preprocess_output_exist": true
     },
     "ml": {
-        "does_model_exist": true,
-        "is_model_accurate": true
+        "does_model_exist": false,
+        "is_model_accurate": false
     },
     "neuropm": {
         "does_neuropm_interm_output_exist": true,
         "does_neuropm_output_exist": true,
         "is_cti_accurate": true,
-        "is_cti_pred_accurate": true
+        "is_cti_pred_accurate": false
     }
 }
