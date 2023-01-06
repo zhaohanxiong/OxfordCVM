@@ -120,10 +120,13 @@ data_std   = apply(ukb1, 2, function(x) sd(x, na.rm = TRUE))
 ukb2       = sweep(ukb2, 2, data_means, "-")
 ukb2       = sweep(ukb2, 2, data_std, "/")
 
+# remove large z scores
+ukb2[abs(ukb2) > 5] = NA
+
 # impute data
 ukb2 = apply(ukb2, 2, function(x) {
-                                x[is.na(x)] = median(x, na.rm=TRUE)
-                                return(x)
+                              x[is.na(x)] = median(x, na.rm = TRUE)
+                              return(x)
                           })
 
 # ------------------------------------------------------------------------------
