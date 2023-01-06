@@ -47,33 +47,46 @@ PC_transform = readMat(file.path(path, "PC_Transform.mat"))$Node.Weights
 # ------------------------------------------------------------------------------
 # prepare reference dataset from visit 1
 PC_ukb1  = unname(as.matrix(ukb1_norm)) %*% PC_transform
-gt       = scores$global_pseudotime
-gt_group = scores$bp_group
 
-# filter out ill-defined scores
-#f1  = quantile(gt[scores$bp_group == 1], 0.25)
-#f2  = quantile(gt[scores$bp_group == 2], 0.75)
-#ind = (gt_group != 0) & (gt <= f1 | gt >= f2)
+if (TRUE) {
 
-# subset reference matrix rows based on new row index filter
-PC_ukb1 = PC_ukb1[ind, ]
-gt      = gt[ind]
+  # filter out ill-defined scores
+  f3  = quantile(scores$global_pseudotime[scores$bp_group == 2], 0.25)
+  ind = scores$bp_group == 2 & scores$global_pseudotimes > f3
+  ind = scores$bp_group != 2 | ind
+  
+  # subset reference matrix rows based on new row index filter
+  #PC_ukb1 = PC_ukb1[ind, ]
+  scores1 = scores[ind, ]
+  
+}
 
 # transform visit 2 data into PC space
 PC_ukb2 = unname(as.matrix(ukb2_norm)) %*% PC_transform
 
-# compute distance with each row
-k = 5
-knn_ref = t(PC_ukb1)
-pred = apply(PC_ukb2, 1, function(p) {
-                              diff  = t(p - knn_ref)
-                              dist  = rowMeans(abs(diff))
-                              top_k = gt[order(dist)[1:k]]
-                              return(mean(top_k))
-                          })
-
 # create dataframe for this score
-pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = pred)
+pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = NA)
+
+# define number of K for KNN, also transpose ref matrix
+k = 1
+PC_ukb1_t = t(PC_ukb1)
+
+# loop through each row and predict score 
+for (i in 1:nrow(pred)) {
+  
+  # only use same bp group as current patient for reference
+  g = scores$bp_group[scores$patid == pred$patid[i]]
+  g_ind = scores1$bp_group == g
+
+  # compute KNN
+  diff  = t(PC_ukb2[i, ] - PC_ukb1_t[, g_ind])
+  dist  = rowMeans(abs(diff))
+  top_k = scores1$global_pseudotime[g_ind][order(dist)[1:k]]
+  
+  # store result
+  pred$global_pseudotimes2[i] = mean(top_k)
+  
+}
 
 # ------------------------------------------------------------------------------
 # Merge Data For Analysis
