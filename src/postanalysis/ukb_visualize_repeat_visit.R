@@ -46,24 +46,31 @@ PC_transform = readMat(file.path(path, "PC_Transform.mat"))$Node.Weights
 # Perform KNN Prediction
 # ------------------------------------------------------------------------------
 # prepare reference dataset from visit 1
-PC_ukb1 = unname(as.matrix(ukb1_norm)) %*% PC_transform
-gt = scores$global_pseudotime
+PC_ukb1  = unname(as.matrix(ukb1_norm)) %*% PC_transform
+gt       = scores$global_pseudotime
+gt_group = scores$bp_group
 
 # filter out ill-defined scores
 #f1  = quantile(gt[scores$bp_group == 1], 0.25)
 #f2  = quantile(gt[scores$bp_group == 2], 0.75)
-#ind = (gt <= f1 | gt >= f2) & (scores$bp_group != 0)
+#ind = (gt_group != 0) & (gt <= f1 | gt >= f2)
 
 # subset reference matrix rows based on new row index filter
-#PC_ukb1 = PC_ukb1[ind, ]
-#gt      = gt[ind]
+PC_ukb1 = PC_ukb1[ind, ]
+gt      = gt[ind]
 
 # transform visit 2 data into PC space
 PC_ukb2 = unname(as.matrix(ukb2_norm)) %*% PC_transform
 
 # compute distance with each row
-pred = apply(PC_ukb2, 1, function(p)
-                              mean(gt[order(rowMeans(abs(p - PC_ukb1)))[1:10]]))
+k = 5
+knn_ref = t(PC_ukb1)
+pred = apply(PC_ukb2, 1, function(p) {
+                              diff  = t(p - knn_ref)
+                              dist  = rowMeans(abs(diff))
+                              top_k = gt[order(dist)[1:k]]
+                              return(mean(top_k))
+                          })
 
 # create dataframe for this score
 pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = pred)
@@ -83,8 +90,8 @@ pred_analyze = cbind(pred, ukb2[, sapply(analyze, function(s)
 follow_up = merge(scores_analyze, pred_analyze, by.x = "patid", by.y = "patid") 
 
 # change blood pressure groups into a ordered factor for plotting
-follow_up$bp_group = ordered(c("Between", "Healthy", "Disease")[follow_up$bp_group + 1], 
-                             c("Healthy", "Between", "Disease"))
+groups = c("Between", "Healthy", "Disease")
+follow_up$bp_group = ordered(groups[follow_up$bp_group + 1], groups[c(2, 1, 3)])
 
 # ------------------------------------------------------------------------------
 # Aggregate Data for Plots
