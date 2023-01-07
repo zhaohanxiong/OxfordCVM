@@ -4,6 +4,7 @@ addpath("cTI-codes/","cTI-codes/auxiliary/","cTI-codes/dijkstra_tools/","cTI-cod
 %% read data
 % loads data (main feature matrix) and labels (bp_group)
 ukb_data = readtable('io/ukb_num_norm_ft_select.csv'); % N patients by M features
+ukb_data_raw = readtable('io/ukb_num_ft_select.csv'); % N patients by M features
 labels   = readtable('io/labels_select.csv'); % N patients with arbitrary number of columns
 
 % extract parts of dataframe to array

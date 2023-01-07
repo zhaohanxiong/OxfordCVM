@@ -132,6 +132,7 @@ ukb_df$Sex = ifelse(ukb_df$Sex == 1, "Male", "Female")
 pat_ids = ukb_df$`df[, ignore_cols]`
 outcomes_path = "../../../ukb_outcomes.csv"
 df_outcomes_selected = add_outcomes(pat_ids, outcomes_path)
+write.csv(df_outcomes_selected, "NeuroPM/io/ukb_num_norm_outcomes.csv", row.names = FALSE)
 
 # write to output (data & labels)
 write.csv(ukb_df[, 1:5], "NeuroPM/io/labels.csv", row.names = FALSE)
