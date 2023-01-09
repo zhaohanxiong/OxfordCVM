@@ -12,9 +12,9 @@ analyze = c("X22423", # LV stroke volume
             "X25781", # white matter hyperintensities
             "X25019", # Hippocampus volume (left)
             "X25020") # Hippocampus volume (right)
-analyze_names = c("LV SV",
-                  "LV EDV",
-                  "WM Hyperintensity",
+analyze_names = c("LV Stroke Volume",
+                  "LV End Diastolic Volume",
+                  "White Matter Hyperintensity",
                   "Hippocampus Volume (Left)",
                   "Hippocampus Volume (Right)")
 

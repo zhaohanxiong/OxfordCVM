@@ -11,9 +11,9 @@ vars      = c("X22423.2.0",
               "X25781.2.0", 
               "X25019.2.0",
               "X25020.2.0")
-var_names = c("LV SV",
-              "LV EDV",
-              "WM Hyperintensity",
+var_names = c("LV Stroke Volume",
+              "LV End Diastolic Volume",
+              "White Matter Hyperintensity",
               "Hippocampus Volume",
               "Hippocampus Volume")
 
