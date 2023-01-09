@@ -4,7 +4,7 @@ library(R.matlab)
 library(gridExtra)
 library(data.table)
 rm(list=ls())
-var_i = 1
+var_i = 2
 
 # define columns of interest (visit 1 and 2) to this dataframe
 analyze = c("X22423", # LV stroke volume
@@ -48,6 +48,10 @@ PC_transform = readMat(file.path(path, "PC_Transform.mat"))$Node.Weights
 # prepare reference dataset from visit 1
 PC_ukb1 = unname(as.matrix(ukb1_norm)) %*% PC_transform
 
+# filter
+PC_ukb1 = PC_ukb1[scores$bp_group != 0, ]
+scores1 = scores[scores$bp_group != 0, ]
+  
 # transform visit 2 data into PC space
 PC_ukb2 = unname(as.matrix(ukb2_norm)) %*% PC_transform
 
@@ -62,14 +66,19 @@ PC_ukb1_transpose = t(PC_ukb1)
 for (i in 1:nrow(pred)) {
   
   # only use same bp group as current patient for reference
-  group_i = scores$bp_group[scores$patid == pred$patid[i]]
-  g_ind = scores$bp_group == group_i
+  #group_i = scores$bp_group[scores$patid == pred$patid[i]]
+  #g_ind = scores$bp_group == group_i
 
   # compute KNN
-  diff  = t(PC_ukb2[i, ] - PC_ukb1_transpose[, g_ind])
+  #diff  = t(PC_ukb2[i, ] - PC_ukb1_transpose[, g_ind])
+  #dist  = rowMeans(abs(diff))
+  #top_k = scores$global_pseudotime[g_ind][order(dist)[1:k]]
+  
+  # compute KNN
+  diff  = t(PC_ukb2[i, ] - PC_ukb1_transpose)
   dist  = rowMeans(abs(diff))
-  top_k = scores$global_pseudotime[g_ind][order(dist)[1:k]]
-
+  top_k = scores1$global_pseudotime[order(dist)[1:k]]
+  
   # store result
   pred$global_pseudotimes2[i] = mean(top_k)
   
