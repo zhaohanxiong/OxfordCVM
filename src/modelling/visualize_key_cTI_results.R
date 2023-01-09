@@ -46,7 +46,7 @@ p2 = ggplot(scores, aes(x = global_pseudotimes, fill = as.factor(bp_group))) +
           theme(legend.title = element_blank())
 
 # write plot
-png("io/final_plot1_ScoreDistribution.png", width = 1000, height = 500)
+png(file.path(path, "final_plot1_ScoreDistribution.png"), width = 1000, height = 500)
 grid.arrange(p1, p2, ncol = 2, widths = c(1, 1.5))
 dev.off()
 
@@ -100,7 +100,7 @@ p2 = ggplot(metrics_plot, aes(x = fpr, y = tpr)) +
           geom_abline(col = "red")
 
 # write plot
-png("io/final_plot2_AUROC.png", width = 1000, height = 600)
+png(file.path(path, "final_plot2_AUROC.png"), width = 1000, height = 600)
 grid.arrange(p1, p2, ncol = 2, widths = c(1, 1.5))
 dev.off()
 
@@ -127,7 +127,7 @@ p2 = ggplot(scores, aes(x = global_pseudotimes, y = `BPDia.2.0`)) +
           scale_colour_brewer(palette = "Dark2")
 
 # write plot
-png("io/final_plot3_BP.png", width = 1000, height = 600)
+png(file.path(path, "final_plot3_BP.png"), width = 1000, height = 600)
 grid.arrange(p1, p2, ncol = 2)
 dev.off()
 
@@ -180,7 +180,7 @@ p2 = ggplot(weight_plot_sig,
         xlab("") + ylab("")
 
 # write plot
-png("io/final_plot4_VariableContribution.png", width = 1000, height = 500)
+png(file.path(path, "final_plot4_VariableContribution.png"), width = 1000, height = 500)
 grid.arrange(p1, p2, ncol = 2)
 dev.off()
 
@@ -244,7 +244,7 @@ ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) +
               plot.title = element_text(size = 15, face = "bold"))
 
 # write plot
-png("io/final_plot5_ClinicalVariables.png", width = 600, height = 600)
+png(file.path(path, "final_plot5_ClinicalVariables.png"), width = 600, height = 600)
 grid.arrange(p1, p2, ncol = 2)
 dev.off()
 
