@@ -143,4 +143,3 @@ print(sprintf("Imaging Visit 1: Originally %i Rows and %i Columns",
                                                     nrow(ukb1), ncol(ukb1)))
 print(sprintf("Imaging Visit 2: Extracted %i Rows and %i Columns",
                                                     nrow(ukb2), ncol(ukb2)))
-print(sprintf("---------- Repeat Visit Data Subset Complete"))
