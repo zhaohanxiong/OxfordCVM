@@ -232,7 +232,7 @@ df_plot$x = as.factor(df_plot$x)
 df_plot$name = as.factor(df_plot$name)
 
 # produce plot
-ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) + 
+p = ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) + 
         geom_point(size = 7.5, alpha = 0.25) +
         geom_smooth(orientation = "x", method = "loess", span = 5, 
                     linewidth = 2, se = FALSE, fullrange = TRUE) +
@@ -245,7 +245,7 @@ ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) +
 
 # write plot
 png(file.path(path, "final_plot5_ClinicalVariables.png"), width = 600, height = 600)
-grid.arrange(p1, p2, ncol = 2)
+grid.arrange(p)
 dev.off()
 
 # print ending message
