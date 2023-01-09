@@ -52,10 +52,10 @@ PC_ukb1 = unname(as.matrix(ukb1_norm)) %*% PC_transform
 PC_ukb2 = unname(as.matrix(ukb2_norm)) %*% PC_transform
 
 # create dataframe for this score
-pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = NA)
+pred = data.frame(patid = ukb2$patid, global_pseudotimes2 = NA)
 
 # define number of K for KNN, also transpose ref matrix
-k = 25
+K = 25
 PC_ukb1_transpose = t(PC_ukb1)
 
 # loop through each row and predict score 
@@ -68,7 +68,7 @@ for (i in 1:nrow(pred)) {
   # compute KNN
   diff  = t(PC_ukb2[i, ] - PC_ukb1_transpose[, g_ind])
   dist  = rowMeans(abs(diff))
-  top_k = scores$global_pseudotime[g_ind][order(dist)[1:k]]
+  top_k = scores$global_pseudotime[g_ind][order(dist)[1:K]]
   
   # store result
   pred$global_pseudotimes2[i] = mean(top_k)

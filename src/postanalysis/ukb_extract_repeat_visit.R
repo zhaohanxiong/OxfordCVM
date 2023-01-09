@@ -67,15 +67,15 @@ print(sprintf("Number of New Columns Found in Follow Up: %i (Out of %i)",
 # ------------------------------------------------------------------------------
 # read all new columns from raw ukb
 ukb_all = fread(ukb_data_file, header = TRUE, select = visit2_cols)
-patid_all = as.list(fread(ukb_data_file, header = TRUE, select = c("eid")))[[1]]
+labels_all = fread(ukb_data_file, header = TRUE, 
+                   select = c("eid", "X4080.3.0","X4079.3.0"))
 
 # load 1st visit patient IDs
-labels = read.csv(file.path(path, "labels_select.csv"), header = TRUE)
-patid1 = labels[, 1]
+labels = read.csv(file.path(path, "pseudotimes.csv"), header = TRUE)
 
 # subset rows with patid
-ukb2 = ukb_all[patid_all %in% patid1, ]
-patid2 = patid_all[patid_all %in% patid1]
+ukb2 = ukb_all[labels_all$eid %in% labels$patid, ]
+labels2 = labels_all[labels_all$eid %in% labels$patid, ]
 
 # ------------------------------------------------------------------------------
 # Pre-Process
@@ -95,23 +95,23 @@ ukb2 = apply(ukb2, 2, function(x) {
                         })
 
 # find out rows with too many missing data 
-print(sprintf("Number of Missing Data Before Filtering is %0.1f%%",
-                                        sum(is.na(ukb2))/prod(dim(ukb2))))
-row_filter = rowMeans(is.na(ukb2)) <= 0.10
+print(sprintf("Number of Missing Data Before Filtering is %i (%0.1f%%)",
+                      sum(is.na(ukb2)), sum(is.na(ukb2))/prod(dim(ukb2))*100))
+row_filter = rowMeans(is.na(ukb2)) <= 0.05
 
 # filter out these rows, also filter out patiend ids
 ukb2 = ukb2[row_filter, ]
-repeat_patid = patid2[row_filter]
-print(sprintf("Number of Missing Data After Filtering is %0.1f%%",
-                                        sum(is.na(ukb2))/prod(dim(ukb2))))
+labels2 = labels2[row_filter, ]
+print(sprintf("Number of Missing Data After Filtering is %i (%0.1f%%)",
+                      sum(is.na(ukb2)), sum(is.na(ukb2))/prod(dim(ukb2))*100))
 
 # save non-normalized values
-fwrite(cbind(eid = repeat_patid, ukb2),
+fwrite(cbind(patid = labels2$eid, ukb2),
                             file.path(path, "ukb_num_ft_select_2nd_visit.csv"))
 
 # load 1st visit raw values
 ukb1 = fread(file.path(path, "ukb_num_ft_select.csv"), 
-                                            header = TRUE, select = visit1_cols)
+                                          header = TRUE, select = visit1_cols)
 
 # normalize data with means/sd from previous visit
 data_means = colMeans(ukb1, na.rm = TRUE)
@@ -139,5 +139,3 @@ print(sprintf("Imaging Visit 1: Originally %i Rows and %i Columns",
                                                     nrow(ukb1), ncol(ukb1)))
 print(sprintf("Imaging Visit 2: Extracted %i Rows and %i Columns",
                                                     nrow(ukb2), ncol(ukb2)))
-print("Distribution of Repeat Imaging Patients Per Blood Pressure Group:")
-table(labels$bp_group[labels[, 1] %in% repeat_patid])
