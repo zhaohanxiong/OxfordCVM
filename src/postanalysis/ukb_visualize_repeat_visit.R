@@ -55,7 +55,7 @@ PC_ukb2 = unname(as.matrix(ukb2_norm)) %*% PC_transform
 pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = NA)
 
 # define number of K for KNN, also transpose ref matrix
-k = 1
+k = 25
 PC_ukb1_transpose = t(PC_ukb1)
 
 # loop through each row and predict score 
