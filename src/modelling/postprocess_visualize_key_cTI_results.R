@@ -4,7 +4,7 @@ library(gridExtra)
 library(data.table)
 
 # define data path
-path = "../modelling/NeuroPM/io/"
+path = "NeuroPM/io/"
 
 # load data
 scores = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
@@ -28,7 +28,6 @@ ukb = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"), header=TRU
 # Plot 1 - Distribution of Disease Scores Separated by Group
 # ------------------------------------------------------------------------------
 # produce the plot
-png("plots/final_plot1_ScoreDistribution.png", width = 1000, height = 500)
 p1 = ggplot(scores, aes(y = global_pseudotimes, x = as.factor(bp_group), 
                         fill = as.factor(bp_group))) +
           geom_boxplot(alpha = 0.8) +
@@ -45,7 +44,9 @@ p2 = ggplot(scores, aes(x = global_pseudotimes, fill = as.factor(bp_group))) +
           xlab("Disease Score") + 
           ylab("Density") +
           theme(legend.title = element_blank())
-  
+
+# write plot
+png("io/final_plot1_ScoreDistribution.png", width = 1000, height = 500)
 grid.arrange(p1, p2, ncol = 2, widths = c(1, 1.5))
 dev.off()
 
@@ -80,7 +81,6 @@ auc = sum((tpr[1:(length(intervals) - 1)] +
            tpr[2:length(intervals)]) * diff(1 - fpr) / 2)
 
 # produce the plot
-png("plots/final_plot2_AUROC.png", width = 1000, height = 600)
 p1 = ggplot(scores, aes(y = global_pseudotimes, x = as.factor(bp_group), 
                         fill = as.factor(bp_group))) +
           geom_boxplot() +
@@ -99,6 +99,8 @@ p2 = ggplot(metrics_plot, aes(x = fpr, y = tpr)) +
           ylab("True Positive Rate (Sensitivity)") +
           geom_abline(col = "red")
 
+# write plot
+png("io/final_plot2_AUROC.png", width = 1000, height = 600)
 grid.arrange(p1, p2, ncol = 2, widths = c(1, 1.5))
 dev.off()
 
@@ -106,7 +108,6 @@ dev.off()
 # Plot 3 - Hyperscore vs Blood Pressure Measurements
 # ------------------------------------------------------------------------------
 # produce the plot
-png("plots/final_plot3_BP.png", width = 1000, height = 600)
 p1 = ggplot(scores, aes(x = global_pseudotimes, y = `BPSys.2.0`)) +
           geom_point(aes(color = bp_group), shape = 19, alpha = 0.25, size = 2) +
           geom_smooth(orientation = "x", span = 1.5,
@@ -125,6 +126,8 @@ p2 = ggplot(scores, aes(x = global_pseudotimes, y = `BPDia.2.0`)) +
           ylab("Diastolic Blood Pressure (mmHg)") +
           scale_colour_brewer(palette = "Dark2")
 
+# write plot
+png("io/final_plot3_BP.png", width = 1000, height = 600)
 grid.arrange(p1, p2, ncol = 2)
 dev.off()
 
@@ -155,12 +158,10 @@ weight_plot_sig = merge(aggregate(var_weight_sig$Node_contributions,
 names(weight_plot_sig) = c("Var_Group", "Total_Weighting", "Count")
 weight_plot_sig$Total_Weighting = as.numeric(weight_plot_sig$Total_Weighting)
 weight_plot_sig$Total_Weighting = round(weight_plot_sig$Total_Weighting * 100, 2)
-print(sprintf("----- Significant Variable Weighting Distribution is:"))
+print(sprintf("Significant Variable Weighting Distribution is:"))
 print(weight_plot_sig)
 
 # produce the plot
-png("plots/final_plot4_VariableContribution.png", width = 1000, height = 500)
-
 p1 = ggplot(weight_plot, aes(x = "", y = Total_Weighting, fill = Var_Group)) + 
         geom_bar(width = 1, stat = "identity") + 
         coord_polar("y", start = 0) + 
@@ -178,6 +179,8 @@ p2 = ggplot(weight_plot_sig,
         ggtitle("cTI Significant Variable Weighting Contribution") +
         xlab("") + ylab("")
 
+# write plot
+png("io/final_plot4_VariableContribution.png", width = 1000, height = 500)
 grid.arrange(p1, p2, ncol = 2)
 dev.off()
 
@@ -228,9 +231,6 @@ df_plot$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot$x), ","),
 df_plot$x = as.factor(df_plot$x)
 df_plot$name = as.factor(df_plot$name)
 
-# produce the plot
-png("plots/final_plot5_ClinicalVariables.png", width = 600, height = 600)
-
 # produce plot
 ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) + 
         geom_point(size = 7.5, alpha = 0.25) +
@@ -243,4 +243,11 @@ ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) +
         theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1),
               plot.title = element_text(size = 15, face = "bold"))
 
+# write plot
+png("io/final_plot5_ClinicalVariables.png", width = 600, height = 600)
+grid.arrange(p1, p2, ncol = 2)
 dev.off()
+
+# print ending message
+cat(sprintf("---------- Core Plots Generation Complete"))
+cat("\n")

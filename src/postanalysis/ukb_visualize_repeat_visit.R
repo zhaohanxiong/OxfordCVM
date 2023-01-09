@@ -125,7 +125,7 @@ df_plot2 = data.frame(score = c(df_plot$global_pseudotimes,
                                             each = nrow(df_plot))))
 
 # ------------------------------------------------------------------------------
-# Produce Outputs
+# Produce Output Visualizations
 # ------------------------------------------------------------------------------
 # produce plots
 p1 = ggplot(df_plot2, aes(y = score, x = group, fill = visit)) + 
@@ -133,6 +133,20 @@ p1 = ggplot(df_plot2, aes(y = score, x = group, fill = visit)) +
         ggtitle("1st & 2nd Imaging Visit Hyper Scores") +
         ylab("Hyper Score") + 
         xlab("Blood Pressure Group") +
+        theme(plot.title = element_text(size = 15, face = "bold"))
+
+# start offline plot, arrange multi-plot, then close plot
+png("plots/temp_visit1_vs_2_hyperscore.png", width = 600, height = 600)
+grid.arrange(p1, ncol = 2)
+dev.off()
+
+# produce plots
+p1 = ggplot(df_plot, aes_string(x = var_1st, y = var_2nd)) + 
+        geom_point(size = 7.5, alpha = 0.25, color = "orange") +
+        geom_smooth(span = 15, linewidth = 2, se = TRUE, color = "purple") +
+        ggtitle(sprintf("%s Visit 1 vs 2", toTitleCase(analyze_names[var_i]))) +
+        xlab("Imaging Visit 1") + 
+        ylab("Imaging Visit 2") + 
         theme(plot.title = element_text(size = 15, face = "bold"))
 
 p2 = ggplot(df_plot, aes(x = score_change, y = var_change)) + 

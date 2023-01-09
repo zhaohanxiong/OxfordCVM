@@ -20,12 +20,12 @@ Rscript postprocess_eval_model.R
 # run python trajectory visualization/computation
 python postprocess_traj_compute.py --max_traj_num=5 --overlap_threshold=0.8 --color_by="traj"
 
-# arrange/tidy up files for post-analysis
+# arrange/tidy up files for post-analysis and generate key results
 Rscript postprocess_files.R
+Rscript postprocess_visualize_key_cTI_results
 
 # perform series of post-analysis visualizations
 cd ../postanalysis
-Rscript ukb_visualize_key_cTI_results.R
 Rscript ukb_extract_repeat_visit.R
 
 # run test cases (in root directory)
