@@ -20,11 +20,6 @@ g1 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Background"]
 g2 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Between"]
 g3 = psuedotimes$global_pseudotimes[psuedotimes$bp_group == "Disease"]
 
-# perform t-test between groups (always significant with large samples)
-#t.test(g1, g2) # background vs between
-#t.test(g2, g3) # between vs disease
-#t.test(g1, g3) # background vs disease
-
 # perform quantile differences between groups, % overlap
 g1_box = unname(c(quantile(g1, 0.25), quantile(g1, 0.75))) # background
 g2_box = unname(c(quantile(g2, 0.25), quantile(g2, 0.75))) # between
@@ -134,3 +129,6 @@ print(sprintf("Confusion Matrix:"))
 print(sprintf("(Pred/GT) True  False"))
 print(sprintf("True      %0.1f%% %0.1f%%", tpr[ind]*100, fpr[ind]*100))
 print(sprintf("False     %0.1f%% %0.1f%%", fnr[ind]*100, tnr[ind]*100))
+
+# print ending message
+print(sprintf("---------- Evaluation Complete\n"))

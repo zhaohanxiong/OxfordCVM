@@ -329,4 +329,4 @@ plotly.offline.plot(fig, filename='Trajectory_Paths.html', auto_open=False)
 labels.to_csv("pseudotimes.csv", index=False)
 
 # print message to indicate completion
-print("Python -- Completed Trajectory Isolation")
+print("---------- Trajectory Isolation Complete\n")

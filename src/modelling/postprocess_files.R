@@ -115,3 +115,6 @@ ukb_df_raw = ukb_df_raw[, var_weights$Var1[var_weights$significant]]
 # write the reduced variable data frame to output
 fwrite(ukb_df, file.path(path, "ukb_num_norm_reduced.csv"))
 fwrite(ukb_df_raw, file.path(path, "ukb_num_reduced.csv"))
+
+# print ending message
+print(sprintf("---------- File Cleaning Complete Complete\n"))

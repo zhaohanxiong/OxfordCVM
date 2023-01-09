@@ -89,9 +89,7 @@ ft_raw = ft_raw[, colnames(ft_norm)]
 print(sprintf("Further Filtering Complete"))
 print(sprintf("The Filtered Data Frame is of Size %0.0f by %0.0f",
               nrow(ft_norm), ncol(ft_norm)))
-print(sprintf("----- Distribution of Classes is:"))
-print(table(labels$bp_group))
-print(sprintf("----- Distribution of Variable Groups is:"))
+print(sprintf("Distribution of Variable Groups is:"))
 print(table(var_groups$var_group[var_groups$ukb_var 
                                         %in% colnames(ft_norm)]))
 
@@ -99,3 +97,6 @@ print(table(var_groups$var_group[var_groups$ukb_var
 fwrite(ft_raw, "NeuroPM/io/ukb_num_ft_select.csv")
 fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
 fwrite(labels, "NeuroPM/io/labels_select.csv")
+
+# print ending message
+print(sprintf("---------- Feature Selection Complete\n"))
