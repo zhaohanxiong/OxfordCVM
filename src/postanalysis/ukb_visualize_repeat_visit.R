@@ -69,16 +69,12 @@ for (i in 1:nrow(pred)) {
      # compute KNN
      diff  = t(PC_ukb2[i, ] - PC_ukb1_transpose[, g_ind])
      dist  = rowMeans(abs(diff))
-     top_k = scores1$global_pseudotime[g_ind][order(dist)[1:K]]
+     top_k = scores1$global_pseudotimes[g_ind][order(dist)[1:K]]
      
      # store result
      pred$global_pseudotimes2[i] = mean(top_k)
         
 }
-
-# normalize scores to same range
-pred$global_pseudotimes2 = pred$global_pseudotimes2 - min(pred$global_pseudotimes2)
-pred$global_pseudotimes2 = pred$global_pseudotimes2 / max(pred$global_pseudotimes2)
 
 # ------------------------------------------------------------------------------
 # Merge Data For Analysis
@@ -98,6 +94,12 @@ follow_up = merge(scores_analyze, pred_analyze, by.x = "patid", by.y = "patid")
 groups = c("Between", "Healthy", "Disease")
 follow_up$bp_group = ordered(groups[follow_up$bp_group + 1], groups[c(2, 1, 3)])
 
+# normalize scores to same range
+follow_up$global_pseudotimes2 = follow_up$global_pseudotimes2 - 
+          min(follow_up$global_pseudotimes2) + min(follow_up$global_pseudotimes)
+follow_up$global_pseudotimes2 = follow_up$global_pseudotimes2 / 
+          max(follow_up$global_pseudotimes2) * max(follow_up$global_pseudotimes)
+
 # ------------------------------------------------------------------------------
 # Aggregate Data for Plots
 # ------------------------------------------------------------------------------
@@ -110,47 +112,59 @@ var_2nd = grep(paste0(analyze[var_i], "\\.3\\."),
 # subset and remove missing values
 df_plot = follow_up[, c("bp_group", "global_pseudotimes", "global_pseudotimes2",
                         var_1st, var_2nd)]
-df_plot = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
-
-# compute change in score and change in variable
-df_plot$score_change = df_plot$global_pseudotimes2 - df_plot$global_pseudotimes
-df_plot$var_change = df_plot[, var_2nd] - df_plot[, var_1st]
 
 # convert from wide to long format for the 2 variables
-df_plot2 = data.frame(score = c(df_plot$global_pseudotimes,
+df_plot1 = data.frame(score = c(df_plot$global_pseudotimes,
                                 df_plot$global_pseudotimes2),
                       var   = c(df_plot[, var_1st], df_plot[, var_2nd]),
                       group = rep(df_plot$bp_group, 2),
                       visit = as.factor(rep(c("1st", "2nd"),
                                             each = nrow(df_plot))))
 
+# clean data frame for missing values
+df_plot2 = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
+
+# compute change in score and change in variable
+df_plot2$score_change = df_plot2$global_pseudotimes2 - df_plot2$global_pseudotimes
+df_plot2$var_change = df_plot2[, var_2nd] - df_plot2[, var_1st]
+
 # ------------------------------------------------------------------------------
 # Produce Output Visualizations
 # ------------------------------------------------------------------------------
 # produce plots
-p1 = ggplot(df_plot2, aes(y = score, x = group, fill = visit)) + 
+p1 = ggplot(df_plot1, aes(y = score, x = group, fill = visit)) + 
         geom_boxplot() +
         ggtitle("1st & 2nd Imaging Visit Hyper Scores") +
         ylab("Hyper Score") + 
         xlab("Blood Pressure Group") +
         theme(plot.title = element_text(size = 15, face = "bold"))
+p2 = ggplot(df_plot, aes(x = global_pseudotimes, y = global_pseudotimes2)) + 
+        geom_point(size = 7.5, alpha = 0.25, color = "black") +
+        geom_smooth(method = "lm", linewidth = 2, se = TRUE, fullrange = TRUE,
+                    color = "yellow") +
+        ggtitle("Hyperscore Comparison (Imaging Visit 1 vs 2)") +
+        xlab("Hyperscore Computed at Visit 1") + 
+        ylab("Hyperscore Estimated at Visit 2") + 
+        coord_cartesian(xlim = range(df_plot$pseudotimes),
+                        ylim = range(df_plot$global_pseudotimes2)) +
+        theme(plot.title = element_text(size = 15, face = "bold"))
 
 # start offline plot, arrange multi-plot, then close plot
-png("plots/Validation_FollowUpHyperscore.png", width = 600, height = 1000)
-grid.arrange(p1)
+png("plots/Validation_FollowUpHyperscore.png", width = 1250, height = 750)
+grid.arrange(p1, p2, ncol = 2, widths = c(1, 2))
 dev.off()
 
 # produce plots
-p1 = ggplot(df_plot, aes(x = df_plot[, var_1st], y = df_plot[, var_2nd])) + 
+p1 = ggplot(df_plot2, aes(x = df_plot2[, var_1st], y = df_plot2[, var_2nd])) + 
         geom_point(size = 7.5, alpha = 0.25, color = "orange") +
-        geom_smooth(span = 15, linewidth = 2, se = TRUE, color = "purple") +
+        geom_smooth(method = "lm", linewidth = 2, se = TRUE, color = "purple") +
         ggtitle(sprintf("%s Trend (Visit 1 vs 2)",
                         toTitleCase(analyze_names[var_i]))) +
         xlab("Imaging Visit 1") + 
         ylab("Imaging Visit 2") + 
         theme(plot.title = element_text(size = 15, face = "bold"))
 
-p2 = ggplot(df_plot, aes(x = score_change, y = var_change)) + 
+p2 = ggplot(df_plot2, aes(x = score_change, y = var_change)) + 
         geom_point(size = 7.5, alpha = 0.25, color = "orange") +
         geom_smooth(span = 15, linewidth = 2, se = TRUE, color = "purple") +
         ggtitle(sprintf("Change in %s vs Change in Hyper Score",
