@@ -136,15 +136,16 @@ p1 = ggplot(df_plot2, aes(y = score, x = group, fill = visit)) +
         theme(plot.title = element_text(size = 15, face = "bold"))
 
 # start offline plot, arrange multi-plot, then close plot
-png("plots/temp_visit1_vs_2_hyperscore.png", width = 600, height = 600)
-grid.arrange(p1, ncol = 2)
+png("plots/Validation_FollowUpHyperscore.png", width = 600, height = 1000)
+grid.arrange(p1)
 dev.off()
 
 # produce plots
-p1 = ggplot(df_plot, aes_string(x = var_1st, y = var_2nd)) + 
+p1 = ggplot(df_plot, aes(x = df_plot[, var_1st], y = df_plot[, var_2nd])) + 
         geom_point(size = 7.5, alpha = 0.25, color = "orange") +
         geom_smooth(span = 15, linewidth = 2, se = TRUE, color = "purple") +
-        ggtitle(sprintf("%s Visit 1 vs 2", toTitleCase(analyze_names[var_i]))) +
+        ggtitle(sprintf("%s Trend (Visit 1 vs 2)",
+                        toTitleCase(analyze_names[var_i]))) +
         xlab("Imaging Visit 1") + 
         ylab("Imaging Visit 2") + 
         theme(plot.title = element_text(size = 15, face = "bold"))
@@ -161,6 +162,8 @@ p2 = ggplot(df_plot, aes(x = score_change, y = var_change)) +
         theme(plot.title = element_text(size = 15, face = "bold"))
 
 # start offline plot, arrange multi-plot, then close plot
-png("plots/temp_follow_up.png", width = 1200, height = 600)
+out_name = gsub(" ", "_", analyze_names[var_i])
+png(paste0("plots/Validation_FollowUpVariable_", out_name, ".png"),
+    width = 1200, height = 600)
 grid.arrange(p1, p2, ncol = 2)
 dev.off()

@@ -4,7 +4,7 @@ library(gridExtra)
 library(data.table)
 
 # define input parameters
-i = 10 # index of variable weighting to view: 43, 5, 30, 457, 462
+i = 5 # index of variable weighting to view: 43, 5, 30, 457, 462
 n_traj = 4 # number of trajectories
 
 # # # read input data
@@ -112,7 +112,9 @@ p3 = ggplot(df_plot3, aes(x = x, y = y, group = traj, color = traj)) +
               plot.title = element_text(size = 15, face = "bold"))
 
 # start offline plot
-png("plots/temp_traj.png", width = 1800, height = 600)
+out_name = gsub(" ", "_", toTitleCase(weights$name[i]))
+png(paste0("plots/Validation_Traj_", out_name, ".png"),
+    width = 1800, height = 600)
 
 # mutli-plot
 grid.arrange(p1, p2, p3, ncol = 3)
