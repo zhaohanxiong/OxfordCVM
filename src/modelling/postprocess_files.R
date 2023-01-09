@@ -117,5 +117,5 @@ fwrite(ukb_df, file.path(path, "ukb_num_norm_reduced.csv"))
 fwrite(ukb_df_raw, file.path(path, "ukb_num_reduced.csv"))
 
 # print ending message
-print(sprintf("---------- File Cleaning Complete Complete"))
+cat(sprintf("---------- File Cleaning Complete Complete"))
 cat("\n")

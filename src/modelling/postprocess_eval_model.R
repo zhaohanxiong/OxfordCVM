@@ -131,5 +131,5 @@ print(sprintf("True      %0.1f%% %0.1f%%", tpr[ind]*100, fpr[ind]*100))
 print(sprintf("False     %0.1f%% %0.1f%%", fnr[ind]*100, tnr[ind]*100))
 
 # print ending message
-print(sprintf("---------- Evaluation Complete"))
+cat(sprintf("---------- Evaluation Complete"))
 cat("\n")

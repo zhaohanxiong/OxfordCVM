@@ -98,5 +98,5 @@ fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
 fwrite(labels, "NeuroPM/io/labels_select.csv")
 
 # print ending message
-print(sprintf("---------- Feature Selection Complete"))
+cat(sprintf("---------- Feature Selection Complete"))
 cat("\n")
