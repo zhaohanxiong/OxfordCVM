@@ -86,7 +86,6 @@ ft_raw = ft_raw[, colnames(ft_norm)]
 
 # # # Output
 # display messages to see in terminal
-print(sprintf("Further Filtering Complete"))
 print(sprintf("The Filtered Data Frame is of Size %0.0f by %0.0f",
               nrow(ft_norm), ncol(ft_norm)))
 print(sprintf("Distribution of Variable Groups is:"))
@@ -99,4 +98,5 @@ fwrite(ft_norm, "NeuroPM/io/ukb_num_norm_ft_select.csv")
 fwrite(labels, "NeuroPM/io/labels_select.csv")
 
 # print ending message
-print(sprintf("---------- Feature Selection Complete\n"))
+print(sprintf("---------- Feature Selection Complete"))
+cat("\n")

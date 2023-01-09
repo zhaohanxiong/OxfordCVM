@@ -133,4 +133,5 @@ write.csv(ukb_df[, 1:5], "NeuroPM/io/labels.csv", row.names = FALSE)
 fwrite(ukb_df[, 6:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
 
 # print ending message
-print(sprintf("---------- Initial Data Extraction Complete\n"))
+print(sprintf("---------- Initial Data Extraction Complete"))
+cat("\n")
