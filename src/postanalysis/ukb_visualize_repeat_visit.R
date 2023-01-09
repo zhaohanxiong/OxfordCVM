@@ -3,7 +3,7 @@ library(ggplot2)
 library(R.matlab)
 library(gridExtra)
 library(data.table)
-
+rm(list=ls())
 var_i = 1
 
 # define columns of interest (visit 1 and 2) to this dataframe
@@ -46,20 +46,7 @@ PC_transform = readMat(file.path(path, "PC_Transform.mat"))$Node.Weights
 # Perform KNN Prediction
 # ------------------------------------------------------------------------------
 # prepare reference dataset from visit 1
-PC_ukb1  = unname(as.matrix(ukb1_norm)) %*% PC_transform
-
-if (TRUE) {
-
-  # filter out ill-defined scores
-  f3  = quantile(scores$global_pseudotime[scores$bp_group == 2], 0.25)
-  ind = scores$bp_group == 2 & scores$global_pseudotimes > f3
-  ind = scores$bp_group != 2 | ind
-  
-  # subset reference matrix rows based on new row index filter
-  #PC_ukb1 = PC_ukb1[ind, ]
-  scores1 = scores[ind, ]
-  
-}
+PC_ukb1 = unname(as.matrix(ukb1_norm)) %*% PC_transform
 
 # transform visit 2 data into PC space
 PC_ukb2 = unname(as.matrix(ukb2_norm)) %*% PC_transform
@@ -75,18 +62,22 @@ PC_ukb1_t = t(PC_ukb1)
 for (i in 1:nrow(pred)) {
   
   # only use same bp group as current patient for reference
-  g = scores$bp_group[scores$patid == pred$patid[i]]
-  g_ind = scores1$bp_group == g
+  group_i = scores$bp_group[scores$patid == pred$patid[i]]
+  g_ind = scores$bp_group == group_i
 
   # compute KNN
   diff  = t(PC_ukb2[i, ] - PC_ukb1_t[, g_ind])
   dist  = rowMeans(abs(diff))
-  top_k = scores1$global_pseudotime[g_ind][order(dist)[1:k]]
-  
+  top_k = scores$global_pseudotime[g_ind][order(dist)[1:k]]
+
   # store result
   pred$global_pseudotimes2[i] = mean(top_k)
   
 }
+
+# normalize results
+#pred$global_pseudotimes2 = pred$global_pseudotimes2 - min(pred$global_pseudotimes2)
+#pred$global_pseudotimes2 = pred$global_pseudotimes2 / max(pred$global_pseudotimes2)
 
 # ------------------------------------------------------------------------------
 # Merge Data For Analysis
