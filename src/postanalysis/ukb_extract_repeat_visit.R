@@ -65,18 +65,17 @@ print(sprintf("Number of New Columns Found in Follow Up: %i (Out of %i)",
 # ------------------------------------------------------------------------------
 # Extract Repeat Visit Rows
 # ------------------------------------------------------------------------------
-# load all patient IDs
-all_patid = as.list(fread(ukb_data_file, header = TRUE, select = c("eid")))[[1]]
+# read all new columns from raw ukb
+ukb_all = fread(ukb_data_file, header = TRUE, select = visit2_cols)
+patid_all = as.list(fread(ukb_data_file, header = TRUE, select = c("eid")))[[1]]
 
 # load 1st visit patient IDs
 labels = read.csv(file.path(path, "labels_select.csv"), header = TRUE)
-patid = labels[, 1]
-
-# read all new columns from raw ukb
-ukb_df = fread(ukb_data_file, header = TRUE, select = visit2_cols)
+patid1 = labels[, 1]
 
 # subset rows with patid
-ukb2 = ukb_df[all_patid %in% patid, ]
+ukb2 = ukb_all[patid_all %in% patid1, ]
+patid2 = patid2[patid_all %in% patid1]
 
 # ------------------------------------------------------------------------------
 # Pre-Process
@@ -104,7 +103,7 @@ print(sprintf("Number of Missing Data After Filtering is %0.1f%%",
                                         sum(is.na(ukb2))/prod(dim(ukb2))))
 
 # store patient IDs with sufficient repeat visit information
-repeat_patid = patid[row_filter]
+repeat_patid = patid2[row_filter]
 
 # save non-normalized values
 fwrite(cbind(eid = repeat_patid, ukb2),
