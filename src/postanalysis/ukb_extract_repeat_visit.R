@@ -89,7 +89,7 @@ ukb2 = apply(ukb2, 2, function(x) {
                             z_score = abs(x - mean_val)/std
                             
                             # set outliers as NA
-                            x[z_score > 5] = NA
+                            x[z_score > 10] = NA
                             return(x)
                           
                         })
@@ -120,7 +120,7 @@ ukb2       = sweep(ukb2, 2, data_means, "-")
 ukb2       = sweep(ukb2, 2, data_std, "/")
 
 # remove large z scores
-ukb2[abs(ukb2) > 5] = NA
+ukb2[abs(ukb2) > 10] = NA
 
 # impute data
 ukb2 = apply(ukb2, 2, function(x) {
