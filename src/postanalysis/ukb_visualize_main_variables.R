@@ -57,7 +57,7 @@ p = ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) +
         geom_point(size = 7.5, alpha = 0.25) +
         geom_smooth(orientation = "x", method = "loess", span = 5, 
                     linewidth = 2, se = FALSE, fullrange = TRUE) +
-        ggtitle("Trend of Clinical Variables vs Hyper Score") +
+        ggtitle("Trend of Important Clinical Variables vs Hyper Score") +
         xlab("Hyper Score [0 to 1]") +
         ylab("Clinical Variables (Normalized Z-Score)") +
         labs(color = "Variable Name") +
@@ -65,7 +65,7 @@ p = ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) +
               plot.title = element_text(size = 15, face = "bold"))
 
 # write plot
-png(file.path(path, "final_plot5_ClinicalVariables.png"), width = 600, height = 600)
+png("plots/Validation_MainClinicalVariables.png", width = 600, height = 600)
 grid.arrange(p)
 dev.off()
 
