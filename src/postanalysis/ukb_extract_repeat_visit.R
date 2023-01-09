@@ -75,7 +75,7 @@ patid1 = labels[, 1]
 
 # subset rows with patid
 ukb2 = ukb_all[patid_all %in% patid1, ]
-patid2 = patid2[patid_all %in% patid1]
+patid2 = patid_all[patid_all %in% patid1]
 
 # ------------------------------------------------------------------------------
 # Pre-Process
@@ -94,16 +94,16 @@ ukb2 = apply(ukb2, 2, function(x) {
                           
                         })
 
-# filter out rows with too many missing data and 
+# find out rows with too many missing data 
 print(sprintf("Number of Missing Data Before Filtering is %0.1f%%",
                                         sum(is.na(ukb2))/prod(dim(ukb2))))
 row_filter = rowMeans(is.na(ukb2)) <= 0.10
+
+# filter out these rows, also filter out patiend ids
 ukb2 = ukb2[row_filter, ]
+repeat_patid = patid2[row_filter]
 print(sprintf("Number of Missing Data After Filtering is %0.1f%%",
                                         sum(is.na(ukb2))/prod(dim(ukb2))))
-
-# store patient IDs with sufficient repeat visit information
-repeat_patid = patid2[row_filter]
 
 # save non-normalized values
 fwrite(cbind(eid = repeat_patid, ukb2),
