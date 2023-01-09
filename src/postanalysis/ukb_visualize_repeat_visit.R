@@ -145,7 +145,7 @@ p2 = ggplot(df_plot, aes(x = global_pseudotimes, y = global_pseudotimes2)) +
         ggtitle("Hyperscore Comparison (Imaging Visit 1 vs 2)") +
         xlab("Hyperscore Computed at Visit 1") + 
         ylab("Hyperscore Estimated at Visit 2") + 
-        coord_cartesian(xlim = range(df_plot$pseudotimes),
+        coord_cartesian(xlim = range(df_plot$global_pseudotimes),
                         ylim = range(df_plot$global_pseudotimes2)) +
         theme(plot.title = element_text(size = 15, face = "bold"))
 
