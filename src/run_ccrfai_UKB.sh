@@ -26,7 +26,6 @@ Rscript postprocess_files.R
 # perform series of post-analysis visualizations
 cd ../postanalysis
 Rscript ukb_visualize_key_cTI_results.R
-Rscript ukb_visualize_traj.R
 Rscript ukb_extract_repeat_visit.R
 Rscript ukb_visualize_repeat_visit.R
 
