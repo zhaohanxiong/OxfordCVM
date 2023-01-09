@@ -22,7 +22,7 @@ python postprocess_traj_compute.py --max_traj_num=5 --overlap_threshold=0.8 --co
 
 # arrange/tidy up files for post-analysis and generate key results
 Rscript postprocess_files.R
-Rscript postprocess_visualize_key_cTI_results
+Rscript visualize_key_cTI_results.R
 
 # perform series of post-analysis visualizations
 cd ../postanalysis
