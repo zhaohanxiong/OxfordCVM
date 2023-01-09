@@ -4,7 +4,7 @@ library(R.matlab)
 library(gridExtra)
 library(data.table)
 rm(list=ls())
-var_i = 3
+var_i = 1
 
 # define columns of interest (visit 1 and 2) to this dataframe
 analyze = c("X22423", # LV stroke volume
