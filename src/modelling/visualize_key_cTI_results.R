@@ -183,3 +183,7 @@ p2 = ggplot(weight_plot_sig,
 png(file.path(path, "final_plot4_VariableContribution.png"), width = 1000, height = 500)
 grid.arrange(p1, p2, ncol = 2)
 dev.off()
+
+# print ending message
+cat(sprintf("---------- Core Plots Generation Complete"))
+cat("\n")

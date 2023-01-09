@@ -68,7 +68,3 @@ p = ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) +
 png("plots/Validation_MainClinicalVariables.png", width = 600, height = 600)
 grid.arrange(p)
 dev.off()
-
-# print ending message
-cat(sprintf("---------- Core Plots Generation Complete"))
-cat("\n")
