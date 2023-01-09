@@ -56,7 +56,7 @@ pred = data.frame(patid = ukb2$eid, global_pseudotimes2 = NA)
 
 # define number of K for KNN, also transpose ref matrix
 k = 1
-PC_ukb1_t = t(PC_ukb1)
+PC_ukb1_transpose = t(PC_ukb1)
 
 # loop through each row and predict score 
 for (i in 1:nrow(pred)) {
@@ -66,7 +66,7 @@ for (i in 1:nrow(pred)) {
   g_ind = scores$bp_group == group_i
 
   # compute KNN
-  diff  = t(PC_ukb2[i, ] - PC_ukb1_t[, g_ind])
+  diff  = t(PC_ukb2[i, ] - PC_ukb1_transpose[, g_ind])
   dist  = rowMeans(abs(diff))
   top_k = scores$global_pseudotime[g_ind][order(dist)[1:k]]
 
@@ -74,10 +74,6 @@ for (i in 1:nrow(pred)) {
   pred$global_pseudotimes2[i] = mean(top_k)
   
 }
-
-# normalize results
-#pred$global_pseudotimes2 = pred$global_pseudotimes2 - min(pred$global_pseudotimes2)
-#pred$global_pseudotimes2 = pred$global_pseudotimes2 / max(pred$global_pseudotimes2)
 
 # ------------------------------------------------------------------------------
 # Merge Data For Analysis
@@ -126,11 +122,6 @@ df_plot2 = data.frame(score = c(df_plot$global_pseudotimes,
 # ------------------------------------------------------------------------------
 # Produce Outputs
 # ------------------------------------------------------------------------------
-# perform correlation test
-cortest = cor.test(df_plot$score_change, df_plot$var_change)
-print(sprintf("Pearson Correlation Test: R = %0.1f, p = %0.3f",
-              cortest$estimate, cortest$p.value))
-
 # produce plots
 p1 = ggplot(df_plot2, aes(y = score, x = group, fill = visit)) + 
         geom_boxplot() +
