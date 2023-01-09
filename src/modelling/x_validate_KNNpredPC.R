@@ -107,7 +107,11 @@ for (i in 1:n_folds) {
     eval$knn_dist[j] = mean(dist_j[sorted_ind])
     
   }
-
+  
+  # normalize
+  eval$pred = eval$pred - min(eval$pred)
+  eval$pred = eval$pred / max(eval$pred)
+  
   # compute err
   eval$err = sqrt((eval$pred - eval$gt)**2)
 
@@ -171,8 +175,6 @@ print(aggregate(pseudotimes_full[, c("err", "knn_dist")],
 out_df = data.frame(score_gt   = pseudotimes_full$global_pseudotimes,
                     score_pred = pseudotimes_full$pred_score,
                     bp_group   = pseudotimes_full$bp_group)
-out_df$score_pred = out_df$score_pred - min(out_df$score_pred)
-out_df$score_pred = out_df$score_pred / max(out_df$score_pred)
 
 # write output to file
 write.csv(out_df, file.path(path, "inference_x_val_pred.csv"), row.names = FALSE)
