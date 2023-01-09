@@ -25,7 +25,8 @@ analyze_names = c("LV SV",
 path = "../modelling/NeuroPM/io/"
 
 # load data
-scores = read.csv(file.path(path, "pseudotimes.csv"), header = TRUE)
+scores1 = read.csv(file.path(path, "pseudotimes.csv"), header = TRUE)
+scores2 = read.csv(file.path(path, "2nd_visit_pseudotimes.csv"), header = TRUE)
 
 # load 1st visit values
 ukb1 = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"), 
@@ -34,9 +35,9 @@ ukb1_norm = data.frame(fread(file.path(path, "ukb_num_norm_ft_select.csv"),
                                                                 header = TRUE))
 
 # load 2nd visit values
-ukb2 = data.frame(fread(file.path(path, "ukb_num_ft_select_2nd_visit.csv"), 
+ukb2 = data.frame(fread(file.path(path, "2nd_visit_ukb_num_ft_select.csv"), 
                                                                 header = TRUE))
-ukb2_norm = data.frame(fread(file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"), 
+ukb2_norm = data.frame(fread(file.path(path, "2nd_visit_ukb_num_norm_ft_select.csv"), 
                                                                 header = TRUE))
 
 # load transformation matrix into PC space
@@ -62,13 +63,13 @@ PC_ukb1_transpose = t(PC_ukb1)
 for (i in 1:nrow(pred)) {
         
      # only use same bp group as current patient for reference
-     group_i = scores$bp_group[scores$patid == pred$patid[i]]
-     g_ind = scores$bp_group == group_i
+     group_i = scores1$bp_group[scores1$patid == pred$patid[i]]
+     g_ind = scores1$bp_group == group_i
      
      # compute KNN
      diff  = t(PC_ukb2[i, ] - PC_ukb1_transpose[, g_ind])
      dist  = rowMeans(abs(diff))
-     top_k = scores$global_pseudotime[g_ind][order(dist)[1:K]]
+     top_k = scores1$global_pseudotime[g_ind][order(dist)[1:K]]
      
      # store result
      pred$global_pseudotimes2[i] = mean(top_k)
@@ -83,7 +84,7 @@ pred$global_pseudotimes2 = pred$global_pseudotimes2 / max(pred$global_pseudotime
 # Merge Data For Analysis
 # ------------------------------------------------------------------------------
 # append 1st imaging visit values to original hyper score df
-scores_analyze = cbind(scores, ukb1[, sapply(analyze, function(s) 
+scores_analyze = cbind(scores1, ukb1[, sapply(analyze, function(s) 
                                         grep(s, colnames(ukb1), value = TRUE))])
 
 # append 2nd imaging visit values to original hyper score df

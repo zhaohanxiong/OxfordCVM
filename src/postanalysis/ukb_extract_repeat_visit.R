@@ -107,9 +107,9 @@ print(sprintf("Number of Missing Data After Filtering is %i (%0.1f%%)",
 
 # save non-normalized values
 fwrite(data.frame(cbind(patid = labels2$eid, ukb2)),
-                            file.path(path, "ukb_num_ft_select_2nd_visit.csv"))
+                            file.path(path, "2nd_visit_ukb_num_ft_select.csv"))
 
-# load 1st visit raw values
+# load 1st visit raw values to transfer mean and standard deviation
 ukb1 = fread(file.path(path, "ukb_num_ft_select.csv"), 
                                           header = TRUE, select = visit1_cols)
 
@@ -131,7 +131,12 @@ ukb2 = apply(ukb2, 2, function(x) {
 # ------------------------------------------------------------------------------
 # Write to File
 # ------------------------------------------------------------------------------
-fwrite(data.frame(ukb2), file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"))
+
+# write patient ID and blood pressure (similar to pseudotimes.csv)
+fwrite(labels2, file.path(path, "2nd_visit_pseudotimes.csv"))
+
+# write normailzied variable values
+fwrite(data.frame(ukb2), file.path(path, "2nd_visit_ukb_num_norm_ft_select.csv"))
 
 # display outputs
 print(sprintf("Imaging Visit 1: Originally %i Rows and %i Columns",
