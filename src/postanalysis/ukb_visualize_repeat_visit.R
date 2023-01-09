@@ -60,19 +60,19 @@ PC_ukb1_transpose = t(PC_ukb1)
 
 # loop through each row and predict score 
 for (i in 1:nrow(pred)) {
-  
-  # only use same bp group as current patient for reference
-  group_i = scores$bp_group[scores$patid == pred$patid[i]]
-  g_ind = scores$bp_group == group_i
-
-  # compute KNN
-  diff  = t(PC_ukb2[i, ] - PC_ukb1_transpose[, g_ind])
-  dist  = rowMeans(abs(diff))
-  top_k = scores$global_pseudotime[g_ind][order(dist)[1:K]]
-  
-  # store result
-  pred$global_pseudotimes2[i] = mean(top_k)
-  
+        
+     # only use same bp group as current patient for reference
+     group_i = scores$bp_group[scores$patid == pred$patid[i]]
+     g_ind = scores$bp_group == group_i
+     
+     # compute KNN
+     diff  = t(PC_ukb2[i, ] - PC_ukb1_transpose[, g_ind])
+     dist  = rowMeans(abs(diff))
+     top_k = scores$global_pseudotime[g_ind][order(dist)[1:K]]
+     
+     # store result
+     pred$global_pseudotimes2[i] = mean(top_k)
+        
 }
 
 # normalize scores to same range

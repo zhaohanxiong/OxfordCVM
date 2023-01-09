@@ -26,35 +26,35 @@ visit1_cols_sub = substring(visit1_cols, 1, regexpr("\\.", visit1_cols) - 1)
 # find cols 1st visit contain repeat visit
 for (i in 1:length(visit1_cols_sub)) {
 
-  # find all related columns in original dataframe
-  cols = grep(paste0(visit1_cols_sub[i], "\\."), all_cols, value = TRUE)
+    # find all related columns in original dataframe
+    cols = grep(paste0(visit1_cols_sub[i], "\\."), all_cols, value = TRUE)
 
-  # find if there is instance 3
-  repeat_visits = grep("\\.3\\.\\d", cols, value = TRUE)
+    # find if there is instance 3
+    repeat_visits = grep("\\.3\\.\\d", cols, value = TRUE)
 
-  # if there is repeat visit, replace the column with the updated one
-  if (length(repeat_visits) > 0) {
-    
-    # if there is more than 1 measurement in the repeat visit
-    if (length(repeat_visits) > 1) {
-
-      # query the ukb dataframe
-      ukb_cols = fread(ukb_data_file, header = TRUE, select = repeat_visits)
+    # if there is repeat visit, replace the column with the updated one
+    if (length(repeat_visits) > 0) {
       
-      # find which column has the least number of missing values
-      index = which.min(apply(ukb_cols, 2, function(x) sum(is.na(x))))
+        # if there is more than 1 measurement in the repeat visit
+        if (length(repeat_visits) > 1) {
 
-    } else {
+            # query the ukb dataframe
+            ukb_cols = fread(ukb_data_file, header = TRUE, select = repeat_visits)
+            
+            # find which column has the least number of missing values
+            index = which.min(apply(ukb_cols, 2, function(x) sum(is.na(x))))
 
-      # if there is only one value, then just take the first index
-      index = 1
+        } else {
+
+            # if there is only one value, then just take the first index
+            index = 1
+
+      }
+
+      # update this value in the updated column set
+      visit2_cols[i] = repeat_visits[index]
 
     }
-
-    # update this value in the updated column set
-    visit2_cols[i] = repeat_visits[index]
-
-  }
 
 }
 
@@ -68,7 +68,7 @@ print(sprintf("Number of New Columns Found in Follow Up: %i (Out of %i)",
 # read all new columns from raw ukb
 ukb_all = fread(ukb_data_file, header = TRUE, select = visit2_cols)
 labels_all = fread(ukb_data_file, header = TRUE, 
-                   select = c("eid", "X4080.3.0","X4079.3.0"))
+                   select = c("eid", "X4080.3.0", "X4079.3.0"))
 
 # load 1st visit patient IDs
 labels = read.csv(file.path(path, "pseudotimes.csv"), header = TRUE)
@@ -106,7 +106,7 @@ print(sprintf("Number of Missing Data After Filtering is %i (%0.1f%%)",
                       sum(is.na(ukb2)), sum(is.na(ukb2))/prod(dim(ukb2))*100))
 
 # save non-normalized values
-fwrite(cbind(patid = labels2$eid, ukb2),
+fwrite(data.frame(cbind(patid = labels2$eid, ukb2)),
                             file.path(path, "ukb_num_ft_select_2nd_visit.csv"))
 
 # load 1st visit raw values
@@ -131,11 +131,11 @@ ukb2 = apply(ukb2, 2, function(x) {
 # ------------------------------------------------------------------------------
 # Write to File
 # ------------------------------------------------------------------------------
-fwrite(ukb2, file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"))
+fwrite(data.frame(ukb2), file.path(path, "ukb_num_norm_ft_select_2nd_visit.csv"))
 
 # display outputs
-print(sprintf("---------- Repeat Visit Data Subset Complete"))
 print(sprintf("Imaging Visit 1: Originally %i Rows and %i Columns",
                                                     nrow(ukb1), ncol(ukb1)))
 print(sprintf("Imaging Visit 2: Extracted %i Rows and %i Columns",
                                                     nrow(ukb2), ncol(ukb2)))
+print(sprintf("---------- Repeat Visit Data Subset Complete"))
