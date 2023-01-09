@@ -167,10 +167,14 @@ print(aggregate(pseudotimes_full[, c("err", "knn_dist")],
                 list(pseudotimes_full$bp_group), 
                 function(x) mean(x, na.rm = TRUE)))
 
-# write output to file
+# create output data frame
 out_df = data.frame(score_gt   = pseudotimes_full$global_pseudotimes,
                     score_pred = pseudotimes_full$pred_score,
                     bp_group   = pseudotimes_full$bp_group)
+out_df$score_pred = out_df$score_pred - min(out_df$score_pred)
+out_df$score_pred = out_df$score_pred / max(out_df$score_pred)
+
+# write output to file
 write.csv(out_df, file.path(path, "inference_x_val_pred.csv"), row.names = FALSE)
 
 # generate plot for predicted vs ground truth distribution
