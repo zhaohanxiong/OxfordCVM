@@ -1,8 +1,8 @@
 library(tools)
 library(ggplot2)
-library(R.matlab)
 library(gridExtra)
 library(data.table)
+suppressWarnings(library(R.matlab))
 
 var_i = 1
 
@@ -147,6 +147,18 @@ df_plot3 = aggregate(list(y = df_plot3$var),
 df_plot3$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot3$x), ","), 
                     function(x) mean(as.numeric(x)))
 
+
+# split variable into categories
+df_plot4 = df_plot2
+df_plot4$score_int1 = cut(df_plot4$global_pseudotimes,
+                          breaks = seq(0, 1, length = 5))
+df_plot4$score_int2 = cut(df_plot4$global_pseudotimes2,
+                          breaks = seq(0, 1, length = 5))
+df_plot4 = df_plot4[!is.na(df_plot4$score_int1) & !is.na(df_plot4$score_int2), ]
+df_plot4 = aggregate(list(y = df_plot4$var_change),
+                     by = list(x = df_plot4$score_int1),
+                     "mean")
+
 # ------------------------------------------------------------------------------
 # Produce Output Visualizations
 # ------------------------------------------------------------------------------
@@ -190,11 +202,14 @@ p2 = ggplot(df_plot3, aes(x = x, y = y, colour = visit)) +
         ylab(sprintf("%s", toTitleCase(analyze_names[var_i]))) + 
         scale_fill_brewer(palette = "Dark2") +
         theme(plot.title = element_text(size = 15, face = "bold"))
-p3 = 
+p3 = ggplot(df_plot4, aes(x = score_change, y = var_change, colour = score_int1)) + 
+        geom_point(size = 7.5, alpha = 0.25) +
+        geom_smooth(span = 10, linewidth = 2, se = FALSE, fullrange = TRUE) +
+        theme(plot.title = element_text(size = 15, face = "bold"))
 
 # start offline plot, arrange multi-plot, then close plot
 out_name = gsub(" ", "_", analyze_names[var_i])
 png(paste0("plots/Validation_FollowUpVariable_", out_name, ".png"),
     width = 1800, height = 600)
-grid.arrange(p1, p2, p2, ncol = 3)
+grid.arrange(p1, p2, p3, ncol = 3)
 dev.off()
