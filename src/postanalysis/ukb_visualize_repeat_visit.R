@@ -124,9 +124,28 @@ df_plot1 = data.frame(score = c(df_plot$global_pseudotimes,
 # clean data frame for missing values
 df_plot2 = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
 
+# filter dataframe for outliers
+return_non_outliers = function(x) {
+        lq = quantile(x, 0.25)
+        uq = quantile(x, 0.75)
+        iqr = uq - lq
+        return(x >= lq - 1.5*iqr & x <= uq + 1.5*iqr)
+}
+df_plot2 = df_plot2[return_non_outliers(df_plot2[, var_1st]), ]
+df_plot2 = df_plot2[return_non_outliers(df_plot2[, var_2nd]), ]
+
 # compute change in score and change in variable
 df_plot2$score_change = df_plot2$global_pseudotimes2 - df_plot2$global_pseudotimes
 df_plot2$var_change = df_plot2[, var_2nd] - df_plot2[, var_1st]
+
+# compute averages per hyper score interval for the variables
+df_plot3 = df_plot1[!is.na(df_plot1$var), ]
+df_plot3$score_int = cut(df_plot3$score, breaks = seq(0, 1, length = 21))
+df_plot3 = aggregate(list(y = df_plot3$var),
+                     by = list(x = df_plot3$score_int, visit = df_plot3$visit),
+                     "mean")
+df_plot3$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot3$x), ","), 
+                    function(x) mean(as.numeric(x)))
 
 # ------------------------------------------------------------------------------
 # Produce Output Visualizations
@@ -140,11 +159,10 @@ p1 = ggplot(df_plot1, aes(y = score, x = group, fill = visit)) +
         theme(plot.title = element_text(size = 15, face = "bold"))
 p2 = ggplot(df_plot, aes(x = global_pseudotimes, y = global_pseudotimes2)) + 
         geom_point(size = 7.5, alpha = 0.25, color = "black") +
-        geom_smooth(method = "lm", linewidth = 2, se = TRUE, fullrange = TRUE,
-                    color = "yellow") +
+        geom_smooth(method = "lm", linewidth = 2, se = TRUE, color = "yellow") +
         ggtitle("Hyperscore Comparison (Imaging Visit 1 vs 2)") +
-        xlab("Hyperscore Computed at Visit 1") + 
-        ylab("Hyperscore Estimated at Visit 2") + 
+        xlab("Hyperscore Computed at Visit 1 (2014+)") + 
+        ylab("Hyperscore Estimated at Visit 2 (2019+)") + 
         coord_cartesian(xlim = range(df_plot$global_pseudotimes),
                         ylim = range(df_plot$global_pseudotimes2)) +
         theme(plot.title = element_text(size = 15, face = "bold"))
@@ -156,28 +174,27 @@ dev.off()
 
 # produce plots
 p1 = ggplot(df_plot2, aes(x = df_plot2[, var_1st], y = df_plot2[, var_2nd])) + 
-        geom_point(size = 7.5, alpha = 0.25, color = "orange") +
-        geom_smooth(method = "lm", linewidth = 2, se = TRUE, color = "purple") +
-        ggtitle(sprintf("%s Trend (Visit 1 vs 2)",
+        geom_point(size = 7.5, alpha = 0.25, color = "black") +
+        geom_smooth(method = "lm", linewidth = 2, se = TRUE, color = "yellow") +
+        ggtitle(sprintf("%s Comparison (Imaging Visit 1 vs 2)",
                         toTitleCase(analyze_names[var_i]))) +
-        xlab("Imaging Visit 1") + 
-        ylab("Imaging Visit 2") + 
+        xlab("Imaging Visit 1 (2014+)") + 
+        ylab("Imaging Visit 2 (2019+)") + 
         theme(plot.title = element_text(size = 15, face = "bold"))
-
-p2 = ggplot(df_plot2, aes(x = score_change, y = var_change)) + 
-        geom_point(size = 7.5, alpha = 0.25, color = "orange") +
-        geom_smooth(span = 15, linewidth = 2, se = TRUE, color = "purple") +
-        ggtitle(sprintf("Change in %s vs Change in Hyper Score",
+p2 = ggplot(df_plot3, aes(x = x, y = y, colour = visit)) + 
+        geom_point(size = 7.5, alpha = 0.25) +
+        geom_smooth(span = 25, linewidth = 2, se = FALSE, fullrange = TRUE) +
+        ggtitle(sprintf("%s vs Hyper Score (Imaging Visit 1 vs 2))",
                         toTitleCase(analyze_names[var_i]))) +
-        xlab("Change in Hyper Score (2nd - 1st Imaging Visit)") + 
-        ylab(sprintf("Change in %s (2nd - 1st Imaging Visit)",
-                     toTitleCase(analyze_names[var_i]))) + 
+        xlab("Hyper Score") + 
+        ylab(sprintf("%s", toTitleCase(analyze_names[var_i]))) + 
         scale_fill_brewer(palette = "Dark2") +
         theme(plot.title = element_text(size = 15, face = "bold"))
+p3 = 
 
 # start offline plot, arrange multi-plot, then close plot
 out_name = gsub(" ", "_", analyze_names[var_i])
 png(paste0("plots/Validation_FollowUpVariable_", out_name, ".png"),
-    width = 1200, height = 600)
-grid.arrange(p1, p2, ncol = 2)
+    width = 1800, height = 600)
+grid.arrange(p1, p2, p2, ncol = 3)
 dev.off()
