@@ -2,7 +2,7 @@ library(tools)
 library(ggplot2)
 library(gridExtra)
 library(data.table)
-suppressWarnings(library(R.matlab))
+suppressMessages(library(R.matlab))
 
 var_i = 1
 
@@ -151,12 +151,12 @@ df_plot3$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot3$x), ","),
 # Statistical Analysis for Change in Visit 1 vs 2 for Variable & Score
 # ------------------------------------------------------------------------------
 # create model for var vs hyperscore (1st imaging visit complete dataset)
-
+print(head(scores_analyze[, c("global_pseudotimes", var_1st, var_2nd)]))
 # use model to predict variable given score change
 
 # evaluate this vs the actual variable in visit 2
 
-print(head(df_plot2))
+# generate bland altman plot to compare 2 distributions
 
 # ------------------------------------------------------------------------------
 # Produce Output Visualizations

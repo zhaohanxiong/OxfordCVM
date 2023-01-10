@@ -1,5 +1,5 @@
 library(data.table)
-library(R.matlab)
+suppressMessages(library(R.matlab))
 
 # load outputs from NeuroPM
 path = "NeuroPM/io"
