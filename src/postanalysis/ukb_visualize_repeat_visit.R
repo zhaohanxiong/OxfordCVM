@@ -192,6 +192,7 @@ p1 = ggplot(df_plot1, aes(y = score, x = group, fill = visit)) +
         ggtitle("1st & 2nd Imaging Visit Hyper Scores") +
         ylab("Hyper Score") + 
         xlab("Blood Pressure Group") +
+        scale_fill_brewer(palette = "Set2") +
         theme(plot.title = element_text(size = 15, face = "bold"))
 
 p2 = ggplot(df_plot, aes(x = global_pseudotimes, y = global_pseudotimes2)) + 
@@ -223,12 +224,12 @@ p1 = ggplot(df_plot2, aes(x = df_plot2[, var_1st], y = df_plot2[, var_2nd])) +
 
 p2 = ggplot(df_plot3, aes(x = x, y = y, colour = visit)) + 
         geom_point(size = 7.5, alpha = 0.25) +
-        geom_smooth(span = 25, linewidth = 2, se = FALSE, fullrange = TRUE) +
+        geom_smooth(span = 25, linewidth = 3, se = FALSE, fullrange = TRUE) +
         ggtitle(sprintf("%s vs Hyper Score (Imaging Visit 1 vs 2))",
                         toTitleCase(analyze_names[var_i]))) +
         xlab("Hyper Score (Split into Fixed Intervals)") + 
         ylab(sprintf("%s", toTitleCase(analyze_names[var_i]))) + 
-        scale_fill_brewer(palette = "Dark2") +
+        scale_color_brewer(palette = "Set2") +
         theme(plot.title = element_text(size = 20, face = "bold"),
               axis.text = element_text(size = 15),
               axis.title = element_text(size = 15, face = "bold"))
@@ -258,7 +259,7 @@ p4 = ggplot(df_plot4, aes(x = avg, y = diff)) +
                    colour = "deepskyblue2", linewidth = 3) +
         annotate("text",
                  x = max(df_plot4$avg), y = mean_diff + c(yy, -yy),
-                 label = c("Mean:", sprintf("%.3f", mean_diff)),
+                 label = c("Bias:", sprintf("%.3f", mean_diff)),
                  size = 8, hjust = 1, colour = "deepskyblue3") +
         geom_hline(yintercept = l_bound, colour = "tomato1", linewidth = 3) +
         annotate("text",
