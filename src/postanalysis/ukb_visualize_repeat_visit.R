@@ -18,6 +18,14 @@ analyze_names = c("LV Stroke Volume",
                   "Hippocampus Volume (Left)",
                   "Hippocampus Volume (Right)")
 
+# helper function for outlier removal
+return_non_outliers = function(x) {
+        lq = quantile(x, 0.25)
+        uq = quantile(x, 0.75)
+        iqr = uq - lq
+        return(x >= lq - 1.5*iqr & x <= uq + 1.5*iqr)
+}
+
 # ------------------------------------------------------------------------------
 # Load Data
 # ------------------------------------------------------------------------------
@@ -125,12 +133,6 @@ df_plot1 = data.frame(score = c(df_plot$global_pseudotimes,
 df_plot2 = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
 
 # filter dataframe for outliers
-return_non_outliers = function(x) {
-        lq = quantile(x, 0.25)
-        uq = quantile(x, 0.75)
-        iqr = uq - lq
-        return(x >= lq - 1.5*iqr & x <= uq + 1.5*iqr)
-}
 df_plot2 = df_plot2[return_non_outliers(df_plot2[, var_1st]), ]
 df_plot2 = df_plot2[return_non_outliers(df_plot2[, var_2nd]), ]
 
@@ -178,10 +180,12 @@ y2_pred = follow_up[, var_1st] + y2_pred - y1_fit
 # create data frame for plotting, add terms, and clean df
 df_plot4 = data.frame(var_true = follow_up[, var_2nd],
                       var_pred = y2_pred)
+df_plot4 = df_plot4[!is.na(df_plot4$var_true) & !is.na(df_plot4$var_pred), ]
+df_plot4 = df_plot4[return_non_outliers(df_plot4$var_true), ]
+df_plot4 = df_plot4[return_non_outliers(df_plot4$var_pred), ]
 df_plot4$err = abs(df_plot4$var_pred - df_plot4$var_true) / df_plot4$var_true
 df_plot4$avg = (df_plot4$var_true + df_plot4$var_pred) / 2
 df_plot4$diff = df_plot4$var_true - df_plot4$var_pred
-df_plot4 = df_plot4[!is.na(df_plot4$var_true) & !is.na(df_plot4$var_pred), ]
 
 # ------------------------------------------------------------------------------
 # Produce Output Visualizations
