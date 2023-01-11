@@ -134,10 +134,6 @@ return_non_outliers = function(x) {
 df_plot2 = df_plot2[return_non_outliers(df_plot2[, var_1st]), ]
 df_plot2 = df_plot2[return_non_outliers(df_plot2[, var_2nd]), ]
 
-# compute change in score and change in variable
-df_plot2$score_change = df_plot2$global_pseudotimes2 - df_plot2$global_pseudotimes
-df_plot2$var_change = df_plot2[, var_2nd] - df_plot2[, var_1st]
-
 # compute averages per hyper score interval for the variables
 df_plot3 = df_plot1[!is.na(df_plot1$var), ]
 df_plot3$score_int = cut(df_plot3$score, breaks = seq(0, 1, length = 21))
@@ -150,13 +146,42 @@ df_plot3$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot3$x), ","),
 # ------------------------------------------------------------------------------
 # Statistical Analysis for Change in Visit 1 vs 2 for Variable & Score
 # ------------------------------------------------------------------------------
-# create model for var vs hyperscore (1st imaging visit complete dataset)
-print(head(scores_analyze[, c("global_pseudotimes", var_1st, var_2nd)]))
-# use model to predict variable given score change
+# extract training data for hyper score and variable at visit 1
+x = scores_analyze[!is.na(scores_analyze[, var_1st]), c("global_pseudotimes")]
+y = scores_analyze[!is.na(scores_analyze[, var_1st]), c(var_1st)]
 
-# evaluate this vs the actual variable in visit 2
+# aggregate data into intervals for smoother fit into model
+data = aggregate(list(y = y), 
+                 by = list(x = cut(x, breaks = seq(0, 1, length = 21))),
+                 "mean")
+data$x = sapply(strsplit(gsub("\\(|\\]", "", data$x), ","), 
+                function(x) mean(as.numeric(x)))
 
-# generate bland altman plot to compare 2 distributions
+# fit loess model for interval-averaged var vs hyperscore intervals
+model = loess(y ~ x, data = data, span = 1, 
+              se = TRUE, control = loess.control(surface = "direct"))
+
+# use model to predict visit 1 fitted to the loess curve
+y1_fit = predict(model, 
+                 newdata = data.frame(x = follow_up$global_pseudotimes))
+
+# use model to predict variable givven hyper score in visit 2
+y2_pred = predict(model,
+                  newdata = data.frame(x = follow_up$global_pseudotimes2))
+
+# since we are using an interval-averaged model, we want to apply the change
+# of the hyperscore (from visit 1 to 2) with the corresponding expected change
+# in the variable value (visit 1) to the variable at visit 2 given we know
+# the anticipated change from the fitted loess curve
+y2_pred = follow_up[, var_1st] + y2_pred - y1_fit
+
+# create data frame for plotting, add terms, and clean df
+df_plot4 = data.frame(var_true = follow_up[, var_2nd],
+                      var_pred = y2_pred)
+df_plot4$err = abs(df_plot4$var_pred - df_plot4$var_true) / df_plot4$var_true
+df_plot4$avg = (df_plot4$var_true + df_plot4$var_pred) / 2
+df_plot4$diff = df_plot4$var_true - df_plot4$var_pred
+df_plot4 = df_plot4[!is.na(df_plot4$var_true) & !is.na(df_plot4$var_pred), ]
 
 # ------------------------------------------------------------------------------
 # Produce Output Visualizations
@@ -168,8 +193,9 @@ p1 = ggplot(df_plot1, aes(y = score, x = group, fill = visit)) +
         ylab("Hyper Score") + 
         xlab("Blood Pressure Group") +
         theme(plot.title = element_text(size = 15, face = "bold"))
+
 p2 = ggplot(df_plot, aes(x = global_pseudotimes, y = global_pseudotimes2)) + 
-        geom_point(size = 7.5, alpha = 0.25, color = "black") +
+        geom_point(size = 7.5, alpha = 0.1, color = "black") +
         geom_smooth(method = "lm", linewidth = 2, se = TRUE, color = "yellow") +
         ggtitle("Hyperscore Comparison (Imaging Visit 1 vs 2)") +
         xlab("Hyperscore Computed at Visit 1 (2014+)") + 
@@ -191,20 +217,72 @@ p1 = ggplot(df_plot2, aes(x = df_plot2[, var_1st], y = df_plot2[, var_2nd])) +
                         toTitleCase(analyze_names[var_i]))) +
         xlab("Imaging Visit 1 (2014+)") + 
         ylab("Imaging Visit 2 (2019+)") + 
-        theme(plot.title = element_text(size = 15, face = "bold"))
+        theme(plot.title = element_text(size = 20, face = "bold"),
+              axis.text = element_text(size = 15),
+              axis.title = element_text(size = 15, face = "bold"))
+
 p2 = ggplot(df_plot3, aes(x = x, y = y, colour = visit)) + 
         geom_point(size = 7.5, alpha = 0.25) +
         geom_smooth(span = 25, linewidth = 2, se = FALSE, fullrange = TRUE) +
         ggtitle(sprintf("%s vs Hyper Score (Imaging Visit 1 vs 2))",
                         toTitleCase(analyze_names[var_i]))) +
-        xlab("Hyper Score") + 
+        xlab("Hyper Score (Split into Fixed Intervals)") + 
         ylab(sprintf("%s", toTitleCase(analyze_names[var_i]))) + 
         scale_fill_brewer(palette = "Dark2") +
-        theme(plot.title = element_text(size = 15, face = "bold"))
+        theme(plot.title = element_text(size = 20, face = "bold"),
+              axis.text = element_text(size = 15),
+              axis.title = element_text(size = 15, face = "bold"))
+
+p3 = ggplot(df_plot4, aes(x = var_true, y = var_pred)) + 
+        geom_point(size = 7.5, alpha = 0.5, color = "violet") +
+        geom_smooth(method = "lm", linewidth = 2, se = TRUE, color = "yellow") +
+        ggtitle(sprintf("Accuracy of Hyper Score for Inferring %s (Visit 2)",
+                        toTitleCase(analyze_names[var_i]))) +
+        xlab(sprintf("True Value of %s",
+                     toTitleCase(analyze_names[var_i]))) +
+        ylab(sprintf("Hyper Score-Inferred Value of %s",
+                     toTitleCase(analyze_names[var_i]))) +
+        theme(plot.title = element_text(size = 20, face = "bold"),
+              axis.text = element_text(size = 15),
+              axis.title = element_text(size = 15, face = "bold"))
+
+mean_diff = mean(df_plot4$diff)
+sd_diff = sd(df_plot4$diff) * 1.05
+u_bound = mean_diff + (1.96 * sd_diff)
+l_bound = mean_diff - (1.96 * sd_diff)
+yy = round(abs(diff(range(df_plot4$diff))) * 0.02)
+
+p4 = ggplot(df_plot4, aes(x = avg, y = diff)) +
+        geom_point(size = 7.5, alpha = 0.1) +
+        geom_hline(yintercept = mean_diff,
+                   colour = "deepskyblue2", linewidth = 3) +
+        annotate("text",
+                 x = max(df_plot4$avg), y = mean_diff + c(yy, -yy),
+                 label = c("Mean:", sprintf("%.3f", mean_diff)),
+                 size = 8, hjust = 1, colour = "deepskyblue3") +
+        geom_hline(yintercept = l_bound, colour = "tomato1", linewidth = 3) +
+        annotate("text",
+                 x = max(df_plot4$avg), y = l_bound + c(yy, -yy),
+                 label = c("-1.96SD:", sprintf("%.1f", l_bound)),
+                 size = 8, hjust = 1, colour = "tomato3") +
+        geom_hline(yintercept = u_bound, colour = "tomato", linewidth = 3) +
+        annotate("text",
+                 x = max(df_plot4$avg), y = u_bound + c(yy, -yy),
+                 label = c("+1.96SD:", sprintf("%.1f", u_bound)),
+                 size = 8, hjust = 1, colour = "tomato3") +
+        ggtitle(sprintf("Bland-Altman (Accuracy of Hyper Score for Inferring %s)",
+                        toTitleCase(analyze_names[var_i]))) +
+        xlab(sprintf("Average of %s (Prediction vs Ground Truth)",
+                        toTitleCase(analyze_names[var_i]))) +
+        ylab(sprintf("Difference of %s (Prediction vs Ground Truth)",
+                        toTitleCase(analyze_names[var_i]))) +
+        theme(plot.title = element_text(size = 20, face = "bold"),
+              axis.text = element_text(size = 15),
+              axis.title = element_text(size = 15, face = "bold"))
 
 # start offline plot, arrange multi-plot, then close plot
 out_name = gsub(" ", "_", analyze_names[var_i])
 png(paste0("plots/Validation_FollowUpVariable_", out_name, ".png"),
-    width = 1200, height = 600)
-grid.arrange(p1, p2, ncol = 2)
+    width = 1500, height = 1500)
+grid.arrange(p1, p2, p3, p4, ncol = 2)
 dev.off()
