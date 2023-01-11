@@ -219,6 +219,8 @@ p1 = ggplot(df_plot2, aes(x = df_plot2[, var_1st], y = df_plot2[, var_2nd])) +
         xlab("Imaging Visit 1 (2014+)") + 
         ylab("Imaging Visit 2 (2019+)") + 
         theme(plot.title = element_text(size = 20, face = "bold"),
+              legend.text = element_text(size = 10),
+              legend.title = element_text(size = 10, face = "bold"),
               axis.text = element_text(size = 15),
               axis.title = element_text(size = 15, face = "bold"))
 
@@ -231,12 +233,21 @@ p2 = ggplot(df_plot3, aes(x = x, y = y, colour = visit)) +
         ylab(sprintf("%s", toTitleCase(analyze_names[var_i]))) + 
         scale_color_brewer(palette = "Set2") +
         theme(plot.title = element_text(size = 20, face = "bold"),
+              legend.text = element_text(size = 15),
+              legend.title = element_text(size = 15, face = "bold"),
               axis.text = element_text(size = 15),
               axis.title = element_text(size = 15, face = "bold"))
+
+cortest = cor.test(df_plot4$var_true, df_plot4$var_pred)
 
 p3 = ggplot(df_plot4, aes(x = var_true, y = var_pred)) + 
         geom_point(size = 7.5, alpha = 0.5, color = "violet") +
         geom_smooth(method = "lm", linewidth = 2, se = TRUE, color = "yellow") +
+        annotate("text",
+                 x = max(df_plot4$var_true), y = min(df_plot4$var_pred),
+                 label = sprintf("Pearson Correlation: %.2f (p = %.3f)",
+                                 cortest$estimate, cortest$p.value),
+                 size = 8, hjust = 1, colour = "black") +
         ggtitle(sprintf("Accuracy of Hyper Score for Inferring %s (Visit 2)",
                         toTitleCase(analyze_names[var_i]))) +
         xlab(sprintf("True Value of %s",
@@ -252,6 +263,7 @@ sd_diff = sd(df_plot4$diff) * 1.05
 u_bound = mean_diff + (1.96 * sd_diff)
 l_bound = mean_diff - (1.96 * sd_diff)
 yy = round(abs(diff(range(df_plot4$diff))) * 0.02)
+err = mean(abs(df_plot4$var_true - df_plot4$var_pred) / df_plot4$var_true)
 
 p4 = ggplot(df_plot4, aes(x = avg, y = diff)) +
         geom_point(size = 7.5, alpha = 0.1) +
@@ -271,6 +283,10 @@ p4 = ggplot(df_plot4, aes(x = avg, y = diff)) +
                  x = max(df_plot4$avg), y = u_bound + c(yy, -yy),
                  label = c("+1.96SD:", sprintf("%.1f", u_bound)),
                  size = 8, hjust = 1, colour = "tomato3") +
+        annotate("text",
+                 x = max(df_plot4$avg), y = max(df_plot4$diff),
+                 label = sprintf("Mean Err: %.1f%%", err * 100),
+                 size = 8, hjust = 1, colour = "black") +
         ggtitle(sprintf("Bland-Altman (Accuracy of Hyper Score for Inferring %s)",
                         toTitleCase(analyze_names[var_i]))) +
         xlab(sprintf("Average of %s (Prediction vs Ground Truth)",
