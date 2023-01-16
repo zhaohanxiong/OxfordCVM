@@ -233,6 +233,10 @@ dev.off()
 p1 = ggplot(df_plot2, aes(x = df_plot2[, var_1st], y = df_plot2[, var_2nd])) + 
         geom_point(size = 7.5, alpha = 0.25, color = "black") +
         geom_smooth(method = "lm", linewidth = 2, se = TRUE, color = "yellow") +
+        annotate("text",
+                 x = min(df_plot2[, var_1st]), y = max(df_plot2[, var_2nd]),
+                 label = sprintf("N = %i", nrow(df_plot2)),
+                 size = 8, hjust = 0, colour = "black") +
         ggtitle(sprintf("%s (Visit 1 vs 2)",
                         toTitleCase(analyze_names[var_i]))) +
         xlab("Imaging Visit 1 (2014+)") + 
