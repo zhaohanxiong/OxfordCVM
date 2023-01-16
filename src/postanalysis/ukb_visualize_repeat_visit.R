@@ -167,7 +167,7 @@ model = loess(y ~ x, data = data, span = 1,
 y1_fit = predict(model, 
                  newdata = data.frame(x = follow_up$global_pseudotimes))
 
-# use model to predict variable givven hyper score in visit 2
+# use model to predict variable given hyper score in visit 2
 y2_pred = predict(model,
                   newdata = data.frame(x = follow_up$global_pseudotimes2))
 
@@ -176,6 +176,7 @@ y2_pred = predict(model,
 # in the variable value (visit 1) to the variable at visit 2 given we know
 # the anticipated change from the fitted loess curve
 y2_pred = follow_up[, var_1st] + y2_pred - y1_fit
+y2_pred = ifelse(y2_pred > 0, y2_pred, NA)
 
 # create data frame for plotting, add terms, and clean df
 df_plot4 = data.frame(var_true = follow_up[, var_2nd],
@@ -183,7 +184,10 @@ df_plot4 = data.frame(var_true = follow_up[, var_2nd],
 df_plot4 = df_plot4[!is.na(df_plot4$var_true) & !is.na(df_plot4$var_pred), ]
 df_plot4 = df_plot4[return_non_outliers(df_plot4$var_true), ]
 df_plot4 = df_plot4[return_non_outliers(df_plot4$var_pred), ]
-df_plot4$err = abs(df_plot4$var_pred - df_plot4$var_true) / df_plot4$var_true
+
+# compute error measures
+df_plot4$rmse = sqrt(mean((df_plot4$var_pred - df_plot4$var_true)**2))
+df_plot4$err = abs(df_plot4$var_pred - df_plot4$var_true)/df_plot4$var_true*100
 df_plot4$avg = (df_plot4$var_true + df_plot4$var_pred) / 2
 df_plot4$diff = df_plot4$var_true - df_plot4$var_pred
 
@@ -218,7 +222,7 @@ dev.off()
 p1 = ggplot(df_plot2, aes(x = df_plot2[, var_1st], y = df_plot2[, var_2nd])) + 
         geom_point(size = 7.5, alpha = 0.25, color = "black") +
         geom_smooth(method = "lm", linewidth = 2, se = TRUE, color = "yellow") +
-        ggtitle(sprintf("%s Comparison (Imaging Visit 1 vs 2)",
+        ggtitle(sprintf("%s (Visit 1 vs 2)",
                         toTitleCase(analyze_names[var_i]))) +
         xlab("Imaging Visit 1 (2014+)") + 
         ylab("Imaging Visit 2 (2019+)") + 
@@ -231,7 +235,7 @@ p1 = ggplot(df_plot2, aes(x = df_plot2[, var_1st], y = df_plot2[, var_2nd])) +
 p2 = ggplot(df_plot3, aes(x = x, y = y, colour = visit)) + 
         geom_point(size = 7.5, alpha = 0.25) +
         geom_smooth(span = 25, linewidth = 3, se = FALSE, fullrange = TRUE) +
-        ggtitle(sprintf("%s vs Hyper Score (Imaging Visit 1 vs 2))",
+        ggtitle(sprintf("%s vs Hyper Score (Visit 1 vs 2)",
                         toTitleCase(analyze_names[var_i]))) +
         xlab("Hyper Score (Split into Fixed Intervals)") + 
         ylab(sprintf("%s", toTitleCase(analyze_names[var_i]))) + 
@@ -252,11 +256,11 @@ p3 = ggplot(df_plot4, aes(x = var_true, y = var_pred)) +
                  label = sprintf("Pearson Correlation: %.2f (p = %.3f)",
                                  cortest$estimate, cortest$p.value),
                  size = 8, hjust = 1, colour = "black") +
-        ggtitle(sprintf("Accuracy of Hyper Score for Inferring %s (Visit 2)",
+        ggtitle(sprintf("Accuracy of Hyper Score for Predicting %s \n(Visit 2)",
                         toTitleCase(analyze_names[var_i]))) +
         xlab(sprintf("True Value of %s",
                      toTitleCase(analyze_names[var_i]))) +
-        ylab(sprintf("Hyper Score-Inferred Value of %s",
+        ylab(sprintf("Predicted Value of %s based on Hyper Score",
                      toTitleCase(analyze_names[var_i]))) +
         theme(plot.title = element_text(size = 20, face = "bold"),
               axis.text = element_text(size = 15),
@@ -267,7 +271,6 @@ sd_diff = sd(df_plot4$diff) * 1.05
 u_bound = mean_diff + (1.96 * sd_diff)
 l_bound = mean_diff - (1.96 * sd_diff)
 yy = round(abs(diff(range(df_plot4$diff))) * 0.02)
-err = mean(abs(df_plot4$var_true - df_plot4$var_pred) / df_plot4$var_true)
 
 p4 = ggplot(df_plot4, aes(x = avg, y = diff)) +
         geom_point(size = 7.5, alpha = 0.1) +
@@ -289,10 +292,10 @@ p4 = ggplot(df_plot4, aes(x = avg, y = diff)) +
                  size = 8, hjust = 1, colour = "tomato3") +
         annotate("text",
                  x = max(df_plot4$avg), y = max(df_plot4$diff),
-                 label = sprintf("Mean Err: %.1f%%", err * 100),
+                 label = sprintf("RMSE: %.1f (%.0f%%)",
+                                 mean(df_plot4$rmse), mean(df_plot4$err)),
                  size = 8, hjust = 1, colour = "black") +
-        ggtitle(sprintf("Bland-Altman (Accuracy of Hyper Score for Inferring %s)",
-                        toTitleCase(analyze_names[var_i]))) +
+        ggtitle(sprintf("Bland-Altman Distribution Comparison")) +
         xlab(sprintf("Average of %s (Prediction vs Ground Truth)",
                         toTitleCase(analyze_names[var_i]))) +
         ylab(sprintf("Difference of %s (Prediction vs Ground Truth)",
