@@ -4,7 +4,7 @@ library(gridExtra)
 library(data.table)
 suppressMessages(library(R.matlab))
 
-var_i = 1
+var_i = 5
 
 # define columns of interest (visit 1 and 2) to this dataframe
 analyze = c("X22423", # LV stroke volume
@@ -15,8 +15,8 @@ analyze = c("X22423", # LV stroke volume
 analyze_names = c("LV Stroke Volume",
                   "LV End Diastolic Volume",
                   "White Matter Hyperintensity",
-                  "Hippocampus Volume (Left)",
-                  "Hippocampus Volume (Right)")
+                  "Hippocampus Volume",
+                  "Hippocampus Volume")
 
 # helper function for outlier removal
 return_non_outliers = function(x) {
@@ -111,11 +111,22 @@ follow_up$global_pseudotimes2 = follow_up$global_pseudotimes2 /
 # ------------------------------------------------------------------------------
 # Aggregate Data for Plots
 # ------------------------------------------------------------------------------
+
 # define 2 variable columns to analyze
 var_1st = grep(paste0(analyze[var_i], "\\.2\\."),
                colnames(follow_up), value = TRUE)
 var_2nd = grep(paste0(analyze[var_i], "\\.3\\."),
                colnames(follow_up), value = TRUE)
+
+# if hippocampus, average the two columns into one
+if (analyze[var_i] == "X25019" | analyze[var_i] == "X25020") {
+
+        follow_up[, var_1st] = 
+                (follow_up[, "X25019.2.0"] + follow_up[, "X25020.2.0"]) / 2
+        follow_up[, var_2nd] =
+                (follow_up[, "X25019.3.0"] + follow_up[, "X25020.3.0"]) / 2
+
+}    
 
 # subset and remove missing values
 df_plot = follow_up[, c("bp_group", "global_pseudotimes", "global_pseudotimes2",
