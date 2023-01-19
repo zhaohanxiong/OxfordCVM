@@ -46,28 +46,30 @@ time_events = time_events(ia);
 
 %% Survival analysis (survival probability - cumulative hazard)
 %%%% Circulatory deaths without events
+sex_analysis = 0;
 events = 0;
 selected_group = circ_death_ids;
 tag = 'circ_deaths';
-[stats_bp] = extract_survival_bp(ukb_outcomes,selected_group,bp_group,events,events_ids,age_events,tag);
-[stats_hs] = extract_survival_hs(ukb_outcomes,selected_group,global_pseudotimes,events,events_ids,age_events,tag);
+[stats_bp,~,~,~] = extract_survival_bp(ukb_outcomes,sex,selected_group,bp_group,events,events_ids,age_events,sex_analysis,tag);
+[stats_hs,~,~,~] = extract_survival_hs(ukb_outcomes,sex,selected_group,global_pseudotimes,events,events_ids,age_events,sex_analysis,tag);
 %%%% Circulatory deaths with events
 events = 1;
 selected_group = [circ_death_ids;events_ids];
 tag = 'circ_deaths_events';
-[stats_bp] = extract_survival_bp(ukb_outcomes,selected_group,bp_group,events,events_ids,age_events,tag);
-[stats_hs] = extract_survival_hs(ukb_outcomes,selected_group,global_pseudotimes,events,events_ids,age_events,tag);
+[stats_bp,~,~,~] = extract_survival_bp(ukb_outcomes,sex,selected_group,bp_group,events,events_ids,age_events,sex_analysis,tag);
+[stats_hs,~,~,~] = extract_survival_hs(ukb_outcomes,sex,selected_group,global_pseudotimes,events,events_ids,age_events,sex_analysis,tag);
 %%%% All-cause deaths
 events = 0;
 selected_group = death_ids;
 tag = 'allcause_deaths';
-[stats_bp] = extract_survival_bp(ukb_outcomes,selected_group,bp_group,events,events_ids,age_events,tag);
-[stats_hs] = extract_survival_hs(ukb_outcomes,selected_group,global_pseudotimes,events,events_ids,age_events,tag);
+[stats_bp,~,~,~] = extract_survival_bp(ukb_outcomes,sex,selected_group,bp_group,events,events_ids,age_events,sex_analysis,tag);
+[stats_hs,~,~,~] = extract_survival_hs(ukb_outcomes,sex,selected_group,global_pseudotimes,events,events_ids,age_events,sex_analysis,tag);
 
-%% Gender analysis
+%% Sex analysis
 %%%% Circulatory deaths with events
+sex_analysis = 1;
 events = 1;
 selected_group = [circ_death_ids;events_ids];
 tag = 'circ_deaths_events';
-[stats_bp] = extract_survival_bp_sex(ukb_outcomes,sex,selected_group,bp_group,events,events_ids,age_events,tag);
-[stats_hs] = extract_survival_hs_sex(ukb_outcomes,sex,selected_group,global_pseudotimes,events,events_ids,age_events,tag);
+[stats_bp,stats_bp_sex,stats_female,stats_male] = extract_survival_bp(ukb_outcomes,sex,selected_group,bp_group,events,events_ids,age_events,sex_analysis,tag);
+[stats_hs,stats_hs_sex,stats_female,stats_male] = extract_survival_hs(ukb_outcomes,sex,selected_group,global_pseudotimes,events,events_ids,age_events,sex_analysis,tag);
