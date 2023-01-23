@@ -135,6 +135,8 @@ if (analyze[var_i] == "X25019" | analyze[var_i] == "X25020") {
 # subset and remove missing values
 df_plot = follow_up[, c("bp_group", "global_pseudotimes", "global_pseudotimes2",
                         var_1st, var_2nd)]
+df_plot = df_plot[return_non_outliers(df_plot[, var_1st]), ]
+df_plot = df_plot[return_non_outliers(df_plot[, var_2nd]), ]
 
 # clean data frame for missing values
 df_plot = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
@@ -187,14 +189,20 @@ y2_pred = predict(model,
 # in the variable value (visit 1) to the variable at visit 2 given we know
 # the anticipated change from the fitted loess curve
 y2_pred = follow_up[, var_1st] + y2_pred - y1_fit
-y2_pred = ifelse(y2_pred > 0, y2_pred, NA)
 
 # create data frame for plotting, add terms, and clean df
 df_plot4 = data.frame(var_true = follow_up[, var_2nd],
                       var_pred = y2_pred)
 df_plot4 = df_plot4[!is.na(df_plot4$var_true) & !is.na(df_plot4$var_pred), ]
-df_plot4 = df_plot4[return_non_outliers(df_plot4$var_true), ]
-df_plot4 = df_plot4[return_non_outliers(df_plot4$var_pred), ]
+
+# if white matter hyperintensities
+if (analyze[var_i] == "X25781" | analyze[var_i] == "X25781") {
+    df_plot[, var_1st] = 10**df_plot[, var_1st]
+    df_plot[, var_2nd] = 10**df_plot[, var_2nd]
+    df_plot3$y = 10**df_plot3$y
+    df_plot4$var_true = 10**df_plot4$var_true
+    df_plot4$var_pred = 10**df_plot4$var_pred
+}
 
 # compute error measures
 df_plot4$rmse = sqrt(mean((df_plot4$var_pred - df_plot4$var_true)**2))
