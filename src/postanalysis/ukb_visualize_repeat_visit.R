@@ -4,7 +4,7 @@ library(gridExtra)
 library(data.table)
 suppressMessages(library(R.matlab))
 
-var_i = 5
+var_i = 3
 
 # define columns of interest (visit 1 and 2) to this dataframe
 analyze = c("X22423", # LV stroke volume
@@ -118,19 +118,26 @@ var_1st = grep(paste0(analyze[var_i], "\\.2\\."),
 var_2nd = grep(paste0(analyze[var_i], "\\.3\\."),
                colnames(follow_up), value = TRUE)
 
+# if white matter hyperintensities
+if (analyze[var_i] == "X25781" | analyze[var_i] == "X25781") {
+    follow_up[, var_1st] = log10(follow_up[, var_1st])
+    follow_up[, var_2nd] = log10(follow_up[, var_2nd])
+}
+
 # if hippocampus, average the two columns into one
 if (analyze[var_i] == "X25019" | analyze[var_i] == "X25020") {
-
-        follow_up[, var_1st] = 
-                (follow_up[, "X25019.2.0"] + follow_up[, "X25020.2.0"]) / 2
-        follow_up[, var_2nd] =
-                (follow_up[, "X25019.3.0"] + follow_up[, "X25020.3.0"]) / 2
-
-}    
+    follow_up[, var_1st] = 
+            (follow_up[, "X25019.2.0"] + follow_up[, "X25020.2.0"]) / 2
+    follow_up[, var_2nd] =
+            (follow_up[, "X25019.3.0"] + follow_up[, "X25020.3.0"]) / 2
+}
 
 # subset and remove missing values
 df_plot = follow_up[, c("bp_group", "global_pseudotimes", "global_pseudotimes2",
                         var_1st, var_2nd)]
+
+# clean data frame for missing values
+df_plot = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
 
 # convert from wide to long format for the 2 variables
 df_plot1 = data.frame(score = c(df_plot$global_pseudotimes,
@@ -139,13 +146,6 @@ df_plot1 = data.frame(score = c(df_plot$global_pseudotimes,
                       group = rep(df_plot$bp_group, 2),
                       visit = as.factor(rep(c("1st", "2nd"),
                                             each = nrow(df_plot))))
-
-# clean data frame for missing values
-df_plot2 = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
-
-# filter dataframe for outliers
-df_plot2 = df_plot2[return_non_outliers(df_plot2[, var_1st]), ]
-df_plot2 = df_plot2[return_non_outliers(df_plot2[, var_2nd]), ]
 
 # compute averages per hyper score interval for the variables
 df_plot3 = df_plot1[!is.na(df_plot1$var), ]
@@ -160,8 +160,8 @@ df_plot3$x = sapply(strsplit(gsub("\\(|\\]", "", df_plot3$x), ","),
 # Statistical Analysis for Change in Visit 1 vs 2 for Variable & Score
 # ------------------------------------------------------------------------------
 # extract training data for hyper score and variable at visit 1
-x = scores_analyze[!is.na(scores_analyze[, var_1st]), c("global_pseudotimes")]
-y = scores_analyze[!is.na(scores_analyze[, var_1st]), c(var_1st)]
+x = follow_up[!is.na(follow_up[, var_1st]), c("global_pseudotimes")]
+y = follow_up[!is.na(follow_up[, var_1st]), c(var_1st)]
 
 # aggregate data into intervals for smoother fit into model
 data = aggregate(list(y = y), 
@@ -230,12 +230,12 @@ grid.arrange(p1, p2, ncol = 2, widths = c(1, 2))
 dev.off()
 
 # produce plots
-p1 = ggplot(df_plot2, aes(x = df_plot2[, var_1st], y = df_plot2[, var_2nd])) + 
+p1 = ggplot(df_plot, aes(x = df_plot[, var_1st], y = df_plot[, var_2nd])) + 
         geom_point(size = 7.5, alpha = 0.25, color = "black") +
         geom_smooth(method = "lm", linewidth = 2, se = TRUE, color = "yellow") +
         annotate("text",
-                 x = min(df_plot2[, var_1st]), y = max(df_plot2[, var_2nd]),
-                 label = sprintf("N = %i", nrow(df_plot2)),
+                 x = min(df_plot[, var_1st]), y = max(df_plot[, var_2nd]),
+                 label = sprintf("N = %i", nrow(df_plot)),
                  size = 8, hjust = 0, colour = "black") +
         ggtitle(sprintf("%s (Visit 1 vs 2)",
                         toTitleCase(analyze_names[var_i]))) +
@@ -285,7 +285,7 @@ mean_diff = mean(df_plot4$diff)
 sd_diff = sd(df_plot4$diff) * 1.05
 u_bound = mean_diff + (1.96 * sd_diff)
 l_bound = mean_diff - (1.96 * sd_diff)
-yy = round(abs(diff(range(df_plot4$diff))) * 0.02)
+yy = abs(diff(range(df_plot4$diff))) * 0.02
 
 p4 = ggplot(df_plot4, aes(x = avg, y = diff)) +
         geom_point(size = 7.5, alpha = 0.1) +
