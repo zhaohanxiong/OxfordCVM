@@ -4,8 +4,6 @@ library(gridExtra)
 library(data.table)
 suppressMessages(library(R.matlab))
 
-var_i = 3
-
 # define columns of interest (visit 1 and 2) to this dataframe
 analyze = c("X22423", # LV stroke volume
             "X22421", # LV end diastole volume
@@ -17,6 +15,22 @@ analyze_names = c("LV Stroke Volume",
                   "White Matter Hyperintensity",
                   "Hippocampus Volume",
                   "Hippocampus Volume")
+
+# take input arguments
+args = commandArgs(trailingOnly = TRUE)
+
+if (length(args) > 1) { # too many
+     stop("Too Many Input Arguments >:( (MAX = 1)")
+     quit(save = "no")
+} else if (length(args) == 1) { # 1 arg
+     var_i = round(as.numeric(args[1]))
+     if (!(var_i <= length(analyze) & var_i > 0)) {
+        stop(sprintf("Invalid Argument >:( (INPUT MUST BE INT 1:%i)",
+                     length(analyze)))
+     }
+} else { # default args
+     var_i = 1
+}
 
 # helper function for outlier removal
 return_non_outliers = function(x) {
@@ -135,11 +149,11 @@ if (analyze[var_i] == "X25019" | analyze[var_i] == "X25020") {
 # subset and remove missing values
 df_plot = follow_up[, c("bp_group", "global_pseudotimes", "global_pseudotimes2",
                         var_1st, var_2nd)]
+
+# clean data frame for missing values and outliers
+df_plot = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
 df_plot = df_plot[return_non_outliers(df_plot[, var_1st]), ]
 df_plot = df_plot[return_non_outliers(df_plot[, var_2nd]), ]
-
-# clean data frame for missing values
-df_plot = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
 
 # convert from wide to long format for the 2 variables
 df_plot1 = data.frame(score = c(df_plot$global_pseudotimes,

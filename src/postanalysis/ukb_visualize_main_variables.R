@@ -27,7 +27,7 @@ df_conc = data.frame(x = rep(scores$global_pseudotimes, length(vars)),
                      name = rep(var_names, each = nrow(scores)))
 
 # partition hyper scores into intervals (could be variable)
-df_conc$x = cut(df_conc$x, breaks = seq(0, 1, length = 21))
+df_conc$x = cut(df_conc$x, breaks = seq(0, 1, length = 11))
 
 # iterate all the variables and compile into one dataframe
 for (i in 1:length(vars)) {
