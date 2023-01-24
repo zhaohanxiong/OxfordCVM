@@ -12,7 +12,7 @@ analyze = c("X22423", # LV stroke volume
             "X25020") # Hippocampus volume (right)
 analyze_names = c("LV Stroke Volume",
                   "LV End Diastolic Volume",
-                  "White Matter Hyperintensity",
+                  "log(White Matter Hyperintensity)",
                   "Hippocampus Volume",
                   "Hippocampus Volume")
 
@@ -146,14 +146,14 @@ if (analyze[var_i] == "X25019" | analyze[var_i] == "X25020") {
             (follow_up[, "X25019.3.0"] + follow_up[, "X25020.3.0"]) / 2
 }
 
+# clean data frame for missing values and outliers
+follow_up = follow_up[!is.na(follow_up[, var_1st]) & !is.na(follow_up[, var_2nd]), ]
+follow_up = follow_up[return_non_outliers(follow_up[, var_1st]), ]
+follow_up = follow_up[return_non_outliers(follow_up[, var_2nd]), ]
+
 # subset and remove missing values
 df_plot = follow_up[, c("bp_group", "global_pseudotimes", "global_pseudotimes2",
                         var_1st, var_2nd)]
-
-# clean data frame for missing values and outliers
-df_plot = df_plot[!is.na(df_plot[, var_1st]) & !is.na(df_plot[, var_2nd]), ]
-df_plot = df_plot[return_non_outliers(df_plot[, var_1st]), ]
-df_plot = df_plot[return_non_outliers(df_plot[, var_2nd]), ]
 
 # convert from wide to long format for the 2 variables
 df_plot1 = data.frame(score = c(df_plot$global_pseudotimes,
