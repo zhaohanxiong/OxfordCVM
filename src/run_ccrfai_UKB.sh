@@ -27,18 +27,14 @@ Rscript visualize_key_cTI_results.R
 # perform series of post-analysis visualizations
 cd ../postanalysis
 Rscript ukb_visualize_main_variables.R
-Rscript ukb_extract_repeat_visit.R
 
+Rscript ukb_extract_repeat_visit.R
 Rscript ukb_visualize_repeat_visit.R 1
 Rscript ukb_visualize_repeat_visit.R 2
 Rscript ukb_visualize_repeat_visit.R 3
 Rscript ukb_visualize_repeat_visit.R 5
 
-Rscript ukb_visualize_traj.R 43 3
 Rscript ukb_visualize_traj.R 5 3
-Rscript ukb_visualize_traj.R 30 3
-Rscript ukb_visualize_traj.R 457 3
-Rscript ukb_visualize_traj.R 462 3
 
 # run test cases (in root directory)
 cd ../..

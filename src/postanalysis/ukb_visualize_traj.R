@@ -12,7 +12,7 @@ if (length(args) != 2 & length(args) != 0) { # not 2 or 0
 } else if (length(args) == 2) { # 1 arg
      i = round(as.numeric(args[1]))
      n_traj = round(as.numeric(args[2]))
-     if (!(i <= 100 & i > 0 & n_traj < 5 & n_traj > 0)) {
+     if (!(i <= 500 & i > 0 & n_traj < 5 & n_traj > 0)) {
         stop("Invalid Argument >:( (1st INPUT MUST BE INT 1:100, 2nd INPUT MUST BE INT 0:5)")
      }
 } else { # default args

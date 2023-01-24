@@ -133,7 +133,7 @@ var_2nd = grep(paste0(analyze[var_i], "\\.3\\."),
                colnames(follow_up), value = TRUE)
 
 # if white matter hyperintensities
-if (analyze[var_i] == "X25781" | analyze[var_i] == "X25781") {
+if (analyze[var_i] == "X25781") {
     follow_up[, var_1st] = log10(follow_up[, var_1st])
     follow_up[, var_2nd] = log10(follow_up[, var_2nd])
 }
@@ -210,13 +210,13 @@ df_plot4 = data.frame(var_true = follow_up[, var_2nd],
 df_plot4 = df_plot4[!is.na(df_plot4$var_true) & !is.na(df_plot4$var_pred), ]
 
 # if white matter hyperintensities
-if (analyze[var_i] == "X25781" | analyze[var_i] == "X25781") {
-    df_plot[, var_1st] = 10**df_plot[, var_1st]
-    df_plot[, var_2nd] = 10**df_plot[, var_2nd]
-    df_plot3$y = 10**df_plot3$y
-    df_plot4$var_true = 10**df_plot4$var_true
-    df_plot4$var_pred = 10**df_plot4$var_pred
-}
+#if (analyze[var_i] == "X25781" | analyze[var_i] == "X25781") {
+#   df_plot[, var_1st] = 10**df_plot[, var_1st]
+#    df_plot[, var_2nd] = 10**df_plot[, var_2nd]
+#    df_plot3$y = 10**df_plot3$y
+#    df_plot4$var_true = 10**df_plot4$var_true
+#    df_plot4$var_pred = 10**df_plot4$var_pred
+#}
 
 # compute error measures
 df_plot4$rmse = sqrt(mean((df_plot4$var_pred - df_plot4$var_true)**2))
