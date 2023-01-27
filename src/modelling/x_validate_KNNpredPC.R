@@ -1,11 +1,11 @@
 library(data.table)
-library(R.matlab)
+suppressMessages(library(R.matlab))
 
 # load outputs from NeuroPM
 path = "NeuroPM/io"
 
 # set K (for KNN)
-K = 1
+K = 25
 
 # load pseudotime scores
 pseudotimes_full = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
@@ -70,18 +70,13 @@ for (i in 1:n_folds) {
   ref_data = unname(as.matrix(ukb_df[-ind_i, ])) %*% PC_transform
 
   # compute subset index of which have well defined disease scores
-  max_background = max(pseudotimes$global_pseudotimes[
-                                            pseudotimes$bp_group == 1])
-  min_disease = min(pseudotimes$global_pseudotimes[
-                                            pseudotimes$bp_group == 2])
+  #f1 = quantile(pseudotimes$global_pseudotimes[pseudotimes$bp_group == 1], 1)
+  #f2 = quantile(pseudotimes$global_pseudotimes[pseudotimes$bp_group == 2], 0)
 
-  # filter out ill-defined scores tune these two numbers below depending 
-  # on distribution to improve results
-  new_ind_i = (ref_label < (min_disease * 5) | 
-               ref_label > (max_background * 0.25)) & (ref_group != 0)
-  #new_ind_i = c(which(ref_group == 1),
-  #              sample(which(ref_group == 2), sum(ref_group == 1)))
-  
+  # filter out ill-defined scores
+  #ind1 = (ref_label <= f1 | ref_label >= f2) & (ref_group != 0)
+  new_ind_i = (ref_group != 0)
+
   # subset rows based on new row index filter
   ref_label = ref_label[new_ind_i]
   ref_group = ref_group[new_ind_i]
@@ -112,7 +107,11 @@ for (i in 1:n_folds) {
     eval$knn_dist[j] = mean(dist_j[sorted_ind])
     
   }
-
+  
+  # normalize
+  eval$pred = eval$pred - min(eval$pred)
+  eval$pred = eval$pred / max(eval$pred)
+  
   # compute err
   eval$err = sqrt((eval$pred - eval$gt)**2)
 
@@ -172,10 +171,12 @@ print(aggregate(pseudotimes_full[, c("err", "knn_dist")],
                 list(pseudotimes_full$bp_group), 
                 function(x) mean(x, na.rm = TRUE)))
 
-# write output to file
+# create output data frame
 out_df = data.frame(score_gt   = pseudotimes_full$global_pseudotimes,
                     score_pred = pseudotimes_full$pred_score,
                     bp_group   = pseudotimes_full$bp_group)
+
+# write output to file
 write.csv(out_df, file.path(path, "inference_x_val_pred.csv"), row.names = FALSE)
 
 # generate plot for predicted vs ground truth distribution

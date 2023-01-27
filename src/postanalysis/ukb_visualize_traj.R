@@ -3,9 +3,22 @@ library(ggplot2)
 library(gridExtra)
 library(data.table)
 
-# define input parameters
-i = 10 # index of variable weighting to view: 43, 5, 30, 457, 462
-n_traj = 4 # number of trajectories
+# take input arguments
+args = commandArgs(trailingOnly = TRUE)
+
+if (length(args) != 2 & length(args) != 0) { # not 2 or 0
+     stop("Incorrect Number of Input Arguments >:( (NEED 2: i, traj)")
+     quit(save = "no")
+} else if (length(args) == 2) { # 1 arg
+     i = round(as.numeric(args[1]))
+     n_traj = round(as.numeric(args[2]))
+     if (!(i <= 500 & i > 0 & n_traj < 5 & n_traj > 0)) {
+        stop("Invalid Argument >:( (1st INPUT MUST BE INT 1:100, 2nd INPUT MUST BE INT 0:5)")
+     }
+} else { # default args
+     i = 5 # index of variable weighting to view: 43, 5, 30, 457, 462
+     n_traj = 3 # number of trajectories
+}
 
 # # # read input data
 # define data path
@@ -112,7 +125,9 @@ p3 = ggplot(df_plot3, aes(x = x, y = y, group = traj, color = traj)) +
               plot.title = element_text(size = 15, face = "bold"))
 
 # start offline plot
-png("plots/temp_traj.png", width = 1800, height = 600)
+out_name = gsub(" ", "_", toTitleCase(weights$name[i]))
+png(paste0("plots/Validation_Traj_", out_name, ".png"),
+    width = 1800, height = 600)
 
 # mutli-plot
 grid.arrange(p1, p2, p3, ncol = 3)
