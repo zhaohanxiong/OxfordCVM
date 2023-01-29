@@ -1,4 +1,9 @@
+# load functions
+setwd("..")
+setwd("modelling")
 source("preprocess_utils.R")
+setwd("..")
+setwd("postanalysis")
 
 ## Selecting specific outcomes from the whole UKB set
 

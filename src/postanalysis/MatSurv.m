@@ -540,7 +540,10 @@ else % Creat KM-Plot
             end
             
         end
-        
+%         RT_X(:,1) = DATA.GROUPS(1).KM_ALL(1,3) - RT_X(:,1);
+%         RT_X(:,2) = DATA.GROUPS(2).KM_ALL(1,3) - RT_X(:,2);
+%         RT_X(:,3) = DATA.GROUPS(3).KM_ALL(1,3) - RT_X(:,3);
+%         
         % Color OptionsFor Risk Table
         if ischar(options.RT_Color) && strcmpi('same',options.RT_Color)
             cMAP_RT = cMAP;
