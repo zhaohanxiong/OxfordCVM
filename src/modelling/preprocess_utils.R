@@ -510,24 +510,20 @@ return_clean_df = function(df, threshold_col, threshold_row, ignore_cols = c()) 
   print(sprintf("Percentage NA Before Cleaning: %0.1f%%", 
                                           sum(is.na(df))/prod(dim(df))*100))
   
-  df_excluded = df[, ignore_cols]
-  df_included = df[, -ignore_cols]
-  
   # turn empty string cells in to NA
-  df_included[df_included == ""] = NA
+  df[df == ""] = NA
 
   # keep columns with under 50% missing data
-  df_included = df_included[, colMeans(is.na(df_included)) <= threshold_col]
+  df = df[, colMeans(is.na(df)) <= threshold_col]
 
   # keep rows with under 5% missing data
-  df_excluded = df_excluded[rowMeans(is.na(df_included)) <= threshold_row, ]
-  df_included = df_included[rowMeans(is.na(df_included)) <= threshold_row, ]
+  df = df[rowMeans(is.na(df)) <= threshold_row, ]
   
   # only perform cleaning on numeric columns
   if (length(ignore_cols) > 0) {
     
     # assign numeric columns only to new temp dataframe
-    temp = df_included
+    temp = df[, -ignore_cols]
     
     # filter out any column which are all 0s, if column is full of 0s, this 
     # will break the PCA algorithm. Mask out NAs when finding zeros
@@ -536,13 +532,9 @@ return_clean_df = function(df, threshold_col, threshold_row, ignore_cols = c()) 
     temp = temp[, !zero_cols]
     
     # reassign via column concatenation, moving character columns to the front
-    df = cbind(df_excluded, temp)
+    df = cbind(df[, ignore_cols], temp)
     
-    } else {
-  
-    df = cbind(df_excluded, df_included)
-    
-    }
+  }
   
   # display % missing values before cleaning
   print(sprintf("Percentage NA After Cleaning: %0.1f%%", 

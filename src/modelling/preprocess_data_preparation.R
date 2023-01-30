@@ -40,13 +40,15 @@ rm(ukb)
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
 
+ukb_df = cbind(ukb_df[,1,drop=F],ukb_df[,4,drop=F],ukb_df[,2:3],ukb_df[,5:ncol(ukb_df)])
+
 # remove outliers
-ukb_df[, 2:ncol(ukb_df)] = return_remove_outlier(data =
-                                                    ukb_df[, 2:ncol(ukb_df)])
+ukb_df[, 3:ncol(ukb_df)] = return_remove_outlier(data =
+                                                    ukb_df[, 3:ncol(ukb_df)])
 
 # clean dataset of rows/columns with too many missing values
 ukb_df = return_clean_df(df = ukb_df, threshold_col = 0.5, threshold_row = 0.05,
-                         ignore_cols = c(1,which(colnames(ukb_df) == c("Sex")),which(colnames(ukb_df) == c("31-0.0"))))
+                         ignore_cols = c(1,2))
 
 # remove rows with missing blood pressure values
 ukb_df = ukb_df[(!is.na(ukb_df$`BPSys-2.0`)) & (!is.na(ukb_df$`BPDia-2.0`)),]
@@ -56,7 +58,7 @@ print(sprintf("Cleaned Data Frame is of Size %0.0f by %0.0f",
                                                     nrow(ukb_df), ncol(ukb_df)))
 
 # write raw dataframe to file so we can check pre-normalization values
-fwrite(ukb_df[, 6:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")
+fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")
 
 # get corresponding vector of labels depending on criteria background (1), 
 # target (2), between (0). The first 4 columns are now ID/label columns
@@ -69,7 +71,7 @@ print("Distribution of Patients Per Group")
 print(table(ukb_df$bp_group))
 
 # remove columns which contain the same value
-ukb_df[,4:ncol(ukb_df)] = return_remove_single_value_columns(data = ukb_df[,4:ncol(ukb_df)])
+ukb_df[,3:ncol(ukb_df)] = return_remove_single_value_columns(data = ukb_df[,3:ncol(ukb_df)])
 
 # write to output (imaging centres)
 loc_var = "54-2.0"
@@ -77,24 +79,24 @@ loc = data.frame(loc_var = ukb_df[, loc_var])
 fwrite(loc, "NeuroPM/io/loc.csv")
 
 # mean and standard deviation normalization for all feature columns (from 5th)
-ukb_df[, 7:ncol(ukb_df)] = return_normalize_zscore(data = 
-                                                     ukb_df[, 7:ncol(ukb_df)])
+ukb_df[, 6:ncol(ukb_df)] = return_normalize_zscore(data = 
+                                                     ukb_df[, 6:ncol(ukb_df)])
 
 # further filtering outliers
-ukb_df[, 7:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 7:ncol(ukb_df)], 
+ukb_df[, 6:ncol(ukb_df)] = return_remove_large_zscores(ukb_df[, 6:ncol(ukb_df)], 
                                                        sd_threshold = 5)
 
 # impute data
-ukb_df[, 7:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 7:ncol(ukb_df)], 
+ukb_df[, 6:ncol(ukb_df)] = return_imputed_data(data = ukb_df[, 6:ncol(ukb_df)], 
                                                method = "median")
 
 # filter again to remove low standard deviation variables
-ukb_df = cbind(ukb_df[, 1:6], 
-               return_remove_low_sd(data = ukb_df[, 7:ncol(ukb_df)]))
+ukb_df = cbind(ukb_df[, 1:5], 
+               return_remove_low_sd(data = ukb_df[, 6:ncol(ukb_df)]))
 
 # write to output (covariates)
 cov = return_covariates(ukb_df, covariate = c("31-0.0", "21003-2.0"))
-fwrite(cov, "NeuroPM/io/cov.csv")
+write.csv(cov, "NeuroPM/io/cov.csv",row.names = FALSE) #fwrite(cov, "NeuroPM/io/cov.csv")
 
 # remove columns which we dont want influence the model
 ukb_df = edit_ukb_columns(ukb_df, 
@@ -109,17 +111,17 @@ ukb_df = edit_ukb_columns(ukb_df,
           )
 
 # remove duplicate variable instances
-ukb_df = cbind(ukb_df[, 1:6], 
-               remove_ukb_duplicate_instances(data = ukb_df[, 7:ncol(ukb_df)]))
+ukb_df = cbind(ukb_df[, 1:5], 
+               remove_ukb_duplicate_instances(data = ukb_df[, 6:ncol(ukb_df)]))
 
 # display final dataframe size
 print(sprintf("Final Data Frame is of Size %0.0f by %0.0f", 
                                                     nrow(ukb_df), ncol(ukb_df)))
 print(sprintf("Final Number of Missing Data: %0.f", sum(is.na(ukb_df))))
 print(sprintf("Final Distribution is E(x) = %0.3f +- %0.3f [%0.3f, %0.3f]",
-                   mean(as.matrix(ukb_df[, 7:ncol(ukb_df)])),
-                   sd(as.matrix(ukb_df[, 7:ncol(ukb_df)])),
-                   min(ukb_df[, 7:ncol(ukb_df)]),max(ukb_df[, 7:ncol(ukb_df)])))
+                   mean(as.matrix(ukb_df[, 6:ncol(ukb_df)])),
+                   sd(as.matrix(ukb_df[, 6:ncol(ukb_df)])),
+                   min(ukb_df[, 6:ncol(ukb_df)]),max(ukb_df[, 6:ncol(ukb_df)])))
 
 # display number of rows after sampling
 print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f", 
@@ -129,8 +131,8 @@ print(sprintf("Subset Data Frame is of Size %0.0f by %0.0f",
 ukb_df$Sex = ifelse(ukb_df$Sex == 1, "Male", "Female")
 
 # write to output (data & labels)
-write.csv(ukb_df[, 1:6], "NeuroPM/io/labels.csv", row.names = FALSE)
-fwrite(ukb_df[, 7:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
+write.csv(ukb_df[, 1:5], "NeuroPM/io/labels.csv", row.names = FALSE)
+fwrite(ukb_df[, 6:ncol(ukb_df)], "NeuroPM/io/ukb_num_norm.csv")
 
 # print ending message
 cat(sprintf("---------- Initial Data Extraction Complete"))
