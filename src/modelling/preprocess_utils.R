@@ -384,6 +384,14 @@ get_ukb_subset_rows = function(df, subset_option="all") {
                         df[,"31-0.0"] == 0 &
                         (events == -7 | events == 4))
     
+  } else if (subset_option == "men no heart attack, angina, stroke") {
+    
+    # only women: exclude those with heart attack/angina/stroke at time 
+    #             of imaging
+    subset_rows = which(!is.na(df[,"BPSys-2.0"]) & !is.na(df[,"BPDia-2.0"]) & 
+                          df[,"31-0.0"] == 1 &
+                          (events == -7 | events == 4))
+    
   } else {
     warning("Wrong Subset Option Error")
   }
@@ -502,20 +510,24 @@ return_clean_df = function(df, threshold_col, threshold_row, ignore_cols = c()) 
   print(sprintf("Percentage NA Before Cleaning: %0.1f%%", 
                                           sum(is.na(df))/prod(dim(df))*100))
   
+  df_excluded = df[, ignore_cols]
+  df_included = df[, -ignore_cols]
+  
   # turn empty string cells in to NA
-  df[df == ""] = NA
+  df_included[df_included == ""] = NA
 
   # keep columns with under 50% missing data
-  df = df[, colMeans(is.na(df)) <= threshold_col]
+  df_included = df_included[, colMeans(is.na(df_included)) <= threshold_col]
 
   # keep rows with under 5% missing data
-  df = df[rowMeans(is.na(df)) <= threshold_row, ]
+  df_excluded = df_excluded[rowMeans(is.na(df_included)) <= threshold_row, ]
+  df_included = df_included[rowMeans(is.na(df_included)) <= threshold_row, ]
   
   # only perform cleaning on numeric columns
   if (length(ignore_cols) > 0) {
     
     # assign numeric columns only to new temp dataframe
-    temp = df[, -ignore_cols]
+    temp = df_included
     
     # filter out any column which are all 0s, if column is full of 0s, this 
     # will break the PCA algorithm. Mask out NAs when finding zeros
@@ -524,9 +536,13 @@ return_clean_df = function(df, threshold_col, threshold_row, ignore_cols = c()) 
     temp = temp[, !zero_cols]
     
     # reassign via column concatenation, moving character columns to the front
-    df = cbind(df[, ignore_cols], temp)
+    df = cbind(df_excluded, temp)
     
-  }
+    } else {
+  
+    df = cbind(df_excluded, df_included)
+    
+    }
   
   # display % missing values before cleaning
   print(sprintf("Percentage NA After Cleaning: %0.1f%%", 
