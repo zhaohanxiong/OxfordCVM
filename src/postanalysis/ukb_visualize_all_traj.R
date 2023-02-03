@@ -3,7 +3,7 @@ library(ggplot2)
 library(gridExtra)
 library(data.table)
 
-var_i = 5 # index of variable weighting to view: 43, 5, 30, 457, 462
+var_i = 3 # index of variable weighting to view: 43, 5, 30, 457, 462
 n_traj = 3 # number of trajectories
 
 # # # read input data
