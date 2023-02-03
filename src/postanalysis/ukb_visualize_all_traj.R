@@ -3,7 +3,7 @@ library(ggplot2)
 library(gridExtra)
 library(data.table)
 
-var_i = 3 # index of variable weighting to view: 43, 5, 30, 457, 462
+var_i = 5 # index of variable weighting to view: 43, 5, 30, 457/462
 n_traj = 3 # number of trajectories
 
 # # # read input data
@@ -48,7 +48,7 @@ scores$var = ukb[, weights$Var1[var_i]]
 scores = scores[scores$trajectory %in% main_trajs, ]
 
 # intialize the dataframe with all the hyperscores repeated, and var column
-n_ints = 100
+n_ints = 25
 df_conc = data.frame(x = rep(NA, n_ints * length(main_trajs)), y = NA, traj = NA)
 
 # iterate through all traj
@@ -58,7 +58,7 @@ for (i in 1:length(main_trajs)) {
         scores_t = scores[scores$trajectory == main_trajs[i], ]
 
         # fit loess model for data
-        model = loess(var ~ global_pseudotimes, data = scores_t, span = 10, 
+        model = loess(var ~ global_pseudotimes, data = scores_t, span = 5, 
                       se = TRUE, control = loess.control(surface = "direct"))
 
         # get n_ints (100) equal points for pseudotime score, and fit to get var value
