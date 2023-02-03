@@ -18,6 +18,7 @@ scores = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
 # load variable weighting outputs
 weights = read.csv(file.path(path, "var_weighting.csv"),
                              header=TRUE, stringsAsFactor=FALSE)
+weights = weights[order(weights$Node_contributions, decreasing = TRUE), ]
 
 # load uk raw variables
 ukb = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"), header = TRUE))
@@ -36,10 +37,17 @@ cols = c("#F8766D", "#CD9600", "#7CAE00", "#00BE67",
 # retrive N trajectories with the most number of patients
 main_trajs = names(sort(table(scores$trajectory), decreasing = TRUE)[1:n_traj])
 
+
+# Make table (variable X p-vals (ANOVA for each trajectory).
+# Then summarise in each trajectory, which variables are most different (significant p-value).
+
+
 # create new column for assigning trajectories with different trend (-1 = all same)
 weights$traj_diff = -1
 
-# iterate through different variables
+
+
+# iterate through different variables (top 50 highest weighted)
 for (var_i in c(43, 5, 30, 462)) {
 
         # ------------------------------------------------------------------------------
@@ -73,6 +81,7 @@ for (var_i in c(43, 5, 30, 462)) {
                 x_fit = seq(0, 1, length = n_ints)
                 y_fit = predict(model, newdata = data.frame(global_pseudotimes = x_fit))
 
+                # concatenate the values for this trajectory in same data frame
                 df_conc$x[((i - 1) * n_ints + 1):(i * n_ints)] = x_fit
                 df_conc$y[((i - 1) * n_ints + 1):(i * n_ints)] = unname(y_fit)
                 df_conc$traj[((i - 1) * n_ints + 1):(i * n_ints)] = main_trajs[i]
