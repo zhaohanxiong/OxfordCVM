@@ -126,7 +126,7 @@ p3 = ggplot(df_plot3, aes(x = x, y = y, group = traj, color = traj)) +
 
 # start offline plot
 out_name = gsub(" ", "_", toTitleCase(weights$name[i]))
-png(paste0("plots/Validation_Traj_", out_name, ".png"),
+png(paste0("plots/temp_Traj_", out_name, ".png"),
     width = 1800, height = 600)
 
 # mutli-plot
