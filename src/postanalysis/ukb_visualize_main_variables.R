@@ -55,8 +55,8 @@ df_plot$name = as.factor(df_plot$name)
 # produce plot
 p = ggplot(df_plot, aes(x = x, y = y, group = name, color = name)) + 
         geom_point(size = 7.5, alpha = 0.25) +
-        geom_smooth(orientation = "x", method = "loess", span = 5, 
-                    linewidth = 2, se = FALSE, fullrange = TRUE) +
+        geom_smooth(formula = y ~ x, method = 'loess', orientation = "x", 
+                    span = 15, linewidth = 2, se = FALSE, fullrange = TRUE) +
         ggtitle("Trend of Important Clinical Variables vs Hyper Score") +
         xlab("Hyper Score [0 to 1]") +
         ylab("Clinical Variables (Normalized Z-Score)") +
