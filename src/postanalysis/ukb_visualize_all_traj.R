@@ -55,7 +55,7 @@ for (var_i in 1:nrow(weights)) {
         scores_i = scores_i[scores_i$trajectory %in% main_trajs, ]
         
         # intialize the dataframe with all the hyperscores repeated, and var column
-        n_ints = 25
+        n_ints = 20
         df_long = data.frame(x = rep(NA, n_ints * length(main_trajs)), y = NA, traj = NA)
         x_fit = seq(0, 1, length = n_ints)
 
@@ -80,11 +80,11 @@ for (var_i in 1:nrow(weights)) {
 
         }
 
-        # assign colours and name the colours to be labelled during ggploting
-        group_cols = cols[unique(as.numeric(unique(df_long$traj))) + 1]
-        names(group_cols) = unique(df_long$traj)
-
         if (figure_out) {
+
+                # assign colours and name the colours to be labelled during ggploting
+                group_cols = cols[unique(as.numeric(unique(df_long$traj))) + 1]
+                names(group_cols) = unique(df_long$traj)
 
                 # start offline plot
                 out_name = gsub(" ", "_", toTitleCase(weights$name[var_i]))
