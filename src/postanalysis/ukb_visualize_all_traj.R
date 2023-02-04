@@ -16,6 +16,7 @@ scores = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
 weights = read.csv(file.path(path, "var_weighting.csv"),
                              header=TRUE, stringsAsFactor=FALSE)
 weights = weights[order(weights$Node_contributions, decreasing = TRUE), ]
+weights = weights[weights$Significant, ]
 
 # load uk raw variables
 ukb = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"), header = TRUE))
@@ -114,13 +115,10 @@ for (var_i in 1:nrow(weights)) {
         df_long$traj = as.factor(df_long$traj)
         traj_diff = TukeyHSD(aov(y ~ traj, df_long))
         
-        # assign p-values to pair-wise comparisons for trajectories
-        weights[var_i, traj_cols] = traj_diff$traj[, c("p adj")]
+        # assign p-values to new columns, assign bool for significant or not
+        weights[var_i, traj_cols] = traj_diff$traj[, c("p adj")] < 0.01
 
 }
 
 # write out traj comparison information
-write.csv(weights, file.path(path, "weight_traj.csv"), row.names = FALSE)
-
-# Then summarise in each trajectory, which variables are most different (significant p-value)
-
+write.csv(weights, "plots/weight_traj.csv", row.names = FALSE)
