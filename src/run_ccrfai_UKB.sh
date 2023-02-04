@@ -28,13 +28,15 @@ Rscript visualize_key_cTI_results.R
 cd ../postanalysis
 Rscript ukb_visualize_main_variables.R
 
+/home/zhaohanx/Matlab2020a/bin/matlab -nodisplay -nosplash -nodesktop -r "run('survival_analysis.m');exit;"
+
 Rscript ukb_extract_repeat_visit.R
 Rscript ukb_visualize_repeat_visit.R 1
 Rscript ukb_visualize_repeat_visit.R 2
 Rscript ukb_visualize_repeat_visit.R 3
 Rscript ukb_visualize_repeat_visit.R 5
 
-Rscript ukb_visualize_traj.R 5 3
+Rscript ukb_visualize_all_traj.R
 
 # run test cases (in root directory)
 cd ../..

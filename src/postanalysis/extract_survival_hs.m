@@ -5,16 +5,19 @@ stats_female = single.empty;
 stats_male = single.empty;
 
 global_pseudotimes2 = global_pseudotimes(selected_group);
+global_pseudotimes3 = global_pseudotimes2(global_pseudotimes2>0.18);
+range = max(global_pseudotimes3) + min(global_pseudotimes3);
+
 idx = zeros(length(global_pseudotimes2),1);
 for i = 1:length(global_pseudotimes2)
     selected_score = global_pseudotimes2(i);
-    if selected_score <= 0.18
+    if selected_score <= 0.2
        idx(i) = 1;
     end
-    if (selected_score > 0.18) && (selected_score <= 0.38)
+    if (selected_score > 0.2) && (selected_score <= 0.4)
        idx(i) = 2;
     end
-    if (selected_score > 0.38) && (selected_score <= 0.79)
+    if (selected_score > 0.4) && (selected_score <= 0.8)
        idx(i) = 3;
     end
 end
@@ -62,9 +65,9 @@ labels_death_clusters(idx2) = 2;
 labels_death_clusters(idx3) = 3;
 
 bp_group2 = string;
-bp_group2(labels_death_clusters == 1) = "0-0.18";
-bp_group2(labels_death_clusters == 2) = "0.18-0.38";
-bp_group2(labels_death_clusters == 3) = "0.38-0.78";
+bp_group2(labels_death_clusters == 1) = "0-0.20";
+bp_group2(labels_death_clusters == 2) = "0.20-0.40";
+bp_group2(labels_death_clusters == 3) = "0.40-0.80";
 bp_group2 = bp_group2';
 groups = char(bp_group2);
 groups2 = cell.empty;
@@ -79,8 +82,9 @@ end
                            0.10 0.48 0.64;...
                            1 0.49 0.49],...
                            'XLim',[0 7],...
+                           'XTicks',[0:1:6],...
                            'YLim',[0.975*100 1*100],'legend',false,'TimeUnit','Years',...
-                           'DispP',false,'PairWiseP',true,'NoRiskTable',true,...
+                           'DispP',false,'PairWiseP',true,'NoRiskTable',true,'RT_XAxis',false,...
                            'TimeMax',7,'Print',false);
 stats_hs = stats;
 fh1.Position = [624,378,556,407];
@@ -101,6 +105,7 @@ cd([pwd,'/outcomes_analysis'])
 exportgraphics(fh1,['survival_plot_HS_',tag,'.png']);
 cd ..
 
+
 % overall_p = p;
 % pairwise_p = struct2table(stats.ParwiseStats).p_MC;
 % groups_12_p = pairwise_p(1);
@@ -116,12 +121,12 @@ cd ..
 %%%%%%%%%% Hazard rate
 censored = ones(size(timeToevent_full,1),1);
 censored(selected_group) = 0;
-c1 = censored(string(groups2) == '0-0.18   ');
-g1 = timeToevent_full(string(groups2) == '0-0.18   ');
-c2 = censored(string(groups2) == '0.18-0.38');
-g2 = timeToevent_full(string(groups2) == '0.18-0.38');
-c3 = censored(string(groups2) == '0.38-0.78');
-g3 = timeToevent_full(string(groups2) == '0.38-0.78');
+c1 = censored(string(groups2) == '0-0.20   ');
+g1 = timeToevent_full(string(groups2) == '0-0.20   ');
+c2 = censored(string(groups2) == '0.20-0.40');
+g2 = timeToevent_full(string(groups2) == '0.20-0.40');
+c3 = censored(string(groups2) == '0.40-0.80');
+g3 = timeToevent_full(string(groups2) == '0.40-0.80');
 
 fh2=figure;
 [f,x] = ecdf(g1,'Censoring',c1,'function','cumulative hazard');
