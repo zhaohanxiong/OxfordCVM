@@ -16,7 +16,7 @@ scores = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
 weights = read.csv(file.path(path, "var_weighting.csv"),
                              header=TRUE, stringsAsFactor=FALSE)
 weights = weights[order(weights$Node_contributions, decreasing = TRUE), ]
-weights = weights[weights$Significant, ]
+weights = weights[weights$significant, ]
 
 # load uk raw variables
 ukb = data.frame(fread(file.path(path, "ukb_num_ft_select.csv"), header = TRUE))
