@@ -113,7 +113,7 @@ for (var_i in 1:nrow(weights)) {
 
         # perform comparison
         df_long$traj = as.factor(df_long$traj)
-        traj_diff = TukeyHSD(aov(y ~ traj, df_long))$traj[, c("p adj")] < 0.01
+        traj_diff = TukeyHSD(aov(y ~ traj, df_long))$traj[, c("p adj")] < 0.05
 
         # grab the boolean and pair-wise traj names
         traj_pairs = names(traj_diff)
