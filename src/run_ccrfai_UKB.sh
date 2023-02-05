@@ -36,7 +36,7 @@ Rscript ukb_visualize_repeat_visit.R 2
 Rscript ukb_visualize_repeat_visit.R 3
 Rscript ukb_visualize_repeat_visit.R 5
 
-Rscript ukb_visualize_all_traj.R
+Rscript ukb_compute_traj_diff.R
 
 # run test cases (in root directory)
 cd ../..
