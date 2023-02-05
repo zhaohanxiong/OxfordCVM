@@ -10,11 +10,11 @@ figure_out = FALSE # write figures out or not
 path = "../modelling/NeuroPM/io/"
 
 # load data
-scores = read.csv(file.path(path, "pseudotimes.csv"), header=TRUE)
+scores = read.csv(file.path(path, "pseudotimes.csv"), header = TRUE)
 
 # load variable weighting outputs
 weights = read.csv(file.path(path, "var_weighting.csv"),
-                             header=TRUE, stringsAsFactor=FALSE)
+                             header=TRUE, stringsAsFactor = FALSE)
 weights = weights[order(weights$Node_contributions, decreasing = TRUE), ]
 weights = weights[weights$significant, ]
 
@@ -38,7 +38,7 @@ main_trajs = names(sort(table(scores$trajectory), decreasing = TRUE)[1:n_traj])
 # create new columns for assigning trajectories with different trend
 traj_cols = rownames(TukeyHSD(aov(global_pseudotimes ~ trajectory,
                                   scores[scores$trajectory %in% main_trajs, ]))$trajectory)
-weights[, traj_cols] = NA
+weights[, main_trajs] = NA
 
 # iterate through different variables (top 50 highest weighted)
 #for (var_i in c(43, 5, 30, 462)) {
@@ -113,10 +113,15 @@ for (var_i in 1:nrow(weights)) {
 
         # perform comparison
         df_long$traj = as.factor(df_long$traj)
-        traj_diff = TukeyHSD(aov(y ~ traj, df_long))
-        
-        # assign p-values to new columns, assign bool for significant or not
-        weights[var_i, traj_cols] = traj_diff$traj[, c("p adj")] < 0.01
+        traj_diff = TukeyHSD(aov(y ~ traj, df_long))$traj[, c("p adj")] < 0.01
+
+        # grab the boolean and pair-wise traj names
+        traj_pairs = names(traj_diff)
+        traj_diff = unname(traj_diff)
+
+        # assign true to new traj columns if each traj is different than all others
+        weights[var_i, main_trajs] = sapply(main_trajs, function(t)
+                                                all(traj_diff[which(grepl(t, traj_pairs))]))
 
 }
 
