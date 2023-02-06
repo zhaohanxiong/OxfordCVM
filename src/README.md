@@ -157,6 +157,32 @@ scp -r file_to_transfer.txt zhaohanx@163.1.212.155:/home/zhaohanx
 scp -r zhaohanx@163.1.212.155:/home/zhaohanx/file_to_transfer .
 ```
 
+### X11 Forwarding (Powershell, Putty, MobaXterm)
+- For windows powershell, permanently add DISPLAY environment variable (and also check variable
+```
+setx DISPLAY "127.0.0.1:0.0"
+echo $env:DISPLAY
+```
+- Restart powershell and ssh with (-Y) option
+```
+ssh -Y zhaohanx@163.1.212.155
+```
+
+### X11 Forwarding (VS-Code)
+- install X410 (https://x410.dev/download), open the program (after installing), open the configuration on the right bottom corner (apps), make sure first 3 options under TCP are enabled.
+- in the terminal (locally), make sure to set the environment variable for DISPLAY
+```
+setx DISPLAY "127.0.0.1:0.0"
+```
+- In VS-Code, go to ssh sidebar, hover over "SSH tab" on the left and click the "gear" icon just to the right, open the first config file in the pop up window and makesure the configuration for the server is as follows (change ur username)
+```
+Host CCRF_Server
+  HostName 163.1.212.155
+  User zhaohanx
+  ForwardX11 yes
+  ForwardX11Trusted yes
+```
+
 ## FMRIB Cluster
 ### Connect
 - VPN Connection using Cisco
