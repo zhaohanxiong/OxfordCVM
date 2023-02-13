@@ -384,6 +384,14 @@ get_ukb_subset_rows = function(df, subset_option="all") {
                         df[,"31-0.0"] == 0 &
                         (events == -7 | events == 4))
     
+  } else if (subset_option == "men no heart attack, angina, stroke") {
+    
+    # only women: exclude those with heart attack/angina/stroke at time 
+    #             of imaging
+    subset_rows = which(!is.na(df[,"BPSys-2.0"]) & !is.na(df[,"BPDia-2.0"]) & 
+                          df[,"31-0.0"] == 1 &
+                          (events == -7 | events == 4))
+    
   } else {
     warning("Wrong Subset Option Error")
   }
