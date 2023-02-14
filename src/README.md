@@ -108,16 +108,17 @@ git checkout dev
 - Set up virtual environment (create, map, activate)
 ```
 conda create --name env_name
-activate env_name
+conda activate env_name
 ```
 
-- Install Python Libraries
+- Install Python Libraries (Either use Conda or Pip)
 ```
+conda activate env_name
 conda install numpy
 pip install scipy pandas networkx plotly seaborn matplotlib opencv-python sqlalchemy
 ```
 
-- Install R Libraries
+- Install R Libraries (either in conda or just in your local user directory)
   - type ```yes``` following the terminal prompt
 ```
 R
@@ -156,6 +157,55 @@ scp -r file_to_transfer.txt zhaohanx@163.1.212.155:/home/zhaohanx
 ```
 scp -r zhaohanx@163.1.212.155:/home/zhaohanx/file_to_transfer .
 ```
+
+### X11 Forwarding (Powershell, Putty, MobaXterm)
+- For windows powershell, permanently add DISPLAY environment variable (and also check variable
+```
+setx DISPLAY "127.0.0.1:0.0"
+echo $env:DISPLAY
+```
+- Restart powershell and ssh with (-Y) option
+```
+ssh -Y zhaohanx@163.1.212.155
+```
+
+### X11 Forwarding (VS-Code)
+- install X410 (https://x410.dev/download), open the program (after installing), open the configuration on the right bottom corner (apps), make sure first 3 options under TCP are enabled.
+- in the terminal (locally), make sure to set the environment variable for DISPLAY
+```
+setx DISPLAY "127.0.0.1:0.0"
+```
+- In VS-Code, go to ssh sidebar, hover over "SSH tab" on the left and click the "gear" icon just to the right, open the first config file in the pop up window and makesure the configuration for the server is as follows (change ur username)
+```
+Host CCRF_Server
+  HostName 163.1.212.155
+  User zhaohanx
+  ForwardX11 yes
+  ForwardX11Trusted yes
+```
+
+### GPU Configuration
+- Latest drivers are already installed on the server, verify with command below to monitor GPU usage
+```
+nvidia-smi
+```
+
+- Install Tensorflow-GPU (CUDA Toolkit, CuDNN, tensorflow-gpu)
+```
+conda activate env_name
+conda install -c conda-forge cudatoolkit=11.2.2 cudnn=8.1.0
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$CONDA_PREFIX/lib/
+python3 -m pip install tensorflow
+```
+
+- Verify tensorflow is connected with GPU, should output 2 for our server (2 A30s)
+```
+python
+import tensorflow as tf
+print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
+```
+
+
 
 ## FMRIB Cluster
 ### Connect
