@@ -26,7 +26,7 @@ MST_ind = np.append(np.where(labels["bp_group"] == 1)[0], np.where(labels["bp_gr
 
 # load minimum spanning tree, and labels for each node in the graph
 MST_mat = scipy.io.loadmat("MST.mat")["MST"]
-G = nx.from_numpy_matrix(MST_mat)
+G = nx.from_numpy_array(MST_mat)
 MST_label = pd.read_csv("MST.csv", index_col=False)
 
 # root node (least diseased node)
