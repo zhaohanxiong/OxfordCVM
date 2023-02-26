@@ -1,0 +1,258 @@
+
+[1] "Initial Data Frame is of Size 46102 by 2482"
+[1] "Subset Data Frame is of Size 45137 by 2442"
+[1] "Percentage NA Before Cleaning: 58.3%"
+[1] "Percentage NA After Cleaning: 1.4%"
+[1] "Cleaned Data Frame is of Size 27099 by 1113"
+[1] "Distribution of Patients Per Group"
+
+    0     1     2 
+21544  1386  4169 
+[1] "Final Data Frame is of Size 27099 by 1054"
+[1] "Final Number of Missing Data: 0"
+[1] "Final Distribution is E(x) = -0.001 +- 0.994 [-4.338, 4.999]"
+[1] "Subset Data Frame is of Size 27099 by 1054"
+---------- Initial Data Extraction Complete
+[1] "The Filtered Data Frame is of Size 27099 by 566"
+[1] "Distribution of Variable Groups is:"
+
+             Blood   Body_Composition           Brain_MR         Cardiac_MR 
+                58                 24                449                 13 
+Carotid_Ultrasound       Demographics                ECG         Spirometry 
+                12                  2                  3                  5 
+---------- Feature Selection Complete
+
+[combat] Found 3 batches
+[combat] Adjusting for 0 covariate(s) of covariate level(s)
+[combat] Standardizing Data across features
+[combat] Fitting L/S model and finding priors
+[combat] Finding parametric adjustments
+[combat] Adjusting the Data
+----- Number of cPCs: 17
+----- Alpha Selected: 10
+
+[1] "Overlap in IQR of Background vs Between is 18.4% (Background) 8.9% of (Between)"
+[1] "Overlap in IQR of Boxes Between vs Disease is 51.3% (Between) 42.5% (Disease)"
+[1] "Overlapping Interval of Scores is 26.8% of the entire range (0.051 to 0.319)"
+[1] "% of Samples in the Background Group with Non-Overlapping Scores is 12.6%"
+[1] "% of Samples in the Disease Group with Non-Overlapping Scores is 29.2%"
+[1] "AUC is 0.93357 when using 1001 Logarithmic Intervals"
+[1] "Optimal Threshold at 0.155 (Sensitivity = 85.1%, Specificity = 85.4%)"
+[1] "Confusion Matrix:"
+[1] "(Pred/GT) True  False"
+[1] "True      85.1% 14.6%"
+[1] "False     14.9% 85.4%"
+---------- Evaluation Complete
+
+..... Running Cross Validation Fold 1
+ Number of cPCs: 17
+ Alpha Selected: 10
+..... Running Cross Validation Fold 2
+ Number of cPCs: 17
+ Alpha Selected: 10
+..... Running Cross Validation Fold 3
+ Number of cPCs: 16
+ Alpha Selected: 10
+..... Running Cross Validation Fold 4
+ Number of cPCs: 19
+ Alpha Selected: 10
+..... Running Cross Validation Fold 5
+ Number of cPCs: 17
+ Alpha Selected: 10
+..... Running Cross Validation Fold 6
+ Number of cPCs: 16
+ Alpha Selected: 10
+..... Running Cross Validation Fold 7
+ Number of cPCs: 17
+ Alpha Selected: 10
+..... Running Cross Validation Fold 8
+ Number of cPCs: 16
+ Alpha Selected: 10
+..... Running Cross Validation Fold 9
+ Number of cPCs: 18
+ Alpha Selected: 10
+..... Running Cross Validation Fold 10
+ Number of cPCs: 16
+ Alpha Selected: 10
+
+[1] "\n----------- Evaluating Stability of Disease Scores (Against Full Run)"
+[1] "Root Mean Squared Error is: 0.099 +- 0.023 [0.075, 0.140]"
+[1] "Mean Standard Deviation is: 0.096 +- 0.032 [0.047, 0.172]"
+[1] "------------------------------ Evaluating Fold 1"
+[1] "RMSE = 0.074 (N = 2710)"
+[1] "Optimal Threshold at 0.125 (Sensitivity = 70.5%, Specificity = 70.2%, F1 = 75.5%)"
+[1] "------------------------------ Evaluating Fold 2"
+[1] "RMSE = 0.073 (N = 2710)"
+[1] "Optimal Threshold at 0.161 (Sensitivity = 72.6%, Specificity = 72.5%, F1 = 72.4%)"
+[1] "------------------------------ Evaluating Fold 3"
+[1] "RMSE = 0.077 (N = 2710)"
+[1] "Optimal Threshold at 0.203 (Sensitivity = 74.3%, Specificity = 74.4%, F1 = 63.5%)"
+[1] "------------------------------ Evaluating Fold 4"
+[1] "RMSE = 0.082 (N = 2710)"
+[1] "Optimal Threshold at 0.210 (Sensitivity = 76.2%, Specificity = 76.4%, F1 = 65.8%)"
+[1] "------------------------------ Evaluating Fold 5"
+[1] "RMSE = 0.073 (N = 2710)"
+[1] "Optimal Threshold at 0.126 (Sensitivity = 71.8%, Specificity = 72.1%, F1 = 76.9%)"
+[1] "------------------------------ Evaluating Fold 6"
+[1] "RMSE = 0.074 (N = 2709)"
+[1] "Optimal Threshold at 0.156 (Sensitivity = 73.4%, Specificity = 73.3%, F1 = 72.4%)"
+[1] "------------------------------ Evaluating Fold 7"
+[1] "RMSE = 0.076 (N = 2710)"
+[1] "Optimal Threshold at 0.206 (Sensitivity = 77.9%, Specificity = 77.9%, F1 = 64.2%)"
+[1] "------------------------------ Evaluating Fold 8"
+[1] "RMSE = 0.083 (N = 2710)"
+[1] "Optimal Threshold at 0.236 (Sensitivity = 76.1%, Specificity = 76.1%, F1 = 58.2%)"
+[1] "------------------------------ Evaluating Fold 9"
+[1] "RMSE = 0.074 (N = 2710)"
+[1] "Optimal Threshold at 0.163 (Sensitivity = 76.5%, Specificity = 76.6%, F1 = 72.5%)"
+[1] "------------------------------ Evaluating Fold 10"
+[1] "RMSE = 0.077 (N = 2710)"
+[1] "Optimal Threshold at 0.132 (Sensitivity = 73.6%, Specificity = 73.9%, F1 = 74.2%)"
+[1] "Overall: 10-Fold X-Validation Results in an RMSE of 0.076 (0.063), Sensitivity of 74.3%, Specificity of 74.3%"
+
+[1] "Mean by Group:"
+  Group.1        err  knn_dist
+1       1 0.06155813 0.1718732
+2       0 0.07429258 0.1902140
+3       2 0.09113317 0.2064328
+
+---------- Trajectory Isolation Complete
+
+[1] "109 Significant Columns (cTI Selected) Contributed to  78.3% of the Total Weighting"
+---------- File Cleaning Complete Complete
+
+[1] "Significant Variable Weighting Distribution is:"
+           Var_Group Total_Weighting Count
+1              Blood            5.48     6
+2   Body_Composition           12.73     8
+3           Brain_MR           50.57    71
+4         Cardiac_MR           14.21     9
+5 Carotid_Ultrasound           15.12    12
+6       Demographics            1.26     1
+7         Spirometry            0.64     2
+---------- Core Plots Generation Complete
+
+[1] "Number of New Columns Found in Follow Up: 502 (Out of 566)"
+[1] "Number of Missing Data Before Filtering is 12364655 (80.6%)"
+[1] "Number of Missing Data After Filtering is 36067 (2.7%)"
+[1] "Imaging Visit 1: Originally 27099 Rows and 566 Columns"
+[1] "Imaging Visit 2: Extracted 2396 Rows and 566 Columns"
+
+[1] "1 ----- Mean MD in uncinate fasciculus on FA skeleton (right)"
+[1] "2 ----- Mean carotid IMT (intima-medial thickness) at 210 degrees "
+[1] "3 ----- Cardiac output"
+[1] "4 ----- Mean carotid IMT (intima-medial thickness) at 120 degrees "
+[1] "5 ----- LV stroke volume"
+[1] "6 ----- Trunk fat mass"
+[1] "7 ----- Whole body fat mass"
+[1] "8 ----- Body mass index (BMI)"
+[1] "9 ----- Mean FA in cingulum cingulate gyrus on FA skeleton (right)"
+[1] "10 ----- High light scatter reticulocyte count"
+[1] "11 ----- Cardiac index"
+[1] "12 ----- Mean MD in uncinate fasciculus on FA skeleton (left)"
+[1] "13 ----- Mean carotid IMT (intima-medial thickness) at 240 degrees "
+[1] "14 ----- Mean L1 in inferior cerebellar peduncle on FA skeleton (right)"
+[1] "15 ----- Leg fat percentage (left)"
+[1] "16 ----- Mean MD in inferior cerebellar peduncle on FA skeleton (right)"
+[1] "17 ----- Mean L3 in uncinate fasciculus on FA skeleton (right)"
+[1] "18 ----- Mean MD in cingulum hippocampus on FA skeleton (left)"
+[1] "19 ----- Reticulocyte count"
+[1] "20 ----- Mean L2 in uncinate fasciculus on FA skeleton (left)"
+[1] "21 ----- Average heart rate"
+[1] "22 ----- Arm fat mass (left)"
+[1] "23 ----- Mean L2 in uncinate fasciculus on FA skeleton (right)"
+[1] "24 ----- Cardiac output during PWA"
+[1] "25 ----- Sex"
+[1] "26 ----- Mean L1 in uncinate fasciculus on FA skeleton (right)"
+[1] "27 ----- Mean L3 in cingulum hippocampus on FA skeleton (left)"
+[1] "28 ----- Mean MD in superior cerebellar peduncle on FA skeleton (left)"
+[1] "29 ----- Mean FA in inferior cerebellar peduncle on FA skeleton (right)"
+[1] "30 ----- Total volume of white matter hyperintensities (from T1 and T2_FLAIR images)"
+[1] "31 ----- Mean L3 in cingulum cingulate gyrus on FA skeleton (right)"
+[1] "32 ----- Mean carotid IMT (intima-medial thickness) at 150 degrees "
+[1] "33 ----- Minimum carotid IMT (intima-medial thickness) at 210 degrees "
+[1] "34 ----- Mean L2 in superior cerebellar peduncle on FA skeleton (left)"
+[1] "35 ----- Maximum carotid IMT (intima-medial thickness) at 120 degrees "
+[1] "36 ----- Body surface area"
+[1] "37 ----- Weighted-mean FA in tract cingulate gyrus part of cingulum (left)"
+[1] "38 ----- Mean MD in cingulum hippocampus on FA skeleton (right)"
+[1] "39 ----- Mean FA in cingulum cingulate gyrus on FA skeleton (left)"
+[1] "40 ----- Maximum carotid IMT (intima-medial thickness) at 210 degrees "
+[1] "41 ----- Weighted-mean MD in tract medial lemniscus (right)"
+[1] "42 ----- Weighted-mean ISOVF in tract medial lemniscus (right)"
+[1] "43 ----- LV end diastolic volume"
+[1] "44 ----- Mean L3 in middle cerebellar peduncle on FA skeleton"
+[1] "45 ----- Weighted-mean ISOVF in tract medial lemniscus (left)"
+[1] "46 ----- Mean L2 in cingulum cingulate gyrus on FA skeleton (left)"
+[1] "47 ----- Mean MD in middle cerebellar peduncle on FA skeleton"
+[1] "48 ----- Mean L3 in uncinate fasciculus on FA skeleton (left)"
+[1] "49 ----- Cardiac index during PWA"
+[1] "50 ----- LDL direct"
+[1] "51 ----- Mean FA in uncinate fasciculus on FA skeleton (right)"
+[1] "52 ----- Weighted-mean L1 in tract cingulate gyrus part of cingulum (left)"
+[1] "53 ----- Impedance of whole body"
+[1] "54 ----- Weighted-mean L3 in tract cingulate gyrus part of cingulum (left)"
+[1] "55 ----- Mean L2 in superior cerebellar peduncle on FA skeleton (right)"
+[1] "56 ----- Minimum carotid IMT (intima-medial thickness) at 120 degrees "
+[1] "57 ----- Minimum carotid IMT (intima-medial thickness) at 240 degrees "
+[1] "58 ----- Mean L1 in superior cerebellar peduncle on FA skeleton (left)"
+[1] "59 ----- Cholesterol"
+[1] "60 ----- Mean L2 in middle cerebellar peduncle on FA skeleton"
+[1] "61 ----- Mean MD in cerebral peduncle on FA skeleton (right)"
+[1] "62 ----- Mean FA in uncinate fasciculus on FA skeleton (left)"
+[1] "63 ----- Volumetric scaling from T1 head image to standard space"
+[1] "64 ----- Weighted-mean L2 in tract cingulate gyrus part of cingulum (right)"
+[1] "65 ----- Mean L1 in cingulum cingulate gyrus on FA skeleton (right)"
+[1] "66 ----- Mean L3 in cingulum hippocampus on FA skeleton (right)"
+[1] "67 ----- Maximum carotid IMT (intima-medial thickness) at 240 degrees "
+[1] "68 ----- Weighted-mean MD in tract medial lemniscus (left)"
+[1] "69 ----- Mean L1 in middle cerebellar peduncle on FA skeleton"
+[1] "70 ----- Mean FA in middle cerebellar peduncle on FA skeleton"
+[1] "71 ----- Mean L3 in superior cerebellar peduncle on FA skeleton (left)"
+[1] "72 ----- Weighted-mean MD in tract corticospinal tract (left)"
+[1] "73 ----- Weighted-mean L3 in tract medial lemniscus (left)"
+[1] "74 ----- Mean FA in superior cerebellar peduncle on FA skeleton (right)"
+[1] "75 ----- Mean MD in superior cerebellar peduncle on FA skeleton (right)"
+[1] "76 ----- Mean FA in superior cerebellar peduncle on FA skeleton (left)"
+[1] "77 ----- Mean L2 in medial lemniscus on FA skeleton (right)"
+[1] "78 ----- Mean L3 in superior cerebellar peduncle on FA skeleton (right)"
+[1] "79 ----- Mean L1 in uncinate fasciculus on FA skeleton (left)"
+[1] "80 ----- Weighted-mean L3 in tract cingulate gyrus part of cingulum (right)"
+[1] "81 ----- Weighted-mean FA in tract cingulate gyrus part of cingulum (right)"
+[1] "82 ----- Mean FA in cingulum hippocampus on FA skeleton (left)"
+[1] "83 ----- Volume of ventricular cerebrospinal fluid (normalised for head size)"
+[1] "84 ----- Minimum carotid IMT (intima-medial thickness) at 150 degrees "
+[1] "85 ----- Forced expiratory volume in 1-second (FEV1), Best measure"
+[1] "86 ----- Maximum carotid IMT (intima-medial thickness) at 150 degrees "
+[1] "87 ----- Stroke volume during PWA"
+[1] "88 ----- Mean L2 in cingulum cingulate gyrus on FA skeleton (right)"
+[1] "89 ----- Forced vital capacity (FVC), Best measure"
+[1] "90 ----- Weighted-mean ICVF in tract cingulate gyrus part of cingulum (left)"
+[1] "91 ----- Mean L2 in cingulum hippocampus on FA skeleton (left)"
+[1] "92 ----- Trunk fat percentage"
+[1] "93 ----- Mean L3 in medial lemniscus on FA skeleton (left)"
+[1] "94 ----- Weighted-mean ISOVF in tract corticospinal tract (left)"
+[1] "95 ----- Monocyte count"
+[1] "96 ----- Mean FA in cingulum hippocampus on FA skeleton (right)"
+[1] "97 ----- Weighted-mean ICVF in tract corticospinal tract (left)"
+[1] "98 ----- Mean MD in medial lemniscus on FA skeleton (left)"
+[1] "99 ----- Mean FA in anterior corona radiata on FA skeleton (left)"
+[1] "100 ----- Mean L2 in cerebral peduncle on FA skeleton (left)"
+[1] "101 ----- Mean L3 in cerebral peduncle on FA skeleton (right)"
+[1] "102 ----- Volume of brain, grey+white matter (normalised for head size)"
+[1] "103 ----- Total tissue fat percentage"
+[1] "104 ----- Weighted-mean L1 in tract acoustic radiation (right)"
+[1] "105 ----- Mean L2 in cerebral peduncle on FA skeleton (right)"
+[1] "106 ----- Mean L1 in cerebral peduncle on FA skeleton (right)"
+[1] "107 ----- Immature reticulocyte fraction"
+[1] "108 ----- Mean L1 in cingulum cingulate gyrus on FA skeleton (left)"
+[1] "109 ----- Weighted-mean L3 in tract medial lemniscus (right)"
+============================= test session starts ==============================
+platform linux -- Python 3.10.9, pytest-7.1.3, pluggy-1.0.0
+rootdir: /home/zhaohanx/OxfordCVM
+plugins: hydra-core-1.2.0
+collected 5 items
+
+test/test_neuropm.py .....                                               [100%]
+
+============================== 5 passed in 10.48s ==============================
