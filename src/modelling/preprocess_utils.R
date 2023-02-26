@@ -118,7 +118,8 @@ get_ukb_subset_column_names = function(df, df_vars,
   # Demographic
   Sex = "31-0.0"
   Age = grep("21003-2", names(df), value=TRUE)
-  
+  Eth = grep("21000-2|21000.2", names(df), value=TRUE)
+
   # blood pressure variables (in addition)
   #bp_var1 = grep("12674", names(df), value=TRUE) # systolic brachial PWA
   #bp_var2 = grep("12675", names(df), value=TRUE) # diastolic brachial PWA 
@@ -284,7 +285,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   } else if (subset_option == "all") {
     
     # all
-    vars_subset_cols = c(bp_var,med_bp,loc_var,Sex,Age,Event,
+    vars_subset_cols = c(bp_var,med_bp,loc_var,Sex,Age,Event,Eth,
                          bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_car_vars,
                          bb_bodycomp_vars,bb_art_vars,bb_blood_vars,
                          bb_spir_vars,bb_ecgrest_vars)
@@ -313,7 +314,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   # write variable groups to output by arranging by group and writing to csv
   vars = c(bb_CMR_vars,bb_BMR_vars,bb_AMR_vars,bb_bodycomp_vars,bb_art_vars,
            bb_car_vars,bb_blood_vars,bb_spir_vars,bb_ecgrest_vars,
-           bp_var,med_bp,Sex,Age,Event)
+           bp_var,med_bp,Sex,Age,Event,Eth)
   vars = paste0("X", gsub("-", "\\.", vars))
   var_groups = c(rep("Cardiac_MR",         length(bb_CMR_vars)),
                  rep("Brain_MR",           length(bb_BMR_vars)),
@@ -326,7 +327,7 @@ get_ukb_subset_column_names = function(df, df_vars,
                  rep("ECG",                length(bb_ecgrest_vars)),
                  rep("Blood_Pressure",     length(bp_var)),
                  rep("Medication",         length(med_bp)),
-                 rep("Demographics",       length(c(Sex, Age))),
+                 rep("Demographics",       length(c(Sex, Age, Eth))),
                  rep("Event",              length(Event))
                  )
   
