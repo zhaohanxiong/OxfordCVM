@@ -118,7 +118,7 @@ get_ukb_subset_column_names = function(df, df_vars,
   # Demographic
   Sex = "31-0.0"
   Age = grep("21003-2", names(df), value=TRUE)
-  Eth = grep("21000-2|21000.2", names(df), value=TRUE)
+  Eth = grep("21000", names(df), value=TRUE)
 
   # blood pressure variables (in addition)
   #bp_var1 = grep("12674", names(df), value=TRUE) # systolic brachial PWA
