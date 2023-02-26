@@ -58,6 +58,10 @@ print(sprintf("Cleaned Data Frame is of Size %0.0f by %0.0f",
 # write raw dataframe to file so we can check pre-normalization values
 fwrite(ukb_df[, 5:ncol(ukb_df)], "NeuroPM/io/ukb_num.csv")
 
+print(grep("21000", colnames(ukb_df), value = TRUE))
+table(ukb_df[, c("X21000.2.0")])
+print(aggregate(list(y = ukb_df[, c("21000-2.0")]), by = list(ukb_df[, c("31-0.0")]), "length"))
+quit(save="no")
 # get corresponding vector of labels depending on criteria background (1), 
 # target (2), between (0). The first 4 columns are now ID/label columns
 # to omit during further processing
